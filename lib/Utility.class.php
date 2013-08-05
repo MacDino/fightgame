@@ -26,13 +26,17 @@ class Utility
 		$ration = 1;
 		if(!$data || !is_array($data))return $ration;
 		$data = array_filter($data, 'self::arrayFilterFloat');
-		$minValue = min($data);
-		while(!filter_var($minValue, FILTER_VALIDATE_INT))
-		{
-		  $minValue *= 10;
-		  $ration *= 10;
+		$ration = 1;
+		foreach ($data as $value) {
+			if(!filter_var($value*$ration, FILTER_VALIDATE_INT))
+			{
+				$valueLen = strlen($value);
+				$ration = $valueLen-1;	
+			}else{
+				continue;
+			}
 		}
-		return $ration;
+		return (int)str_pad(1, $ration, 0);
 	}
 	//去除数组中为0的值
 	public static function arrayFilterFloat($value)

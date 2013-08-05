@@ -36,20 +36,14 @@ try {
     //创建用户
     User_Info::createUserInfo($userId, array('race_id' => $raceId, 'user_name' => $userName));
     //创建蓝色0级装备一套
-
-        
+    Equip_Create::createEquip(Equip::EQUIP_TYPE_ARMS, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
+    Equip_Create::createEquip(Equip::EQUIP_TYPE_HELMET, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
+    Equip_Create::createEquip(Equip::EQUIP_TYPE_NECKLACE, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
+    Equip_Create::createEquip(Equip::EQUIP_TYPE_CLOTHES, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
+    Equip_Create::createEquip(Equip::EQUIP_TYPE_BELT, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
+    Equip_Create::createEquip(Equip::EQUIP_TYPE_SHOES, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
 } catch (Exception $e) {
-    
+    $code = 1;
+    $msg = '创建用户失败!';
+    die;    
 }
-
-
-
-
-
-
-
-
-
-
-
-fastcgi_finish_request();

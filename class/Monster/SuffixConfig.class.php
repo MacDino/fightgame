@@ -6,14 +6,14 @@ class Monster_SuffixConfig
     public static function monsterSuffixList()
     {
         $monsterSuffixList = array(
-            self::MONSTER_SUFFIX_BOSS         => 'Boss',
-            self::MONSTER_SUFFIX_SACRED       => '神圣的',
-            self::MONSTER_SUFFIX_UNKNOWN      => '未知的',
-            self::MONSTER_SUFFIX_ADVANCED     => '进阶的',
-            self::MONSTER_SUFFIX_WILL_EXTINCT => '将要灭绝的',
-            self::MONSTER_SUFFIX_CURSED       => '被诅咒的',
-            self::MONSTER_SUFFIX_ANCIENT      => '远古的',
-            self::MONSTER_SUFFIX_HEAD         => '头头',
+            Monster::MONSTER_SUFFIX_BOSS         => 'Boss',
+            Monster::MONSTER_SUFFIX_SACRED       => '神圣的',
+            Monster::MONSTER_SUFFIX_UNKNOWN      => '未知的',
+            Monster::MONSTER_SUFFIX_ADVANCED     => '进阶的',
+            Monster::MONSTER_SUFFIX_WILL_EXTINCT => '将要灭绝的',
+            Monster::MONSTER_SUFFIX_CURSED       => '被诅咒的',
+            Monster::MONSTER_SUFFIX_ANCIENT      => '远古的',
+            Monster::MONSTER_SUFFIX_HEAD         => '头头',
           );
         return $monsterSuffixList;
     }
