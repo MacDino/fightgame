@@ -42,7 +42,7 @@ class Friend
      * @param string $channel	好友来源
      * @return Bool
      */
-    private static function _createFriendInfo($userId, $friendId, $channel = FALSE)
+    public static function createFriendInfo($userId, $friendId, $channel = FALSE)
     {
     	//数据进行校验,非空,数据内
     	if(!is_int($userId) || !is_int($friendId) || !in_array($channel, self::$_allChannelType)) return FALSE;
@@ -51,7 +51,7 @@ class Friend
 		$friend_info = Mysql::query("select user_id from user_info where user_id = '$friendId' and user_level < '40'");
 		if(!$user_info || !$friend_info) return FALSE;
 		//是否已添加过好友
-		if(!empty(_getUserFrined($userId, $friendId))) return FALSE;
+		if(!empty(self::getUserFrined($userId, $friendId))) return FALSE;
         
         $userId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
         
@@ -66,12 +66,12 @@ class Friend
     }
 
     //删除好友
-    private static function _deleteFriendInfo($userId, $friendId)
+    public static function deleteFriendInfo($userId, $friendId)
     {
     	//简单检测
     	if(!is_int($userId) || !is_int($friendId))	return FALSE;
     	//是否存在
-    	if(empty(_getUserFrined($userId, $friendId))) return FALSE;
+    	if(empty(self::getUserFrined($userId, $friendId))) return FALSE;
     	
         $userId = MySql::delete(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
         
@@ -92,7 +92,7 @@ class Friend
      * @param int $friendId		好友ID
      * @return Bool 
      */
-	public static function _getUserFrined($userId, $friendId)
+	public static function getUserFrined($userId, $friendId)
 	{
 		if(!is_int($userId) || !is_int($friendId))	return FALSE;
 		
