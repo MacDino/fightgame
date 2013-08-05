@@ -2,6 +2,23 @@
 //计算概率方法
 class PerRand
 {
+	public static function getRandValue($data)
+	{
+		//var_dump($data);
+		if(!is_array($data) || !$data)return FALSE;
+		$ration = Utility::getChangeIntRation($data);
+		$randValue = mt_rand($data[0]*$ration, $data[1]*$ration);
+		return $randValue/$ration;
+	}
+	//多维数组随机 - 目前实现二维
+	public static function getMultRandResultKey($multArrayData)
+	{
+		if(!is_array($multArrayData) || !$multArrayData)return FALSE;
+		foreach ($multArrayData as $key => $value) {
+			$hitList[] = self::getRandResultKey($value);
+		}
+		return $hitList;
+	}
 	public static function getRandResultKey($data)
 	{
 		if(!is_array($data) || !$data)return FALSE;
@@ -39,7 +56,7 @@ class PerRand
 	{
 		if(!$randNum || !is_array($checkArray))return FALSE;
 		foreach ($checkArray as $key => $value) {
-	        if($randNum > $value[0] && $randNum <= $value[1])
+	        if($randNum >= $value[0] && $randNum <= $value[1])
 	        {
 	          return $key;
 	        }

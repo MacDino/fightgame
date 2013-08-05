@@ -18,7 +18,15 @@ class User_Info
         $info = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
         if($info)return FALSE;
         if(!isset($data['user_name']) || !isset($data['role_id']))return FALSE;
-        $res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'user_name' => $data['user_name'], 'role_id' => $data['role_id'], 'user_level' => 0, 'experience' => 0, 'money' => 0, 'ingot' => 0, 'pack_num' => 40));
+        $data = array('user_id' => $userId, 
+                      'user_name' => $data['user_name'], 
+                      'race_id' => $data['race_id'], 
+                      'user_level' => User::DEFAULT_USER_LEVEL, 
+                      'experience' => 0, 
+                      'money' => User::DEFAULT_MONEY, 
+                      'ingot' => User::DEFAULT_INGOT, 
+                      'pack_num' => User::DEFAULT_PACK_NUM);
+        $res = MySql::insert(self::TABLE_NAME, $data);
         return $res;
     }
     public static function updateUserInfo($userId, $data)

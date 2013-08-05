@@ -21,20 +21,40 @@ class Equip
 	CONST EQUIP_TYPE_BELT 		= 5;//腰带
 	CONST EQUIP_TYPE_SHOES 		= 6;//鞋子
 
-	CONST EQUIP_QUALITY_GENERAL = 1;//品质-普通
-	CONST EQUIP_QUALITY_ADVANCED = 2;//品质-进阶
-	CONST EQUIP_QUALITY_SUBLIME = 3;//品质-升华
-	CONST EQUIP_QUALITY_HOLY = 4;//品质-圣品
+	CONST EQUIP_QUALITY_GENERAL 	= 1;//品质-普通
+	CONST EQUIP_QUALITY_ADVANCED 	= 2;//品质-进阶
+	CONST EQUIP_QUALITY_SUBLIME 	= 3;//品质-升华
+	CONST EQUIP_QUALITY_HOLY 		= 4;//品质-圣品
 
+	CONST TABLE_EQUID_ATTRIBUTES = 'equid_attributes';
+	
 
-	//随机建创建一套装备
-	public static function createRandEquip($equipColour, $equipLevel)
+	//获取应颜色的配置
+	public static function getEquipConfigListByColour($equipColour)
 	{
-
+		$equipConfigList = self::equipConfigList();
+		if(is_array($equipConfigList) && isset($equipConfigList[$equipColour]))
+		{
+			return $equipConfigList[$equipColour];
+		}
+		return FALSE;
 	}
 
+	//获取装备基本属性
+	public static function attributeBaseList($base = self::EQUIP_BASE_ATTRIBUTE_GENERAL, $equipType = self::EQUIP_TYPE_ARMS, $level = 0)
+	{
+		$sql = "SELECT * FROM ".self::TABLE_EQUID_ATTRIBUTES." WHERE `equid_id` = ".$equipType." AND `base_attribute` = '".$base."' AND '".$level."' >= level_begin ";
+		$res = MySql::query($sql);
+		if($res && is_array($res))
+		{
+			foreach ($res as $value) {
+				$attributeBaseList[$value['attribute_id']] = PerRand::getRandValue(array($value['attributes_begin'], $value['attributes_end']));
+			}
+		}
+		return $attributeBaseList;
+	}
 
-	//颜色和装笽对应
+	//颜色和装备对应
 	public static function equipConfigList()
 	{
 		$equipConfigList = array(
@@ -63,19 +83,6 @@ class Equip
 					'add_attribute_num' => 5,
 				),
 		);
+		return $equipConfigList;
 	}
-
-	//装备对应的属性
-	public static function equipAttributeList()
-	{
-		$equipAttributeList = array(
-			self::EQUIP_TYPE_ARMS 		=> array(User_Attributes::USER_ATTRIBUTE_HIT, User_Attributes::USER_ATTRIBUTE_HURT),
-			self::EQUIP_TYPE_HELMET 	=> array(User_Attributes::USER_ATTRIBUTE_DEFENSE, User_Attributes::USER_ATTRIBUTE_MAGIC),
-			self::EQUIP_TYPE_NECKLACE 	=> array(User_Attributes::USER_ATTRIBUTE_PSYCHIC),
-			self::EQUIP_TYPE_CLOTHES 	=> array(User_Attributes::USER_ATTRIBUTE_DEFENSE),
-			self::EQUIP_TYPE_BELT 		=> array(User_Attributes::USER_ATTRIBUTE_BLOOD, User_Attributes::USER_ATTRIBUTE_DEFENSE),
-			self::EQUIP_TYPE_SHOES 		=> array(User_Attributes::USER_ATTRIBUTE_DEFENSE, User_Attributes::USER_ATTRIBUTE_QUICK),
-		);
-	}
-
 }

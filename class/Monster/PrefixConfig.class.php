@@ -6,11 +6,11 @@ class Monster_PrefixConfig
     public static function monsterPrefixList()
     {
         $monsterPrefixList = array(
-            self::MONSTER_PREFIX_PUNY     => '弱小的',
-            self::MONSTER_PREFIX_SLOW     => '缓慢的',
-            self::MONSTER_PREFIX_ORDINARY => '普通的',
-            self::MONSTER_PREFIX_POWERFUL => '强大的',
-            self::MONSTER_PREFIX_QUICK    => '敏捷的',
+            Monster::MONSTER_PREFIX_PUNY     => '弱小的',
+            Monster::MONSTER_PREFIX_SLOW     => '缓慢的',
+            Monster::MONSTER_PREFIX_ORDINARY => '普通的',
+            Monster::MONSTER_PREFIX_POWERFUL => '强大的',
+            Monster::MONSTER_PREFIX_QUICK    => '敏捷的',
           );
         return $monsterPrefixList;
     }
