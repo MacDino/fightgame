@@ -7,7 +7,7 @@ class Output {
         global $code, $msg, $data;
         $code   = intval ( $code );
         $msg    = ( string ) $msg;
-        if($code == 0) {
+        if($code == 0 && !$msg) {
             $msg = self::MESSAGE;
         }   
         echo self::outputJson ( $code, $msg, $data );
