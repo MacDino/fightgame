@@ -9,8 +9,17 @@ class User_Info
     public static function getUserInfoByUserId($userId)
     {
         $res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
+        print_r($res);exit;
         return $res;
     }
+    
+	//查找要添加的好友是否超过40级			@郑毅枫 2013/8/6		
+	public static function getUserInfoByLevel($friend_id, $compare, $level)
+	{
+		if(!int($friend_id) || !int($level))return FALSE;
+		$res = Mysql::selectOne(self::TABLE_NAME, array('user_id' => $friend_id, 'user_level' => array('opt' => $compare, 'val' => $level)));
+		return $res;
+	}
 
     public static function createUserInfo($userId, $data)
     {
