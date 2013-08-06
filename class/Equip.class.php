@@ -27,6 +27,20 @@ class Equip
 	CONST EQUIP_QUALITY_HOLY 		= 4;//品质-圣品
 
 	CONST TABLE_EQUID_ATTRIBUTES = 'equid_attributes';
+
+
+    //给某件装备进行升级
+    pulic static function updateEquipLevel($equipId, $fromLevel, $toLevel)
+    {
+     
+    
+    }
+    //创建一个装备
+    public static function createEquip()
+    {
+    
+    
+    }
 	
 
 	//获取应颜色的配置

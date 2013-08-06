@@ -32,7 +32,7 @@ class Race
     public static function randRaceId()
     {
         $raceList = self::getRaceList();
-        $raceId = mt_rand(1, count($raceList));
+        $raceId = array_rand(array_keys($raceList), 1);
         return $raceId;
     }
     //获取种族列表
