@@ -1,5 +1,4 @@
 <?php
-
 //好友关联信息
 class Friend_Info
 {
@@ -64,7 +63,7 @@ class Friend_Info
 		if(!empty($is_friend)) return FALSE;
         
         $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId, 'channel' => $channel), true);
-        echo $userId;exit;
+        //echo $userId;exit;
         if($userId)
         {
         	//同时增加user_id声望
