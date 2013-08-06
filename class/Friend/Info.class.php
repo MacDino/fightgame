@@ -1,4 +1,5 @@
 <?php
+
 //好友关联信息
 class Friend_Info
 {
