@@ -9,7 +9,6 @@ class User_Info
     public static function getUserInfoByUserId($userId)
     {
         $res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
-        print_r($res);exit;
         return $res;
     }
     
