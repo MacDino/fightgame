@@ -20,24 +20,23 @@ class Utility
 	    return $difference;
 	}
 
-	//获取数组全部转为INT所需要乘以的系统
+	//获取数组全部转为INT所需要乘以的系数
 	public static function getChangeIntRation($data)
 	{
-		$ration = 1;
-		if(!$data || !is_array($data))return $ration;
 		$data = array_filter($data, 'self::arrayFilterFloat');
-		$ration = 1;
-		foreach ($data as $value) {
-			if(!filter_var($value*$ration, FILTER_VALIDATE_INT))
+		$max_decimals = 0;
+		foreach($data as $value)
+		{
+			$decimals = strlen(strstr($value, '.')) - 1;
+			if ($decimals > $max_decimals)
 			{
-				$valueLen = strlen($value);
-				$ration = $valueLen-1;	
-			}else{
-				continue;
+				$max_decimals = $decimals;
 			}
 		}
-		return (int)str_pad(1, $ration, 0);
+
+		return pow(10, $max_decimals);
 	}
+
 	//去除数组中为0的值
 	public static function arrayFilterFloat($value)
 	{
