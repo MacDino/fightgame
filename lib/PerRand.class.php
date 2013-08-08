@@ -1,5 +1,6 @@
 <?php
 //计算概率方法
+include "Utility.class.php";
 class PerRand
 {
 	public static function getRandValue($data)
@@ -11,56 +12,44 @@ class PerRand
 		return $randValue/$ration;
 	}
 	//多维数组随机 - 目前实现二维
-	public static function getMultRandResultKey($multArrayData)
+	public static function getMultiRandResultKey($multArrayData)
 	{
-		if(!is_array($multArrayData) || !$multArrayData)return FALSE;
+		if(!is_array($multArrayData) || !$multArrayData)return array();
 		foreach ($multArrayData as $key => $value) {
 			$hitList[] = self::getRandResultKey($value);
 		}
 		return $hitList;
 	}
+
 	public static function getRandResultKey($data)
 	{
-		if(!is_array($data) || !$data)return FALSE;
-		$data = array_filter($data, 'Utility::arrayFilterFloat');
-		$getEveryPercentArr = array_values($data);
-		$totalPercent = array_sum($getEveryPercentArr);
-		if($totalPercent > 1)return FALSE;
-		$ration = Utility::getChangeIntRation($getEveryPercentArr);
-	    $randCheckList = self::_createRandResultArray($data, $ration);
-	    $randNum = self::_getRandNum(1, $ration);
-	    return self::_checkIsHit($randNum, $randCheckList);
-	}
+		$data = array_filter($data);
+		if ( ! $data || array_sum($data) > 1) 
+		{
+			return false;
+		}
 
-	private static function _createRandResultArray($data, $times)
-	{
-		$lastEnd = 1;
-	    foreach ($data as $key => $value) 
-	    {
-	        $value = $value * $times;
-	        if(!$value)continue;
-	        $begin = $lastEnd;
-	        $end   = $lastEnd + $value - 1;
-	        $randCheckList[$key] = array($begin ,$end);
-	        $lastEnd = $end + 1;
-	    }
-	    return $randCheckList;
-	}
+		$min = min($data);
+		$length = strlen($min) - 1;
+		$times = pow(10, $length);
 
-	private static function _getRandNum($begin = 1, $end)
-	{
-		return mt_rand($begin, $end);
-	}
+		$range_from = 0;
+		foreach ($data as &$value)
+		{
+			$value = $value * $times + $range_from;
+			$range_from = $value;
+		}
+		unset($value);
 
-	private static function _checkIsHit($randNum, $checkArray)
-	{
-		if(!$randNum || !is_array($checkArray))return FALSE;
-		foreach ($checkArray as $key => $value) {
-	        if($randNum >= $value[0] && $randNum <= $value[1])
-	        {
-	          return $key;
-	        }
-	    }
-	    return FALSE;
+		$rand = mt_rand(0, $times - 1);
+		foreach ($data as $key => $value)
+		{
+			if ($rand < $value)
+			{
+				return $key;
+			}
+		}
+
+		return false;
 	}
 }
