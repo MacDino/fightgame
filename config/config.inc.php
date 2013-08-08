@@ -35,3 +35,16 @@ if(DEVELOPER)
         ),  
     );
 }
+
+// for DB class
+$DB_CONFIG = array();
+foreach ($MYSQL_CONFIG as $connection => $config)
+{
+	$DB_CONFIG[$connection] = array(
+		'host' => $config['db_host'],
+		'database' => $config['db_name'],
+		'username' => $config['db_user'],
+		'password' => $config['db_passwd'],
+		'port' => $config['db_port'],
+	);
+}
