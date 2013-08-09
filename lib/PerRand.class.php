@@ -22,6 +22,11 @@ class PerRand
 
 	public static function getRandResultKey($data)
 	{
+		if ( ! is_array($data))
+		{
+			return false;
+		}
+
 		$data = array_filter($data);
 		if ( ! $data || array_sum($data) > 1) 
 		{

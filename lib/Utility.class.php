@@ -47,4 +47,26 @@ class Utility
 	      return (float)$value;
 	    }
 	}
+
+	// 以最左侧数组为基准，相乘数组中键值相同的元素
+	// $a = array('a' => 1, 'b' => 2); $b = array('a' => 0.1, 'b' => 0.2);
+	// Utility::arrayMultiply($a, $b) => array('a' => 0.1, 'b' => 0.4);
+	public static function arrayMultiply()
+	{
+		$args = array_filter(func_get_args(), 'is_array');
+		$base = array_shift($args);
+		while ($args)
+		{
+			$multiple = array_shift($args);
+			foreach($base as $key => &$value)
+			{
+				if (isset($multiple[$key]))
+				{
+					$value *= $multiple[$key];
+				}
+			}
+		}
+
+		return $base;
+	}
 }
