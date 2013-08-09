@@ -1,5 +1,6 @@
 <?php
 //计算概率方法
+include "Utility.class.php";
 class PerRand
 {
 	public static function getRandValue($data)
