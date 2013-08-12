@@ -456,6 +456,26 @@ class DBQuery {
 		return $this;
 	}
 
+	public function __call($method, $parameters)
+	{
+		if (preg_match('/^getOneBy(\w++)$/', $method, $matches)) 
+		{
+			return $this->dynamicWhere($matches[1], $parameters)->selectOne();
+		}
+
+		if (preg_match('/^getBy(\w++)$/', $method, $matches)) 
+		{
+			return $this->dynamicWhere($matches[1], $parameters)->select();
+		}
+
+		if (preg_match('/^deleteBy(\w++)$/', $method, $matches)) 
+		{
+			return $this->dynamicWhere($matches[1], $parameters)->delete();
+		}
+
+		throw new Exception("methods $method not exists");
+	}
+
 	protected function setTable()
 	{
 		if (isset($this->connection->config['cache_path']))
@@ -576,7 +596,7 @@ class DBQuery {
 	}
 
 	// empty value except 0
-	public function blank($value)
+	protected function blank($value)
 	{
 		return	empty($value) && ! is_numeric($value);
 	}
@@ -736,5 +756,18 @@ class DBQuery {
 
 		$sql = ' WHERE '.$sql;
 		return array($sql, $bindings);
+	}
+
+	protected function dynamicWhere($by_field, $parameters)
+	{
+		$by_field = strtolower(preg_replace('/(?<!\b)(?=[A-Z])/', '_', $by_field));
+		$fields = explode('_and_', $by_field);
+		if (count($fields) !== count($parameters))
+		{
+			throw new Exception('parameters error!');
+		}
+
+		$this->where(array_combine($fields, $parameters));
+		return $this;
 	}
 }

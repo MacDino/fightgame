@@ -78,37 +78,7 @@ abstract class Model {
 
 	public static function __callStatic($method, $parameters)
 	{
-		if (preg_match('/^getOneBy(\w++)$/', $method, $matches)) 
-		{
-			$where = self::_dynamicWhere($matches[1], $parameters);
-			return DB::table(static::$table_name)->selectOne($where);
-		}
-
-		if (preg_match('/^getBy(\w++)$/', $method, $matches)) 
-		{
-			$where = self::_dynamicWhere($matches[1], $parameters);
-			return DB::table(static::$table_name)->select($where);
-		}
-
-		if (preg_match('/^deleteBy(\w++)$/', $method, $matches)) 
-		{
-			$where = self::_dynamicWhere($matches[1], $parameters);
-			return DB::table(static::$table_name)->delete($where);
-		}
-
 		$db_query = DB::table(static::$table_name);
 		return call_user_func_array(array($db_query, $method), $parameters);
-	}
-
-	private static function _dynamicWhere($by_field, $parameters)
-	{
-		$by_field = strtolower(preg_replace('/(?<!\b)(?=[A-Z])/', '_', $by_field));
-		$fields = explode('_and_', $by_field);
-		if (count($fields) !== count($parameters))
-		{
-			throw new Exception('parameters error!');
-		}
-
-		return array_combine($fields, $parameters);
 	}
 }
