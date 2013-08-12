@@ -11,6 +11,18 @@ class Skill_Info {
     }
 
     /**
+     * @desc 获取技能物理防御
+     */
+    public static function getSkillDefense(){
+    }
+
+    /**
+     * @desc 获取技能魔法防御
+     */
+    public static function getSkillMagic(){
+    }
+
+    /**
      * @desc 技能学习
      */
     public static function updateSkillByRoleId(){
