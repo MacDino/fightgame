@@ -30,7 +30,7 @@ class Equip
 
 
     //给某件装备进行升级
-    pulic static function updateEquipLevel($equipId, $fromLevel, $toLevel)
+    public static function updateEquipLevel($equipId, $fromLevel, $toLevel)
     {
      
     
