@@ -100,24 +100,26 @@ class Monster
 		$ret = array('attack' => array(), 'defense' => array(), 'passive' => array());
 		foreach ($ret as $skill_type => &$skills)
 		{
+			$must_skills = isset($must_skills_list[$skill_type]) ? $must_skills_list[$skill_type] : array();
+
 			//地图技能为空时直接返回必须技能
 			if (empty($map_skills_list[$skill_type]))
 			{
-				$skills = isset($must_skills_list[$skill_type]) ? $must_skills_list[$skill_type] : array();
+				$skills = $must_skills;
 				continue;
 			}
-
-			$must_skills = isset($must_skills_list[$skill_type]) ? $must_skills_list[$skill_type] : array();
 
 			//可选技能中去除必选的
 			$map_skills =  array_diff($map_skills_list[$skill_type], $must_skills);
 
 			//生成技能数范围
 			$min_count = isset($min_count_list[$skill_type]) ? $min_count_list[$skill_type] : 0;
-			$max_count = ($skill_type == 'passive') ? count($map_skills) : 5;
+			$max_count = ($skill_type == 'passive') ? count($map_skills_list[$skill_type]) : 5;
 
 			//随机技能数
 			$skill_count = mt_rand($min_count, $max_count);
+
+			//去除必选的技能数
 			$skill_count = max($skill_count - count($must_skills), 0);
 
 			shuffle($map_skills);
