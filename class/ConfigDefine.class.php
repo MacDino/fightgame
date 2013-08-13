@@ -39,6 +39,11 @@ class ConfigDefine
 	//其它
 	CONST RELEASE_PROBABILITY 		  	= 301;//释放概率
 
+
+    CONST PK_NUM                        = 'pk_num';//PVP次数
+    CONST USER_BASE_ATTRIBUTE           = 'user_base_attribute';//用户基本属性
+    CONST USER_GROWUP_ATTRIBUTE         = 'user_growup_attribute';//用户成长属性
+
 	public static function configDefineNameList()
 	{
 		$configDefineNameList = array(
