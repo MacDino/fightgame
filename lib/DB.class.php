@@ -767,7 +767,6 @@ class DBQuery {
 			throw new Exception('parameters error!');
 		}
 
-		$this->where(array_combine($fields, $parameters));
-		return $this;
+		return $this->where(array_combine($fields, $parameters));
 	}
 }
