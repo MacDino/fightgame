@@ -7,7 +7,15 @@ class Skill_Config
      *
      * return int 伤害值
      */
-    public static function zjSkillFormula(){
+    public static function zjSkillFormula($attributes){
+        $hurt   = 0;
+        $const  = Skill_Common::wlgjConst($attributes['role_level'], $attributes['power']);
+        extract($const);
+        $hurt   = $hurt + $rand5 + ($attributes['hit'] + 12 * $attrubutes['skill_level']) / 3 + $attributes['hurt'] + $randPower;
+        $hurt   = $hurt * $rate;
+        $hurt   = $hurt - $attributes['base_defense'] - $attributes['skill_defense'];
+        $hurt   = $hurt * (1.5 + 0.01 * $attributes['skill_level']);
+        return $hurt;
     }
 
     /**
@@ -15,7 +23,18 @@ class Skill_Config
      *
      * return array array(第一次攻击值,...)
      */
-    public static function ljSkillFormula(){
+    public static function ljSkillFormula($attributes){
+        $hurt       = 0;
+        $const  = Skill_Common::wlgjConst($attributes['role_level'], $attributes['power']);
+        extract($const);
+        $hurt       = $hurt + $rand5 + $attributes['hit'] / 3 + $attributes['hurt'] + 4 * $attributes['skill_level'] + $randPower;  
+        $hurt       = $hurt * $rate;
+        $hurt_arr   = array(
+            0.7 * $hurt - $attributes['base_defense'] - $attributes['skill_defense'],
+            0.8 * $hurt - $attributes['base_defense'] - $attributes['skill_defense'],
+            $hurt - $attributes['base_defense'] - $attributes['skill_defense']
+        );
+        return $hurt_arr;
     }
     
     /**
@@ -23,8 +42,15 @@ class Skill_Config
      *
      * return int 伤害值
      */
-    public static function lxyzSkillFormula(){
+    public static function lxyzSkillFormula($attributes){
         //消耗50魔法
+        $hurt   = 0;
+        $const  = Skill_Common::wlgjConst($attributes['role_level'], $attributes['power']);
+        extract($const);
+        $hurt   = $hurt + $rand5 + ($attributes['hit'] + 4 * $attributes['skill_level']) / 3 + $attributes['hurt'] + 2 * $attributes['skill_level'] + $randPower; 
+        $hurt   = $hurt * $rate;
+        $hurt   = $hurt - $attributes['base_defense'] - $attributes['skill_defense'] + (20 + 4 * $attributes['skill_level']);
+        return $hurt;
     }
    
     /**
