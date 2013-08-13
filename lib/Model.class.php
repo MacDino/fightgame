@@ -73,7 +73,7 @@ abstract class Model {
 
 	public static function insert()
 	{
-		return call_user_func_array('self::create', func_get_args());
+		return call_user_func_array('static::create', func_get_args());
 	}
 
 	public static function getError()
