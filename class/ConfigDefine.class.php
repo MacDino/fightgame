@@ -22,7 +22,7 @@ class ConfigDefine
 	//技能定义
 
 	CONST SKILL_ZJ      				= 201;//重击
-	CONST SKILL_LJ      				= 202;//重击
+	CONST SKILL_LJ      				= 202;//连击
     CONST SKILL_LSYZ    				= 203;//灵犀一指
     CONST SKILL_SWZH    				= 204;//三昧真火
     CONST SKILL_HFHY    				= 205;//呼风唤雨 
@@ -63,6 +63,7 @@ class ConfigDefine
             self::USER_ATTRIBUTE_LUCKY        	=> '幸运',
 
             self::SKILL_ZJ      				=> '重击', 
+            self::SKILL_LJ      				=> '连击', 
             self::SKILL_LSYZ    				=> '灵犀一指',
             self::SKILL_SWZH    				=> '三昧真火', 
             self::SKILL_HFHY    				=> '呼风唤雨', 
