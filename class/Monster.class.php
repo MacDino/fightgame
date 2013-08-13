@@ -88,14 +88,13 @@ class Monster
 	  $prefix_probability = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'equip_get_probability');
 	  $suffix_probability = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'equip_get_probability');
 
-	  // ?? 如何处理两种概率, 
-	  // 暂先摇后缀概率，没中的话再摇前缀概率
-	  if ($color = PerRand::getRandResultKey($suffix_probability))
-	  {
-		  return $color;
-	  }
+	  return PerRand::getMultiRandResultKey(array($prefix_probability, $suffix_probability));
+  }
 
-	  return PerRand::getRandResultKey($prefix_probability);
+  // 获取怪物的技能
+  public static function getMonsterSkill($monster)
+  {
+	  
   }
 
   //多余属性随机分配
