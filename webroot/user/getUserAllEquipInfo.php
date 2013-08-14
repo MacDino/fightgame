@@ -14,7 +14,6 @@ if(!$userId)
 
 //$AllEquipInfo = Equip::getEquipInfoByUserId($userId, FALSE);//所有装备
 //var_dump($AllEquipInfo);
-
 try {
     Equip::getEquipInfoByUserId($userId, FALSE);
     $code = 0;

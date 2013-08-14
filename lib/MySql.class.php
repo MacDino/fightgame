@@ -94,6 +94,7 @@ class MySql
     	if (!empty($limit)) {
     		$sql .= " LIMIT $start,$limit";
     	}
+    	//echo $sql;exit;
     	return self::query($sql);
     }
     //获取一条数据
