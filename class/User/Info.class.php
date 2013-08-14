@@ -1,4 +1,4 @@
-<?php 
+<?php    
 //角色相关
 class User_Info
 {
