@@ -14,7 +14,6 @@ if(!$userId)
 
 //$BaseInfo = User_Info::getUserInfoByUserId($userId);//基础信息
 //var_dump($BaseInfo);
-
 try {
     User_Info::getUserInfoByUserId($userId);
     $code = 0;

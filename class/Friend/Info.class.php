@@ -3,39 +3,54 @@
 class Friend_Info
 {
     CONST TABLE_NAME = 'friend_info';
+    CONST FRIEND_NUM = '10';//好友数量原始上限,可增加
 
     //好友来源
     private static $_allChannelType = array('lbs', 'weixin', 'sina', 'game');
 
 	
     /**
-     * 查找好友
-     *
+     * 查找好友信息
      * @param int $userId		用户ID
-     * @param int $channel	 	好友来源
-     * @return array	
+     * @return array
      */
-    public static function getFriendInfo($userId, $channel = FALSE)
+    public static function getFriendInfo($userId)
     {
-    	
         try{
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
-			
-			//取出数组
+			//查询好友信息
 			$friendInfo = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
 			
            	if(is_array($friendInfo))
 	        {
-	        	//echo 1111;exit;
 	            return $friendInfo;
 	        }else{
-	        	//echo 2222;exit;
 	        	return FALSE;
 	        }
         }catch (Exception $e){
            return FALSE;
         } 
+    }
+    /**
+     * 查询已有好友数量
+     *
+     * @param int $userId	用户ID
+     * @return int
+     */
+    public static function getFriendNum($userId){
+    	try{
+        	//数据进行校验,非空,数据内
+			if(!$userId)	return FALSE;
+			//查询好友数量
+			$friendInfo = Mysql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+			
+            return $friendInfo;
+
+        }catch (Exception $e){
+           return FALSE;
+        } 
+    }
     }
 
     /**
@@ -67,7 +82,6 @@ class Friend_Info
         if($userId)
         {
         	//同时增加user_id声望
-        	
             return TRUE;
         }else{
         	return FALSE;

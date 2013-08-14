@@ -18,8 +18,18 @@ class User_Info
         if(!$userId || !$data || !is_array($data))return FALSE;
         $info = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
         if($info)return FALSE;
-        if(!isset($data['user_name']) || !isset($data['role_id']))return FALSE;
-        $res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'user_name' => $data['user_name'], 'role_id' => $data['role_id'], 'user_level' => 0, 'experience' => 0, 'money' => 0, 'ingot' => 0, 'pack_num' => 40));
+        if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
+        $res = MySql::insert(self::TABLE_NAME, array(
+	        'user_id' => $userId, 
+	        'user_name' => $data['user_name'], 
+	        'race_id' => $data['race_id'], 
+	        'user_level' => 0, 
+	        'experience' => 0, 
+	        'money' => 0, 
+	        'ingot' => 0, 
+	        'pack_num' => 40, 
+	        'friend_num' => Friend_Info::FRIEND_NUM //好友上限
+        ));
         return $res;
     }
     
@@ -38,6 +48,28 @@ class User_Info
         return $res;
     }
     
+    /**
+     * 用户信息单项更新
+     *
+     * @param int		 $userId	用户ID
+     * @param string	 $key		变化的项
+     * @param string	 $value		值
+     * @param string	 $channel	+or-
+     */
+    public static function updateSingleInfo($userId, $key, $value, $change){
+    	if(!$userId || !$key || !$value || !$change)return FALSE;
+    	if($change == 1){
+    		$change = '+';
+    	}elseif($change == 2){
+    		$change = '-';
+    	}else{
+    		return FALSE;
+    	}
+    	$sql = "UPDATE " . self::TABLE_NAME . " SET $key = " . "$key $change $value WHERE user_id = $userId";
+    	$res = Mysql::query($sql);
+    	return $res;
+    }
+    
     public static function testUserInfo($id){
     	
     	$res = MySql::selectOne(self::TABLE_NAME, array('id'=>$id));
@@ -54,7 +86,7 @@ class User_Info
      *
      * @param int $user_id	用户ID
      */
-    public static function getUserInfoFightAttribute($user_id){
+    public static function getUserInfoFightAttribute($userId){
     	//先计算出所有数值
     	//然后再算比例
     	$numerical = array(
@@ -77,14 +109,14 @@ class User_Info
     	
     	//根本ID取出所属种族和等级
     	//getUserInfoByUserId
-    	$user_info = self::testUserInfo($user_id);
+    	$userInfo = self::testUserInfo($user_id);
     	
     	//根据种族和等级取出基础属性(裸属性),把基础属性的数值加入到$numerical里
     	//getInfoByRaceAndLevel
-    	$user_attribute = User_Attributes::getInfoByRaceAndLevel($user_info['race_id'], $user_info['user_level']);
+    	$userAttribute = User_Attributes::getInfoByRaceAndLevel($userInfo['race_id'], $userInfo['user_level']);
     	//此处为假数据,需要分割字符串,分割成 属性['数值']
-    	$explode_attribute = explode($user_attribute, ',');
-    	foreach ($explode_attribute as $i=>$key)
+    	$explodeAttribute = explode($userAttribute, ',');
+    	foreach ($explodeAttribute as $i=>$key)
     	{
     		if(isset($i) && !empty($key) && is_array($numerical))
     		{
@@ -94,14 +126,14 @@ class User_Info
     	
     	//根据ID取出所有装备
     	//假设为getEquipInfoByUserId
-    	$equip_info = Equip_Info::getEquipInfoByUserId($user_id, TRUE);
+    	$equipInfo = Equip_Info::getEquipInfoByUserId($userId, TRUE);
     	
     	//循环装备信息,加值类相加,比例类相加,比例类=比例+100%
-    	foreach ($equip_info as $p)
+    	foreach ($equipInfo as $p)
     	{
-	    	$equip_attribute = json_decode($p, TRUE);
+	    	$equipAttribute = json_decode($p, TRUE);
 	    	//基础属性
-	    	foreach ($equip_attribute as $m=>$n)
+	    	foreach ($equipAttribute as $m=>$n)
 	    	{
 	    		if(isset($m) && !empty($n) && is_array($numerical))
 	    		{
@@ -109,7 +141,6 @@ class User_Info
 	    		}
 	    	}
 	    	//扩展属性,百分比,判断是百分比数据的,加入$proportion
-	    	
     	}
     	
     	//判断是否有对手,如果有,属性相生还是相克,计算所得值
@@ -133,7 +164,6 @@ class User_Info
 	    		}
 	    	}
     	}*/
-    	
     	//把每项属性数值型部分乘上比例值部分
     	/*foreach ($proportion as $x=>$y)
     	{
