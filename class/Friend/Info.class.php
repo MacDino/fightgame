@@ -1,6 +1,6 @@
 <?php
 //好友关联信息
-class Friend
+class Friend_Info
 {
     CONST TABLE_NAME = 'friend_info';
 
@@ -17,16 +17,20 @@ class Friend
      */
     public static function getFriendInfo($userId, $channel = FALSE)
     {
+    	
         try{
         	//数据进行校验,非空,数据内
-			if(!is_int($userId) || !in_array($channel, self::$_allChannelType))	return FALSE;
+			if(!$userId)	return FALSE;
 			
 			//取出数组
-			$friendInfo = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'channel' => $channel));
-           	if($friendInfo)
+			$friendInfo = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+			
+           	if(is_array($friendInfo))
 	        {
+	        	//echo 1111;exit;
 	            return $friendInfo;
 	        }else{
+	        	//echo 2222;exit;
 	        	return FALSE;
 	        }
         }catch (Exception $e){
@@ -44,17 +48,22 @@ class Friend
      */
     public static function createFriendInfo($userId, $friendId, $channel = FALSE)
     {
+    	
     	//数据进行校验,非空,数据内
-    	if(!is_int($userId) || !is_int($friendId) || !in_array($channel, self::$_allChannelType)) return FALSE;
+    	if(!$userId || !$friendId) return FALSE;
+    	
     	//查询好友ID是否在用户表里存在//是否已经超过某等级 >40
-		$user_info = Mysql::query("select user_id from user_info where user_id = '$userId'");
-		$friend_info = Mysql::query("select user_id from user_info where user_id = '$friendId' and user_level < '40'");
+		$user_info = User_Info::getUserInfoByUserId($userId);
+		$friend_info = User_Info::getUserInfoByLevel($friendId, '<', 40);
+		
 		if(!$user_info || !$friend_info) return FALSE;
 		//是否已添加过好友
-		if(!empty(self::getUserFrined($userId, $friendId))) return FALSE;
+		
+		$is_friend = self::getUserFrined($userId, $friendId);
+		if(!empty($is_friend)) return FALSE;
         
-        $userId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
-        
+        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId, 'channel' => $channel), true);
+        //echo $userId;exit;
         if($userId)
         {
         	//同时增加user_id声望
@@ -69,9 +78,10 @@ class Friend
     public static function deleteFriendInfo($userId, $friendId)
     {
     	//简单检测
-    	if(!is_int($userId) || !is_int($friendId))	return FALSE;
+    	if(!$userId || !$friendId)	return FALSE;
     	//是否存在
-    	if(empty(self::getUserFrined($userId, $friendId))) return FALSE;
+    	$is_friend = self::getUserFrined($userId, $friendId);
+    	if(empty($is_friend)) return FALSE;
     	
         $userId = MySql::delete(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
         
@@ -94,9 +104,9 @@ class Friend
      */
 	public static function getUserFrined($userId, $friendId)
 	{
-		if(!is_int($userId) || !is_int($friendId))	return FALSE;
+		if(!$userId || !$friendId)	return FALSE;
 		
-		$friendInfo = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'channel' => $channel));
+		$friendInfo = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
 		
        	if($friendInfo)
         {
