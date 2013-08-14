@@ -65,4 +65,25 @@ class Skill
         );
     }
 
+    /**
+     * @desc 获取技能加成后的角色属性
+     * @param $attributes 角色基本属性
+     *
+     */
+    public static function getRoleAttributesWithSkill($attributes){
+        //主动技能加成
+        //被动技能加成
+    }
+
+    /**
+     * @desc 使用技能(主动技能)
+     *
+     * @param $skill    技能缩写
+     * @param $role_id  当前角色id
+     * @param $op_id    对手id
+     * @param $type     类型：怪物，其他玩家
+     */
+    public static function useSkill($skill, $role_id, $op_id, $type){
+    }
+
 }

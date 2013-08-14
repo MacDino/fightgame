@@ -11,6 +11,18 @@ class Skill_Common {
         $const['rate']      = 2 * $rate;
         return $const;
     }
+
+    /**
+     * @desc 物理攻击常用值
+     */
+    public static function fsgjConst($role_level, $hurt){
+        $const              = array();
+        $const['rand5']     = self::rand5RoleLevel($role_level); 
+        $rate   = PerRand::getRandValue(array(0, 0.05));
+        $const['rate']      = 2 * $rate;
+        $const['hurt_rand'] = PerRand::getRandValue(array(0.03 * $hurt, 0.09 * $hurt));
+        return $const;
+    }
     /**
      * @desc 根据角色等级随机5次随机
      */
