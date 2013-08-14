@@ -50,31 +50,28 @@ class User_Info
      * 属性组成
      * 		基本属性
      * 		装备加成
-     * 		被动技能		
-     * 		种族相克		@opponent_id	对手ID
      * 		
      *
      * @param int $user_id	用户ID
-     * @param int $opponent_id	对手ID
      */
-    public static function getUserInfoFightAttribute($user_id, $opponent_id=FALSE){
+    public static function getUserInfoFightAttribute($user_id){
     	//先计算出所有数值
     	//然后再算比例
     	$numerical = array(
-    		User_Attributes::USER_ATTRIBUTE_BLOOD,
-    		User_Attributes::USER_ATTRIBUTE_DEFENSE,
-    		User_Attributes::USER_ATTRIBUTE_DODGE,
-    		User_Attributes::USER_ATTRIBUTE_ENDURANCE,
-    		User_Attributes::USER_ATTRIBUTE_HIT,
-    		User_Attributes::USER_ATTRIBUTE_HURT,
-    		User_Attributes::USER_ATTRIBUTE_LUCKY,
-    		User_Attributes::USER_ATTRIBUTE_MAGIC,
-    		User_Attributes::USER_ATTRIBUTE_MAGIC_POWER,
-    		User_Attributes::USER_ATTRIBUTE_PHYSIQUE,
-    		User_Attributes::USER_ATTRIBUTE_POWER,
-    		User_Attributes::USER_ATTRIBUTE_PSYCHIC,
-    		User_Attributes::USER_ATTRIBUTE_QUICK,
-    		User_Attributes::USER_ATTRIBUTE_SPEED    	
+    		ConfigDefine::USER_ATTRIBUTE_BLOOD,
+    		ConfigDefine::USER_ATTRIBUTE_DEFENSE,
+    		ConfigDefine::USER_ATTRIBUTE_DODGE,
+    		ConfigDefine::USER_ATTRIBUTE_ENDURANCE,
+    		ConfigDefine::USER_ATTRIBUTE_HIT,
+    		ConfigDefine::USER_ATTRIBUTE_HURT,
+    		ConfigDefine::USER_ATTRIBUTE_LUCKY,
+    		ConfigDefine::USER_ATTRIBUTE_MAGIC,
+    		ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER,
+    		ConfigDefine::USER_ATTRIBUTE_PHYSIQUE,
+    		ConfigDefine::USER_ATTRIBUTE_POWER,
+    		ConfigDefine::USER_ATTRIBUTE_PSYCHIC,
+    		ConfigDefine::USER_ATTRIBUTE_QUICK,
+    		ConfigDefine::USER_ATTRIBUTE_SPEED    	
     	);//数值型属性
     	//$proportion = array();//比例型属性
     	
@@ -100,9 +97,9 @@ class User_Info
     	$equip_info = Equip_Info::getEquipInfoByUserId($user_id, TRUE);
     	
     	//循环装备信息,加值类相加,比例类相加,比例类=比例+100%
-    	foreach ($equip_info as $o=>$p)
+    	foreach ($equip_info as $p)
     	{
-	    	$equip_attribute = json_decode($p);
+	    	$equip_attribute = json_decode($p, TRUE);
 	    	//基础属性
 	    	foreach ($equip_attribute as $m=>$n)
 	    	{
@@ -127,7 +124,7 @@ class User_Info
     			}
     		}
     	}*/
-    	if(isset($opponent_id)){
+    	/*if(isset($opponent_id)){
     		$opponent_info = self::getUserInfoByUserId($opponent_id);
     		if(int($opponent_info['race_id'] - $user_info['race_id']) = 1 || int($opponent_info['race_id'] - $user_info['race_id']) = '-2')
 	    	foreach ($numerical as $x=>$y){
@@ -135,7 +132,7 @@ class User_Info
 	    			$numerical[$x] = ceil($y * 0.97);
 	    		}
 	    	}
-    	}
+    	}*/
     	
     	//把每项属性数值型部分乘上比例值部分
     	/*foreach ($proportion as $x=>$y)
@@ -146,6 +143,6 @@ class User_Info
     	}*/
     	
     	//得出结果,合成字符串,抛出
-    	return json_encode($numerical);
+    	return $numerical;
     }
 }
