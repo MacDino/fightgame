@@ -3,12 +3,12 @@
 class Friend_Info
 {
     CONST TABLE_NAME = 'friend_info';
+    
     CONST FRIEND_NUM = '10';//好友数量原始上限,可增加
 
     //好友来源
-    private static $_allChannelType = array('lbs', 'weixin', 'sina', 'game');
-
-	
+    //private static $_allChannelType = array('lbs', 'weixin', 'sina', 'game');
+    
     /**
      * 查找好友信息
      * @param int $userId		用户ID
@@ -42,15 +42,14 @@ class Friend_Info
     	try{
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
+			
 			//查询好友数量
 			$friendInfo = Mysql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
 			
             return $friendInfo;
-
         }catch (Exception $e){
            return FALSE;
         } 
-    }
     }
 
     /**
@@ -58,27 +57,25 @@ class Friend_Info
      *
      * @param int $userId		用户ID
      * @param int $friendId		好友ID
-     * @param string $channel	好友来源
      * @return Bool
      */
-    public static function createFriendInfo($userId, $friendId, $channel = FALSE)
+    public static function createFriendInfo($userId, $friendId)
     {
-    	
     	//数据进行校验,非空,数据内
     	if(!$userId || !$friendId) return FALSE;
     	
     	//查询好友ID是否在用户表里存在//是否已经超过某等级 >40
 		$user_info = User_Info::getUserInfoByUserId($userId);
 		$friend_info = User_Info::getUserInfoByLevel($friendId, '<', 40);
-		
 		if(!$user_info || !$friend_info) return FALSE;
-		//是否已添加过好友
 		
+		//是否已添加过好友
 		$is_friend = self::getUserFrined($userId, $friendId);
 		if(!empty($is_friend)) return FALSE;
         
         $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId, 'channel' => $channel), true);
         //echo $userId;exit;
+        
         if($userId)
         {
         	//同时增加user_id声望
@@ -93,7 +90,8 @@ class Friend_Info
     {
     	//简单检测
     	if(!$userId || !$friendId)	return FALSE;
-    	//是否存在
+    	
+    	//好友是否存在
     	$is_friend = self::getUserFrined($userId, $friendId);
     	if(empty($is_friend)) return FALSE;
     	
@@ -102,7 +100,6 @@ class Friend_Info
         if($userId)
         {
         	//同时减少user_id声望
-        	
             return TRUE;
         }else{
         	return FALSE;
@@ -118,26 +115,16 @@ class Friend_Info
      */
 	public static function getUserFrined($userId, $friendId)
 	{
+		//简单检测
 		if(!$userId || !$friendId)	return FALSE;
 		
 		$friendInfo = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
 		
        	if($friendInfo)
-        {
+       	{
             return TRUE;
         }else{
         	return FALSE;
         }
 	}
-	
-	/**
-	 * 增减声望
-	 */
-	
-	/**
-	 * 增加元宝
-	 */
-
-
-
 }
