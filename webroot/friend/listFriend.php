@@ -13,10 +13,11 @@ if(!$userId)
     $msg = '1';
     die;
 }
-
+$reslut = Friend_Info::getFriendInfo($userId);
+var_dump($reslut);
 try {
     //显示好友
-    $reslut = Friend_Info::getFriendInfo($userId);
+    Friend_Info::getFriendInfo($userId);
     $code = 0;
     $msg = 'OK';
     die;

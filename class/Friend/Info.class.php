@@ -7,7 +7,6 @@ class Friend_Info
     CONST FRIEND_NUM = '10';//好友数量原始上限,可增加
 
     //好友来源
-    //private static $_allChannelType = array('lbs', 'weixin', 'sina', 'game');
     
     /**
      * 查找好友信息
@@ -73,7 +72,7 @@ class Friend_Info
 		$is_friend = self::getUserFrined($userId, $friendId);
 		if(!empty($is_friend)) return FALSE;
         
-        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId, 'channel' => $channel), true);
+        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId), true);
         //echo $userId;exit;
         
         if($userId)

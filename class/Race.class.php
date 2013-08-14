@@ -10,6 +10,7 @@ class Race
     //获取种族升级属性加成
     public static function getDefaultAttributes($raceId)
     {
+//    	echo "raceId===$raceId";exit;
         $defaultAttributtesList = self::_defaultAttributesList();
         if($raceId && isset($defaultAttributtesList[$raceId]))
         {

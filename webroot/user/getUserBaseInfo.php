@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
-
+//echo "userID==$userId";exit;
 if(!$userId)
 {
     $code = 1;
@@ -11,7 +11,10 @@ if(!$userId)
     $msg = '1';
     die;
 }
-
+/*$sql = "select * from user_info where user_id = '$userId'";
+$a = MySql::query($sql);
+var_dump($a);
+exit;*/
 //$BaseInfo = User_Info::getUserInfoByUserId($userId);//基础信息
 //var_dump($BaseInfo);
 try {

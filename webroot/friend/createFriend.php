@@ -39,7 +39,7 @@ if($friendNum == $userInfo['friend_num']){
 }
 
 //好友ID是否存在&是否满足等级限制 <40
-$friendInfo = User_Info::getUserInfoByLevel($friendId, '<', 40);
+$friendInfo = User_Info::getUserInfoByLevel($friendId, '<', User::FRIENDADDLEVEL);
 //print_r($friend_info);exit;
 if(!$friendInfo)
 {

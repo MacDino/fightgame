@@ -14,6 +14,12 @@ class User_Info
         $res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
         return $res;
     }
+    
+    public static function getUserInfoByLevel($friendId, $compare, $level){
+    	if(!is_numeric($friendId) || !is_numeric($level))return FALSE;
+    	$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $friendId, 'user_level' => array('opt' => $compare, 'val' => $level)));
+    	return $res;
+    }
 
     /**
      * 创建用户基础信息
@@ -24,9 +30,12 @@ class User_Info
     public static function createUserInfo($userId, $data)
     {
         if(!$userId || !$data || !is_array($data))return FALSE;
+        
         $info = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
         if($info)return FALSE;
+        
         if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
+        
         $res = MySql::insert(self::TABLE_NAME, array(
 	        'user_id' => $userId, 
 	        'user_name' => $data['user_name'], 
@@ -117,7 +126,7 @@ class User_Info
     	);
     	
     	//根据ID取出所属种族和等级
-    	$userInfo = self::getUserInfoByUserId($user_id);
+    	$userInfo = self::getUserInfoByUserId($userId);
     	
     	//根据种族和等级取出基础属性(裸属性),把基础属性的数值加入到$numerical里
     	$userAttribute = User_Attributes::getInfoByRaceAndLevel($userInfo['race_id'], $userInfo['user_level']);
@@ -133,7 +142,7 @@ class User_Info
     	
     	//根据ID取出所有装备
     	//假设为getEquipInfoByUserId
-    	$equipInfo = Equip_Info::getEquipInfoByUserId($userId, TRUE);
+    	/*$equipInfo = Equip_Info::getEquipInfoByUserId($userId, TRUE);
     	
     	//循环装备信息,数值类相加
     	foreach ($equipInfo as $p)
@@ -148,7 +157,7 @@ class User_Info
 	    		}
 	    	}
 	    	//扩展属性,百分比,判断是百分比数据的,加入$proportion
-    	}
+    	}*/
     	
     	//判断是否有对手,如果有,属性相生还是相克,计算所得值
     	//因为每个用户都会计算属性,所以相克只在一个用户身上体现就OK了

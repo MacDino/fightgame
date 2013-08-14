@@ -31,7 +31,15 @@
 </form>
 
 <p center>获取用户信息</p>
-<form method="GET" action="http://kaedezyf.com/webroot/friend/listFriend.php" name="listFriend" target="_blank">
+<form method="GET" action="http://kaedezyf.com/webroot/user/getUserBaseInfo.php" name="listFriend" target="_blank">
+
+<input align="left" id="user_id" name="user_id" value="">用户ID
+
+<input type="submit" value="提交">
+</form>
+
+<p center>获取用户属性</p>
+<form method="GET" action="http://kaedezyf.com/webroot/user/getUserAttributes.php" name="listFriend" target="_blank">
 
 <input align="left" id="user_id" name="user_id" value="">用户ID
 

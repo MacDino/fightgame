@@ -10,6 +10,7 @@ class User_Attributes
      */
     public static function getInfoByRaceAndLevel($raceId, $level, $needGrowUpAttribute = FALSE)
     {
+    	//echo "raceId===$raceId&&level===$level";exit;
         if(!$raceId || !$level)return FALSE;
         $raceId = (int)$raceId;
         $level = (int)$level;

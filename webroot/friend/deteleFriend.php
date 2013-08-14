@@ -18,7 +18,7 @@ if(!$userId || !$friendId)
 //echo $userId;exit;
 $userInfo = User_Info::getUserInfoByUserId($userId);
 //print_r($user_info);exit;
-if(!$user_info)
+if(!$userInfo)
 {
 	$code = 1;
     //$msg = '用户信息错误!';
