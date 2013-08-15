@@ -15,7 +15,9 @@ if(!$userId || !$friendId)
     die;
 }
 
-//查询好友ID是否在用户表里存在
+
+
+//查询用户ID是否在用户表里存在
 //echo $userId;exit;
 $userInfo = User_Info::getUserInfoByUserId($userId);
 //print_r($user_info);exit;
@@ -27,8 +29,17 @@ if(!$userInfo)
     die;
 }
 
+//查看是否还有位置添加好友
+$friendNum = Friend_Info::getFriendNum($userId);
+if($friendNum == $userInfo['friend_num']){
+	$code = 1;
+    //$msg = '好友已达上限!';
+    $msg = '5';
+    die;
+}
+
 //好友ID是否存在&是否满足等级限制 <40
-$friendInfo = User_Info::getUserInfoByLevel($friendId, '<', 40);
+$friendInfo = User_Info::getUserInfoByLevel($friendId, '<', User::FRIENDADDLEVEL);
 //print_r($friend_info);exit;
 if(!$friendInfo)
 {

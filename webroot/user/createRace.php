@@ -19,7 +19,7 @@ $trueUserId = User_Bind::getBindUserId($bindType ,$bindValue);
 if($userId != $trueUserId)
 {
     $code = 1;
-    $msg = '用户不一至!';
+    $msg = '用户不一致!';
     die;
 }
 
