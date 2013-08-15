@@ -7,17 +7,20 @@ class Skill_Info {
     /**
      * @desc 获取角色技能等级
      */
-    public static function getSkillByRoleId($role_id){
+    public static function getSkillByUserId($user_id){
         $where      = array(
-            'role_id' => $role_id,
+            'user_id' => $user_id,
         );
-        $skill_info = MySql::selectOne(self::TN_SKILL_INFO, $where);
+        $skill_info = DB::table(self::TN_SKILL_INFO)->select($where);
         return $skill_info;
     }
 
     /**
      * @desc 技能学习
      */
-    public static function updateSkillByRoleId($role_id){
+    public static function updateSkill($user_id, $skill_code){
+        //最高技能等级限制
+        //判断技能点
+        //判断铜钱
     }
 }

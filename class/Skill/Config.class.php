@@ -9,7 +9,7 @@ class Skill_Config
      */
     public static function zjSkillFormula($attributes){
         $hurt   = 0;
-        $const  = Skill_Common::wlgjConst($attributes['role_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
+        $const  = Skill_Common::wlgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
         extract($const);
         $hurt   = $hurt + $rand5 + ($attributes[ConfigDefine::USER_ATTRIBUTE_HIT] + 12 * $attrubutes['skill_level']) / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + $randPower;
         $hurt   = $hurt * $rate;
@@ -21,20 +21,20 @@ class Skill_Config
     /**
      * @desc 连击技能公式,三次攻击
      *
-     * return array array(第一次攻击值,...)
      */
     public static function ljSkillFormula($attributes){
         $hurt       = 0;
-        $const  = Skill_Common::wlgjConst($attributes['role_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
+        $const  = Skill_Common::wlgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
         extract($const);
         $hurt       = $hurt + $rand5 + $attributes[ConfigDefine::USER_ATTRIBUTE_HIT] / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + 4 * $attributes['skill_level'] + $randPower;  
         $hurt       = $hurt * $rate;
-        $hurt_arr   = array(
+        $hurt_all   = 1.5 * $hurt - 3 * $attributes['op_defense'];
+        /*
             0.7 * $hurt - $attributes['op_defense'],
             0.8 * $hurt - $attributes['op_defense'],
             $hurt - $attributes['op_defense']
-        );
-        return $hurt_arr;
+         */
+        return $hurt_all;
     }
     
     /**
@@ -45,7 +45,7 @@ class Skill_Config
     public static function lxyzSkillFormula($attributes){
         //消耗50魔法
         $hurt   = 0;
-        $const  = Skill_Common::wlgjConst($attributes['role_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
+        $const  = Skill_Common::wlgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
         extract($const);
         $hurt   = $hurt + $rand5 + ($attributes[ConfigDefine::USER_ATTRIBUTE_HIT] + 4 * $attributes['skill_level']) / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + 2 * $attributes['skill_level'] + $randPower; 
         $hurt   = $hurt * $rate;
@@ -61,7 +61,7 @@ class Skill_Config
     public static function swzhSkillFormula($attributes){
         //消耗70魔法,魔法值不够，技能使用失败
         $hurt       = 0;
-        $const      = Skill_Common::fsgjConst($attributes['role_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_HURT]);
+        $const      = Skill_Common::fsgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_HURT]);
         extract($const);
         $hurt       = $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] + 4 * $attributes['skill_level'] + $hurt_rand + 1.3 * $attributes['skill_level'];
         $hurt       = $hurt - $attributes['op_psychic'];
@@ -72,18 +72,17 @@ class Skill_Config
     /**
      * @desc 呼风唤雨技能公式
      *
-     * return array array(第一次攻击值，第二次攻击值)
      */
     public static function hfhySkillFormula($attributes){
         //每次攻击30点魔法,每次魔法判断
         $hurt   = 0;
-        $const  = Skill_Common::fsgjConst($attributes['role_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_HURT]);
+        $const  = Skill_Common::fsgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_HURT]);
         extract($const);
         $hurt   = $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] + 3 * $attributes['skill_level'] + $hurt_rand + 1.2 * $attributes['skill_level'];
         $hurt   = $hurt * $rate;
         $hurt   = $hurt - $attributes['op_psychic'];
         $hurt   = $hurt + $rand5;
-        return array($hurt, $hurt);
+        return 2 * $hurt;
     }
 
     /**
@@ -94,7 +93,7 @@ class Skill_Config
     public static function wljSkillFormula($attributes){
         //20点魔法
         $hurt   = 0;
-        $const  = Skill_Common::fsgjConst($attributes['role_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_HURT]);
+        $const  = Skill_Common::fsgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_HURT]);
         extract($const);
         $hurt   = $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] + $attributes['skill_level'] + $hurt_rand + 1.1 * $attributes['skill_level'];
         $hurt   = $hurt * $rate;
@@ -112,7 +111,8 @@ class Skill_Config
      * return array array(物理防御，气血，躲避，灵力)
      */
     public static function wfxSkillFormula($attributes){
-        $attrAdd[ConfigDefine::USER_ATTRIBUTE_DEFENSE]  = 0.02 * $attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE] + 5;
+        $attrAdd['result']                              = 0.02 * $attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE] + 5;
+        //增加自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_BLOOD]    = 0.01 * $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD]; 
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_DODGE]    = 0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_DODGE];
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]  = -0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
@@ -125,7 +125,8 @@ class Skill_Config
      * return array array(法术防御，气血，躲避，防御)
      */
     public static function ffxSkillFormula($attributes){
-        $attrAdd[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]  = 0.02 * $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] + 5;
+        $attrAdd['result']                              = 0.02 * $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] + 5;
+        //增加自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_BLOOD]    = 0.01 * $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD];
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_DODGE]    = 0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_DODGE];
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_DEFENSE]  = -0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE];
@@ -138,7 +139,8 @@ class Skill_Config
      * return array array(伤害结果，伤害，命中)
      */
     public static function gxSkillFormula($attributes){
-        $attrAdd['hurt_result']                             = 0.02 * $attributes['hurt_result'] + 5;
+        $attrAdd['result']                                  = 0.02 * $attributes['hurt_result'] + 5;
+        //自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_HURT]         = 3;
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_HIT]          = 4;
         return $attrAdd;
@@ -150,7 +152,8 @@ class Skill_Config
      * return array array(伤害，灵力，魔法)
      */
     public static function fxSkillFormula($attributes){
-        $attributes['hurt_result']                          = 0.02 * $attributes['hurt_result'] + 5;
+        $attributes['result']                               = 0.02 * $attributes['hurt_result'] + 5;
+        //自身属性
         $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]   = 3;
         $attributes[ConfigDefine::USER_ATTRIBUTE_MAGIC]     = 4;
         return $attributes;
