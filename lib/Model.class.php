@@ -14,18 +14,11 @@ by extends the Model class, User will have all the instance methods of DB::table
 	User::select($where); // DB::table('users')->select($where)
 	User::delete($where); // DB::table('users')->delete($where)
 
-and 3 dynamic methods which are getBy*, getOneBy*, deleteBy*.
-Note that given a table field 'user_name', the according dynamic method name shall be exactly 'getByUserName', case sensitive!
-	User::getByUserName('%aa%');
-   	//DB::table('users')->select(array('user_name' => '%aa%'));
-	
-	User::getByUserNameAndSex('%aa%', '1');
-   	//DB::table('users')->select(array('user_name' => '%aa%', 'sex' => 1));
-	
+	// dynamic query
+	User::getByUserName('%aa%');  
 	User::deleteByUserNameAndSexAndAge('%aa%', '1', array(15, 20, 25));
-	//DB::table('users')->delete(array('user_name' => '%aa%', 'sex' => '1', 'age' => array(15, 20, 25)));
 
-params in create and update operation will be automatically checked according to $validates
+params in create and update operation will be automatically checked against $validates
 	User::create(array(
 		'user_name' => 'user_name',
 		'email' => 'a@a.com'

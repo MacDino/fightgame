@@ -68,6 +68,21 @@ table query
 	));
 	// WHERE (age > ?) OR ((user_name LIKE ?) AND (sex = ?))
 	
+dynamic query
+	there are 3 dynamic methods which are getBy*, getOneBy*, deleteBy*.
+	dynamic method only support 'in', 'equal', 'like' query
+	note that given a table field 'user_name', 
+	the according dynamic method name shall be exactly 'getByUserName', case sensitive!
+	
+	DB::table('users')->getByUserName('%aa%'); 
+   	//DB::table('users')->select(array('user_name' => '%aa%'));
+	
+	DB::table('users')->getOneByUserNameAndSex('%aa%', '1'); // 'like' and 'equal'
+   	//DB::table('users')->selectOne(array('user_name' => '%aa%', 'sex' => 1));
+	
+	DB::table('users')->deleteByUserNameAndSexAndAge('%aa%', '1', array(15, 20, 25));
+	//DB::table('users')->delete(array('user_name' => '%aa%', 'sex' => '1', 'age' => array(15, 20, 25)));
+
 chain options
 	DB::table('users')->field('user_name as name, age, sex')->selectOne();
 	DB::table('users')->order('name desc, age asc')->select();
