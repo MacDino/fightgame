@@ -2,11 +2,10 @@
 //用户绑定信息
 class User_Bind
 {
-
     CONST TABLE_NAME = 'user_bind';
 
     //private static $_allowBindType = array('mac', 'sina', 'weixin');
-    private static $_allowBindType = array('mac');
+    private static $_allowBindType = array('mac');//绑定方式
 
     public static function getBindUserId($bindType, $bindValue, $createNew = FALSE)
     {
@@ -40,7 +39,6 @@ class User_Bind
         	$userId = $userInfo['user_id'];
             return $userId;
         }else{
-        
         	return FALSE;
         }
     }
@@ -48,7 +46,6 @@ class User_Bind
     private static function _checkValue($bindType, $bindValue)
     {
         
-    
     }
 
     private static function _allowBindType($bindType)
@@ -58,7 +55,4 @@ class User_Bind
             throw new Exception('没有适配的绑定类型', 1);
         }
     }
-
-
-
 }

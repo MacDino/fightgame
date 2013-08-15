@@ -5,10 +5,12 @@ class Race
     //种族定义
     CONST RACE_HUMAN        = 1;//人族
     CONST RACE_TSIMSHIAN    = 2;//仙族
-    CONST RACE_DEMON        = 3;//魔族 
+    CONST RACE_DEMON        = 3;//魔族
+    
     //获取种族升级属性加成
     public static function getDefaultAttributes($raceId)
     {
+//    	echo "raceId===$raceId";exit;
         $defaultAttributtesList = self::_defaultAttributesList();
         if($raceId && isset($defaultAttributtesList[$raceId]))
         {

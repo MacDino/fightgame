@@ -3,7 +3,6 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
-//$opponent_id    = isset($_REQUEST['opponent_id'])?(int)$_REQUEST['opponent_id']:'';//对手ID
 
 if(!$userId)
 {
@@ -15,7 +14,6 @@ if(!$userId)
 
 //$res = User_Info::getUserInfoFightAttribute($userId);
 //var_dump($res);
-
 try {
     User_Info::getUserInfoFightAttribute($userId);
     $code = 0;
