@@ -7,7 +7,12 @@ class Skill_Info {
     /**
      * @desc 获取角色技能等级
      */
-    public static function getSkillByRoleId(){
+    public static function getSkillByRoleId($role_id){
+        $where      = array(
+            'role_id' => $role_id,
+        );
+        $skill_info = MySql::selectOne(self::TN_SKILL_INFO, $where);
+        return $skill_info;
     }
 
     /**
