@@ -9,11 +9,32 @@ class Skill
 
     CONST DEFAULT_SKILL_POINT   = 3;//默认用户拥有的技能点
 
-    /** 数据库字段映射 */
+    /** 
+     * 技能array(技能缩写code,所属分组，消耗魔法值)
+     *
+     * */
+    public static $skill_info    = array(
+        ConfigDefine::SKILL_ZJ  => array('zj', self::SKILL_GROUP_WLGJ),
+        ConfigDefine::SKILL_LJ  => array('lj', self::SKILL_GROUP_WLGJ),
+        ConfigDefine::SKILL_LXYZ    => array('lxyz', self::SKILL_GROUP_WLGJ, 50),
+        ConfigDefine::SKILL_SWZH    => array('swzh', self::SKILL_GROUP_FSGJ, 70),
+        ConfigDefine::SKILL_HFHY    => array('hfhy', self::SKILL_GROUP_FSGJ, 30),
+        ConfigDefine::SKILL_WLJ => array('wlj', self::SKILL_GROUP_FSGJ, 20),
+        ConfigDefine::SKILL_WFX => array('wfx', self::SKILL_GROUP_BDJN),
+        ConfigDefine::SKILL_FFX => array('ffx', self::SKILL_GROUP_BDJN),
+        ConfigDefine::SKILL_GX  => array('gx', self::SKILL_GROUP_BDJN),
+        ConfigDefine::SKILL_FX  => array('fx', self::SKILL_GROUP_BDJN),
+        ConfigDefine::SKILL_DZ  => array('dz', self::SKILL_GROUP_BDJN),
+        ConfigDefine::SKILL_FY  => array('fy', self::SKILL_GROUP_FYJN),
+        ConfigDefine::SKILL_FJ  => array('fj', self::SKILL_GROUP_FYJN),
+        ConfigDefine::SKILL_FD  => array('fd', self::SKILL_GROUP_FYJN)
+    );
+
+    /** 技能对应数据库map **/
     public static $skill_map    = array(
         'zj'    => ConfigDefine::SKILL_ZJ,
         'lj'    => ConfigDefine::SKILL_LJ,
-        'lsyz'  => ConfigDefine::SKILL_LSYZ,
+        'lxyz'  => ConfigDefine::SKILL_LXYZ,
         'swzh'  => ConfigDefine::SKILL_SWZH,
         'hfhy'  => ConfigDefine::SKILL_HFHY,
         'wlj'   => ConfigDefine::SKILL_WLJ,
@@ -25,7 +46,7 @@ class Skill
         'fy'    => ConfigDefine::SKILL_FY,
         'fj'    => ConfigDefine::SKILL_FJ,
         'fd'    => ConfigDefine::SKILL_FD,
-        );
+    );
 
     /** 主动技能属性加成 */
     private static $_skill_attributes    = array(
@@ -55,6 +76,10 @@ class Skill
             self::SKILL_GROUP_BDJN => array(ConfigDefine::SKILL_WFX, ConfigDefine::SKILL_FFX, ConfigDefine::SKILL_GX, ConfigDefine::SKILL_FX, ConfigDefine::SEILL_DZ,),
             self::SKILL_GROUP_FYJN => array(ConfigDefine::SKILL_FY, ConfigDefine::SKILL_FJ, ConfigDefine::SKILL_FD),
         );
+    }
+    //获取技能分组
+    public static function getSkillGroupBySkillCode($skill_code){
+        return self::$skill_info[$skill_code][1];
     }
     //技能分组名称
     private static function _skillGroupNameList()
@@ -102,65 +127,83 @@ class Skill
     }
 
     /**
-     * @desc 技能自身属性加成规则 
-     *
-     */
-    public static function getSkillAttributesFormulas(){
-    }
-
-    /**
      * @desc 获取额外加成后的角色属性
      * @param $attributes 角色成长属性
      *
      */
-    public static function getRoleAttributesWithSkill($role_id, $attributes){
-        //装备加成 直接调用
-        //道具加成 直接调用
-        //主动技能属性加成
-        $skill_info     = Skill_Info::getSkillByRoleId($role_id);
-        if(!empty($skill_info) && is_array($skill_info)){
-            foreach($skill_info as $skill => $level){
-                if(in_array($skill, array('id', 'role_id', 'user_id')) || $level == 0){
-                    continue;
-                }
-                $skill      = self::$skill_map[$skill];
+    public static function getRoleAttributesWithSkill($attributes, $skills = NULL){
+        if(empty($skills)){
+            return $attributes;
+        }
+
+        foreach($skills as $skill => $level){
+            if($level == 0){
+                continue;
+            }
+            //主动技能
+            if(self::$skill_info[$skill][1] == self::SKILL_GROUP_WLGJ  || self::$skill_info[$skill][1] == self::SKILL_GROUP_FSGJ){
                 $skill_attr = self::$_skill_attributes[$skill];
                 foreach($skill_attr as $attr => $value){
                     $attributes[$attr]  += $value * $level;
                 }
             }
         }
-        //被动技能加成
+        //被动技能需放最后加成
+        foreach($skills as $skill => $level){
+                $skill      = self::$skill_info[$skill][0];
+                $attrAdd    = call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
+                foreach($attrAdd as $attr => $value){
+                    //第一个属性
+                    $attributes[$attr]  += $value * $level;
+                }
+            }
+        }
+
+        return $attributes;
     }
 
     /**
      * @desc 使用技能(主动技能)
      *
-     * @param data = array($skill    技能code或缩写
-     *                     $role_id  当前角色id
-     *                     $op_id    对手id
-     *                     $role_type当前角色类型
-     *                     $op_id    对手类型
-     *                     )
+     *                     skill_code, 技能code或缩写
+     * @param data =    array(  当前攻击者属性
+     *                     user_level,
+     *                     skills(
+     *                          'skill_code'    => level,
+     *                      ),
+     *                      attributes(
+     *                      ConfigDefine::
+     *                          14个成长属性+装备属性
+     *                      )
+     * @param op_data 被攻击者属性，格式与攻击者属性一致
      */
-    public static function useSkill($data){
-        //$role_info  = User_Info:://TODO
+    public static function useSkill($skill_code, $data, $op_data){
         //成长属性
-        $attributes = User_Attributes::getInfoByRaceAndLevel($role_info['race_id'], $role_info['user_level'], TRUE); 
+        //$attributes = User_Attributes::getInfoByRaceAndLevel($role_info['race_id'], $role_info['user_level'], TRUE); 
         //技能加成属性
-        $attributes = self::getRoleAttributesWithSkill($role_id, $attributes);
+        $attributes = self::getRoleAttributesWithSkill($data['attributes'], $data['skills']);
         //构造额外需要参数
-        $attributes['role_level']   = $role_info['user_level'];
-        if(is_numeric($data['skill'])){
-            $skill      = array_search($data['skill'], self::$skill_map);
+        $attributes['role_level']   = $data['user_level'];
+        $attributes['skill_level']  = $data['skills'][$skill_code];
+        if(is_numeric($skill_code)){
+            $skill      = self::$skill_info[$skill_code][0];
         } else {
-            $skill      = $data['skill'];
+            $skill      = $skill_code;
         }
-        $skill_info                 = Skill_Info::getSkillByRoleId($role_id);
-        $attribues['skill_level']   = $skill_info[$skill];
-        //怪物防御 基本+技能
+        //怪物防御 基本+技能 TODO
+        $op_atrributes  = self::getRoleAttributesWithSkill($op_data['attributes'], $data['skills']);
 
         return call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
+    }
+
+    /**
+     * @desc 获取当前技能消耗魔法值
+     */
+    public static function getNeedMagicBySkillCode($skill_code){
+        if(isset(self::$skill_info[$skill_code][2])){
+            return self::$skill_info[$skill_code][2];
+        }
+        return 0;
     }
 
 }

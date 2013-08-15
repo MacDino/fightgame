@@ -18,6 +18,6 @@ class Skill_Info {
     /**
      * @desc 技能学习
      */
-    public static function updateSkillByRoleId(){
+    public static function updateSkillByRoleId($role_id){
     }
 }
