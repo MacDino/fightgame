@@ -66,6 +66,11 @@ class Equip_Create
         return self::equipInsertDb($equipInfo);
 	}
 
+	//装备升级
+	public static function upgradeEquip($equipId, $level){
+
+	}
+
 	//创建数据庘数据
 	public static function equipInsertDb($data)
     {

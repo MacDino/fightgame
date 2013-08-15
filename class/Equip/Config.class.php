@@ -220,6 +220,7 @@ class Equip_Config
 	public static function equipSuitAttributeList()
 	{
 		$equipSuitAttributeList = array(
+			//人族
 			Race::RACE_HUMAN => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_DZ => 1,),
@@ -246,6 +247,7 @@ class Equip_Config
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),
 				),
 			),
+			//仙族
 			Race::RACE_TSIMSHIAN => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_FX => 1,),
@@ -272,6 +274,7 @@ class Equip_Config
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),
 				),
 			),
+			//魔族
 			Race::RACE_DEMON => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_GX => 1,),
