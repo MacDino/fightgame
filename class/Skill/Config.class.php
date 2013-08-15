@@ -111,7 +111,6 @@ class Skill_Config
      * return array array(物理防御，气血，躲避，灵力)
      */
     public static function wfxSkillFormula($attributes){
-        $attrAdd['result']                              = 0.02 * $attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE] + 5;
         //增加自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_BLOOD]    = 0.01 * $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD]; 
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_DODGE]    = 0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_DODGE];
@@ -125,7 +124,6 @@ class Skill_Config
      * return array array(法术防御，气血，躲避，防御)
      */
     public static function ffxSkillFormula($attributes){
-        $attrAdd['result']                              = 0.02 * $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] + 5;
         //增加自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_BLOOD]    = 0.01 * $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD];
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_DODGE]    = 0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_DODGE];
@@ -139,7 +137,6 @@ class Skill_Config
      * return array array(伤害结果，伤害，命中)
      */
     public static function gxSkillFormula($attributes){
-        $attrAdd['result']                                  = 0.02 * $attributes['hurt_result'] + 5;
         //自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_HURT]         = 3;
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_HIT]          = 4;
@@ -152,7 +149,6 @@ class Skill_Config
      * return array array(伤害，灵力，魔法)
      */
     public static function fxSkillFormula($attributes){
-        $attributes['result']                               = 0.02 * $attributes['hurt_result'] + 5;
         //自身属性
         $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]   = 3;
         $attributes[ConfigDefine::USER_ATTRIBUTE_MAGIC]     = 4;
