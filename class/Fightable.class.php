@@ -78,7 +78,7 @@ class Fightable {
 			return 0;
 		}
 
-		$defense_harm = Skill::doDefenseSkill($defense_skill, $attacker->getAttackParameters(), $this->getAttackParameters());
+		$defense_harm = Skill::doDefenseSkill($defense_skill, $attacker->getFightParameters(), $this->getFightParameters());
 
 		//反击防御技能, 不降低伤害值, 但回弹伤害
 		if (Skill::isFj($defense_skill))
