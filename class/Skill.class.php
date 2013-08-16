@@ -30,7 +30,7 @@ class Skill
         ConfigDefine::SKILL_FD  => array('fd', self::SKILL_GROUP_FYJN)
     );
 
-    /** 技能对应数据库map **/
+    /** 技能缩写map **/
     public static $skill_map    = array(
         'zj'    => ConfigDefine::SKILL_ZJ,
         'lj'    => ConfigDefine::SKILL_LJ,
@@ -67,7 +67,7 @@ class Skill
             ConfigDefine::USER_ATTRIBUTE_PSYCHIC    => 1
             )
         );
-    /** 被动技能基于百分比加成的属性 */
+    /** 被动技能基于百分比加成的属性map */
     private static $_bdjn_skill_attributes  = array(
         ConfigDefine::SKILL_WFX => ConfigDefine::USER_ATTRIBUTE_DEFENSE,
         ConfigDefine::SKILL_FFX => ConfigDefine::USER_ATTRIBUTE_PSYCHIC,
@@ -158,7 +158,7 @@ class Skill
     }
 
     /**
-     * @desc 获取额外加成后的角色属性
+     * @desc 获取技能额外加成后的角色属性
      * @param $attributes 角色成长属性
      *
      */
@@ -272,7 +272,7 @@ class Skill
     }
 
     /**
-     * $desc 
+     * $desc 执行防御技能
      */
     public static function doDefenseSkill($skill_code, $data, $op_data){
         //技能等级

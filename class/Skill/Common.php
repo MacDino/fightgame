@@ -13,7 +13,7 @@ class Skill_Common {
     }
 
     /**
-     * @desc 物理攻击常用值
+     * @desc 法术攻击常用值
      */
     public static function fsgjConst($role_level, $hurt){
         $const              = array();

@@ -136,7 +136,7 @@ class Skill_Config
      *
      * return array array(伤害结果，伤害，命中)
      */
-    public static function gxSkillFormula($attributes){
+    public static function gxSkillFormula(){
         //自身属性
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_HURT]         = 3;
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_HIT]          = 4;
@@ -148,11 +148,11 @@ class Skill_Config
      *
      * return array array(伤害，灵力，魔法)
      */
-    public static function fxSkillFormula($attributes){
+    public static function fxSkillFormula(){
         //自身属性
-        $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]   = 3;
-        $attributes[ConfigDefine::USER_ATTRIBUTE_MAGIC]     = 4;
-        return $attributes;
+        $attrAdd[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]   = 3;
+        $attrAdd[ConfigDefine::USER_ATTRIBUTE_MAGIC]     = 4;
+        return $attrAdd;
     }
 
     /**
@@ -161,9 +161,9 @@ class Skill_Config
      * return array array(敏捷，成功率，失败后不掉锻造等级概率)
      */
     public static function dzSkillFormula(){
-        $attributes['quick']    = 2;
+        $attrAdd[ConfigDefine::USER_ATTRIBUTE_QUICK]    = 2;
         //装备强化成功率和失败率 todo
-        return $attributes;
+        return $attrAdd;
     }
 
     /*****  防御技能，概率触发  *****/
