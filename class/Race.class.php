@@ -11,7 +11,8 @@ class Race
     public static function getDefaultAttributes($raceId)
     {
 //    	echo "raceId===$raceId";exit;
-        $defaultAttributtesList = self::_defaultAttributesList();
+        $defaultAttributtesList = Race_Config::defaultAttributesList();
+//        var_dump($defaultAttributtesList);exit;
         if($raceId && isset($defaultAttributtesList[$raceId]))
         {
             return $defaultAttributtesList[$raceId];
@@ -22,7 +23,7 @@ class Race
     //获取种族升级属性加成
     public static function getLeveUpAddAttributes($raceId)
     {
-        $leveUpAddAttributtesList = self::_levelUpAddAttributesList();
+        $leveUpAddAttributtesList = Race_Config::levelUpAddAttributesList();
         if($raceId && isset($leveUpAddAttributtesList[$raceId]))
         {
             return $leveUpAddAttributtesList[$raceId];
