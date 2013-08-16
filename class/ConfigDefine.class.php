@@ -3,7 +3,23 @@
 class ConfigDefine
 {
 	//用户属性定义
-	CONST USER_ATTRIBUTE_POWER        	= 101;//力量 - 基本属性
+//	CONST USER_ATTRIBUTE_POWER        	= '力量';//力量 - 基本属性
+//    CONST USER_ATTRIBUTE_MAGIC_POWER  	= '魔力';//魔力 - 基本属性
+//    CONST USER_ATTRIBUTE_PHYSIQUE     	= '魔力';//体质 - 基本属性
+//    CONST USER_ATTRIBUTE_ENDURANCE    	= '耐力';//耐力 - 基本属性
+//    CONST USER_ATTRIBUTE_QUICK        	= '敏捷';//敏捷 - 基本属性
+//
+//    CONST USER_ATTRIBUTE_HIT          	= '命中';//命中 - 成长属性
+//    CONST USER_ATTRIBUTE_HURT         	= '伤害';//伤害 - 成长属性
+//    CONST USER_ATTRIBUTE_MAGIC        	= '魔法';//魔法 - 成长属性
+//    CONST USER_ATTRIBUTE_BLOOD        	= '气血';//气血 - 成长属性
+//    CONST USER_ATTRIBUTE_PSYCHIC      	= '灵力';//灵力 - 成长属性
+//    CONST USER_ATTRIBUTE_SPEED        	= '速度';//速度 - 成长属性
+//    CONST USER_ATTRIBUTE_DEFENSE      	= '防御';//防御 - 成长属性
+//    CONST USER_ATTRIBUTE_DODGE        	= '躲闪';//躲闪 - 成长属性
+//    CONST USER_ATTRIBUTE_LUCKY        	= '幸运';//幸运 - 成长属性
+    
+    CONST USER_ATTRIBUTE_POWER        	= 101;//力量 - 基本属性
     CONST USER_ATTRIBUTE_MAGIC_POWER  	= 102;//魔力 - 基本属性
     CONST USER_ATTRIBUTE_PHYSIQUE     	= 103;//体质 - 基本属性
     CONST USER_ATTRIBUTE_ENDURANCE    	= 104;//耐力 - 基本属性
@@ -18,6 +34,7 @@ class ConfigDefine
     CONST USER_ATTRIBUTE_DEFENSE      	= 112;//防御 - 成长属性
     CONST USER_ATTRIBUTE_DODGE        	= 113;//躲闪 - 成长属性
     CONST USER_ATTRIBUTE_LUCKY        	= 114;//幸运 - 成长属性
+
 
 	//技能定义
 
