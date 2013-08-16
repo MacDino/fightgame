@@ -13,6 +13,23 @@ class Map_Skill extends Model {
 		'skill_type' => 'required, in:defense|attack|passive',
 	);
 
+	protected static $skill_rates = array(
+		'not_boss' => array(
+			'attack' => array(1 => 0.25, 0.3, 0.35, 0.4, 0.45),
+			'defense' => array(1 => 0.2, 0.25, 0.3, 0.35, 0.4),
+		),
+
+		'boss' => array(
+			'attack' => array(1 => 0.7, 0.75, 0.8, 0.85, 0.9),
+			'defense' => array(1 => 0.6, 0.65, 0.7, 0.75, 0.8),
+		),
+	);
+
+	public static function getSkillRate($boss_type)
+	{
+		return isset(self::$skill_rates[$boss_type]) ? self::$skill_rates[$boss_type] : false;
+	}
+
 	// 获取该地图允行怪物使用的所有技能，包括攻击，防御，被动
 	public static function getAllSkills($map_id, $skill_type = null)
 	{

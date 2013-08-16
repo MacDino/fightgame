@@ -31,14 +31,12 @@ class Monster
 	//获取杀死怪物获得的经验，没有计算加成
 	public static function getMonsterBaseExperience($level)
 	{
-		if(!$level || (int)$level < 1)return 0;
-		return (float)41.4 + 10.33*$level;
+		return (float)41.4 + 10.33*(int)$level;
 	}
 
 	//获取某指定等级怪物的基本属性值,没有计算加成
 	public static function getMonsterBaseAttribute($level)
 	{
-		if(!$level || (int)$level < 1)return array();
 		$level = (int)$level;
 		$totalBaseAttribute = Monster_Config::getMonsterBaseAttributeTotal($level);
 		$userAttributeList  = Monster_Config::getMonsterBaseAttributeList($level);
@@ -78,7 +76,9 @@ class Monster
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'attribute_change_list');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'attribute_change_list');
 
-		return Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
+		$attribute =  Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
+		$growup_attribute = Race::getGrowUpAttributes($monster['race_id'], $attribute);
+		return $attribute + $growup_attribute;
 	}
 
 	// 获取怪物的装备顔色(前后缀加成后)
@@ -96,6 +96,7 @@ class Monster
 		$map_skills_list = Map_Skill::getAllSkills($monster['map_id']);
 		$must_skills_list = self::_getMustSkills($monster);
 		$min_count_list = self::_getMinSkillCount($monster);
+		$skill_rate_list = self::_getSkillRate($monster);
 
 		$ret = array('attack' => array(), 'defense' => array(), 'passive' => array());
 		foreach ($ret as $skill_type => &$skills)
@@ -122,9 +123,32 @@ class Monster
 			//去除必选的技能数
 			$skill_count = max($skill_count - count($must_skills), 0);
 
+			//随机技能
 			shuffle($map_skills);
-			$skills = array_slice($map_skills, 0, $skill_count);
-			$skills = array_merge($skills, $must_skills);
+			$rand_skills = array_slice($map_skills, 0, $skill_count);
+			$rand_skills = array_flip(array_merge($rand_skills, $must_skills));
+
+			$min_skill_level = max(1, $monster['level'] - 10);
+			$max_skill_level = $monster['level'] + 10;
+
+			//随机技能级别
+			foreach ($rand_skills as &$skill_level)
+			{
+				$skill_level = mt_rand($min_skill_level, $max_skill_level);
+			}
+
+			$skills = array(
+				'list' => $rand_skills,
+			);
+
+			if ($skill_type == 'passive')
+			{
+				continue;
+			}
+
+			//获取技能概率
+			$rand_skill_count = count($rand_skills);
+			$skills['rate'] = $skill_rate_list[$skill_type][$rand_skill_count];
 		}
 
 		return $ret;
@@ -175,5 +199,15 @@ class Monster
 		}
 
 		return array();
+	}
+
+	private static function _getSkillRate($monster)
+	{
+		if ($monster['suffix'] == self::MONSTER_SUFFIX_BOSS)
+		{
+			return Map_Skill::getSkillRate('boss');
+		}
+
+		return Map_Skill::getSkillRate('not_boss');
 	}
 }
