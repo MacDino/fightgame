@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
 //读取用户属性信息
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
