@@ -5,12 +5,12 @@ class Equip_Create
 	CONST TABLE_USER_EQUID = 'user_equid';
 	
 	//创建一件随机的装备,颜色由外部传入
-	public static function createOneRandEquip($equipColour)
+	public static function createOneRandEquip($equipColour, $userId)
 	{
 		if(!$equipColour)return FALSE;
 		$equipType = self::_getRandEquipType();
 		$equipQuality = self::_randQuality();
-		return self::createEquip($equipType, $equipColour, $equipQuality);
+		return self::createEquip($equipType, $equipColour, $equipQuality, $userId);
 	}
 	//颜色，品质
 	public static function createEquip($equipType, $equipColour, $equipQuality, $userId)
@@ -18,6 +18,7 @@ class Equip_Create
 		if(!$equipColour || !$equipQuality || !$equipType)return FALSE;
 		$equipInfo = $attributeList = $randAttributes = array();
 		$attributeHaveNum = 0;
+        //附加属性
 		$equipAttributeList = Equip_Config::equipAttributeList();
 		$allowRandAttributes = array_keys($equipAttributeList);
 		
@@ -66,6 +67,11 @@ class Equip_Create
         return self::equipInsertDb($equipInfo);
 	}
 
+	//装备升级(打造)
+	public static function upgradeEquip($equipType, $equipColor){
+
+	}
+
 	//创建数据庘数据
 	public static function equipInsertDb($data)
     {
@@ -83,7 +89,7 @@ class Equip_Create
 		$raceId = Race::randRaceId();//随机一把种族
 		$equipSuitInfo['race_id'] = $raceId;
 		$equipSuitAttributeList = Equip_Config::getEquipSuitAttributeByRaceIdAndEquipType($raceId, $equipType);
-		$equipSuitInfo['list'] = PerRand::getMultRandResultKey($equipSuitAttributeList);
+		$equipSuitInfo['list'] = PerRand::getMultiRandResultKey($equipSuitAttributeList);
 		return $equipSuitInfo;
 	}
 

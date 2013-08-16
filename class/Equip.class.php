@@ -29,19 +29,19 @@ class Equip
 	CONST TABLE_EQUID_ATTRIBUTES = 'equid_attributes';
 
 
-    //给某件装备进行升级
-    public static function updateEquipLevel($equipId, $fromLevel, $toLevel)
-    {
-     
-    
-    }
-    //创建一个装备
-    public static function createEquip()
-    {
-    
-    
-    }
-	
+	//给某件装备进行升级
+	public static function updateEquipLevel($equipId, $fromLevel, $toLevel)
+	{
+
+
+	}
+
+	//创建一个装备
+	public static function createEquip($equipType, $equipColour, $equipQuality, $userId)
+	{
+		return Equip_create::createEquip($equipType, $equipColour, $equipQuality, $userId);
+	}
+
 
 	//获取应颜色的配置
 	public static function getEquipConfigListByColour($equipColour)
@@ -72,31 +72,31 @@ class Equip
 	public static function equipConfigList()
 	{
 		$equipConfigList = array(
-			self::EQUIP_COLOUR_GRAY => array(
+				self::EQUIP_COLOUR_GRAY => array(
 					'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_GENERAL,
 					'add_attribute_num' => 0,
-				),
-			self::EQUIP_COLOUR_WHITE => array(
+					),
+				self::EQUIP_COLOUR_WHITE => array(
 					'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_GENERAL,
 					'add_attribute_num' => 1,
-				),
-			self::EQUIP_COLOUR_GREEN => array(
+					),
+				self::EQUIP_COLOUR_GREEN => array(
 					'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_GENERAL,
 					'add_attribute_num' => 2,
-				),
-			self::EQUIP_COLOUR_BLUE => array(
+					),
+				self::EQUIP_COLOUR_BLUE => array(
 					'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_HIGH,
 					'add_attribute_num' => 3,
-				),
-			self::EQUIP_COLOUR_PURPLE => array(
+					),
+				self::EQUIP_COLOUR_PURPLE => array(
 					'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_HIGH,
 					'add_attribute_num' => 4,
-				),
-			self::EQUIP_COLOUR_ORANGE => array(
-					'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_VH,
-					'add_attribute_num' => 5,
-				),
-		);
+					),
+				self::EQUIP_COLOUR_ORANGE => array(
+						'base_attribute' => self::EQUIP_BASE_ATTRIBUTE_VH,
+						'add_attribute_num' => 5,
+						),
+				);
 		return $equipConfigList;
 	}
 }
