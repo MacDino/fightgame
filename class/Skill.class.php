@@ -48,7 +48,7 @@ class Skill
         'fd'    => ConfigDefine::SKILL_FD,
     );
 
-    /** 主动技能自身属性加成 */
+    /** 技能自身属性加成 */
     private static $_skill_attributes    = array(
             //主动技能
         ConfigDefine::SKILL_ZJ  => array(
@@ -151,6 +151,15 @@ class Skill
         );
     }
     /**
+     * @desc 锻造技能对装备的影响
+     */
+    public static function getQuickAttributeForEquip($level){
+        $data               = array();
+        $data['success']    = 0.5 + 0.002 * $level;
+        $data['no_less_dz'] = 0.01 * ceil($level / 2);
+        return $data;
+    }
+    /**
      * @desc 被动技能基于全部属性百分比加成,公式都一样
      */
     private static function getBdjnResult($attr_val){
@@ -172,7 +181,7 @@ class Skill
             if($level == 0){
                 continue;
             }
-            //主动技能
+            //主动技能+锻造技能
             if(self::$skill_info[$skill][1] == self::SKILL_GROUP_WLGJ  || self::$skill_info[$skill][1] == self::SKILL_GROUP_FSGJ){
                 $skill_attr = self::$_skill_attributes[$skill];
                 foreach($skill_attr as $attr => $value){
@@ -190,8 +199,10 @@ class Skill
         //被动技能result加成属性需放最后加成
         if(!empty($bdjn_skill)){
             foreach($bdjn_skill as $skill => $level){
-                $skill_attr = self::$_bdjn_skill_attributes[$skill];
-                $attributes[$skill_attr]    +=   $level * (self::getBdjnResult($attributes[$skill_attr]));
+                if(isset(self::$_bdjn_skill_attributes[$skill])){
+                    $skill_attr = self::$_bdjn_skill_attributes[$skill];
+                    $attributes[$skill_attr]    +=   $level * (self::getBdjnResult($attributes[$skill_attr]));
+                }
             }
         }
 
