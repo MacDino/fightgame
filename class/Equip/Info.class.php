@@ -6,12 +6,22 @@ class Equip_Info
 	
 	//获取用户的装备信息
 	public static function getEquipListByUserId($userId){
-        $res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+        if($userId){
+            $res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+        }else{
+            return false;    
+        }
 		return $res;
 	}	
 
-	//返回装备的所有属性
-	public static function getEquipAttrSum($user_id){
+    //根据装备id返回信息
+    public static function getEquipInfoById($equipId){
+        if($equipId){
+            $res = MySql::selectOne(self::TABLE_NAME, array('user_equid_id' => $equipId));
+        }else{
+            return false;    
+        }
+        return $res;
+    }
 
-	}
 }

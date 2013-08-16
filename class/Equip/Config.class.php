@@ -27,7 +27,7 @@ class Equip_Config
 		return $qualityProbabilityList;
 	}
 	
-	//装备属性列表
+	//装备附加属性列表
 	public static function equipAttributeList()
 	{
 		$equipAttributeList = array(
