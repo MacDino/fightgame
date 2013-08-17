@@ -10,6 +10,8 @@ class Fightable {
 	//包括技能等级，释放概率
 	protected $skills;
 
+	protected $status_sleep;
+
 	protected $current_blood;
 	protected $current_magic;
 
@@ -28,12 +30,29 @@ class Fightable {
 		return $this->current_blood > 0;
 	}
 
+	public function isDead()
+	{
+		return ! $this->isAlive();
+	}
+
+	public function isSleep()
+	{
+		return $this->status_sleep;
+	}
+
 	//打它
-	public function attack(Fightable $user)
+	public function attack(Fightable $target)
 	{
 		//死人是不会攻击的
-		if ( ! $this->isAlive())
+		if ($this->isDead() || $target->isDead())
 		{
+			return;
+		}
+
+		//休息状态跳过
+		if ( $this->isSleep())
+		{
+			$this->status_sleep = false;
 			return;
 		}
 
@@ -43,27 +62,32 @@ class Fightable {
 		//魔法攻击
 		if (Skill::isMagicSkill($skill_id))
 		{
-			$harm = $this->magicAttack($skill_id, $user);
+			$harm = $this->magicAttack($skill_id, $target);
 		}
 		//物理攻击
 		else
 		{
-			$harm = $this->physicAttack($skill_id, $user);
+			$harm = $this->physicAttack($skill_id, $target);
 		}
 
 		//成功命中
 		if ($harm)
 		{
-			$beat_back = $user->defense($this, $skill_id, $harm);
+			$beat_back = $target->defense($this, $skill_id, $harm);
 			$this->current_blood -= $beat_back;
+		}
+
+		//连击后进入休息状态
+		if (Skill::isLj($skill_id))
+		{
+			$this->status_sleep = true;
 		}
 	}
 
 	//我顶
 	public function defense(Fightable $attacker, $attack_skill, $attack_harm)
 	{
-		// 死人也不会防御
-		if ( ! $this->isAlive())
+		if ($this->isDead() || $attacker->isDead())
 		{
 			return 0;
 		}
@@ -78,7 +102,8 @@ class Fightable {
 			return 0;
 		}
 
-		$defense_harm = Skill::doDefenseSkill($defense_skill, $attacker->getFightParameters(), $this->getFightParameters());
+		$defense_skill_level = $this->skills['defense'][$defense_skill];
+		$defense_harm = Skill::doDefenseSkill($defense_skill, $defense_skill_level, $attacker->getFightParameters(), $this->getFightParameters());
 
 		//反击防御技能, 不降低伤害值, 但回弹伤害
 		if (Skill::isFj($defense_skill))
@@ -94,10 +119,17 @@ class Fightable {
 		return 0;
 	}
 
-	// 速度上下浮动5%
+	// 出手速度
 	public function speed()
 	{
 		$rand_rate = PerRand::getRandValue(array(0.95, 1.05));
+		return $this->attributes[ConfigDefine::USER_ATTRIBUTE_SPEED] * $rand_rate;
+	}
+
+	// 被攻击速度
+	public function attackedSpeed()
+	{
+		$rand_rate = PerRand::getRandValue(array(0.5, 1.5));
 		return $this->attributes[ConfigDefine::USER_ATTRIBUTE_SPEED] * $rand_rate;
 	}
 
@@ -132,36 +164,36 @@ class Fightable {
 	//获取使用技能所必须的参数
 	public function getFightParameters()
 	{
-		$skill_ids = array();
-		foreach($this->skills as $skills)
+		$attributes = $this->attributes;
+		if ($this->isSleep())
 		{
-			$skill_ids = array_merge($skill_ids, $skills['list']);
+			$attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE] *= 0.8;
 		}
 
 		return array(
 			'level' => $this->level,
-			'attributes' => $this->attributes,
-			'skills' => $skill_ids,
+			'attributes' => $attributes,
 		);
 	}
 
 	//开动法术攻击, 返回伤害值
-	protected function magicAttack($skill_id, Fightable $user)
+	protected function magicAttack($skill_id, Fightable $target)
 	{
 		$magic = Skill::getSkillMagic($skill_id);
 
 		//当魔法不足时，改用物理普通攻击
 		if ($this->current_magic < $magic)
 		{
-			return $this->physicAttack(false, $user);
+			return $this->physicAttack(false, $target);
 		}
 
 		$this->current_magic -= $magic;
 
 		//检查是否命中
-		if ($this->magicHit() - $user->magicDodge() >= 1)
+		if ($this->magicHit() - $target->magicDodge() >= 1)
 		{
-			return Skill::useSkill($skill_id, $this->getFightParameters(), $user->getFightParameters());
+			$skill_level = $this->skills['attack'][$skill_id];
+			return Skill::useSkill($skill_id, $skill_level, $this->getFightParameters(), $target->getFightParameters());
 		}
 
 		//没有命中，返回伤害值为0
@@ -169,12 +201,13 @@ class Fightable {
 	}
 
 	//开动物理攻击,返回伤害值
-	protected function physicAttack($skill_id, Fightable $user)
+	protected function physicAttack($skill_id, Fightable $target)
 	{
 		//检查命中
-		if ($this->physicHit() - $user->physicDodge() >= 1)
+		if ($this->physicHit() - $target->physicDodge() >= 1)
 		{
-			return Skill::userSkill($skill_id, $this->getFightParameters(), $user->getFightParameters());
+			$skill_level = $skill_id ? $this->skills['attack'][$skill_id] : false;
+			return Skill::useSkill($skill_id, $skill_level, $this->getFightParameters(), $target->getFightParameters());
 		}
 
 		return 0;
