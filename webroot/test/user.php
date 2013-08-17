@@ -1,8 +1,15 @@
+
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>测试用户</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<?php
+echo time();
+?>
 
 <p center>添加用户</p>
 <form method="GET" action="http://kaedezyf.com/webroot/friend/createFriend.php" name="createFriend" target="_blank">
