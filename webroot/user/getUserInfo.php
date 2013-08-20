@@ -12,7 +12,7 @@ if(!$userId)
 }
 
 //使用中装备
-$equipInfo = Equip_Info::getEquipInfoByUserId($userId, TRUE);
+$equipInfo = Equip_Info::getEquipListByUserId($userId);
 var_dump($equipInfo);
 
 //角色基本属性(点)

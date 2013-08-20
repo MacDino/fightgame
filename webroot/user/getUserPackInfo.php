@@ -15,4 +15,4 @@ if(!$userId)
 }
 
 //背包中全部装备
-$equipInfo = Equip_Info::getEquipInfoByUserId($userId);
+$equipInfo = Equip_Info::getEquipListByUserId($userId);
