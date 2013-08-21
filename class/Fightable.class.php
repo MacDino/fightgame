@@ -1,4 +1,5 @@
 <?php
+//生成可战斗对象
 class Fightable {
 
 	//等级
@@ -15,6 +16,20 @@ class Fightable {
 	protected $current_blood;
 	protected $current_magic;
 
+	/**
+	 * 初始化一个可战斗对象
+	 *
+	 * $attributes = array(:attribute_id => :attribute_value, ...);
+	 * $skills = array(
+	 * 		'attack' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => :attack_rate),	
+	 * 		'defense' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => :defense_rate),
+	 * 		'passive' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => null),
+	 * );
+	 *
+	 * @param int $level 	战斗对象级别
+	 * @param array $attributes 战斗对象的所有属性(包括各种装备，技能加成后的最终基本属性和成长属性)
+	 * @param array $skills 	战斗对象的所有技能(分别包括进攻，防御，及被动技能的技能等级列表及释放概率)
+	 */
 	public function __construct($level, $attributes, $skills)
 	{
 		$this->level = $level;
@@ -73,6 +88,11 @@ class Fightable {
 		//成功命中
 		if ($harm)
 		{
+			if ($this->randomBj())
+			{
+				$harm *= 2;
+			}
+
 			$beat_back = $target->defense($this, $skill_id, $harm);
 			$this->current_blood -= $beat_back;
 		}
@@ -159,6 +179,13 @@ class Fightable {
 	{
 		$rand_rate = PerRand::getRandValue(array(0.5, 1.0));
 		return $this->attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] * $rand_rate;
+	}
+
+	//随机暴击概率5％
+	public function randomBj()
+	{
+		$rand = mt_rand(0,99);
+		return $rand < 5;
 	}
 
 	//获取使用技能所必须的参数
