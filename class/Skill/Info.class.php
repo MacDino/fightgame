@@ -1,6 +1,6 @@
 <?php
 class Skill_Info {
-    CONST TN_SKILL_INFO = 'user_skill_info';
+    CONST TN_SKILL_INFO = 'user_skill';
     CONST TN_SKILL_ALLOWED = 'level_allow_skill_num';
     CONST TN_SKILL_POINT = 'level_skill_point';
     CONST TN_SKILL_MONEY = 'level_skill_money';
@@ -30,11 +30,22 @@ class Skill_Info {
             'user_id'   => $user_id,
             'skill_id'  => $skill_id
         );
-        $skill_info = DB::table(self::TN_SKILL_INFO)->field('level')->selectOne($where);
-        if(!empty($skill_info) && $skill_info['level']){
-            return $skill_info['level'];
+        $skill_info = DB::table(self::TN_SKILL_INFO)->field('skill_level')->selectOne($where);
+        if(!empty($skill_info) && $skill_info['skill_level']){
+            return $skill_info['skill_level'];
         }
         return FALSE;
+    }
+
+    /**
+     * @desc 当前已学习技能数量
+     */
+    public static function getLearnedSkillNum($user_id, $skill_id){
+        $where      = array(
+            'user_id'   => $user_id,
+            'skill_id'  => $skill_id
+        );
+        return DB::table(self::TN_SKILL_INFO)->total($where);
     }
 
 
@@ -95,7 +106,7 @@ class Skill_Info {
             }
         } else {
             $where  = array(
-                'skill_level'   => $skill_level
+                'skill_level'   => $level_to
             );
             $money      = DB::table(self::TN_SKILL_MONEY)->selectOne($where);
             $all_money  = $money['money'];
