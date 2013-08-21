@@ -224,19 +224,21 @@ class Skill
      *                      )
      * @param op_data 被攻击者属性，格式与攻击者属性一致
      */
-    public static function useSkill($skill_code, $data, $op_data){
+    public static function useSkill($skill_code, $skill_level, $data, $op_data){
         //成长属性
         //$attributes = User_Attributes::getInfoByRaceAndLevel($role_info['race_id'], $role_info['user_level'], TRUE); 
         //技能加成属性
-        $attributes = self::getRoleAttributesWithSkill($data['attributes'], $data['skills']);
+        //$attributes = self::getRoleAttributesWithSkill($data['attributes'], $data['skills']);
         //怪物加成
-        $op_atrributes  = self::getRoleAttributesWithSkill($op_data['attributes'], $data['skills']);
+        //$op_atrributes  = self::getRoleAttributesWithSkill($op_data['attributes'], $data['skills']);
+        $attributes     = $data['attributes'];
+        $op_attributes  = $op_data['attributes'];
 
         //使用技能
         if($skill_code){
             //构造额外需要参数
-            $attributes['role_level']   = $data['user_level'];
-            $attributes['skill_level']  = $data['skills'][$skill_code];
+            $attributes['role_level']   = $data['level'];
+            $attributes['skill_level']  = $skill_level;
             $attributes['op_defense']   = $op_attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE];
             $attributes['op_psychic']   = $op_attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
             if(is_numeric($skill_code)){
@@ -285,13 +287,11 @@ class Skill
     /**
      * $desc 执行防御技能
      */
-    public static function doDefenseSkill($skill_code, $data, $op_data){
-        //技能等级
-        $skill_level    = $op_data['skills'][$skill_code];
+    public static function doDefenseSkill($skill_code, $skill_level, $data, $op_data){
         //减少伤害值
         if(self::isFj($skill_code)){
             $fj_percent = Skill_Config::fjSkillFormula($skill_level);
-            return (self::userSkill(false, $data, $op_data)) * $fj_percent;
+            return (self::useSkill(false, $skill_level, $data, $op_data)) * $fj_percent;
         }
         $skill_name = self::$skill_info[$skill_code][0];
         return call_user_func(array('Skill_Config', $skill_name.'SkillFormula'), $skill_level);
