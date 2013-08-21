@@ -50,7 +50,7 @@ class Utility
 
 	// 以最左侧数组为基准，相乘数组中键值相同的元素
 	// $a = array('a' => 1, 'b' => 2); $b = array('a' => 0.1, 'b' => 0.2);
-	// Utility::arrayMultiply($a, $b) => array('a' => 0.1, 'b' => 0.4);
+	// Utility::arrayMultiply($a, $b) ==> array('a' => 0.1, 'b' => 0.4);
 	public static function arrayMultiply()
 	{
 		$args = array_filter(func_get_args(), 'is_array');
@@ -68,5 +68,27 @@ class Utility
 		}
 
 		return $base;
+	}
+
+	// 将一个多维数组转换为以$key的值为索引的新数组
+	// $a = array(array('id' => 'a'), array('id' => 'b')); 
+	// Utility::arrayAssociate($a) ==> array('a' => array('id' => 'a'), 'b' => array('id' => 'b'));
+	public static function arrayAssociate($array, $key = 'id')
+	{
+		$ret = array();
+		if ( ! is_array($array))
+	   	{
+			return $ret;
+		}
+
+		foreach ($array as $value) 
+		{
+			if (isset($value[$key]))
+		   	{
+				$ret[$value[$key]] = $value;
+			}
+		}
+
+		return $ret;
 	}
 }

@@ -14,18 +14,11 @@ by extends the Model class, User will have all the instance methods of DB::table
 	User::select($where); // DB::table('users')->select($where)
 	User::delete($where); // DB::table('users')->delete($where)
 
-and 3 dynamic methods which are getBy*, getOneBy*, deleteBy*.
-Note that given a table field 'user_name', the according dynamic method name shall be exactly 'getByUserName', case sensitive!
-	User::getByUserName('%aa%');
-   	//DB::table('users')->select(array('user_name' => '%aa%'));
-	
-	User::getByUserNameAndSex('%aa%', '1');
-   	//DB::table('users')->select(array('user_name' => '%aa%', 'sex' => 1));
-	
+	// dynamic query
+	User::getByUserName('%aa%');  
 	User::deleteByUserNameAndSexAndAge('%aa%', '1', array(15, 20, 25));
-	//DB::table('users')->delete(array('user_name' => '%aa%', 'sex' => '1', 'age' => array(15, 20, 25)));
 
-params in create and update operation will be automatically checked according to $validates
+params in create and update operation will be automatically checked against $validates
 	User::create(array(
 		'user_name' => 'user_name',
 		'email' => 'a@a.com'
@@ -71,6 +64,11 @@ abstract class Model {
 		return DB::table(static::$table_name)->insert($params);
 	}
 
+	public static function insert()
+	{
+		return call_user_func_array('static::create', func_get_args());
+	}
+
 	public static function getError()
 	{
 		return self::$errors;
@@ -78,37 +76,7 @@ abstract class Model {
 
 	public static function __callStatic($method, $parameters)
 	{
-		if (preg_match('/^getOneBy(\w++)$/', $method, $matches)) 
-		{
-			$where = self::_dynamicWhere($matches[1], $parameters);
-			return DB::table(static::$table_name)->selectOne($where);
-		}
-
-		if (preg_match('/^getBy(\w++)$/', $method, $matches)) 
-		{
-			$where = self::_dynamicWhere($matches[1], $parameters);
-			return DB::table(static::$table_name)->select($where);
-		}
-
-		if (preg_match('/^deleteBy(\w++)$/', $method, $matches)) 
-		{
-			$where = self::_dynamicWhere($matches[1], $parameters);
-			return DB::table(static::$table_name)->delete($where);
-		}
-
 		$db_query = DB::table(static::$table_name);
 		return call_user_func_array(array($db_query, $method), $parameters);
-	}
-
-	private static function _dynamicWhere($by_field, $parameters)
-	{
-		$by_field = strtolower(preg_replace('/(?<!\b)(?=[A-Z])/', '_', $by_field));
-		$fields = explode('_and_', $by_field);
-		if (count($fields) !== count($parameters))
-		{
-			throw new Exception('parameters error!');
-		}
-
-		return array_combine($fields, $parameters);
 	}
 }
