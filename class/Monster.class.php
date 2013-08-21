@@ -154,6 +154,11 @@ class Monster
 		return $ret;
 	}
 
+	public static function fightable($monster)
+	{
+		return new Fightable($monster['level'], self::getMonsterAttribute($monster), self::getMonsterSkill($monster));
+	}
+
 	//多余属性随机分配
 	private static function _randAttribute($surplusAttribute, $userAttributeList)
 	{
