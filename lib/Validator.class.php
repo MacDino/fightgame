@@ -69,9 +69,18 @@ class Validator {
 		return strtotime($value) !== false;
 	}
 
+
+	// ',' is used to sepereate different rules in self::check(), here we need to bind '`' as a ',' in regex
 	public static function checkMatch($value, $regex)
 	{
+		$regex = str_replace('`', ',', $regex);
 		return preg_match($regex, $value);
+	}
+
+	public static function checkIn($value, $in)
+	{
+		$in = is_array($in) ? $in : explode('|', $in);
+		return in_array($value, $in);
 	}
 
 	/**
