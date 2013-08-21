@@ -156,8 +156,26 @@ class Monster
 
 	public static function fightable($monster)
 	{
-		return new Fightable($monster['level'], self::getMonsterAttribute($monster), self::getMonsterSkill($monster));
+		$skill = self::getMonsterSkill($monster);
+		$attribute = self::getMonsterAttribute($monster, $skill);
+
+		//技能加成后的属性
+		$attribute = self::attributeWithSkill($attribute, $skill);
+
+		return new Fightable($monster['level'], $attribute, $skill);
 	}
+
+	public static function attributeWithSkill($attribute, $skill)
+	{
+		$skill_list = array();
+		foreach ($skill as $_skill)
+		{
+			$skill_list = array_merge($skill_list, $_skill['list']);
+		}
+
+		return Skill::getRoleAttributesWithSkill($attribute, $skill_list);
+	}
+
 
 	//多余属性随机分配
 	private static function _randAttribute($surplusAttribute, $userAttributeList)
