@@ -3,8 +3,6 @@
 class Friend_Info
 {
     CONST TABLE_NAME = 'friend_info';
-    
-    CONST FRIEND_NUM = '10';//好友数量原始上限,可增加
 
     //好友来源
     
