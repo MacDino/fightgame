@@ -176,7 +176,6 @@ class Monster
 		return Skill::getRoleAttributesWithSkill($attribute, $skill_list);
 	}
 
-
 	//多余属性随机分配
 	private static function _randAttribute($surplusAttribute, $userAttributeList)
 	{

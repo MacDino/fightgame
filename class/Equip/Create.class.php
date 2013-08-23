@@ -2,7 +2,7 @@
 //生产一件装备
 class Equip_Create
 {	
-	CONST TABLE_USER_EQUID = 'user_equid';
+	CONST TABLE_USER_EQUID = 'user_equip';
 	
 	//创建一件随机的装备,颜色由外部传入
 	public static function createOneRandEquip($equipColour, $userId)
@@ -61,15 +61,10 @@ class Equip_Create
 		$equipInfo['equip_type'] = $equipType;
 		$equipInfo['race_id'] = isset($equipSuitInfo['race_id'])?$equipSuitInfo['race_id']:0;
 		$equipInfo['is_used'] = 0;
-		$equipInfo['equid_level'] = 0;
+		$equipInfo['equip_level'] = 0;
         $equipInfo['user_id'] = $userId;
 
         return self::equipInsertDb($equipInfo);
-	}
-
-	//装备升级(打造)
-	public static function upgradeEquip($equipType, $equipColor){
-
 	}
 
 	//创建数据庘数据

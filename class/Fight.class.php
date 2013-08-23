@@ -2,9 +2,6 @@
 class Fight {
 
 	//单挑
-	//$monster1 = Map::getMonster(1);
-	//$monster2 = Map::getMonster(1);
-	//Fight::start(Monster::fightable($monster1), Monster::fightable($monster2))
 	public static function start(Fightable $user1, Fightable $user2)
 	{
 		//速度快者先出手

@@ -26,6 +26,20 @@ class Equip_Config
 		);
 		return $qualityProbabilityList;
 	}
+
+    //打造增加的基本属性
+    public static function upgradeAttributeList(){
+        $ret = array(
+            Equip::EQUIP_TYPE_ARMS     => array(ConfigDefine::USER_ATTRIBUTE_HIT => 8),
+            Equip::EQUIP_TYPE_HELMET   => array(ConfigDefine::USER_ATTRIBUTE_DEFENSE => 20), 
+            Equip::EQUIP_TYPE_NECKLACE => array(ConfigDefine::USER_ATTRIBUTE_PSYCHIC => 6), 
+            Equip::EQUIP_TYPE_CLOTHES  => array(ConfigDefine::USER_ATTRIBUTE_DEFENSE => 12),
+            Equip::EQUIP_TYPE_BELT     => array(ConfigDefine::USER_ATTRIBUTE_BLOOD => 40),
+            Equip::EQUIP_TYPE_SHOES    => array(ConfigDefine::USER_ATTRIBUTE_QUICK =>8),
+        );
+
+        return $ret;
+    }
 	
 	//装备附加属性列表
 	public static function equipAttributeList()
