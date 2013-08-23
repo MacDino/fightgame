@@ -8,15 +8,8 @@ $monster        = Map::getMonster($map_id);
 $monster_fight  = Monster::fightable($monster);
 
 //当前角色fight对象
-$fight_data     = array();
 $user_info      = User_Info::getUserInfoByUserId($user_id);
-//基本属性 成长属性 装备属性
-$base_attr      = User_Info::getUserInfoFightAttribute($user_info['user_id']);
-$skill_list     = Skill_Info::getSkill($user_info['user_id']);
-//技能属性加成
-$skill_attr     = Skill::getRoleAttributesWithSkill($grouth_attr, $skill_list);
-$fight_skill    = Skill::getFightSkillList($skill_list);
-$user_fight     = new Fightable($user_info['user_level'], $skill_attr, $fight_skill);
+$user_fight     = User_Info::fightable($user_id, $user_info['user_level']);
 
 $data   = array();
 try {
