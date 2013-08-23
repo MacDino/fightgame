@@ -149,6 +149,7 @@ class Skill
                 'maxUseProbability'  => array('gj' => 0.9, 'fy' => 0.8),
             ),
         );
+        return $configList;
     }
     /**
      * @desc 锻造技能对装备的影响
@@ -182,17 +183,20 @@ class Skill
                 continue;
             }
             //主动技能+锻造技能
-            if(self::$skill_info[$skill][1] == self::SKILL_GROUP_WLGJ  || self::$skill_info[$skill][1] == self::SKILL_GROUP_FSGJ){
-                $skill_attr = self::$_skill_attributes[$skill];
-                foreach($skill_attr as $attr => $value){
-                    $attributes[$attr]  += $value * $level;
-                }
-            } elseif (self::$skill_info[$skill][1] == self::SKILL_GROUP_BDJN){
-                $bdjn_skill[$skill] = $level;
-                $skill      = self::$skill_info[$skill][0];
-                $attrAdd    = call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
-                foreach($attrAdd as $attr => $value){
-                    $attributes[$attr]  += $value * $level;
+            if(isset(self::$skill_info[$skill][1])){
+                $skill_group    = self::$skill_info[$skill][1];
+                if($skill_group == self::SKILL_GROUP_WLGJ  || $skill_group == self::SKILL_GROUP_FSGJ){
+                    $skill_attr = self::$_skill_attributes[$skill];
+                    foreach($skill_attr as $attr => $value){
+                        $attributes[$attr]  += $value * $level;
+                    }
+                } elseif ($skill_group == self::SKILL_GROUP_BDJN){
+                    $bdjn_skill[$skill] = $level;
+                    $skill      = self::$skill_info[$skill][0];
+                    $attrAdd    = call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
+                    foreach($attrAdd as $attr => $value){
+                        $attributes[$attr]  += $value * $level;
+                    }
                 }
             }
         }
@@ -297,4 +301,42 @@ class Skill
         return call_user_func(array('Skill_Config', $skill_name.'SkillFormula'), $skill_level);
     }
 
+    /**
+     * @desc 战斗技能列表格式化 todo
+     * @param $skills array('skill_id'=>skill_level...)
+     */
+	public static function getFightSkillList($skills){
+        //主动技能数 防御技能数
+        $skill_count    = count($skills);
+		$data = array('attack' => array(), 'defense' => array(), 'passive' => array());
+		foreach ($skills as $skill_code => $skill_level){
+            if(isset(self::$skill_info[$skill_code][1])){
+                $skill_group    = self::$skill_info[$skill_code][1];
+                if($skill_group == self::SKILL_GROUP_WLGJ || $skill_group == self::SKILL_GROUP_FSGJ){
+                    $data['attack']['list'][$skill_code]    = $skill_level;
+                } elseif ($skill_group == self::SKILL_GROUP_FYJN){
+                    $data['defense']['list'][$skill_code]   = $skill_level;
+                } elseif ($skill_group == self::SKILL_GROUP_BDJN){
+                    $data['passive']['list'][$skill_code]   = $skill_level;
+                }
+            }
+        }
+        //获取技能概率
+        $skill_rate     = self::skillUseProbability();
+        if($attack_count = count($data['attack']['list'])){
+            if($attack_count > 5){
+                $attack_count   = 5;
+            }
+            $data['attack']['rate']   = $skill_rate[$attack_count]['baseUseProbability']['gj'];
+        }
+
+        if($defense_count = count($data['defense']['list'])){
+            if($defense_count > 5){
+                $defense_count  = 5;
+            }
+            $data['defense']['rate']  = $skill_rate[$attack_count]['baseUseProbability']['fy'];
+        }
+
+        return $data;
+    }
 }
