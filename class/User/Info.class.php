@@ -246,6 +246,20 @@ class User_Info
 		return $res;
 	}
 
+    /**
+     * @desc 根据user_id生成战斗对象
+     */
+    public static function fightable($user_id, $user_level){
+        //基本属性 成长属性 装备属性
+        $all_attr      = self::getUserInfoFightAttribute($user_id);
+        $skill_list     = Skill_Info::getSkill($user_id);
+        //技能属性加成
+        $all_attr     = Skill::getRoleAttributesWithSkill($all_attr, $skill_list);
+        $fight_skill    = Skill::getFightSkillList($skill_list);
+
+        return new Fightable($user_level, $all_attr, $fight_skill);
+    }
+
 
 
 
