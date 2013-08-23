@@ -1,10 +1,86 @@
 <?php
 class User_Property{
 	
+	CONST TABLE_NAME = 'property_info';
+	
+	/** 属性增强咒符*/
+	CONST ATTRIBUTE_ENHANCE = 1;
+	/** 双倍咒符 */
+	CONST DOUBLE_HARVEST = 2;
+	/** 挂机咒符 */
+	CONST AUTO_FIGHT = 3;
+	/** 装备打造咒符 */
+	CONST EQUIP_FORGE = 4;
+	/** 装备成长咒符 */
+	CONST EQUIP_GROW = 5;
+	
+	//上古遗迹没考虑清楚,暂时没做
+	
+	/**
+	 * @param int $userId	用户ID
+	 * @param int $type		符咒类别
+	 * @return 购买符咒数量
+	 */
+	public static function addAmulet($userId, $type)
+	{
+		if(!$userId || !$type)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + 1 WHERE user_id = $userId AND property_id = $type";
+//		echo $sql;exit;
+		$res = MySql::query($sql);
+	}
+	
+	/**
+	 * @param int $userId	用户ID
+	 * @param int $type		符咒类别
+	 * @return 使用符咒数量
+	 */
+	public static function UseAmulet($userId, $type)
+	{
+		if(!$userId || !$type)return FALSE;
+		
+		$num = self::getPropertyNum($userId, $type);
+		if($num <= 0)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - 1 WHERE user_id = $userId AND property_id = $type";
+//		echo $sql;exit;
+		$res = MySql::query($sql);
+	}
+	
+	/**
+	 * @param int $userId	用户ID
+	 * @param int $type		符咒类别
+	 * @return 获取某符咒数量
+	 */
+	public static function getPropertyNum($userId, $type)
+	{
+		if(!$userId || !$type)return FALSE;
+		
+		$num = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type), array('property_num'));
+		return $num['property_num'];
+	}
+	
+	/**
+	 * 显示拥有符咒信息
+	 *
+	 * @param int $userId	用户ID
+	 * @return 显示拥有符咒信息
+	 */
+	public static function getUserProperty($userId)
+	{
+		if(!$userId)return FALSE;
+		
+		$propertyInfo = MySql::select(self::TABLE_NAME, array('user_id' => $userId), array('property_id', 'property_num'));
+		
+		if(!is_array($propertyInfo))return FALSE;
+		
+		return $propertyInfo;
+	}
+	
 	/**
 	 * 购买背包上限
 	 * @param int $userId
-	 * @return bool
+	 * @return 购买背包上限
 	 */
 	public static function buyPackNum($userId)
 	{
@@ -26,7 +102,7 @@ class User_Property{
 	/**
 	 * 购买好友上限
 	 * @param int $userId
-	 * @return bool
+	 * @return 购买好友上限
 	 */
 	public static function buyFriendNum($userId)
 	{
@@ -48,7 +124,7 @@ class User_Property{
 	/**
 	 * 购买人宠上限
 	 * @param int $userId
-	 * @return bool
+	 * @return 购买人宠上限
 	 */
 	public static function buyPetNum($userId)
 	{
@@ -71,6 +147,7 @@ class User_Property{
 	 * 购买PK次数
 	 * @param int	$userId		用户ID
 	 * @param int	$num		购买次数,默认为1
+	 * @return 购买PK次数
 	 */
 	public static function buyPkNum($userId, $num = FALSE)
 	{
@@ -88,8 +165,9 @@ class User_Property{
 		if($res_num && $res_ingot)return TRUE;
 	}
 		
-	/** 购买属性增强咒符*/
-	public static function buyAttributeEnhance($userId)
+	/** 
+	 * @return 使用属性增强咒符*/
+	public static function useAttributeEnhance($userId)
 	{
 		if(!$userId)return FALSE;
 		
@@ -98,9 +176,13 @@ class User_Property{
 		if(!empty($isuse))return FALSE;
 		
 		$res = MySql::insert('attribute_enhance', array('user_id' => $userId, 'add_time' => time()));
+		$res_num = self::UseAmulet($userId, self::ATTRIBUTE_ENHANCE);
+		
+		if(!$res && !$res_num)return FALSE;
 		return $res;
 	}
-	/** 检测是否在使用属性增强符咒*/
+	/** 检测是否在使用属性增强符咒
+	 * @return 检测是否在使用属性增强符咒*/
 	public static function isuseAttributeEnhance($userId)
 	{
 		if(!$userId)return FALSE;
@@ -117,8 +199,9 @@ class User_Property{
 		}
 	}
 	
-	/** 购买双倍符咒*/
-	public static function buyDoubleHarvest($userId)
+	/** 
+	 * @return 使用双倍符咒*/
+	public static function useDoubleHarvest($userId)
 	{
 		if(!$userId)return FALSE;
 		
@@ -127,9 +210,11 @@ class User_Property{
 		if(!empty($isuse))return FALSE;
 		
 		$res = MySql::insert('double_harvest', array('user_id' => $userId, 'add_time' => time()));
+		$res_num = self::UseAmulet($userId, self::DOUBLE_HARVEST);
 		return $res;
 	}
-	/** 检测是否在使用双倍符咒*/
+	/** 检测是否在使用挂机符咒
+	 * @return 检测是否在使用双倍符咒*/
 	public static function isuseDoubleHarvest($userId)
 	{
 		if(!$userId)return FALSE;
@@ -146,8 +231,9 @@ class User_Property{
 		}
 	}
 	
-	/** 购买挂机符咒*/
-	public static function buyAutoFight($userId)
+	/** 
+	 * @return 使用挂机符咒*/
+	public static function useAutoFight($userId)
 	{
 		if(!$userId)return FALSE;
 		
@@ -156,9 +242,11 @@ class User_Property{
 		if(!empty($isuse))return FALSE;
 		
 		$res = MySql::insert('auto_fight', array('user_id' => $userId, 'add_time' => time()));
+		$res_num = self::UseAmulet($userId, self::AUTO_FIGHT);
 		return $res;
 	}
-	/** 检测是否在使用挂机符咒,若过期自动删除*/
+	/** 检测是否在使用挂机符咒
+	 * @return 检测是否在使用挂机符咒*/
 	public static function isuseAutoFight($userId)
 	{
 		if(!$userId)return FALSE;
@@ -177,6 +265,10 @@ class User_Property{
 	
 	/**
 	 * 装备成长咒符
+	 */
+	
+	/**
+	 * 装备打造咒符
 	 */
 		
 	/**

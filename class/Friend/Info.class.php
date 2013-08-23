@@ -17,7 +17,10 @@ class Friend_Info
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
 			//查询好友信息
-			$friendInfo = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+			$sql = "select u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id";
+//			echo $sql;exit;
+			$friendInfo = MySql::query($sql);
+			
 			
            	if(is_array($friendInfo))
 	        {
@@ -54,26 +57,55 @@ class Friend_Info
      *
      * @param int $userId		用户ID
      * @param int $friendId		好友ID
+     * @param int $is_pass		是否通过好友,没有的话是未通过,有的话是直接通过(好友邀请)
      * @return Bool
      */
-    public static function createFriendInfo($userId, $friendId)
+    public static function createFriendInfo($userId, $friendId, $is_pass = FALSE)
     {
+//    	echo "UserId===".$userId."&FriendId===".$friendId;exit;
     	//数据进行校验,非空,数据内
     	if(!$userId || !$friendId) return FALSE;
     	
     	//查询好友ID是否在用户表里存在//是否已经超过某等级 >40
 		$user_info = User_Info::getUserInfoByUserId($userId);
-		$friend_info = User_Info::getUserInfoByLevel($friendId, '<', 40);
+		$friend_info = User_Info::getUserInfoByUserId($friendId);
 		if(!$user_info || !$friend_info) return FALSE;
 		
 		//是否已添加过好友
 		$is_friend = self::getUserFrined($userId, $friendId);
 		if(!empty($is_friend)) return FALSE;
         
-        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId), true);
+        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId), true);//默认未通过
         //echo $userId;exit;
         
         if($userId)
+        {
+            return TRUE;
+        }else{
+        	return FALSE;
+        }
+    }
+    
+    /**
+     * 通过好友申请
+     *
+     * @param int $userId		用户ID
+     * @param int $friendId		好友ID
+     */
+    public static function agreeFriendInfo($userId, $friendId)
+    {
+    	//数据进行校验,非空,数据内
+    	if(!$userId || !$friendId) return FALSE;
+    	
+    	//查询用户ID和好友ID是否在用户表里存在
+		$user_info = User_Info::getUserInfoByUserId($userId);
+		$friend_info = User_Info::getUserInfoByUserId($friendId);
+		if(!$user_info || !$friend_info) return FALSE;
+		
+		$res = MySql::update(self::TABLE_NAME, array('is_pass' => 2), array('user_id' => $userId, 'friend_id' => $friendId));//通过状态
+		//通过好友申请的同时添加对方为好友,默认通过
+		$result = MySql::insert(self::TABLE_NAME, array('user_id' => $friendId, 'friend_id' => $userId, 'is_pass' => 2), true);//默认通过
+		if($res & $result)
         {
         	//同时增加user_id声望
             return TRUE;

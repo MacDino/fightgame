@@ -44,7 +44,7 @@ class ConfigDefine
     CONST SKILL_SWZH    				= 204;//三昧真火
     CONST SKILL_HFHY    				= 205;//呼风唤雨 
     CONST SKILL_WLJ     				= 206;//五雷决
-    CONST SKILL_WFX     				= 207;//物防修 
+    CONST SKILL_WFX     				= 207;//物防修                                                     
     CONST SKILL_FFX     				= 208;//法防修
     CONST SKILL_GX      				= 209;//攻修
     CONST SKILL_FX      				= 210;//法修

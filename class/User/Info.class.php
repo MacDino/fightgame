@@ -108,7 +108,7 @@ class User_Info
 			return FALSE;
 		}
 
-		$sql = "UPDATE " . self::TABLE_NAME . " SET $key = " . "$key $change $value WHERE user_id = $userId";
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
 		$res = Mysql::query($sql);
 		return $res;
 	}
@@ -148,7 +148,7 @@ class User_Info
 		$userInfo = self::getUserInfoByUserId($userId);
 
 		//根据ID取出所有装备,假设为getEquipInfoByUserId
-		$equipInfo = Equip_Info::getEquipInfoByUserId($userId, TRUE);
+		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
 //		var_dump($equipInfo);exit;
 		//把装备中的属性点放在一起,属性值放在一起
 		foreach ($equipInfo as $p)
