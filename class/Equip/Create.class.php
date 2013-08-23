@@ -67,11 +67,6 @@ class Equip_Create
         return self::equipInsertDb($equipInfo);
 	}
 
-	//装备升级(打造)
-	public static function upgradeEquip($equipType, $equipColor){
-
-	}
-
 	//创建数据庘数据
 	public static function equipInsertDb($data)
     {

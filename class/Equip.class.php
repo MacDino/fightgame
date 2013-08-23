@@ -28,14 +28,6 @@ class Equip
 
 	CONST TABLE_EQUID_ATTRIBUTES = 'equip_attributes';
 
-
-	//给某件装备进行升级
-	public static function updateEquipLevel($equipId, $fromLevel, $toLevel)
-	{
-
-
-	}
-
 	//创建一个装备
 	public static function createEquip($equipType, $equipColour, $equipQuality, $userId)
 	{
