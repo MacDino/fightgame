@@ -4,6 +4,8 @@
 <title>测试用户</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+
+
 <p center>添加用户</p>
 <form method="GET" action="http://kaedezyf.com/webroot/friend/createFriend.php" name="createFriend" target="_blank">
 

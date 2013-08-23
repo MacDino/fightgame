@@ -89,6 +89,7 @@ class Race_Config
             ConfigDefine::USER_ATTRIBUTE_DEFENSE  => $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*1.4,
             ConfigDefine::USER_ATTRIBUTE_SPEED    => $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_QUICK]*0.7 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*0.1,
             ConfigDefine::USER_ATTRIBUTE_BLOOD    => 100 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*6,
+            ConfigDefine::USER_ATTRIBUTE_LUCKY	  => 0,
               );
         return $demonGrowUpAttributes;
     }
@@ -109,6 +110,7 @@ class Race_Config
             ConfigDefine::USER_ATTRIBUTE_DEFENSE  => $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*1.6,
             ConfigDefine::USER_ATTRIBUTE_SPEED    => $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_QUICK]*0.7 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*0.1,
             ConfigDefine::USER_ATTRIBUTE_BLOOD    => 100 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*4.5,
+            ConfigDefine::USER_ATTRIBUTE_LUCKY	  => 0,
               );
         return $tsimshianGrowUpAttributes;
     }
@@ -129,6 +131,7 @@ class Race_Config
             ConfigDefine::USER_ATTRIBUTE_DEFENSE  => $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*1.5,
             ConfigDefine::USER_ATTRIBUTE_SPEED    => $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_QUICK]*0.7 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*0.1,
             ConfigDefine::USER_ATTRIBUTE_BLOOD    => 100 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*5,
+            ConfigDefine::USER_ATTRIBUTE_LUCKY	  => 0,
               );
         return $humanGrowUpAttributes;
     }

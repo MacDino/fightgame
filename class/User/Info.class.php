@@ -108,7 +108,7 @@ class User_Info
 			return FALSE;
 		}
 
-		$sql = "UPDATE " . self::TABLE_NAME . " SET $key = " . "$key $change $value WHERE user_id = $userId";
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
 		$res = Mysql::query($sql);
 		return $res;
 	}
@@ -148,36 +148,44 @@ class User_Info
 		$userInfo = self::getUserInfoByUserId($userId);
 
 		//根据ID取出所有装备,假设为getEquipInfoByUserId
-		$equipInfo = Equip_Info::getEquipInfoByUserId($userId, TRUE);
+		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
+//		var_dump($equipInfo);exit;
 		//把装备中的属性点放在一起,属性值放在一起
 		foreach ($equipInfo as $p)
 		{
 			//基础属性
 			$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
-			foreach ($equipBaseAttribute as $m=>$n)
-			{
-				if(in_array($m, $baseAttribute))//装备中属性点部分
+//			print_r($equipBaseAttribute);exit;
+			if(is_array($equipBaseAttribute)){
+//				echo 111;exit;
+				foreach ($equipBaseAttribute as $m=>$n)
 				{
-					$baseAttribute[$m] += $n;
-				}elseif(in_array($m, $valueAttribute)){//装备中属性值部分
-					$valueAttribute[$m] += $n;
-				}else{
+//					echo 2222;exit;
+					if(array_key_exists($m, $baseAttribute))//装备中属性点部分
+					{
+						$baseAttribute[$m] += $n;
+					}elseif(array_key_exists($m, $valueAttribute)){//装备中属性值部分
+						$valueAttribute[$m] += $n;
+					}else{
+					}
 				}
 			}
 			//扩展属性
 			$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
-			foreach ($equipExpandAttribute as $x=>$y)
-			{
-				if(in_array($x, $baseAttribute))//装备中属性点部分
+			if(is_array($equipBaseAttribute)){
+				foreach ($equipExpandAttribute as $x=>$y)
 				{
-					$baseAttribute[$x] += $y;
-				}elseif(in_array($x, $valueAttribute)){//装备中属性值部分
-					$valueAttribute[$x] += $y;
-				}else{
+					if(array_key_exists($x, $baseAttribute))//装备中属性点部分
+					{
+						$baseAttribute[$x] += $y;
+					}elseif(array_key_exists($x, $valueAttribute)){//装备中属性值部分
+						$valueAttribute[$x] += $y;
+					}else{
+					}
 				}
 			}
 		}
-		
+//		var_dump($baseAttribute);var_dump($valueAttribute);exit;
 		//根据种族和等级取出基本属性点
 		$userBaseAttribute = User_Attributes::getBaseAttribute($userInfo['race_id'], $userInfo['user_level']);
 		

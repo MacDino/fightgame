@@ -3,11 +3,15 @@
 class Equip_Info
 {	
     CONST TABLE_NAME = 'user_equip';
-
-    //获取用户的装备信息
-    public static function getEquipListByUserId($userId){
+	
+	//获取用户的装备信息
+	public static function getEquipListByUserId($userId, $is_used = FALSE){
         if($userId){
-            $res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+        	if(!$is_used){
+            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+        	}else{
+        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1));
+        	}
         }else{
             return FALSE;    
         }
