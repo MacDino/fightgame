@@ -49,6 +49,8 @@ if(empty($isFriend))
 try {
     //删除好友
     Friend_Info::deleteFriendInfo($userId, $friendId);
+    Friend_Info::deleteFriendInfo($friendId, $userId);
+    echo "<script>alert('删除成功');location.href='listFriend.php?user_id=$userId'</script>";
     //减少声望
     $code = 0;
     $msg = 'OK';

@@ -41,6 +41,7 @@ if($friendNum == $userInfo['friend_num']){
 try {
     //添加好友
     Friend_Info::agreeFriendInfo($userId, $friendId);
+    echo "<script>alert('通过');location.href='listFriend.php?user_id=$userId'</script>";
     //增加声望
     $code = 0;
     $msg = 'OK';

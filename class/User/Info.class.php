@@ -3,6 +3,7 @@
 class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
+	CONST TABLE_NAME_BIND = 'user_bind';
 
 	/**
      * 根据UserId获取用户基本信息
@@ -18,16 +19,38 @@ class User_Info
 	}
 
 	/**
-     * 验证用户是否超过限定等级
-     * @param int	 $friendId		用户ID
-     * @param int	 $compare		对比方式
-     * @param int	 $level			限制等级
-     * @return bool
+     * 根据绑定方式和绑定值,获取账户ID
+     * @param int	 $bind_type		绑定方式
+     * @param int	 $bind_value		绑定值
+     * @return 账户ID
      */
-	public static function getUserInfoByLevel($friendId, $compare, $level){
-		if(!is_numeric($friendId) || !is_numeric($level))return FALSE;
-
-		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $friendId, 'user_level' => array('opt' => $compare, 'val' => $level)));
+	public static function getMasterInfo($bindType, $bindValue)
+	{
+//		echo "bindType==$bindType&&b indValue==$bindValue";
+		if(!$bindType || !$bindValue)return FALSE;
+		
+		$res = MySql::selectOne(self::TABLE_NAME_BIND, array('bind_type' => $bindType, 'bind_value' => $bindValue));
+//		var_dump($res);exit;
+		if(!empty($res)){
+//			echo 1111;exit;
+			return $res['master_id'];
+		}else{
+//			echo 2222;exit;
+			$id = MySql::insert(self::TABLE_NAME_BIND, array('bind_type' => $bindType, 'bind_value' => $bindValue), TRUE);
+			return $id;
+		}
+	}
+	
+	/**
+	 * 获取角色列表
+	 * @param int $masterId	帐号ID
+	 * @param int $area		分区
+	 * @return 角色列表
+	 */
+	public static function listUser($masterId, $area){
+		if(!$masterId || !$area)return FALSE;
+		
+		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area' => $area));
 		return $res;
 	}
 
@@ -37,32 +60,30 @@ class User_Info
      * @param array $data	种族和用户名,其他值走默认
      * @return bool
      */
-	public static function createUserInfo($userId, $data)
+	public static function createUserInfo($data)
 	{
-		if(!$userId || !$data || !is_array($data))return FALSE;
-
-		$info = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
-		if($info)return FALSE;
-
+		if(!$data || !is_array($data))return FALSE;
 		if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
 
 		$res = MySql::insert(self::TABLE_NAME, array(
-		'user_id' => $userId,
-		'user_name' => $data['user_name'],
-		'race_id' => $data['race_id'],
-		'user_level' => User::DEFAULT_USER_LEVEL,
-		'experience' => User::DEFAULT_EXP,
-		'money' => User::DEFAULT_MONEY,
-		'ingot' => User::DEFAULT_INGOT,
-		'pack_num' => User::DEFAULT_PACK_NUM,
-		'friend_num' => User::DEFAULT_FRIEND_NUM,
-		));
+			'user_name' => $data['user_name'],
+			'race_id' => $data['race_id'],
+			'user_level' => User::DEFAULT_USER_LEVEL,
+			'experience' => User::DEFAULT_EXP,
+			'money' => User::DEFAULT_MONEY,
+			'ingot' => User::DEFAULT_INGOT,
+			'pack_num' => User::DEFAULT_PACK_NUM,
+			'friend_num' => User::DEFAULT_FRIEND_NUM,
+			'pet_num' => User::DEFAULT_PET_NUM,
+			'master_id' => $data['master_id'],
+			'area' => $data['area'],
+		), TRUE);
+		
 		return $res;
 	}
 
 	/**
      * 更新用户基础信息,此处应该只能更新用户名,暂时不用这个function,除非是后台调整数据
-     *
      * @param int $userId
      * @param array $data
      * @return bool

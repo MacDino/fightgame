@@ -15,13 +15,12 @@ if(!$userId || !$friendId)
     die;
 }
 
-
-
-//查询用户ID是否在用户表里存在
+//查询用户ID和好友ID是否在用户表里存在
 //echo $userId;exit;
 $userInfo = User_Info::getUserInfoByUserId($userId);
+$friendInfo = User_Info::getUserInfoByUserId($friendId);
 //print_r($user_info);exit;
-if(!$userInfo)
+if(!$userInfo || !$friendInfo)
 {
 	$code = 1;
     //$msg = '用户信息错误!';
@@ -38,19 +37,8 @@ if($friendNum == $userInfo['friend_num']){
     die;
 }
 
-//好友ID是否存在&是否满足等级限制 <40
-$friendInfo = User_Info::getUserInfoByLevel($friendId, '<', User::FRIENDADDLEVEL);
-//print_r($friend_info);exit;
-if(!$friendInfo)
-{
-	$code = 1;
-    //$msg = '用户信息错误!或者已经超过40级!';
-    $msg = '3';
-    die;
-}
-
 //是否已经是好友
-$isFriend = Friend_Info::getUserFrined($userId, $friendId);
+$isFriend = Friend_Info::getUserFrined($friendId, $userId);
 if(!empty($isFriend))
 {
 	$code = 1;
@@ -61,7 +49,8 @@ if(!empty($isFriend))
 
 try {
     //添加好友
-    Friend_Info::createFriendInfo($userId, $friendId);
+    Friend_Info::createFriendInfo($friendId, $userId);
+    echo "<script>alert('添加成功');location.href='listFriend.php?user_id=$userId'</script>";
     //增加声望
     $code = 0;
     $msg = 'OK';
@@ -72,3 +61,4 @@ try {
     $msg = '99';
     die;    
 }
+?>

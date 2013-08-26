@@ -5,10 +5,13 @@ class User_Property{
 	
 	/** 属性增强咒符*/
 	CONST ATTRIBUTE_ENHANCE = 1;
+	CONST ATTRIBUTE_ENHANCE_PRICE = 10;
 	/** 双倍咒符 */
 	CONST DOUBLE_HARVEST = 2;
+	CONST DOUBLE_HARVEST_PRICE = 10;
 	/** 挂机咒符 */
 	CONST AUTO_FIGHT = 3;
+	CONST AUTO_FIGHT_PRICE = 10;
 	/** 装备打造咒符 */
 	CONST EQUIP_FORGE = 4;
 	/** 装备成长咒符 */
@@ -19,11 +22,15 @@ class User_Property{
 	/**
 	 * @param int $userId	用户ID
 	 * @param int $type		符咒类别
-	 * @return 购买符咒数量
+	 * @return 购买符咒
 	 */
 	public static function addAmulet($userId, $type)
 	{
 		if(!$userId || !$type)return FALSE;
+		
+		//是否有足够元宝
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+//		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
 		
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + 1 WHERE user_id = $userId AND property_id = $type";
 //		echo $sql;exit;
@@ -33,7 +40,7 @@ class User_Property{
 	/**
 	 * @param int $userId	用户ID
 	 * @param int $type		符咒类别
-	 * @return 使用符咒数量
+	 * @return 使用符咒
 	 */
 	public static function UseAmulet($userId, $type)
 	{
@@ -58,6 +65,13 @@ class User_Property{
 		
 		$num = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type), array('property_num'));
 		return $num['property_num'];
+	}
+	
+	public static function createPropertylist($userId, $type){
+		if(!$userId || !$type)return FALSE;
+		
+		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type));
+		return $res;
 	}
 	
 	/**
@@ -172,8 +186,12 @@ class User_Property{
 		if(!$userId)return FALSE;
 		
 		//是否已经在用
-		$isuse = self::isuseAttributeEnhance($userId);
-		if(!empty($isuse))return FALSE;
+		$isUse = self::isuseAttributeEnhance($userId);
+		if(!empty($isUse))return FALSE;
+		
+		//是否还有存数
+		$isHave = self::getPropertyNum($userId, self::ATTRIBUTE_ENHANCE);
+		if(empty($isHave))return FALSE;
 		
 		$res = MySql::insert('attribute_enhance', array('user_id' => $userId, 'add_time' => time()));
 		$res_num = self::UseAmulet($userId, self::ATTRIBUTE_ENHANCE);
@@ -191,8 +209,8 @@ class User_Property{
 		
 		if(!$res){//没有记录
 			return FALSE;
-		}elseif( (time() - User::ATTEIBUTEENHANCETIME) > $res['add_time'] ){//过期记录
-			MySql::delete('attribute_enhance', array('user_id' => $userId));//删除记录
+		}elseif( (time() - User::ATTEIBUTEENHANCETIME) > $res['add_time'] ){//删除过期记录
+			MySql::delete('attribute_enhance', array('user_id' => $userId));
 			return FALSE;
 		}else{
 			return TRUE;
@@ -206,8 +224,12 @@ class User_Property{
 		if(!$userId)return FALSE;
 		
 		//是否已经在用
-		$isuse = self::isuseDoubleHarvest($userId);
-		if(!empty($isuse))return FALSE;
+		$isUse = self::isuseDoubleHarvest($userId);
+		if(!empty($isUse))return FALSE;
+		
+		//是否还有存数
+		$isHave = self::getPropertyNum($userId, self::DOUBLE_HARVEST);
+		if(empty($isHave))return FALSE;
 		
 		$res = MySql::insert('double_harvest', array('user_id' => $userId, 'add_time' => time()));
 		$res_num = self::UseAmulet($userId, self::DOUBLE_HARVEST);
@@ -223,8 +245,8 @@ class User_Property{
 		
 		if(!$res){//没有记录
 			return FALSE;
-		}elseif( (time() - User::DOUBLEHARVESTTIME) > $res['add_time'] ){//过期记录
-			MySql::delete('double_harvest', array('user_id' => $userId));//删除记录
+		}elseif( (time() - User::DOUBLEHARVESTTIME) > $res['add_time'] ){//删除过期记录
+			MySql::delete('double_harvest', array('user_id' => $userId));
 			return FALSE;
 		}else{
 			return TRUE;
@@ -236,11 +258,15 @@ class User_Property{
 	public static function useAutoFight($userId)
 	{
 		if(!$userId)return FALSE;
-		
+
 		//是否已经在用
-		$isuse = self::isuseAutoFight($userId);
-		if(!empty($isuse))return FALSE;
-		
+		$isUse = self::isuseAutoFight($userId);
+		if(!empty($isUse))return FALSE;
+
+		//是否还有存数
+		$isHave = self::getPropertyNum($userId, self::AUTO_FIGHT);
+		if(empty($isHave))return FALSE;
+
 		$res = MySql::insert('auto_fight', array('user_id' => $userId, 'add_time' => time()));
 		$res_num = self::UseAmulet($userId, self::AUTO_FIGHT);
 		return $res;
@@ -255,8 +281,8 @@ class User_Property{
 		
 		if(!$res){//没有记录
 			return FALSE;
-		}elseif( (time() - User::AUTOFIGHTTIME) > $res['add_time'] ){//过期记录
-			MySql::delete('auto_fight', array('user_id' => $userId));//删除记录
+		}elseif( (time() - User::AUTOFIGHTTIME) > $res['add_time'] ){//删除过期记录
+			MySql::delete('auto_fight', array('user_id' => $userId));
 			return FALSE;
 		}else{
 			return TRUE;

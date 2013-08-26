@@ -33,6 +33,8 @@ class User
     
     /** PK最大购买次数*/
     CONST PK_BUY_NUM = 10;
+    /** PK次数价格*/
+    CONST PK_PRICE = 10;
     
 	/** 属性增强符咒增益*/
     CONST ATTEIBUTEENHANCE = '0.05';
@@ -40,9 +42,6 @@ class User
     CONST ATTEIBUTEBEGETS	= '0.03';
     /** 属性相克损失*/
     CONST ATTEIBUTERESTRAINT= '0.03';
-    
-    /** 好友可添加等级*/
-    CONST FRIENDADDLEVEL = 40;
     
     /** 属性增强,有效期.24小时*/
     CONST ATTEIBUTEENHANCETIME = 86400;
