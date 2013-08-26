@@ -78,7 +78,7 @@ class Equip_Create
         //todo 检查数据
 		if(!$data || !is_array($data))return FALSE;
 		$res = MySql::insert(self::TABLE_USER_EQUID, $data);
-        echo MySql::getLastSQL();
+        //echo MySql::getLastSQL();
         return $res;
 	}
 

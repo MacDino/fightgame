@@ -127,6 +127,7 @@ class MySql
     {
 		if(!$tableName || !$dataArray)return FALSE;
 		$sql = "INSERT INTO $tableName (`".implode('`,`', array_keys($dataArray))."`) VALUES ('".implode("','", array_values($dataArray))."')";	
+//		echo $sql;exit;
 		$res = self::execute($sql);
 		if($needInsertId && $res)
 		{
