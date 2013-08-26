@@ -58,20 +58,20 @@ CREATE TABLE `double_harvest` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `equid_attributes`
+-- Table structure for `equip_attributes`
 -- ----------------------------
-DROP TABLE IF EXISTS `equid_attributes`;
-CREATE TABLE `equid_attributes` (
-  `equid_attributes_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '装备基本属性ID',
-  `equid_id` int(11) NOT NULL COMMENT '装备ID',
+DROP TABLE IF EXISTS `equip_attributes`;
+CREATE TABLE `equip_attributes` (
+  `equip_attributes_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '装备基本属性ID',
+  `equip_id` int(11) NOT NULL COMMENT '装备ID',
   `base_attribute` varchar(200) NOT NULL COMMENT '基本属性',
   `attribute_id` int(11) NOT NULL COMMENT '用户属性，参考ConfigDefine',
   `level_begin` int(11) NOT NULL COMMENT '等级开始',
   `level_end` int(11) NOT NULL COMMENT '等级结束',
   `attributes_begin` int(11) NOT NULL COMMENT '属性点开始',
   `attributes_end` int(11) NOT NULL COMMENT '属性点结束',
-  PRIMARY KEY (`equid_attributes_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=311 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`equip_attributes_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=311 DEFAULT CHARSET=utf8
 
 -- ----------------------------
 -- Records of equid_attributes
@@ -201,24 +201,24 @@ CREATE TABLE `user_bind` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `user_equid`
+-- Table structure for `user_equip`
 -- ----------------------------
-DROP TABLE IF EXISTS `user_equid`;
-CREATE TABLE `user_equid` (
-  `user_equid_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户装备ID',
+DROP TABLE IF EXISTS `user_equip`;
+CREATE TABLE `user_equip` (
+  `user_equip_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户装备ID',
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `equip_colour` int(11) NOT NULL COMMENT '装备品质ID',
   `equip_type` int(11) NOT NULL COMMENT '装备名称ID',
-  `equid_level` int(11) NOT NULL COMMENT '装备等级',
+  `equip_level` int(11) NOT NULL COMMENT '装备等级',
   `is_used` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否被使用',
   `race_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '种族ID',
   `attribute_list` text NOT NULL COMMENT '扩展属性',
   `attribute_base_list` text NOT NULL COMMENT '基本属性信息',
-  PRIMARY KEY (`user_equid_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=161 DEFAULT CHARSET=utf8 COMMENT='用户装备列表';
+  PRIMARY KEY (`user_equip_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户装备列表'
 
 -- ----------------------------
--- Records of user_equid
+-- Records of user_equip
 -- ----------------------------
 
 -- ----------------------------
