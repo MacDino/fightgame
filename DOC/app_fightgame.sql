@@ -263,3 +263,34 @@ CREATE TABLE `version_list` (
 -- ----------------------------
 -- Records of version_list
 -- ----------------------------
+
+--
+-- Table structure for table `level_skill_money`
+--
+
+DROP TABLE IF EXISTS `level_skill_money`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `level_skill_money` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `skill_level` tinyint(4) NOT NULL COMMENT '技能等级',
+  `money` int(11) NOT NULL COMMENT '对应等级消耗的铜钱',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_skill`
+--
+
+DROP TABLE IF EXISTS `user_skill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_skill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `skill_id` int(11) NOT NULL,
+  `skill_level` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
