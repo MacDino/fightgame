@@ -1,6 +1,9 @@
 <?php 
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
-$userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//
+$userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';
+if(!$userId){
+	echo "<script>alert('请先登录');location.href='login.php'</script>";
+}
 ?>
 <table>
 	<tr>
