@@ -71,7 +71,7 @@ CREATE TABLE `equip_attributes` (
   `attributes_begin` int(11) NOT NULL COMMENT '属性点开始',
   `attributes_end` int(11) NOT NULL COMMENT '属性点结束',
   PRIMARY KEY (`equip_attributes_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=311 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=311 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of equid_attributes
@@ -228,7 +228,7 @@ CREATE TABLE `user_equip` (
   `attribute_list` text NOT NULL COMMENT '扩展属性',
   `attribute_base_list` text NOT NULL COMMENT '基本属性信息',
   PRIMARY KEY (`user_equip_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户装备列表'
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户装备列表';
 
 -- ----------------------------
 -- Records of user_equip
