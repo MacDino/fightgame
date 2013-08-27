@@ -162,12 +162,25 @@ DROP TABLE IF EXISTS `map_monster`;
 CREATE TABLE `map_monster` (
   `monster_id` int(11) NOT NULL AUTO_INCREMENT,
   `monster_name` varchar(200) NOT NULL,
+  `map_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`monster_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of map_monster
 -- ----------------------------
+
+DROP TABLE IF EXISTS `map_skill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `map_skill` (
+  `map_skill_id` int(11) NOT NULL AUTO_INCREMENT,
+  `map_id` int(11) NOT NULL,
+  `skill_id` int(11) NOT NULL,
+  `skill_type` varchar(64) NOT NULL COMMENT '技能类型：attack,defence,passive',
+  `config_type` varchar(64) NOT NULL COMMENT '配置类型:all, boss_must_have, suffix_must_have, boss_min_count, suffix_min_count',
+  PRIMARY KEY (`map_skill_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for `property_info`
