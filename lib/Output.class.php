@@ -4,7 +4,8 @@ class Output {
     
     public static function generalOutPut()
     {   
-        global $code, $msg, $data;
+        global $code, $msg, $data, $doNotPut;
+        if($doNotPut)return;
         $code   = intval ( $code );
         $msg    = ( string ) $msg;
         if($code == 0 && !$msg) {
