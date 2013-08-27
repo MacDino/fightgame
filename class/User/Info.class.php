@@ -17,29 +17,6 @@ class User_Info
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
-
-	/**
-     * 根据绑定方式和绑定值,获取账户ID
-     * @param int	 $bind_type		绑定方式
-     * @param int	 $bind_value		绑定值
-     * @return 账户ID
-     */
-	public static function getMasterInfo($bindType, $bindValue)
-	{
-//		echo "bindType==$bindType&&b indValue==$bindValue";
-		if(!$bindType || !$bindValue)return FALSE;
-		
-		$res = MySql::selectOne(self::TABLE_NAME_BIND, array('bind_type' => $bindType, 'bind_value' => $bindValue));
-//		var_dump($res);exit;
-		if(!empty($res)){
-//			echo 1111;exit;
-			return $res['master_id'];
-		}else{
-//			echo 2222;exit;
-			$id = MySql::insert(self::TABLE_NAME_BIND, array('bind_type' => $bindType, 'bind_value' => $bindValue), TRUE);
-			return $id;
-		}
-	}
 	
 	/**
 	 * 获取角色列表

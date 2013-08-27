@@ -23,8 +23,4 @@ if(!function_exists('autoload_sae'))
 MI::registerAutoload('autoload_sae');
 MI::registerAutoload(array('MI', 'loadClass'));
 
-
 register_shutdown_function(array("Output", "generalOutPut"));
-?>
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
