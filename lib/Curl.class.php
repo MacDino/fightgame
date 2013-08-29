@@ -7,7 +7,7 @@ class Curl
     private static      $_connectTimeOut = '3';
     private static      $_keepAlive     = TRUE;
     private static      $_clientId      = 999999;
-    private static      $_serverUri     = 'http://';
+    private static      $_serverUri     = "";
     private static      $_logServer     = '/data/logs/nginx/interface/interface.[split].log';
     private static      $_logSplit      = 'YmdH';
     private static      $_methodPost    = TRUE;
@@ -81,6 +81,7 @@ class Curl
     //获取请求的地地址
     private static function _getCurlUri($interface, $params)
     {
+        if(!self::$_serverUri)self::$_serverUri = 'http://'.$_SERVER['SERVER_NAME'];
         $uri = self::$_serverUri."/".$interface.self::$_interFaceExt;
         if(!self::$_methodPost)
         {
