@@ -1,6 +1,5 @@
 <?php
-//种族
-class Race
+class User_Race
 {
     //种族定义
     CONST RACE_HUMAN        = 1;//人族
@@ -14,9 +13,7 @@ class Race
      */
     public static function getDefaultAttributes($raceId)
     {
-//    	echo "raceId===$raceId";exit;
-        $defaultAttributtesList = Race_Config::defaultAttributesList();
-//        var_dump($defaultAttributtesList);exit;
+        $defaultAttributtesList = User_RaceConfig::defaultAttributesList();
         if($raceId && isset($defaultAttributtesList[$raceId]))
         {
             return $defaultAttributtesList[$raceId];
@@ -31,7 +28,7 @@ class Race
      */
     public static function getLeveUpAddAttributes($raceId)
     {
-        $leveUpAddAttributtesList = Race_Config::levelUpAddAttributesList();
+        $leveUpAddAttributtesList = User_RaceConfig::levelUpAddAttributesList();
         if($raceId && isset($leveUpAddAttributtesList[$raceId]))
         {
             return $leveUpAddAttributtesList[$raceId];
@@ -74,11 +71,11 @@ class Race
         $growUpAttributes = array();
         if($raceId == self::RACE_HUMAN)
         {
-            $growUpAttributes = Race_Config::humanGrowUpAttributesFormula($userAttributes);
+            $growUpAttributes = User_RaceConfig::humanGrowUpAttributesFormula($userAttributes);
         }elseif($raceId == self::RACE_TSIMSHIAN){
-            $growUpAttributes = Race_Config::tsimshianGrowUpAttributesFormula($userAttributes);
+            $growUpAttributes = User_RaceConfig::tsimshianGrowUpAttributesFormula($userAttributes);
         }elseif($raceId == self::RACE_DEMON){
-            $growUpAttributes = Race_Config::demonGrowUpAttributesFormula($userAttributes); 
+            $growUpAttributes = User_RaceConfig::demonGrowUpAttributesFormula($userAttributes); 
         }
         return $growUpAttributes;
     }

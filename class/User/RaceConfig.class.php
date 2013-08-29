@@ -1,5 +1,5 @@
 <?php
-class Race_Config
+class User_RaceConfig
 {
 	/**
 	 * 种族初始化属性点
@@ -7,34 +7,32 @@ class Race_Config
 	 */
     public static function defaultAttributesList()
     {
-//    	echo 33333;exit;
         $defaultAttributesList = array(
-            Race::RACE_HUMAN => 
+            User_Race::RACE_HUMAN => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 10,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 10,
                       ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 10,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 10,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 10,
-//                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
+                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),
-            Race::RACE_TSIMSHIAN => 
+            User_Race::RACE_TSIMSHIAN => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 11,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 10,
                       ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 12,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 5,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 12,
-//                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
+                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),
-            Race::RACE_DEMON => 
+            User_Race::RACE_DEMON => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 11,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 8,
                       ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 12,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 11,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 8,
-//                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
+                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),
         );
-//        var_dump($defaultAttributesList);exit;
         return $defaultAttributesList;
     }
     
@@ -45,29 +43,29 @@ class Race_Config
     public static function levelUpAddAttributesList()
     {
         $leveUpAddAttributtesList = array(
-            Race::RACE_HUMAN => 
+            User_Race::RACE_HUMAN => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 2,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 2,
                       ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 2,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 2,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 2,
-//                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
+                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),
-            Race::RACE_TSIMSHIAN => 
+            User_Race::RACE_TSIMSHIAN => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 1.5,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 2,
                       ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 1,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 3,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 2.5,
-//                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
+                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),
-            Race::RACE_DEMON => 
+            User_Race::RACE_DEMON => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 2.5,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 2,
                       ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 3,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 1.5,
-//                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
+                      ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),
         );
         return $leveUpAddAttributtesList;
