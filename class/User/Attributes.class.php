@@ -15,12 +15,12 @@ class User_Attributes
         $level = (int)$level;
         
         //获取种族基本属性
-        $defautlAttributes = Race::getDefaultAttributes($raceId);
+        $defautlAttributes = User_Race::getDefaultAttributes($raceId);
 //        var_dump($defautlAttributes);exit;
         if(!is_array($defautlAttributes))return FALSE;
         
         //获取种族属性升级加成
-        $addAttributesList = Race::getLeveUpAddAttributes($raceId);
+        $addAttributesList = User_Race::getLeveUpAddAttributes($raceId);
 //        var_dump($addAttributesList);exit;
         if(!is_array($addAttributesList))return FALSE;
         
@@ -48,7 +48,7 @@ class User_Attributes
 //    	var_dump($data);exit;
     	if(!$raceId || !is_array($data))return FALSE;
     	
-    	$res = Race::getGrowUpAttributes($raceId, $data);
+    	$res = User_Race::getGrowUpAttributes($raceId, $data);
 //    	var_dump($growUpAttributes);exit;
 		return $res;
     }

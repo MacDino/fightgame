@@ -6,7 +6,14 @@ echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 $userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';
 if($userId)
 {
-    $userInfo = User_Info::getUserInfoByUserId($userId); 
+    $interFace = 'user/getUserInfo';
+    $params = array('user_id' => $userId);
+    $data = Curl::sendRequest($interFace, $params);
+    if($data['c'] == 0)
+    {
+    
+    
+    }
     setcookie('user_info', json_encode($userInfo),  time()+360000);    
 }
 

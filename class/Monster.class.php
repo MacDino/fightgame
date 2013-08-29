@@ -77,7 +77,7 @@ class Monster
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'attribute_change_list');
 
 		$attribute =  Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
-		$growup_attribute = Race::getGrowUpAttributes($monster['race_id'], $attribute);
+		$growup_attribute = User_Race::getGrowUpAttributes($monster['race_id'], $attribute);
 		return $attribute + $growup_attribute;
 	}
 

@@ -235,7 +235,7 @@ class Equip_Config
 	{
 		$equipSuitAttributeList = array(
 			//人族
-			Race::RACE_HUMAN => array(
+			User_Race::RACE_HUMAN => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_DZ => 1,),
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),
@@ -262,7 +262,7 @@ class Equip_Config
 				),
 			),
 			//仙族
-			Race::RACE_TSIMSHIAN => array(
+			User_Race::RACE_TSIMSHIAN => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_FX => 1,),
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),
@@ -289,7 +289,7 @@ class Equip_Config
 				),
 			),
 			//魔族
-			Race::RACE_DEMON => array(
+			User_Race::RACE_DEMON => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_GX => 1,),
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),

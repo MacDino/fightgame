@@ -1,9 +1,8 @@
 <?php    
-//角色相关
+//用户相关
 class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
-	CONST TABLE_NAME_BIND = 'user_bind';
 
 	/**
      * 根据UserId获取用户基本信息
@@ -26,7 +25,6 @@ class User_Info
 	 */
 	public static function listUser($loginUserId, $areaId){
 		if(!$loginUserId || !$areaId)return FALSE;
-		
 		$res = MySql::select(self::TABLE_NAME, array('login_user_id' => $loginUserId, 'area_id' => $areaId));
 		return $res;
 	}
@@ -56,34 +54,6 @@ class User_Info
                   'login_user_id'     => $data['login_user_id'],
                   'area_id'          => $data['area_id'],
                 ), TRUE);
-		return $res;
-	}
-
-	/**
-     * 更新用户基础信息,此处应该只能更新用户名,暂时不用这个function,除非是后台调整数据
-     * @param int $userId
-     * @param array $data
-     * @return bool
-     */
-	public static function updateUserInfo($userId, $data)
-	{
-		if(!$userId || !$data || !is_array($data))return FALSE;
-
-		$info = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
-		if($info)return FALSE;
-
-		$updateArray = array();
-
-		isset($data['user_name'])?$updateArray['user_name'] = (int)$data['user_name']:'';
-		isset($data['user_level'])?$updateArray['user_level'] = (int)$data['user_level']:'';
-		isset($data['experience'])?$updateArray['experience'] = (int)$data['experience']:'';
-		isset($data['money'])?$updateArray['money'] = (int)$data['money']:'';
-		isset($data['ingot'])?$updateArray['ingot'] = (int)$data['ingot']:'';
-		isset($data['ingot'])?$updateArray['ingot'] = (int)$data['friend_num']:'';
-		isset($data['ingot'])?$updateArray['ingot'] = (int)$data['pack_num']:'';
-		isset($data['ingot'])?$updateArray['ingot'] = (int)$data['skil_point']:'';
-
-		$res = MySql::update(self::TABLE_NAME, $updateArray, array('user_id' => $userId));
 		return $res;
 	}
 

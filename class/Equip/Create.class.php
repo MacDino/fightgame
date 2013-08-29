@@ -81,7 +81,7 @@ class Equip_Create
 	public static function equipSuit($equipType)
 	{
 		if(!$equipType)return FALSE;
-		$raceId = Race::randRaceId();//随机一把种族
+		$raceId = User_Race::randRaceId();//随机一把种族
 		$equipSuitInfo['race_id'] = $raceId;
 		$equipSuitAttributeList = Equip_Config::getEquipSuitAttributeByRaceIdAndEquipType($raceId, $equipType);
 		$equipSuitInfo['list'] = PerRand::getMultiRandResultKey($equipSuitAttributeList);

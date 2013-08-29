@@ -12,7 +12,7 @@ if(!$areaId || !$loginUserId)
     die;
 }
 
-$raceList = Race::getRaceList();
+$raceList = User_Race::getRaceList();
 
 $userRaceList =  User_Info::listUser($loginUserId, $areaId); 
 
