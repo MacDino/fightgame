@@ -150,7 +150,7 @@ class Equip_Config
 				Equip::EQUIP_QUALITY_SUBLIME => array(4, 4),
 				Equip::EQUIP_QUALITY_HOLY => array(5, 5),
 			),
-			ConfigDefine::SKILL_LSYZ => array(
+			ConfigDefine::SKILL_LXYZ => array(
 				Equip::EQUIP_QUALITY_GENERAL => array(1, 1),
 				Equip::EQUIP_QUALITY_ADVANCED => array(2, 3),
 				Equip::EQUIP_QUALITY_SUBLIME => array(4, 4),
