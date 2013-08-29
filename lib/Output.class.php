@@ -1,16 +1,11 @@
 <?php
 class Output {
-    const MESSAGE = '操作成功';
     
     public static function generalOutPut()
     {   
-        global $code, $msg, $data, $doNotPut;
+        global $code, $data, $doNotPut;
         if($doNotPut)return;
         $code   = intval ( $code );
-        $msg    = ( string ) $msg;
-        if($code == 0 && !$msg) {
-            $msg = self::MESSAGE;
-        }   
         echo self::outputJson ( $code, $msg, $data );
         return true;
     }   
@@ -18,9 +13,8 @@ class Output {
     private static function outputJson($code, $msg, $data)
     {   
         $array = array(
-            'code'  => $code,
-            'msg'   => $msg,
-            'data'  => $data,
+            'c'  => $code,
+            'd'  => $data,
         );  
         return json_encode($array);
     }   
