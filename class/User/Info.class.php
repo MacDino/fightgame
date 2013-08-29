@@ -24,10 +24,10 @@ class User_Info
 	 * @param int $area		分区
 	 * @return 角色列表
 	 */
-	public static function listUser($masterId, $area){
-		if(!$masterId || !$area)return FALSE;
+	public static function listUser($loginUserId, $areaId){
+		if(!$loginUserId || !$areaId)return FALSE;
 		
-		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area' => $area));
+		$res = MySql::select(self::TABLE_NAME, array('login_user_id' => $loginUserId, 'area_id' => $areaId));
 		return $res;
 	}
 
@@ -42,20 +42,20 @@ class User_Info
 		if(!$data || !is_array($data))return FALSE;
 		if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
 
-		$res = MySql::insert(self::TABLE_NAME, array(
-			'user_name' => $data['user_name'],
-			'race_id' => $data['race_id'],
-			'user_level' => User::DEFAULT_USER_LEVEL,
-			'experience' => User::DEFAULT_EXP,
-			'money' => User::DEFAULT_MONEY,
-			'ingot' => User::DEFAULT_INGOT,
-			'pack_num' => User::DEFAULT_PACK_NUM,
-			'friend_num' => User::DEFAULT_FRIEND_NUM,
-			'pet_num' => User::DEFAULT_PET_NUM,
-			'master_id' => $data['master_id'],
-			'area' => $data['area'],
-		), TRUE);
-		
+        $res = MySql::insert(self::TABLE_NAME, 
+              array(
+                  'user_name'     => $data['user_name'],
+                  'race_id'       => $data['race_id'],
+                  'user_level'    => User::DEFAULT_USER_LEVEL,
+                  'experience'    => User::DEFAULT_EXP,
+                  'money'         => User::DEFAULT_MONEY,
+                  'ingot'         => User::DEFAULT_INGOT,
+                  'pack_num'      => User::DEFAULT_PACK_NUM,
+                  'friend_num'    => User::DEFAULT_FRIEND_NUM,
+                  'pet_num'       => User::DEFAULT_PET_NUM,
+                  'login_user_id'     => $data['login_user_id'],
+                  'area_id'          => $data['area_id'],
+                ), TRUE);
 		return $res;
 	}
 
