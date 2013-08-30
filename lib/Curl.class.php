@@ -33,6 +33,36 @@ class Curl
     //发送请求
     public static function sendRequest($interface, $params)
     {
+      if(DEVELOPER)
+      {
+          return self::_sendRequest($interface, $params);
+      }else{
+          return self::_seaSendRequest($interface, $params);
+      }
+    }
+
+
+    private static function _seaSendRequest($interface, $params)
+    {
+        if(!is_array($params))return FALSE;
+        $params = self::_getCurlValue($params);
+        $uri    = self::_getCurlUri($interface, $params);
+
+        $f = new SaeFetchurl();
+        $f->setMethod('post');
+        $f->setPostData($params);
+        $res = $f->fetch($uri); 
+        if($res && $f->errno == 0)
+        {
+            return $res;
+        }else{
+            return false;
+        }
+    }
+
+
+    private static function _sendRequest($interface, $params)
+    {
         if(!is_array($params))return FALSE;
         $params = self::_getCurlValue($params);
         $uri    = self::_getCurlUri($interface, $params);
