@@ -15,7 +15,7 @@ $user2_fight    = User_Info::fightable($user2, $user2_info['user_level']);
 
 $data   = array();
 try {
-    Fight::start($user1_fight, $user2_fight);
+    $data['fight_procedure'] = Fight::start($user1_fight, $user2_fight);
     if($user1_fight->is_Dead()){
         //当前角色被打败的处理
         $msg    = "您被{$user2_info['user_name']}打败了";

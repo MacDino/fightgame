@@ -162,7 +162,7 @@ class Monster
 		//技能加成后的属性
 		$attribute = self::attributeWithSkill($attribute, $skill);
 
-		return new Fightable($monster['level'], $attribute, $skill);
+		return new Fightable($monster['level'], $attribute, $skill, $monster);
 	}
 
 	public static function attributeWithSkill($attribute, $skill)
