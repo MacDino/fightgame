@@ -38,7 +38,7 @@ try {
     $win_list   = '';
     $group1_win = 0;
     $group2_win = 0;
-    Fight::multiStart($group1_fight, $group2_fight);
+    $fight_procedure = Fight::multiStart($group1_fight, $group2_fight);
     foreach($group1_fight as $k => $obj){
         if($obj->is_Dead()){
             $dead_list  .= $group1_user_info[$k]['user_name'].',';
@@ -56,6 +56,7 @@ try {
         }
     }
     $data   = array(
+		'fight_procedure' => $fight_procedure,
         'dead'  => rtrim($dead_list, ','),
         'win'   => rtrim($win_list, ',')
     );
