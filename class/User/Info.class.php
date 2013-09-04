@@ -227,6 +227,6 @@ class User_Info
         $all_attr     = Skill::getRoleAttributesWithSkill($all_attr, $skill_list);
         $fight_skill    = Skill::getFightSkillList($skill_list);
 
-        return new Fightable($user_level, $all_attr, $fight_skill);
+        return new Fightable($user_level, $all_attr, $fight_skill, array('user_id' => $user_id));
     }
 }
