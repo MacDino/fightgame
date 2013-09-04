@@ -13,14 +13,15 @@ $user_fight     = User_Info::fightable($user_id, $user_info['user_level']);
 
 $data   = array();
 try {
-    Fight::start($user_fight, $monster_fight);
+    $data['fight_procedure'] = Fight::start($user_fight, $monster_fight);
     if($user_fight->is_Dead()){
         //当前角色被打败的处理
         $msg    = '您被打败了';
     } else {
         //获取经验 金币
-        $data['experience'] = Monster::getMonsterBaseExperience($monster['level']);
-        $data['money']      = Monster::getMonsterBaseMoney($monster['level']);
+        $data['experience'] = Monster::getMonsterExperience($monster);
+        $data['money']      = Monster::getMonsterMoney($monster);
+        $data['equipment_color']      = Monster::getMonsterEquipmentColor($monster);
         $msg    = '怪物已消灭';
     }
 	$code   = 0;

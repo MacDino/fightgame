@@ -16,11 +16,17 @@ class Fight {
 	//群殴
 	public static function multiStart($team1, $team2)
 	{
+		$fight_procedure = array();
 		$attackers = self::sortByAttackSpeed($team1, $team2);
 		while(self::isTeamAlive($team1) && self::isTeamAlive($team2))
 		{
 			foreach($attackers as $attacker)
 			{
+				if ($attacker->isDead())
+				{
+					continue;
+				}
+
 				//true 不可省略，严格检查是否是同一个对象
 				if (in_array($attacker, $team1, true))
 				{
@@ -31,9 +37,17 @@ class Fight {
 					$target = self::randTarget($team1);
 				}
 
-				$attacker->attack($target);
+				// 没有目标了，全死光光了
+				if (empty($target))
+				{
+					break;
+				}
+
+				$harm = $attacker->attack($target);
+				$fight_procedure[] = self::_report($attacker, $target, $harm);
 			}
 		}
+		return $fight_procedure;
 	}
 
 	//按攻击速度降序
@@ -91,14 +105,32 @@ class Fight {
 		return $target;
 	}
 
+	private static function _report($attacker, $target, $harm)
+	{
+		return array(
+			'attacker' => $attacker->reportAttack(),
+			'target' => $target->reportDefense(),
+			'harm' => $harm,
+		);
+	}
+
 	private static function _start($user1, $user2)
 	{
+		$fight_procedure = array();
+
 		//打到死
 		while($user1->isAlive() && $user2->isAlive())
 		{
-			$user1->attack($user2);
-			$user2->attack($user1);
+			$harm = $user1->attack($user2);
+			$fight_procedure[] = self::_report($user1, $user2, $harm);
+
+			if ($user1->isAlive() && $user2->isAlive())
+			{
+				$harm = $user2->attack($user1);
+				$fight_procedure[] = self::_report($user2, $user1, $harm);
+			}
 		}
+
+		return $fight_procedure;
 	}
 }
-
