@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 class User_RaceConfig
 {
 	/**
@@ -53,8 +53,8 @@ class User_RaceConfig
                      ),
             User_Race::RACE_TSIMSHIAN => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 1.5,
-                      ConfigDefine::USER_ATTRIBUTE_QUICK       => 2,
-                      ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 1,
+                      ConfigDefine::USER_ATTRIBUTE_QUICK       => 1.5,
+                      ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 1.5,
                       ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 3,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 2.5,
                       ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
@@ -62,8 +62,8 @@ class User_RaceConfig
             User_Race::RACE_DEMON => 
                 array(ConfigDefine::USER_ATTRIBUTE_POWER       => 2.5,
                       ConfigDefine::USER_ATTRIBUTE_QUICK       => 2,
-                      ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 3,
-                      ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,
+                      ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 2.5,
+                      ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.5,
                       ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 1.5,
                       ConfigDefine::USER_ATTRIBUTE_LUCKY       => 0,
                      ),

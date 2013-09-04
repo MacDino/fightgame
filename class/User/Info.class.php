@@ -117,18 +117,14 @@ class User_Info
 
 		//根据ID取出所有装备,假设为getEquipInfoByUserId
 		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
-//		var_dump($equipInfo);exit;
 		//把装备中的属性点放在一起,属性值放在一起
 		foreach ($equipInfo as $p)
 		{
 			//基础属性
 			$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
-//			print_r($equipBaseAttribute);exit;
 			if(is_array($equipBaseAttribute)){
-//				echo 111;exit;
 				foreach ($equipBaseAttribute as $m=>$n)
 				{
-//					echo 2222;exit;
 					if(array_key_exists($m, $baseAttribute))//装备中属性点部分
 					{
 						$baseAttribute[$m] += $n;
@@ -153,7 +149,6 @@ class User_Info
 				}
 			}
 		}
-//		var_dump($baseAttribute);var_dump($valueAttribute);exit;
 		//根据种族和等级取出基本属性点
 		$userBaseAttribute = User_Attributes::getBaseAttribute($userInfo['race_id'], $userInfo['user_level']);
 		
@@ -173,7 +168,6 @@ class User_Info
 			$userAttributeValue[$key] += $value;
 		}
 
-//    	var_dump($userAttributeValue);
 		return $userAttributeValue;
 	}
 
@@ -235,8 +229,4 @@ class User_Info
 
         return new Fightable($user_level, $all_attr, $fight_skill);
     }
-
-
-
-
 }

@@ -219,17 +219,6 @@ class Equip_Config
 		);
 		return $equipAttributeList;
 	}
-	//根据种族和装备部位，返回对应的属性相关信息
-	public static function getEquipSuitAttributeByRaceIdAndEquipType($raceId, $equipType)
-	{
-		if(!$raceId || !$equipType)return array();
-		$equipSuitAttributeList = self::equipSuitAttributeList();
-		if(is_array($equipSuitAttributeList) && isset($equipSuitAttributeList[$raceId][$equipType]))
-		{
-			return $equipSuitAttributeList[$raceId][$equipType];
-		}
-		return array();
-	}
 	//套装必带属性
 	public static function equipSuitAttributeList()
 	{
