@@ -19,12 +19,12 @@ try {
     if($userId)
     {
         //创建蓝色0级装备一套
-        Equip_Create::createEquip(Equip::EQUIP_TYPE_ARMS, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
-        Equip_Create::createEquip(Equip::EQUIP_TYPE_HELMET, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
-        Equip_Create::createEquip(Equip::EQUIP_TYPE_NECKLACE, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
-        Equip_Create::createEquip(Equip::EQUIP_TYPE_CLOTHES, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
-        Equip_Create::createEquip(Equip::EQUIP_TYPE_BELT, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
-        Equip_Create::createEquip(Equip::EQUIP_TYPE_SHOES, Equip::EQUIP_COLOUR_BLUE, Equip::EQUIP_QUALITY_GENERAL, $userId);
+        Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, 0, Equip::EQUIP_TYPE_ARMS, Equip::EQUIP_QUALITY_GENERAL);
+        Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, 0, Equip::EQUIP_TYPE_HELMET, Equip::EQUIP_QUALITY_GENERAL);
+        Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, 0, Equip::EQUIP_TYPE_NECKLACE, Equip::EQUIP_QUALITY_GENERAL);
+        Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, 0, Equip::EQUIP_TYPE_CLOTHES, Equip::EQUIP_QUALITY_GENERAL);
+        Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, 0, Equip::EQUIP_TYPE_BELT, Equip::EQUIP_QUALITY_GENERAL);
+        Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, 0, Equip::EQUIP_TYPE_SHOES, Equip::EQUIP_QUALITY_GENERAL);
         //创建道具仓位
         User_Property::createPropertylist($userId, User_Property::ATTRIBUTE_ENHANCE);
         User_Property::createPropertylist($userId, User_Property::DOUBLE_HARVEST);
