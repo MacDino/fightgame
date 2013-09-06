@@ -5,7 +5,6 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 
-//echo "UserId===".$userId."&FriendId===".$friendId;exit;
 //数据进行校验,非空,数据内
 if(!$userId || !$friendId)
 {
@@ -50,7 +49,6 @@ try {
     //删除好友
     Friend_Info::deleteFriendInfo($userId, $friendId);
     Friend_Info::deleteFriendInfo($friendId, $userId);
-    echo "<script>alert('删除成功');location.href='listFriend.php?user_id=$userId'</script>";
     //减少声望
     $code = 0;
     $msg = 'OK';

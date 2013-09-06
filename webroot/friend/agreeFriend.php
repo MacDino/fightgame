@@ -16,10 +16,8 @@ if(!$userId || !$friendId)
 }
 
 //查询用户ID是否在用户表里存在
-//echo $userId;exit;
 $userInfo = User_Info::getUserInfoByUserId($userId);
 $friendInfo = User_Info::getUserInfoByUserId($friendId);
-//print_r($user_info);exit;
 if(!$userInfo || !$friendInfo)
 {
 	$code = 1;
@@ -41,7 +39,6 @@ if($friendNum == $userInfo['friend_num']){
 try {
     //添加好友
     Friend_Info::agreeFriendInfo($userId, $friendId);
-    echo "<script>alert('通过');location.href='listFriend.php?user_id=$userId'</script>";
     //增加声望
     $code = 0;
     $msg = 'OK';
