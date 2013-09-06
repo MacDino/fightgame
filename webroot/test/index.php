@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
+
 $doNotPut = TRUE;
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
