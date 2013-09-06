@@ -149,6 +149,7 @@ class Skill
                 'maxUseProbability'  => array('gj' => 0.9, 'fy' => 0.8),
             ),
         );
+        return $configList;
     }
     /**
      * @desc 锻造技能对装备的影响
@@ -182,17 +183,20 @@ class Skill
                 continue;
             }
             //主动技能+锻造技能
-            if(self::$skill_info[$skill][1] == self::SKILL_GROUP_WLGJ  || self::$skill_info[$skill][1] == self::SKILL_GROUP_FSGJ){
-                $skill_attr = self::$_skill_attributes[$skill];
-                foreach($skill_attr as $attr => $value){
-                    $attributes[$attr]  += $value * $level;
-                }
-            } elseif (self::$skill_info[$skill][1] == self::SKILL_GROUP_BDJN){
-                $bdjn_skill[$skill] = $level;
-                $skill      = self::$skill_info[$skill][0];
-                $attrAdd    = call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
-                foreach($attrAdd as $attr => $value){
-                    $attributes[$attr]  += $value * $level;
+            if(isset(self::$skill_info[$skill][1])){
+                $skill_group    = self::$skill_info[$skill][1];
+                if($skill_group == self::SKILL_GROUP_WLGJ  || $skill_group == self::SKILL_GROUP_FSGJ){
+                    $skill_attr = self::$_skill_attributes[$skill];
+                    foreach($skill_attr as $attr => $value){
+                        $attributes[$attr]  += $value * $level;
+                    }
+                } elseif ($skill_group == self::SKILL_GROUP_BDJN){
+                    $bdjn_skill[$skill] = $level;
+                    $skill      = self::$skill_info[$skill][0];
+                    $attrAdd    = call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
+                    foreach($attrAdd as $attr => $value){
+                        $attributes[$attr]  += $value * $level;
+                    }
                 }
             }
         }
@@ -224,19 +228,21 @@ class Skill
      *                      )
      * @param op_data 被攻击者属性，格式与攻击者属性一致
      */
-    public static function useSkill($skill_code, $data, $op_data){
+    public static function useSkill($skill_code, $skill_level, $data, $op_data){
         //成长属性
         //$attributes = User_Attributes::getInfoByRaceAndLevel($role_info['race_id'], $role_info['user_level'], TRUE); 
         //技能加成属性
-        $attributes = self::getRoleAttributesWithSkill($data['attributes'], $data['skills']);
+        //$attributes = self::getRoleAttributesWithSkill($data['attributes'], $data['skills']);
         //怪物加成
-        $op_atrributes  = self::getRoleAttributesWithSkill($op_data['attributes'], $data['skills']);
+        //$op_atrributes  = self::getRoleAttributesWithSkill($op_data['attributes'], $data['skills']);
+        $attributes     = $data['attributes'];
+        $op_attributes  = $op_data['attributes'];
 
         //使用技能
         if($skill_code){
             //构造额外需要参数
-            $attributes['role_level']   = $data['user_level'];
-            $attributes['skill_level']  = $data['skills'][$skill_code];
+            $attributes['role_level']   = $data['level'];
+            $attributes['skill_level']  = $skill_level;
             $attributes['op_defense']   = $op_attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE];
             $attributes['op_psychic']   = $op_attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
             if(is_numeric($skill_code)){
@@ -285,16 +291,52 @@ class Skill
     /**
      * $desc 执行防御技能
      */
-    public static function doDefenseSkill($skill_code, $data, $op_data){
-        //技能等级
-        $skill_level    = $op_data['skills'][$skill_code];
+    public static function doDefenseSkill($skill_code, $skill_level, $data, $op_data){
         //减少伤害值
         if(self::isFj($skill_code)){
             $fj_percent = Skill_Config::fjSkillFormula($skill_level);
-            return (self::userSkill(false, $data, $op_data)) * $fj_percent;
+            return (self::useSkill(false, $skill_level, $data, $op_data)) * $fj_percent;
         }
         $skill_name = self::$skill_info[$skill_code][0];
         return call_user_func(array('Skill_Config', $skill_name.'SkillFormula'), $skill_level);
     }
 
+    /**
+     * @desc 战斗技能列表格式化 todo
+     * @param $skills array('skill_id'=>skill_level...)
+     */
+	public static function getFightSkillList($skills){
+        //主动技能数 防御技能数
+        $skill_count    = count($skills);
+		$data = array('attack' => array(), 'defense' => array(), 'passive' => array());
+		foreach ($skills as $skill_code => $skill_level){
+            if(isset(self::$skill_info[$skill_code][1])){
+                $skill_group    = self::$skill_info[$skill_code][1];
+                if($skill_group == self::SKILL_GROUP_WLGJ || $skill_group == self::SKILL_GROUP_FSGJ){
+                    $data['attack']['list'][$skill_code]    = $skill_level;
+                } elseif ($skill_group == self::SKILL_GROUP_FYJN){
+                    $data['defense']['list'][$skill_code]   = $skill_level;
+                } elseif ($skill_group == self::SKILL_GROUP_BDJN){
+                    $data['passive']['list'][$skill_code]   = $skill_level;
+                }
+            }
+        }
+        //获取技能概率
+        $skill_rate     = self::skillUseProbability();
+        if($attack_count = count($data['attack']['list'])){
+            if($attack_count > 5){
+                $attack_count   = 5;
+            }
+            $data['attack']['rate']   = $skill_rate[$attack_count]['baseUseProbability']['gj'];
+        }
+
+        if($defense_count = count($data['defense']['list'])){
+            if($defense_count > 5){
+                $defense_count  = 5;
+            }
+            $data['defense']['rate']  = $skill_rate[$attack_count]['baseUseProbability']['fy'];
+        }
+
+        return $data;
+    }
 }

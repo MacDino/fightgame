@@ -26,6 +26,20 @@ class Equip_Config
 		);
 		return $qualityProbabilityList;
 	}
+
+    //打造增加的基本属性
+    public static function upgradeAttributeList(){
+        $ret = array(
+            Equip::EQUIP_TYPE_ARMS     => array(ConfigDefine::USER_ATTRIBUTE_HIT => 8),
+            Equip::EQUIP_TYPE_HELMET   => array(ConfigDefine::USER_ATTRIBUTE_DEFENSE => 20), 
+            Equip::EQUIP_TYPE_NECKLACE => array(ConfigDefine::USER_ATTRIBUTE_PSYCHIC => 6), 
+            Equip::EQUIP_TYPE_CLOTHES  => array(ConfigDefine::USER_ATTRIBUTE_DEFENSE => 12),
+            Equip::EQUIP_TYPE_BELT     => array(ConfigDefine::USER_ATTRIBUTE_BLOOD => 40),
+            Equip::EQUIP_TYPE_SHOES    => array(ConfigDefine::USER_ATTRIBUTE_QUICK =>8),
+        );
+
+        return $ret;
+    }
 	
 	//装备附加属性列表
 	public static function equipAttributeList()
@@ -136,7 +150,7 @@ class Equip_Config
 				Equip::EQUIP_QUALITY_SUBLIME => array(4, 4),
 				Equip::EQUIP_QUALITY_HOLY => array(5, 5),
 			),
-			ConfigDefine::SKILL_LSYZ => array(
+			ConfigDefine::SKILL_LXYZ => array(
 				Equip::EQUIP_QUALITY_GENERAL => array(1, 1),
 				Equip::EQUIP_QUALITY_ADVANCED => array(2, 3),
 				Equip::EQUIP_QUALITY_SUBLIME => array(4, 4),
@@ -205,23 +219,12 @@ class Equip_Config
 		);
 		return $equipAttributeList;
 	}
-	//根据种族和装备部位，返回对应的属性相关信息
-	public static function getEquipSuitAttributeByRaceIdAndEquipType($raceId, $equipType)
-	{
-		if(!$raceId || !$equipType)return array();
-		$equipSuitAttributeList = self::equipSuitAttributeList();
-		if(is_array($equipSuitAttributeList) && isset($equipSuitAttributeList[$raceId][$equipType]))
-		{
-			return $equipSuitAttributeList[$raceId][$equipType];
-		}
-		return array();
-	}
 	//套装必带属性
 	public static function equipSuitAttributeList()
 	{
 		$equipSuitAttributeList = array(
 			//人族
-			Race::RACE_HUMAN => array(
+			User_Race::RACE_HUMAN => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_DZ => 1,),
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),
@@ -248,7 +251,7 @@ class Equip_Config
 				),
 			),
 			//仙族
-			Race::RACE_TSIMSHIAN => array(
+			User_Race::RACE_TSIMSHIAN => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_FX => 1,),
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),
@@ -275,7 +278,7 @@ class Equip_Config
 				),
 			),
 			//魔族
-			Race::RACE_DEMON => array(
+			User_Race::RACE_DEMON => array(
 				Equip::EQUIP_TYPE_ARMS => array(
 					array(ConfigDefine::SKILL_GX => 1,),
 					array(ConfigDefine::USER_ATTRIBUTE_LUCKY => 0.5, ConfigDefine::RELEASE_PROBABILITY => 0.5,),

@@ -26,20 +26,12 @@ class Equip
 	CONST EQUIP_QUALITY_SUBLIME 	= 3;//品质-升华
 	CONST EQUIP_QUALITY_HOLY 		= 4;//品质-圣品
 
-	CONST TABLE_EQUID_ATTRIBUTES = 'equid_attributes';
-
-
-	//给某件装备进行升级
-	public static function updateEquipLevel($equipId, $fromLevel, $toLevel)
-	{
-
-
-	}
+	CONST TABLE_EQUID_ATTRIBUTES = 'equip_attributes';
 
 	//创建一个装备
-	public static function createEquip($equipType, $equipColour, $equipQuality, $userId)
+	public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL)
 	{
-		return Equip_create::createEquip($equipType, $equipColour, $equipQuality, $userId);
+		return Equip_create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality);
 	}
 
 
@@ -57,7 +49,7 @@ class Equip
 	//获取装备基本属性
 	public static function attributeBaseList($base = self::EQUIP_BASE_ATTRIBUTE_GENERAL, $equipType = self::EQUIP_TYPE_ARMS, $level = 0)
 	{
-		$sql = "SELECT * FROM ".self::TABLE_EQUID_ATTRIBUTES." WHERE `equid_id` = ".$equipType." AND `base_attribute` = '".$base."' AND '".$level."' >= level_begin ";
+		$sql = "SELECT * FROM ".self::TABLE_EQUID_ATTRIBUTES." WHERE `equip_id` = ".$equipType." AND `base_attribute` = '".$base."' AND '".$level."' >= level_begin AND '".$level."' <= level_end";
 		$res = MySql::query($sql);
 		if($res && is_array($res))
 		{

@@ -40,7 +40,7 @@ class ConfigDefine
 
 	CONST SKILL_ZJ      				= 201;//重击
 	CONST SKILL_LJ      				= 202;//连击
-    CONST SKILL_LSYZ    				= 203;//灵犀一指
+    CONST SKILL_LXYZ    				= 203;//灵犀一指
     CONST SKILL_SWZH    				= 204;//三昧真火
     CONST SKILL_HFHY    				= 205;//呼风唤雨 
     CONST SKILL_WLJ     				= 206;//五雷决

@@ -1,6 +1,14 @@
 <?php
 class User_Attributes
 {
+    //获取用户所有属性 
+    public static function getUserAllAttribute($raceId, $level)
+    {
+        $userBaseAttribute = self::getBaseAttribute($raceId ,$level);
+        if($userBaseAttribute)$userGrowUpAttribute = User_Race::getGrowUpAttributes($raceId, $userBaseAttribute);
+        $userAllAttribute = $userBaseAttribute + $userGrowUpAttribute;
+        return $userAllAttribute;
+    }
     /**
      * 获取某种族在某等级属性点
      * @param int $raceId				种族ID
@@ -9,19 +17,16 @@ class User_Attributes
      */
     public static function getBaseAttribute($raceId, $level)
     {
-//    	echo "raceId===$raceId&&level===$level";exit;
         if(!$raceId)return FALSE;
         $raceId = (int)$raceId;
         $level = (int)$level;
         
         //获取种族基本属性
-        $defautlAttributes = Race::getDefaultAttributes($raceId);
-//        var_dump($defautlAttributes);exit;
+        $defautlAttributes = User_Race::getDefaultAttributes($raceId);
         if(!is_array($defautlAttributes))return FALSE;
         
         //获取种族属性升级加成
-        $addAttributesList = Race::getLeveUpAddAttributes($raceId);
-//        var_dump($addAttributesList);exit;
+        $addAttributesList = User_Race::getLeveUpAddAttributes($raceId);
         if(!is_array($addAttributesList))return FALSE;
         
         //获取种族某等级属性点
@@ -34,10 +39,8 @@ class User_Attributes
         }
         unset($value);
         $res = $defautlAttributes;
-//		var_dump($res);exit;
         return $res;
     }
-    
     /**
      * 根据属性点,通过成长属性,获取属性值
      * @param int	$raceId
@@ -45,11 +48,8 @@ class User_Attributes
      * @return array
      */
     public static function getAttributesValue($raceId, $data){
-//    	var_dump($data);exit;
     	if(!$raceId || !is_array($data))return FALSE;
-    	
-    	$res = Race::getGrowUpAttributes($raceId, $data);
-//    	var_dump($growUpAttributes);exit;
+    	$res = User_Race::getGrowUpAttributes($raceId, $data);
 		return $res;
     }
     

@@ -4,40 +4,38 @@ class User_Bind
 {
     CONST TABLE_NAME = 'user_bind';
 
-    //private static $_allowBindType = array('mac', 'sina', 'weixin');
-    private static $_allowBindType = array('mac');//绑定方式
+    private static $_allowBindType = array('mac', 'sina', 'weixin');
 
     public static function getBindUserId($bindType, $bindValue, $createNew = FALSE)
     {
         try{
            self::_allowBindType($bindType);
            self::_checkValue($bindType, $bindValue);
-           $userId = self::_getBindUerInfo($bindType, $bindValue);
-           if(!$userId && $createNew)
+           $loginUserId = self::_getBindUerInfo($bindType, $bindValue);
+           if(!$loginUserId && $createNew)
            {
-               $userId = self::_createBindUserInfo($bindType, $bindValue);  
+               $loginUserId = self::_createBindUserInfo($bindType, $bindValue);  
            }
-           return $userId;
+           return $loginUserId;
         }catch (Exception $e){
            return FALSE;
-           //throw new Exception($e->getMessage(), $e->getCode());
         } 
     }
 
     private static function _createBindUserInfo($bindType, $bindValue)
     {
         if(!$bindType || !$bindValue)return;
-        $userId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
-        return $userId;
+        $loginUserId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
+        return $loginUserId;
     }
 
     private static function _getBindUerInfo($bindType, $bindValue)
     {
-        $userInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue));
-        if($userInfo)
+        $loginUserInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue));
+        if($loginUserInfo)
         {
-        	$userId = $userInfo['user_id'];
-            return $userId;
+        	$loginUserId = $loginUserInfo['login_user_id'];
+            return $loginUserId;
         }else{
         	return FALSE;
         }
@@ -45,7 +43,7 @@ class User_Bind
 
     private static function _checkValue($bindType, $bindValue)
     {
-        
+        //todo 检查数据    
     }
 
     private static function _allowBindType($bindType)
