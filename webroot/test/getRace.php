@@ -19,27 +19,16 @@ $data = json_decode($data, true);
 if($data['c'] == 0)
 {
     $data = $data['d'];
-    if($data['race_list'] && is_array($data['race_list']))
+    if($data['user_race_list'])
     {
+        $userRaceList = $data['user_race_list'];
+        $userId = $userRaceList[0]['user_id'];
+        echo '<script>location.href="main.php?user_id='.$userId.'"</script>';
+    }else{
         foreach($data['race_list'] as $raceId => $raceName)
         {
-            $isHit = FALSE;
-            foreach($data['user_race_list'] as $userInfo)
-            {
-                if($userInfo['race_id'] == $raceId) 
-                {
-                    $isHit = TRUE;        
-                    $user = $userInfo;
-                    break; 
-                } 
-            }
-            if($isHit)
-            {
-                echo "<a href='main.php?user_id=".$user['user_id']."'>".$user['user_name']."</a><br />";
-            }else{
-                echo $raceName."<a href='createRace.php?area_id=".$areaId."&race_id=".$raceId."'>创建角色</a><br />";
-            }
-        }
+            echo $raceName."<a href='createRace.php?area_id=".$areaId."&race_id=".$raceId."'>创建角色</a><br />";
+        } 
     }
 }else{
     echo '无法获得用户角色信息';

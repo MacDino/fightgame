@@ -38,7 +38,9 @@ class User_Info
 	public static function createUserInfo($data)
 	{
 		if(!$data || !is_array($data))return FALSE;
-		if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
+        if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
+        $userInfo = self::listUser($data['login_user_id'], $data['area_id']);
+        if($userInfo)throw new Exception('用户已存在', 100001);
 
         $res = MySql::insert(self::TABLE_NAME, 
               array(
