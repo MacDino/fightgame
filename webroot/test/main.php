@@ -9,11 +9,19 @@ if($userId)
     $interFace = 'user/getUserInfo';
     $params = array('user_id' => $userId);
     $data = Curl::sendRequest($interFace, $params);
-    if($data['c'] == 0)
-    {
-    
-    
-    }
+//    if($data['c'] == 0)
+//    {
+//    
+//    
+//    }
+    $userInfo = array(
+    	'user_id' => 27,
+    	'user_name' => '郝晓凯',
+    	'user_level' => 23,
+    	'money'	=> '2345',
+    	'ingot'  => 2233,
+    	'experience' => 3333
+    );
     setcookie('user_info', json_encode($userInfo),  time()+360000);    
 }
 

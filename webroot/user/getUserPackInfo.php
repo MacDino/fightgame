@@ -13,23 +13,14 @@ if(!$userId)
     die;
 }
 
-//背包中全部装备
-$equipInfo = Equip_Info::getEquipListByUserId($userId);
-//var_dump($equipInfo);
-
-?>
-
-<a href="http://kaedezyf.com/webroot/test/index.php?user_id=<?=$userId?>">主页</a>
-<table align="center">
-<? foreach ($equipInfo as $i){?>
-<tr>
-	<th>装备ID:<?=$i["user_equid_id"]?></th><th>装备颜色:<?=$i["equip_colour"]?></th><th>装备名称:<?=$i["equip_type"]?></th>
-</tr>
-<tr>
-	<th>是否使用:<?=$i["is_used"]?></th><th>装备种族:<?=$i["race_id"]?></th><th>装备级别:<?=$i["equid_level"]?></th>
-</tr>
-<tr>
-	<th><a href="">打造装备</a></th><th><a href="../equipment/getInfobyId.php?equip_id=<?=$i["user_equid_id"]?>">查看装备详情</a></th><th><a href="">卖出装备</a></th><th><a href="">使用装备</a></th>
-</tr>
-<? }?>
-</table>
+try {
+    //背包中全部装备
+    $data = Equip_Info::getEquipListByUserId($userId);
+    $code = 0;
+    $msg = 'ok';
+    die;
+} catch (Exception $e) {
+    $code = 1;
+    $msg = '99';
+    die;    
+}

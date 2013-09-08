@@ -48,7 +48,7 @@ if(empty($isFriend))
 try {
     //删除好友
     Friend_Info::deleteFriendInfo($userId, $friendId);
-    Friend_Info::deleteFriendInfo($friendId, $userId);
+    $data = Friend_Info::deleteFriendInfo($friendId, $userId);
     //减少声望
     $code = 0;
     $msg = 'OK';

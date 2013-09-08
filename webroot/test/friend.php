@@ -85,3 +85,13 @@ foreach ($result as $i){?>
 <? }}?>
 </table>
 <?php }?>
+
+
+<p>
+<a href="map.php">地图</a>
+<a href="race.php">角色</a>
+<a href="pk.php">PK</a>
+<a href="shop.php">商店</a>
+<a href="friend.php">好友</a>
+<a href="other.php">其他</a>
+</p>
