@@ -10,16 +10,22 @@ if(!$userId)
     die;
 }
 
-
-$userBaseAttribute = User_Info::
-
-//使用中装备
-$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
-//var_dump($equipInfo);
-
-//角色基本属性(点)
-$baseAttribute = User_Info::getUserInfoFightAttribute($userId);
-//var_dump($baseAttribute);
-
-//角色成长属性(值)
-$valueAttribute = User_Info::getUserInfoFightAttribute($userId, TRUE);
+try {
+    //使用中装备
+    $equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
+	//角色基本属性(点)
+	$baseAttribute = User_Info::getUserInfoFightAttribute($userId);
+	//角色成长属性(值)
+	$valueAttribute = User_Info::getUserInfoFightAttribute($userId, TRUE);
+	
+	$res = array('equipInfo'=>$equipInfo, 'baseAttribute'=>$baseAttribute, 'valueAttribute'=>$valueAttribute);
+	$data = json_encode($res);
+	
+    $code = 0;
+    $msg = 'ok';
+    die;
+} catch (Exception $e) {
+    $code = 1;
+    $msg = '99';
+    die;    
+}

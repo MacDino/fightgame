@@ -6,11 +6,11 @@ class Output {
         global $code, $data, $doNotPut;
         if($doNotPut)return;
         $code   = intval ( $code );
-        echo self::outputJson ( $code, $msg, $data );
+        echo self::outputJson ( $code, $data );
         return true;
     }   
  
-    private static function outputJson($code, $msg, $data)
+    private static function outputJson($code, $data)
     {   
         $array = array(
             'c'  => $code,
