@@ -91,7 +91,7 @@ class Counter
             }
             return $getValues;
         }else{
-            $obj = self:_getCounterObj();
+            $obj = self::_getCounterObj();
             return $obj->mget($keys); 
         }
     
