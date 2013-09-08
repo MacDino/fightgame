@@ -38,7 +38,7 @@ if($friendNum == $userInfo['friend_num']){
 
 try {
     //添加好友
-    Friend_Info::agreeFriendInfo($userId, $friendId);
+    $data = Friend_Info::agreeFriendInfo($userId, $friendId);
     //增加声望
     $code = 0;
     $msg = 'OK';
