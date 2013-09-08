@@ -49,8 +49,7 @@ if(!empty($isFriend))
 
 try {
     //添加好友
-    Friend_Info::createFriendInfo($friendId, $userId);
-//    echo "<script>alert('添加成功');location.href='listFriend.php?user_id=$userId'</script>";
+    $data = Friend_Info::createFriendInfo($friendId, $userId);
     //增加声望
     $code = 0;
     $msg = 'OK';
