@@ -9,7 +9,7 @@ $act   = isset($_REQUEST['act'])?$_REQUEST['act']:'';//好友ID
 
 $userInfo = json_decode($_COOKIE['user_info'], TRUE);
 $userId = $userInfo['user_id'];
-
+//echo $userId;exit;
 if(!$userId)
 {
 	echo "无法获得当前用户信息";
@@ -17,9 +17,9 @@ if(!$userId)
 	$interFace = 'user/getUserAttribute';
 	$params = array('user_id' => $userId);
 	$data = Curl::sendRequest($interFace, $params);
-	var_dump($data);
-	$res = json_decode($data, TURE);
-	var_dump($res);exit;
+//	var_dump($data);
+	$res = json_decode($data, TRUE);
+//	var_dump($res);exit;
 	$result = $res['d'];
 	$equipInfo = $res['equipInfo'];//使用中装备
 	$baseAttribute = $res['baseAttribute'];//角色基本属性(点)

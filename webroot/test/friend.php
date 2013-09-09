@@ -45,10 +45,13 @@ if($userId)
 			echo "<script>alert('添加失败');location.href='friend.php'</script>";
 		}
 	}else{
+		
 		$interFace = 'friend/listFriend';
 	    $params = array('user_id' => $userId);
 	    $data = Curl::sendRequest($interFace, $params);
+//	    var_dump($data);//
 		$res = json_decode($data, TRUE);
+//		var_dump($res);exit;
 		$result = $res['d'];
 	
     
