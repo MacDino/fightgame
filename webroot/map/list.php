@@ -2,7 +2,7 @@
 /**
  * @desc 地图列表
  */
-include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
+include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 
 try {
