@@ -5,7 +5,7 @@ echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
 $userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';
 if($userId)
-{   
+{
     $interFace = 'user/getUserInfo';
     $params = array('user_id' => $userId);
     $data = Curl::sendRequest($interFace, $params);
@@ -37,7 +37,7 @@ if(!$currentUserInfo)
 
 
 
-<a href="map.php">地图</a>
+<a href="map.php?user_id=<?php echo $userId;?>">地图</a>
 <a href="race.php">角色</a>
 <a href="pk.php">PK</a>
 <a href="shop.php">商店</a>

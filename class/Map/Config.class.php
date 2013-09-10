@@ -13,7 +13,10 @@ class Map_Config extends Model {
 		$map_list = self::select();
 		foreach ($map_list as $value)
 		{
-			$ret[$value['map_id']] = $value['map_name'];
+			$ret[$value['map_id']] = array(
+                'map_name'  => $value['map_name'],
+                'start_level' => $value['start_level'],
+            );
 		}
 
 		return $ret;
