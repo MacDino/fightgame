@@ -2,7 +2,7 @@
 /**
  * @desc 进入地图，随机怪物
  */
-include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
+include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $map_id = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
 

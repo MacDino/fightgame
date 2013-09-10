@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
+include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $user_id        = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $map_id         = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;

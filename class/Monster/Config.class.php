@@ -2,7 +2,9 @@
 //和怪物相关的配置数据
 class Monster_Config
 {
-	//获取最基本的属性分配
+    const TABLE_NAME = 'map_monster';
+
+    //获取最基本的属性分配
 	public static function getMonsterBaseAttributeList($level)
 	{
 		return array(
@@ -17,5 +19,9 @@ class Monster_Config
 	public static function getMonsterBaseAttributeTotal($level)
 	{
 		return 50 + $level*10;
-	}  
+	}
+
+    public static function getList() {
+        return Mysql::select(self::TABLE_NAME, NULL, NULL, array('monster_id ASC'));
+    }
 }

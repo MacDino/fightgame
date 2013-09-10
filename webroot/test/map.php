@@ -12,9 +12,9 @@ if($currentUserId) {
     $interFace = 'map/list';
     $res = Curl::sendRequest($interFace,array());
    	$mapList = json_decode($res, true);
-    if(is_array($mapList['d']) && count($mapList['d'])) {
+    if(is_array($mapList['d']['map_list']) && count($mapList['d']['map_list'])) {
         echo '<table>';
-        foreach ($mapList['d'] as $mapId => $map) {
+        foreach ($mapList['d']['map_list'] as $mapId => $map) {
             echo "<tr><td>";
             echo $map['map_name'];
             echo "</td>";

@@ -11,15 +11,7 @@ class Map_Config extends Model {
 	{
 		$ret = array();
 		$map_list = self::select();
-		foreach ($map_list as $value)
-		{
-			$ret[$value['map_id']] = array(
-                'map_name'  => $value['map_name'],
-                'start_level' => $value['start_level'],
-            );
-		}
-
-		return $ret;
+        return $map_list;
 	}
 
 	//获取地图配置
