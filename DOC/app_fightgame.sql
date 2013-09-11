@@ -491,7 +491,7 @@ DROP TABLE IF EXISTS `iap_product`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `iap_product` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT,
-  `iap_product_id` int(11) NOT NULL,
+  `iap_product_id` varchar(100) NOT NULL,
   `product_name` varchar(150) NOT NULL,
   `product_desc` varchar(300) NOT NULL,
   `price` decimal(5,2),
