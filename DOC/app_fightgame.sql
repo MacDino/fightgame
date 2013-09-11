@@ -482,3 +482,20 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2013-08-29 17:48:25
+--
+-- Table structure for table `user_skill`
+--
+
+DROP TABLE IF EXISTS `iap_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `iap_product` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `iap_product_id` int(11) NOT NULL,
+  `product_name` varchar(150) NOT NULL,
+  `product_desc` varchar(300) NOT NULL,
+  `price` decimal(5,2),
+  PRIMARY KEY (`product_id`),
+  UNIQUE(iap_product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
