@@ -35,16 +35,20 @@ class Shop_IAPProduct{
 			 * 先入库记录，再验证
 			 */	
 			$res = Shop_IAPPurchaseLog::insert(array($user_id, $product_id, $receipt));
+			try{
+				/*
+				 * 向apple发起验证
+				 */
+				$verifyRes = self::sendReceiptToApple($receipt, $isSandBox);	
 
-			/*
-			 * 向apple发起验证
-			 */
 
+				/*
+				 * 验证成功，返回验证结果，更新购买记录表状态
+				 */
 
-
-			/*
-			 * 验证成功，返回验证结果，更新购买记录表状态
-			 */
+			} catch (Exception $e){
+				new Exception($e->getErrorMsg(), $e->getErrorCode());	
+			}
 		}
 
 	}

@@ -4,6 +4,7 @@ define('ROOT', dirname(__FILE__) . '/../');
 define('LIB', ROOT . 'lib/');
 define('CLS', ROOT . 'class/');
 define('PEAR' , LIB);
+define('IAP_IS_SANDBOX', FALSE);
 
 
 if($_SERVER['SERVER_NAME'] == 'fightgame.sinaapp.com')
