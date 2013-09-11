@@ -1,4 +1,4 @@
-<?php    
+<?php
 //用户相关
 class User_Info
 {
@@ -16,7 +16,7 @@ class User_Info
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
-	
+
 	/**
 	 * 获取角色列表
 	 * @param int $masterId	帐号ID
@@ -42,7 +42,7 @@ class User_Info
         $userInfo = self::listUser($data['login_user_id'], $data['area_id']);
         if($userInfo)throw new Exception('用户已存在', 100001);
 
-        $res = MySql::insert(self::TABLE_NAME, 
+        $res = MySql::insert(self::TABLE_NAME,
               array(
                   'user_name'     => $data['user_name'],
                   'race_id'       => $data['race_id'],
@@ -153,15 +153,15 @@ class User_Info
 		}
 		//根据种族和等级取出基本属性点
 		$userBaseAttribute = User_Attributes::getBaseAttribute($userInfo['race_id'], $userInfo['user_level']);
-		
+
 		//把装备带来的属性点融合进基本属性点里
 		foreach ($baseAttribute as $keyBase => $valueBase){
 			$userBaseAttribute[$keyBase] += $valueBase;
 		}
-		
+
 		//如果不需要输出属性值,直接在这里结束,输出属性点
 		if(!$needvalue)return $userBaseAttribute;
-		
+
 		//根据种族ID和总属性点算出基本属性值
 		$userAttributeValue = User_Attributes::getAttributesValue($userInfo['race_id'], $userBaseAttribute);
 
@@ -176,7 +176,7 @@ class User_Info
 	/**
      * 使用属性增强符咒
      * @param array $data	属性数组
-     * @return array 
+     * @return array
      */
 	public static function strengthenUserAttribute($data){
 		if(!is_array($data))return FALSE;
@@ -191,7 +191,7 @@ class User_Info
 	/**
      * 种族属性被克
      * @param array $data	属性数组
-     * @return array 
+     * @return array
      */
 	public static function restraintAttribute($data){
 		if(!is_array($data))return FALSE;
@@ -206,7 +206,7 @@ class User_Info
 	/**
      * 种族属性相生
      * @param array $data	属性数组
-     * @return array 
+     * @return array
      */
 	public static function begetsAttribute($data){
 		if(!is_array($data))return FALSE;
@@ -224,11 +224,12 @@ class User_Info
     public static function fightable($user_id, $user_level){
         //基本属性 成长属性 装备属性
         $all_attr      = self::getUserInfoFightAttribute($user_id);
-        $skill_list     = Skill_Info::getSkill($user_id);
+        $skill_list     = Skill_Info::getSkillList($user_id);
         //技能属性加成
         $all_attr     = Skill::getRoleAttributesWithSkill($all_attr, $skill_list);
-        $fight_skill    = Skill::getFightSkillList($skill_list);
+        $attrbuteArr = self::getUserInfoFightAttribute($user_id, TRUE);
 
-        return new Fightable($user_level, $all_attr, $fight_skill, array('user_id' => $user_id));
+        $fight_skill    = Skill::getFightSkillList($skill_list);
+        return new Fightable($user_level, $attrbuteArr, $fight_skill, array('user_id' => $user_id));
     }
 }

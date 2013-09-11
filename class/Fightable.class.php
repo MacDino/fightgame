@@ -12,7 +12,7 @@ class Fightable {
 	protected $level;
 
 	//基本属性和成长属性(各种装备，加成后的)
-	protected $attributes; 
+	protected $attributes;
 
 	//包括技能等级，释放概率
 	protected $skills;
@@ -38,7 +38,7 @@ class Fightable {
 	 *
 	 * $attributes = array(:attribute_id => :attribute_value, ...);
 	 * $skills = array(
-	 * 		'attack' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => :attack_rate),	
+	 * 		'attack' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => :attack_rate),
 	 * 		'defense' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => :defense_rate),
 	 * 		'passive' => array('list' => array(:skill_id => :skill_level, ...), 'rate' => null),
 	 * );
@@ -76,7 +76,7 @@ class Fightable {
 
 	public function setSleep()
 	{
-		$this->status |= self::STATUS_SLEEP; 
+		$this->status |= self::STATUS_SLEEP;
 	}
 
 	public function unsetSleep()
@@ -111,6 +111,9 @@ class Fightable {
 
 		//记录攻击开始前目标血量，用于计算目标实际掉血量
 		$target_blood_start = $target->getCurrentBlood();
+//        echo '<pre>';
+//        var_dump($target_blood_start);
+//                echo '</pre>';
 
 		//死人是不会攻击的
 		if ($this->isDead() || $target->isDead())
@@ -138,7 +141,6 @@ class Fightable {
 		{
 			$harm = $this->physicAttack($skill_id, $target);
 		}
-
 		//成功命中
 		if ($harm)
 		{
@@ -146,14 +148,14 @@ class Fightable {
 			{
 				$harm *= 2;
 			}
-
 			$beat_back = $target->defense($this, $skill_id, $harm);
 			$this->last_beat_back = $beat_back;
 			$this->current_blood -= $beat_back;
 		}
 
 		//连击后进入休息状态
-		if (Skill::isLj($skill_id))
+//		if (Skill::isLj($skill_id))没有此方法
+		if (FALSE)
 		{
 			$this->setSleep();
 		}
@@ -173,7 +175,7 @@ class Fightable {
 		$defense_skill = $this->randDefenseSkill();
 
 		//木有防御技能  或者防御技能无效
-		if (empty($defense_skill) 
+		if (empty($defense_skill)
 			|| ! Skill::isSkillDefensable($attack_skill, $defense_skill))
 		{
 			$this->current_blood -= $attack_harm;
