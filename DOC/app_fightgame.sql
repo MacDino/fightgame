@@ -518,6 +518,7 @@ CREATE TABLE `iap_purchase_log` (
   `product_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `purchase_receipt` varchar(300) NOT NULL,
+  `verify_status` tinyint(3) not null default -1,
   `ctime` datetime NOT NULL,
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
