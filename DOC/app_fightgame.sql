@@ -500,3 +500,24 @@ CREATE TABLE `iap_product` (
   UNIQUE(iap_product_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `iap_product` WRITE;
+/*!40000 ALTER TABLE `iap_product` DISABLE KEYS */;
+INSERT INTO iap_product (iap_product_id,product_name,product_desc,price) VALUES ('com.fightgame.60','6元包套餐','6元含有60个元宝',6.00);
+INSERT INTO iap_product (iap_product_id,product_name,product_desc,price) VALUES ('com.fightgame.300','30元包套餐','30元含有300个元宝',30.00);
+/*!40000 ALTER TABLE `iap_product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `iap_purchase_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `iap_purchase_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `purchase_receipt` varchar(300) NOT NULL,
+  `ctime` datetime NOT NULL,
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
