@@ -495,6 +495,7 @@ CREATE TABLE `iap_product` (
   `product_name` varchar(150) NOT NULL,
   `product_desc` varchar(300) NOT NULL,
   `price` decimal(5,2),
+  `status` tinyint(3) not null default 1,
   PRIMARY KEY (`product_id`),
   UNIQUE(iap_product_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
