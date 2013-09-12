@@ -22,8 +22,12 @@ if(is_array($userLastResult) && count($userLastResult)) {
         $data   = $result;
         exit();
     }
+    $mapId = $mapId > 0 ? $mapId : $userLastResult['map_id'];
 }
-
+if($mapId <=0 ) {
+    $code = 1; $msg = '请选择对应地图';
+    exit();
+}
 /**初始化一个怪物**/
 $monster            = Map::getMonster($mapId);
 $monsterFightTeam[] = Monster::fightable($monster);
