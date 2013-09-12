@@ -496,6 +496,8 @@ CREATE TABLE `iap_product` (
   `product_desc` varchar(300) NOT NULL,
   `ingot` int(6) NOT NULL,
   `price` decimal(5,2),
+  `present_type` tinyint(3) NOT NULL,
+  `present_num`  int(6) NOT NULL,
   `status` tinyint(3) not null default 1,
   PRIMARY KEY (`product_id`),
   UNIQUE(iap_product_id)
@@ -504,8 +506,8 @@ CREATE TABLE `iap_product` (
 
 LOCK TABLES `iap_product` WRITE;
 /*!40000 ALTER TABLE `iap_product` DISABLE KEYS */;
-INSERT INTO iap_product (iap_product_id,product_name,product_desc,ingot,price) VALUES ('com.fightgame.60','6元包套餐','6元含有60个元宝',60,6.00);
-INSERT INTO iap_product (iap_product_id,product_name,product_desc,ingot,price) VALUES ('com.fightgame.300','30元包套餐','30元含有300个元宝',300,30.00);
+INSERT INTO iap_product (iap_product_id,product_name,product_desc,ingot,price,present_type,present_num) VALUES ('com.fightgame.60','6元包套餐','6元含有60个元宝',60,6.00,2,'');
+INSERT INTO iap_product (iap_product_id,product_name,product_desc,ingot,price,present_type,present_num) VALUES ('com.fightgame.300','30元包套餐','30元含有330个元宝',330,30.00,2,30);
 /*!40000 ALTER TABLE `iap_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
