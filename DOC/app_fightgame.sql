@@ -525,3 +525,38 @@ CREATE TABLE `iap_purchase_log` (
   `ctime` datetime NOT NULL,
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `props`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `props` (
+  `props_id` int(11) NOT NULL AUTO_INCREMENT,
+  `props_cate_id` int(11) NOT NULL,
+  `props_name` varchar(100) NOT NULL,
+  `props_desc` varchar(300),
+  `price_type` tinyint(3) NOT NULL default 1 COMMENT '价格类型  1：固定价格  2：动态价格',
+  `price` int(11) NOT NULL COMMENT '花费的元宝数',
+  PRIMARY KEY (`props_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `props` WRITE;
+INSERT INTO `props` VALUES ('1', 1, '双倍咒符','铜钱经验翻倍', 1, 20),('2', 1, 'PK咒符','增加PK次数', 1, 10),('3', 1, '属性增强咒符','增强使用者成长属性的5%，不能叠加使用。有效时间24小时。', 1, 20),('4', 1, '人宠增强咒符', '增加可携带的人宠空间。', 1, 10),('5', 1, '背包咒符', '增加可携带的装备空间。', 1, 10),('6', 1, '挂机咒符','使用后可以挂机2个小时，按分钟计时。', 1, 50),('7', 1, '好友上限咒符', '增加好友上限。',1, 100),('8', 2, '锻造成功咒符','增加10%成功几率。', 1, 100),('9', 2, '装备成长咒符','1.装备等级+10
+2.保持附加属性不变，基本属性根据之前装备基本属性所在范围（一般、高、很高）重新随机。
+3.保持锻造段数不变。
+4.30级的装备可以使用成长符。', 2, ''),('10', 3, '上古遗迹', '可以用来抽取装备。', 2, '');
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `props_cate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `props_cate` (
+  `props_cate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cate_name` varchar(30) NOT NULL,
+  PRIMARY KEY (`props_cate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `props_cate` WRITE;
+INSERT INTO `props_cate` VALUES ('1', '辅助类'),(2,'锻造类'),(3,'装备宝箱类');
+UNLOCK TABLES;
