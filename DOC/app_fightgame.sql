@@ -560,3 +560,15 @@ CREATE TABLE `props_cate` (
 LOCK TABLES `props_cate` WRITE;
 INSERT INTO `props_cate` VALUES ('1', '辅助类'),(2,'锻造类'),(3,'装备宝箱类');
 UNLOCK TABLES;
+
+CREATE TABLE `fight_last_result` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `map_id` int(11) NOT NULL COMMENT '地图的id',
+  `fight_start_time` int(11) NOT NULL COMMENT '战斗接口请求时间',
+  `use_time` int(11) NOT NULL COMMENT '预计战斗耗时时间',
+  `last_fight_result` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '最后一次战斗结果',
+  `create_time` datetime NOT NULL COMMENT '记录创建时间',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
