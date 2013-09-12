@@ -56,7 +56,7 @@ class Monster
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'money_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'money_change');
 
-		return self::_multiply($base_money, $prefix_change, $suffix_change);
+		return self::_multiply($base_money, 1+$prefix_change, 1+$suffix_change);
 	}
 
 	// 获取怪物的经验(前后缀加成后)
@@ -66,7 +66,7 @@ class Monster
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'experience_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'experience_change');
 
-		return self::_multiply($base_experience, $prefix_change, $suffix_change);
+		return self::_multiply($base_experience, 1+$prefix_change, 1+$suffix_change);
 	}
 
 	// 获取怪物的属性(前后缀加成后)
@@ -86,7 +86,7 @@ class Monster
 	{
 		$prefix_probability = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'equip_get_probability');
 		$suffix_probability = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'equip_get_probability');
-
+        
 		return PerRand::getMultiRandResultKey(array($prefix_probability, $suffix_probability));
 	}
 

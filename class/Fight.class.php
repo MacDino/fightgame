@@ -1,5 +1,41 @@
 <?php
+/**
+ * 进行战斗或者PK的战斗记录以及相关数据计算
+ * review by lishengwei
+ * **/
 class Fight {
+
+    /**
+     * 进行多人对多怪的战斗
+     * 可复用至单人对单怪、单人对单怪、多人对多怪
+     * 或者单人对单人、单人对多人，多人对单人、对人对多人
+     * @author lishengwei
+     * **/
+    public static function multiFight($team1, $team2) {
+        $fight_procedure    = array();
+		$attackers          = self::sortByAttackSpeed($team1, $team2);
+        while(self::isTeamAlive($team1) && self::isTeamAlive($team2)) {
+			foreach($attackers as $attacker) {
+				if ($attacker->isDead()) {
+					continue;
+				}
+				//true 不可省略，严格检查是否是同一个对象
+				if (in_array($attacker, $team1, true)) {
+					$target = self::randTarget($team2);
+				} else {
+					$target = self::randTarget($team1);
+				}
+
+				// 没有目标了，全死光光了
+				if (empty($target)) {
+					break;
+				}
+				$harm = $attacker->attack($target);
+				$fight_procedure[] = self::_report($attacker, $target, $harm);
+			}
+		}
+		return $fight_procedure;
+    }
 
 	//单挑
 	public static function start(Fightable $user1, Fightable $user2)
@@ -50,36 +86,31 @@ class Fight {
 		return $fight_procedure;
 	}
 
-	//按攻击速度降序
-	public static function sortByAttackSpeed($team1, $team2)
-	{
-		$attackers = array_merge($team1, $team2);
-		$attack_speed = array();
-		foreach($attackers as $key => $attacker)
-		{
+
+    /**
+     * 多对多情况下，计算出手速度
+     * 按攻击速度降序
+     * **/
+	public static function sortByAttackSpeed($team1, $team2) {
+		$attackers      = array_merge($team1, $team2);
+		$attack_speed   = array();
+		foreach($attackers as $key => $attacker) {
 			$attack_speed[$key] = $attacker->speed();
 		}
 		arsort($attack_speed);
-
 		$sorted_attackers = array();
-		foreach($attack_speed as $key => $speed)
-		{
+		foreach($attack_speed as $key => $speed) {
 			$sorted_attackers[] = $attackers[$key];
 		}
-
 		return $sorted_attackers;
 	}
 
-	public static function isTeamAlive($team)
-	{
-		foreach($team as $member)
-		{
-			if ($member->isAlive())
-			{
+	public static function isTeamAlive($team) {
+		foreach($team as $member) {
+			if ($member->isAlive()) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -105,12 +136,11 @@ class Fight {
 		return $target;
 	}
 
-	private static function _report($attacker, $target, $harm)
-	{
+	private static function _report($attacker, $target, $harm) {
 		return array(
-			'attacker' => $attacker->reportAttack(),
-			'target' => $target->reportDefense(),
-			'harm' => $harm,
+			'attacker'  => $attacker->reportAttack(),
+			'target'    => $target->reportDefense(),
+			'harm'      => $harm,
 		);
 	}
 

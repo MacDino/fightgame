@@ -1,28 +1,53 @@
 <?php
+/**
+ * 单人/多人 对战 单怪物
+ * @author lishengwei
+ * 战斗结果的数据体结构需要进行重构
+ * **/
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$user_id        = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$map_id         = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
-//怪物fight对象
-$monster        = Map::getMonster($map_id);
-$monster_fight  = Monster::fightable($monster);
+$userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
+$mapId              = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
+/**初始化一个怪物**/
+$monster            = Map::getMonster($mapId);
+$monsterFightTeam[] = Monster::fightable($monster);
+/**当前角色fight对象，如果有人宠，获取人宠**/
+$userInfo           = User_Info::getUserInfoByUserId($userId);
+$userFightTeam[]    = User_Info::fightable($userId, $userInfo['user_level']);
+if($userInfo['user_level'] > 40) {
+    /**
+     * 获取人宠
+     * @todo 获取郑毅锋的接口数据
+     * **/
+    $userPetInfo    = array('user_id' => 27);
+    if(is_array($userPetInfo) && count($userPetInfo)) {
+        $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
+        //人宠进入队伍
+        $userFightTeam[] = User_Info::fightable($userPetInfo['user_id'], $userPetInfo['user_level']);
+    }
+}
 
-//当前角色fight对象
-$user_info      = User_Info::getUserInfoByUserId($user_id);
-$user_fight     = User_Info::fightable($user_id, $user_info['user_level']);
-
-$data   = array();
 try {
-    $data['fight_procedure'] = Fight::start($user_fight, $monster_fight);
-    if($user_fight->is_Dead()){
-        //当前角色被打败的处理
+    /**进入多人对单怪的战斗**/
+    $fightProcedure = Fight::multiFight($userFightTeam, $monsterFightTeam);
+    $data = array(
+        'fight_procedure' => $fightProcedure
+    );
+    $isUserAlive = $isMonsterAlive = FALSE;
+    foreach ($userFightTeam as $userFight) {
+        $isUserAlive = $userFight->isAlive() || $isUserAlive;
+    }
+    foreach ($monsterFightTeam as $monsterFight) {
+        $isMonsterAlive = $monsterFight->isDead() || $isMonsterAlive;
+    }
+    if(!$isUserAlive) {
         $msg    = '您被打败了';
     } else {
-        //获取经验 金币
-        $data['experience'] = Monster::getMonsterExperience($monster);
-        $data['money']      = Monster::getMonsterMoney($monster);
-        $data['equipment_color']      = Monster::getMonsterEquipmentColor($monster);
-        $msg    = '怪物已消灭';
+        $data['fight_procedure']    = $fightProcedure;
+        $data['experience']         = Monster::getMonsterExperience($monster);
+        $data['money']              = Monster::getMonsterMoney($monster);
+        $data['equipment_color']    = Monster::getMonsterEquipmentColor($monster);
+        $msg                        = '怪物已消灭';
     }
 	$code   = 0;
 } catch (Exception $e) {
