@@ -9,6 +9,9 @@ class Shop_IAPProduct{
 	const SANDBOX_VERIFY_URL = "https://sandbox.itunes.apple.com/verifyReceipt";
 	const BUY_VERIFY_URL     = "https://buy.itunes.apple.com/verifyReceipt";
 
+	const PRESENT_TYPE_MONTH_PAY = 1;	//欢乐月
+	const PRESENT_TYPE_INGOT = 2;		//元宝
+
 
 	/*
 	 * 套餐列表
@@ -19,6 +22,26 @@ class Shop_IAPProduct{
 		);
 		$res = MySql::select(self::TABLE_NAME, $where);
 		return $res;
+	}
+
+	/*
+	 *  产品详情
+	 */
+	public static function getInfoByProductId($productId){
+		if(!is_numeric($productId))return FALSE;
+		$res = MySql::selectOne(self::TABLE_NAME, array('product_id' => $productId));
+		return $res;
+	}
+
+	/*
+	 * 获取某一个套餐的元宝数
+	 */
+	public static function getIngotByProductId($productId){
+		$res = self::getInfoByProductId($productId);	
+		if(!empty($res['ingot']) && $res['ingot'] ){
+			return $res['ingot'];
+		}
+		return 0;
 	}
 
 	/*
@@ -48,9 +71,19 @@ class Shop_IAPProduct{
 					/*
 					 * 更新用户元宝:套餐本身元宝+赠送元宝
 					 */
-
+					$product = self::getInfoByProductId($product_id);
+					$ingot = $product['ingot'];
+					$present_type = $product['present_type'];
+					//赠送元宝
+					if($present_type == self::PRESENT_TYPE_INGOT){
+						$ingot += $product['present_num']; 
+						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
+					} else if ($present_type == self::PRESENT_TYPE_MONTH_PAY){
+					//赠送欢乐月	
+							
+					}
+					return $verifyRes;
 				}
-				return $verifyRes;
 			} catch (Exception $e){
 				new Exception($e->getErrorMsg(), $e->getErrorCode());	
 			}
