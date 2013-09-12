@@ -24,7 +24,7 @@ class Shop_IAPProduct{
 	/*
 	 * 购买凭证验证借口
 	 */
-	public static function verifyReceipt($data, $isSandBox =  false){
+	public static function verifyReceipt($data){
 		$data = json_decode($data);	
 		if($data && is_array($data)){
 			$user_id = $data['user_id'];	
@@ -39,28 +39,33 @@ class Shop_IAPProduct{
 				/*
 				 * 向apple发起验证
 				 */
-				$verifyRes = self::sendReceiptToApple($receipt, $isSandBox);	
-
-
+				$verifyRes = self::sendReceiptToApple($receipt);	
 				/*
-				 * 验证成功，返回验证结果，更新购买记录表状态
+				 * 验证成功时,更新购买记录表状态
 				 */
+				if(!empty($verifyRes) && is_array($verifyRes)){
+					Shop_IAPPurchaseLog::updateVerifyStatus($res);		
+					/*
+					 * 更新用户元宝:套餐本身元宝+赠送元宝
+					 */
 
+				}
+				return $verifyRes;
 			} catch (Exception $e){
 				new Exception($e->getErrorMsg(), $e->getErrorCode());	
 			}
+		} else{
+			throw new Exception ("请传入验证相关字段", 1);	
 		}
-
 	}
 
 	/*
 	 * 向apple发起凭证数据
 	 */
-	private function sendReceiptToApple($receipt, $isSandBox ){
-		if ($isSandbox) {     
+	private function sendReceiptToApple($receipt){
+		if (IAP_IS_SANDBOX) {     
 			$endpoint = self::SANDBOX_VERIFY_URL;    
-		}     
-		else {     
+		}  else {     
 			$endpoint = self::BUY_VERIFY_URL;     
 		}     
 

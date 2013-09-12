@@ -10,7 +10,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
  */
 $jsondata = $_REQUEST['verify_data'] ? $_REQUEST['verify_data'] : '';
 try{
-	$res = Shop_IAPProduct::verifyReceipt($jsondata);	
+	$data = Shop_IAPProduct::verifyReceipt($jsondata);	
 } catch (Exception $e) {
-
+	$code = $e->getCode();
+	$msg = $e->getMessage();
 }
