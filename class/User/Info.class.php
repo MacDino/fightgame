@@ -79,10 +79,151 @@ class User_Info
 		}
 
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
-		$res = Mysql::query($sql);
+		$res = MySql::query($sql);
 		return $res;
 	}
-
+	
+	//增加金币
+	public static function addMoney($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `money` = `money` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//减少金币
+	public static function subtractMoney($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `money` = `money` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//增加元宝
+	public static function addIngot($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `ingot` = `ingot` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//减少元宝
+	public static function subtractIngot($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `ingot` = `ingot` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//增加经验
+	public static function addExperience($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `experience` = `experience` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//减少经验
+	public static function subtractExperience($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `experience` = `experience` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//增加包裹上限
+	public static function addPackNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `pack_num` = `pack_num` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//增加好友上限
+	public static function addFriendNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `friend_num` = `friend_num` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//增加人宠上限
+	public static function addPetNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `pet_num` = `pet_num` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	/** 增加人物等级 */
+	public static function addLevelNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `user_level` = `user_level` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//减少人物等级
+	public static function subtractLevelNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `user_level` = `user_level` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//增加PK次数
+	public static function addPKNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `pk_num` = `pk_num` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//减少PK次数
+	public static function subtractPKNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `pk_num` = `pk_num` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//增加技能点
+	public static function addPointNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `skil_point` = `skil_point` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//减少技能点
+	public static function subtractPointNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `skil_point` = `skil_point` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
 	/**
      * 获取用户在战斗时的即时属性
      * 先计算数值,然后就算比率
