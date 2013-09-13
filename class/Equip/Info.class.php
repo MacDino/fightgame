@@ -54,4 +54,20 @@ class Equip_Info
         }
         return $res;
     }
+    
+    //装备价格 add by zhengyifeng 76387051@qq.com  2013.9.13
+    public static function priceEquip($userId, $equipId)
+    {
+    	$sql = "SELECT p.equip_price as price FROM user_equip e, equip_price p 
+    					WHERE e.equip_colour = p.equip_colour AND e.equip_level = p.equip_level AND e.user_equip_id = '$equipId'";
+    	$res = MySql::query($sql);
+    	return $res;
+    }
+    
+    //删除(卖出)装备
+    public static function delEquip($equipId)
+    {
+    	$res = MySql::delete(self::TABLE_NAME, array('user_equip_id' => $equipId));
+    	return $res;
+    }
 }

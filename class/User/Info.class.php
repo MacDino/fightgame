@@ -79,9 +79,75 @@ class User_Info
 		}
 
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
-		$res = Mysql::query($sql);
+		$res = MySql::query($sql);
 		return $res;
 	}
+	
+	//增加金币
+	public static function addMoney($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `money` = `money` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//减少金币
+	public static function subtractMoney($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `money` = `money` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//增加元宝
+	public static function addIngot($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `ingot` = `ingot` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//减少元宝
+	public static function subtractIngot($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `ingot` = `ingot` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//增加经验
+	public static function addExperience($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `experience` = `experience` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//减少经验
+	public static function subtractExperience($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `experience` = `experience` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	//增加经验
+	
+	//减少经验
+	
+	//
 
 	/**
      * 获取用户在战斗时的即时属性
