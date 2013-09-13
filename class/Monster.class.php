@@ -16,10 +16,12 @@ class Monster
 	CONST MONSTER_SUFFIX_ANCIENT      = 7;//远古的
 	CONST MONSTER_SUFFIX_HEAD         = 8;//头头
 
-	//获取杀死怪物获得的金钱，没有计算加成
-	public static function getMonsterBaseMoney($level)
-	{
-		if(!$level || (int)$level < 1)return 0;
+	/**
+     * 获取杀死怪物获得的金钱，没有计算加成
+     * review by lishengwei
+     */
+	public static function getMonsterBaseMoney($level) {
+		if(!$level || (int)$level < 1)return 1;
 		$baseNum = ($level/10)*2*($level*(1 + 0.09))+3;
 		$randBegin = $baseNum*(1 - 0.09);
 		$randEnd = $baseNum*(1+0.09);
@@ -28,9 +30,11 @@ class Monster
 		return $randValue/$ration;
 	}
 
-	//获取杀死怪物获得的经验，没有计算加成
-	public static function getMonsterBaseExperience($level)
-	{
+	/***
+     * 获取杀死怪物获得的经验，没有计算加成
+     * review by lishengwei
+     */
+	public static function getMonsterBaseExperience($level) {
 		return (float)41.4 + 10.33*(int)$level;
 	}
 
@@ -49,24 +53,26 @@ class Monster
 		return self::_randAttribute($surplusAttribute, $userAttributeList);
 	}
 
-	// 获取怪物的金钱(前后缀加成后)
-	public static function getMonsterMoney($monster)
-	{
+	/****
+     * 获取怪物的金钱(前后缀加成后)
+     * review by lishengwei
+     */
+	public static function getMonsterMoney($monster) {
 		$base_money = self::getMonsterBaseMoney($monster['level']);
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'money_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'money_change');
-
-		return self::_multiply($base_money, 1+$prefix_change, 1+$suffix_change);
+		return (int)self::_multiply($base_money, 1+$prefix_change, 1+$suffix_change);
 	}
 
-	// 获取怪物的经验(前后缀加成后)
-	public static function getMonsterExperience($monster)
-	{
+	/**
+     *  获取怪物的经验(前后缀加成后)
+     *  review by lishengwei
+     * **/
+	public static function getMonsterExperience($monster) {
 		$base_experience = self::getMonsterBaseExperience($monster['level']);
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'experience_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'experience_change');
-
-		return self::_multiply($base_experience, 1+$prefix_change, 1+$suffix_change);
+		return (int)self::_multiply($base_experience, 1+$prefix_change, 1+$suffix_change);
 	}
 
 	// 获取怪物的属性(前后缀加成后)

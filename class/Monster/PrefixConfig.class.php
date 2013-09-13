@@ -121,7 +121,7 @@ class Monster_PrefixConfig
 	{
 		$rate_list = array();
 
-		foreach (self::$prefix_config_list as $prefix => $config) 
+		foreach (self::$prefix_config_list as $prefix => $config)
 		{
 			$rat_list[$prefix] = $config['meet_probability'];
 		}
