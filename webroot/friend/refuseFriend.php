@@ -1,10 +1,9 @@
 <?php
-//通过好友
+//拒绝好友
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
-//echo "UserId===".$userId."&FriendId===".$friendId;exit;
 
 //数据进行校验,非空,数据内
 if(!$userId || !$friendId)
@@ -14,11 +13,11 @@ if(!$userId || !$friendId)
     $msg = '1';
     die;
 }
-
-//查询用户ID是否在用户表里存在
+//查询好友ID是否在用户表里存在
+//echo $userId;exit;
 $userInfo = User_Info::getUserInfoByUserId($userId);
-$friendInfo = User_Info::getUserInfoByUserId($friendId);
-if(!$userInfo || !$friendInfo)
+//print_r($user_info);exit;
+if(!$userInfo)
 {
 	$code = 1;
     //$msg = '用户信息错误!';
@@ -26,26 +25,36 @@ if(!$userInfo || !$friendInfo)
     die;
 }
 
-//查看是否还有位置添加好友
-$friendNum = Friend_Info::getFriendNum($userId);
-//var_dump($friendNum);exit;
-if($friendNum == $userInfo['friend_num']){
+//好友ID是否存在
+$friendInfo = User_Info::getUserInfoByUserId($friendId);
+if(!$friendInfo)
+{
 	$code = 1;
-    //$msg = '好友已达上限!';
-    $msg = '5';
+    //$msg = '用户信息错误!或者已经超过40级!';
+    $msg = '3';
+    die;
+}
+
+//是否已经是好友
+$isFriend = Friend_Info::getUserFrined($userId, $friendId);
+if(empty($isFriend))
+{
+	$code = 1;
+    //$msg = '没有这个好友!';
+    $msg = '4';
     die;
 }
 
 try {
-    //添加好友
-    $data = Friend_Info::agreeFriendInfo($userId, $friendId);
-    //增加声望
+    //删除好友
+    $data = Friend_Info::deleteFriendInfo($userId, $friendId);
+    //减少声望
     $code = 0;
     $msg = 'OK';
     die;
 } catch (Exception $e) {
     $code = 1;
-    //$msg = '添加好友失败!';
+    //$msg = '删除好友失败!';
     $msg = '99';
     die;    
 }

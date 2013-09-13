@@ -14,16 +14,17 @@ if(!$userId)
 {
 	echo "无法获得当前用户信息";
 }else{
-	$interFace = 'user/getUserAttribute';
+	$interFace = 'user/getUser';
 	$params = array('user_id' => $userId);
-	$data = Curl::sendRequest($interFace, $params);
-//	var_dump($data);
-	$res = json_decode($data, TRUE);
+	$a = Curl::sendRequest($interFace, $params);
+//	error_log($a, 3, 'errors.log');
+//	var_dump($a);
+	$res = json_decode($a, TRUE);
 //	var_dump($res);exit;
 	$result = $res['d'];
-	$equipInfo = $res['equipInfo'];//使用中装备
-	$baseAttribute = $res['baseAttribute'];//角色基本属性(点)
-	$valueAttribute = $res['valueAttribute'];//角色成长属性(值)
+	$equipInfo = $result['equipInfo'];//使用中装备
+	$baseAttribute = $result['baseAttribute'];//角色基本属性(点)
+	$valueAttribute = $result['valueAttribute'];//角色成长属性(值)
 }
 
 ?>

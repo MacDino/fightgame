@@ -63,6 +63,7 @@ class Curl
 
     private static function _sendRequest($interface, $params)
     {
+//    	echo $interface;var_dump($params);exit;
         if(!is_array($params))return FALSE;
         $params = self::_getCurlValue($params);
         $uri    = self::_getCurlUri($interface, $params);
@@ -83,6 +84,7 @@ class Curl
         curl_close($ch);
         if(self::$_httpInfo['http_code'] == 200)
         {
+        	
             return $data;
         }else{
             return FALSE;

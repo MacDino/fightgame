@@ -12,14 +12,14 @@ if(!$userId)
 
 try {
     //使用中装备
-    $equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
+    /*$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
 	//角色基本属性(点)
 	$baseAttribute = User_Info::getUserInfoFightAttribute($userId);
 	//角色成长属性(值)
 	$valueAttribute = User_Info::getUserInfoFightAttribute($userId, TRUE);
 	
-	$res = array('equipInfo'=>$equipInfo, 'baseAttribute'=>$baseAttribute, 'valueAttribute'=>$valueAttribute);
-	$data = json_encode($res);
+	$res = array('equipInfo'=>$equipInfo, 'baseAttribute'=>$baseAttribute, 'valueAttribute'=>$valueAttribute);*/
+	$data = User_Info::getUserInfoByUserId($userId);
 	
     $code = 0;
     $msg = 'ok';

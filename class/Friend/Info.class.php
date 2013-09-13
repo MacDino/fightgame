@@ -17,7 +17,34 @@ class Friend_Info
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
 			//查询好友信息
-			$sql = "select u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id";
+			$sql = "select u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '2'";
+//			echo $sql;exit;
+			$friendInfo = MySql::query($sql);
+			
+			
+           	if(is_array($friendInfo))
+	        {
+	            return $friendInfo;
+	        }else{
+	        	return FALSE;
+	        }
+        }catch (Exception $e){
+           return FALSE;
+        } 
+    }
+    
+    /**
+     * 显示申请好友信息
+     * @param int $userId		用户ID
+     * @return array
+     */
+    public static function getApplyFriendInfo($userId)
+    {
+        try{
+        	//数据进行校验,非空,数据内
+			if(!$userId)	return FALSE;
+			//查询好友信息
+			$sql = "select u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
 //			echo $sql;exit;
 			$friendInfo = MySql::query($sql);
 			
