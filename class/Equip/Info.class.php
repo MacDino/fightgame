@@ -60,8 +60,10 @@ class Equip_Info
     {
     	$sql = "SELECT p.equip_price as price FROM user_equip e, equip_price p 
     					WHERE e.equip_colour = p.equip_colour AND e.equip_level = p.equip_level AND e.user_equip_id = '$equipId'";
+//    	echo $sql;exit;
     	$res = MySql::query($sql);
-    	return $res;
+    	var_dump($res);
+    	return $res[0]['price'];
     }
     
     //删除(卖出)装备

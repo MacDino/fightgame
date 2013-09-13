@@ -66,6 +66,7 @@ class Curl
 //    	echo $interface;var_dump($params);exit;
         if(!is_array($params))return FALSE;
         $params = self::_getCurlValue($params);
+//        var_dump($params);
         $uri    = self::_getCurlUri($interface, $params);
         $ch     = curl_init();
         curl_setopt($ch, CURLOPT_URL, $uri);
@@ -80,6 +81,7 @@ class Curl
         if(self::$_userAgent)curl_setopt($ch, CURLOPT_USERAGENT, self::$_userAgent);
         if(self::$_httpHeader)curl_setopt($ch, CURLOPT_HTTPHEADER, self::$_httpHeader);
         $data               = curl_exec($ch);
+        var_dump($data);exit;
         self::$_httpInfo    = curl_getinfo($ch);
         curl_close($ch);
         if(self::$_httpInfo['http_code'] == 200)
@@ -106,8 +108,11 @@ class Curl
     //组装数据
     private static function _getCurlValue($params)
     {
+    	
         $params = self::_checkParams($params);
+        
         $params = http_build_query($params);
+//        print_r($params);exit;
         return $params;
     }
     //获取请求的地地址
