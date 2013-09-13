@@ -14,7 +14,7 @@ if(!$userId)
 {
 	echo "无法获得当前用户信息";
 }else{
-	$interFace = 'user/getUser';
+	$interFace = 'user/getUserAttribute';
 	$params = array('user_id' => $userId);
 	$a = Curl::sendRequest($interFace, $params);
 //	error_log($a, 3, 'errors.log');
