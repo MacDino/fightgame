@@ -12,7 +12,7 @@ if($userId)
    	$data = json_decode($data, true);
     if($data['c'] == 0)
     {
-    	setcookie('user_info', json_encode($data['d']['user_ifno']),  time()+360000);
+    	setcookie('user_info', json_encode($data['d']),  time()+360000);
     }
 }
 
