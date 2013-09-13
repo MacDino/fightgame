@@ -254,7 +254,11 @@ class Fightable {
 		);
 	}
 
-	//开动法术攻击, 返回伤害值
+    public function getInfo() {
+        return $this->identity;
+    }
+
+    //开动法术攻击, 返回伤害值
 	protected function magicAttack($skill_id, Fightable $target) {
 		$magic = Skill::getSkillMagic($skill_id);
 

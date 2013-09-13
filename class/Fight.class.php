@@ -15,6 +15,7 @@ class Fight {
     public static function multiFight($team1, $team2) {
         $fight_procedure    = array();
 		$attackers          = self::sortByAttackSpeed($team1, $team2);
+        $times              = 0;
         while(self::isTeamAlive($team1) && self::isTeamAlive($team2)) {
 			foreach($attackers as $attacker) {
 				if ($attacker->isDead()) {
@@ -26,19 +27,37 @@ class Fight {
 				} else {
 					$target = self::randTarget($team1);
 				}
-
 				// 没有目标了，全死光光了
 				if (empty($target)) {
 					break;
 				}
 				$harm = $attacker->attack($target);
 				$fight_procedure[] = self::_report($attacker, $target, $harm);
+                $times++;
 			}
 		}
-		return $fight_procedure;
+		return array(
+            'use_time' => $times * self::FIGHT_USE_TIME_BASE,
+            'fight_procedure' => $fight_procedure,
+        );
     }
 
-	//单挑
+    public static function getPeopleFightInfo(Fightable $user) {
+        $userIdentity = $user->getInfo();
+        return array(
+            'user_id'   => $userIdentity['user_id'],
+            'blood'     => $user->getCurrentBlood(),
+            'magic'     => $user->getCurrentMagic(),
+        );
+    }
+
+    public static function getMonsterFightInfo(Fightable $monster, $monsterInfo = array()) {
+        $monsterInfo['blood'] = $monster->getCurrentBlood();
+        $monsterInfo['magic'] = $monster->getCurrentMagic();
+        return $monsterInfo;
+    }
+
+    //单挑
 	public static function start(Fightable $user1, Fightable $user2)
 	{
 		//速度快者先出手
@@ -115,20 +134,16 @@ class Fight {
 		return false;
 	}
 
-	public static function randTarget($team)
-	{
+	public static function randTarget($team) {
 		$target = false;
 		$max_attacked_speed = 0;
-		foreach ($team as $member)
-		{
-			if ($member->isDead())
-			{
+		foreach ($team as $member) {
+			if ($member->isDead()) {
 				continue;
 			}
 
 			$attacked_speed = $member->attackedSpeed();
-			if ($attacked_speed > $max_attacked_speed)
-			{
+			if ($attacked_speed > $max_attacked_speed) {
 				$max_attacked_speed = $attacked_speed;
 				$target = $member;
 			}
