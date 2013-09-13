@@ -86,7 +86,7 @@ class Monster
 	{
 		$prefix_probability = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'equip_get_probability');
 		$suffix_probability = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'equip_get_probability');
-        
+
 		return PerRand::getMultiRandResultKey(array($prefix_probability, $suffix_probability));
 	}
 
@@ -162,7 +162,7 @@ class Monster
 		//技能加成后的属性
 		$attribute = self::attributeWithSkill($attribute, $skill);
 
-		return new Fightable($monster['level'], $attribute, $skill, $monster);
+		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
 	}
 
 	public static function attributeWithSkill($attribute, $skill)

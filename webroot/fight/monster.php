@@ -30,10 +30,15 @@ if($mapId <=0 ) {
 }
 /**初始化一个怪物**/
 $monster            = Map::getMonster($mapId);
+
 $monsterFightTeam[] = Monster::fightable($monster);
+$data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
 /**当前角色fight对象，如果有人宠，获取人宠**/
 $userInfo           = User_Info::getUserInfoByUserId($userId);
 $userFightTeam[]    = User_Info::fightable($userId, $userInfo['user_level']);
+
+$data['user'] = Fight::getPeopleFightInfo($userFightTeam[0]);
+
 if($userInfo['user_level'] > 40) {
     /**
      * 获取人宠
@@ -44,20 +49,17 @@ if($userInfo['user_level'] > 40) {
         $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
         //人宠进入队伍
         $userFightTeam[] = User_Info::fightable($userPetInfo['user_id'], $userPetInfo['user_level']);
+        $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
     }
 }
 
 try {
     /**进入多人对单怪的战斗**/
-    $fightProcedure = Fight::multiFight($userFightTeam, $monsterFightTeam);
-    /**此次战斗耗时
-     * @todo 定义完毕战斗数据结构体后，此部分计算需要在fight类中计算好后返回
-     * **/
-    $fightUseTime   = count($fightProcedure) * Fight::FIGHT_USE_TIME_BASE;
+    $fightResult = Fight::multiFight($userFightTeam, $monsterFightTeam);
+    /**此次战斗耗时 * **/
+    $fightUseTime   = $fightResult['use_time'];
 
-    $data = array(
-        'fight_procedure' => $fightProcedure
-    );
+    $data['fight_procedure'] =  $fightResult['fight_procedure'];
     $isUserAlive = $isMonsterAlive = FALSE;
     foreach ($userFightTeam as $userFight) {
         $isUserAlive = $userFight->isAlive() || $isUserAlive;
@@ -68,7 +70,6 @@ try {
     if(!$isUserAlive) {
         $msg    = '您被打败了';
     } else {
-        $data['fight_procedure']    = $fightProcedure;
         $data['experience']         = Monster::getMonsterExperience($monster);
         $data['money']              = Monster::getMonsterMoney($monster);
         $data['equipment_color']    = Monster::getMonsterEquipmentColor($monster);
