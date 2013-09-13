@@ -14,7 +14,7 @@ if(!$userId)
     echo "无法获得当前用户信息";
 }else{
 
-$interFace = 'user/getUserPackInfo';
+$interFace = 'pack/getUserPackInfo';
 $params = array('user_id' => $userId);
 $data = Curl::sendRequest($interFace, $params);
 

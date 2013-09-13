@@ -30,7 +30,7 @@ $friendInfo = User_Info::getUserInfoByUserId($friendId);
 if(!$friendInfo)
 {
 	$code = 1;
-    //$msg = '用户信息错误!或者已经超过40级!';
+    //$msg = '用户信息错误!';
     $msg = '3';
     die;
 }
@@ -46,7 +46,7 @@ if(empty($isFriend))
 }
 
 try {
-    //删除好友
+    //拒绝好友申请
     $data = Friend_Info::deleteFriendInfo($userId, $friendId);
     //减少声望
     $code = 0;
@@ -54,7 +54,7 @@ try {
     die;
 } catch (Exception $e) {
     $code = 1;
-    //$msg = '删除好友失败!';
+    //$msg = '拒绝申请失败!';
     $msg = '99';
     die;    
 }

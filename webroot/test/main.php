@@ -10,19 +10,25 @@ if($userId)
     $params = array('user_id' => $userId);
     $data = Curl::sendRequest($interFace, $params);
    	$data = json_decode($data, true);
-    if($data['c'] == 0)
+    if($data['c'] == 0 && is_array($data['d']))
     {
+    	$currentUserInfo = $data['d'];
     	setcookie('user_info', json_encode($data['d']),  time()+360000);
+    }else{
+    	echo '无法获得当前用户信息';
+	    exit;
     }
+}else{
+	$currentUserInfo = isset($_COOKIE['user_info'])?json_decode($_COOKIE['user_info'], true):'';
+
+	if(!$currentUserInfo)
+	{
+	    echo '无法获得当前用户信息';
+	    exit;
+	}
 }
 
-$currentUserInfo = isset($_COOKIE['user_info'])?json_decode($_COOKIE['user_info'], true):'';
 
-if(!$currentUserInfo)
-{
-    echo '无法获得当前用户信息';
-    exit;
-}
 
 ?>
 
