@@ -6,7 +6,7 @@ echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
 $act   = isset($_REQUEST['act'])?$_REQUEST['act']:'';
 //echo $act;
-$userInfo = json_decode($_REQUEST['user_info'], TRUE);
+$userInfo = json_decode($_COOKIE['user_info'], TRUE);
 $userId = $userInfo['user_id'];
 
 if(!$userId)
@@ -17,7 +17,9 @@ if(!$userId)
 $interFace = 'user/getUserPackInfo';
 $params = array('user_id' => $userId);
 $data = Curl::sendRequest($interFace, $params);
+
 $res = json_decode($data, TRUE);
+//print_r($res);
 $result = $res['d'];
 ?>
 

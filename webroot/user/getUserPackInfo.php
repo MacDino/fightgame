@@ -15,10 +15,15 @@ if(!$userId)
 
 try {
     //背包中全部装备
-    $data = Equip_Info::getEquipListByUserId($userId);
+    $res = Equip_Info::getEquipListByUserId($userId);
+    foreach ($res as $i=>$key){
+    	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
+    	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
+    }
+    $data = $res;
     $code = 0;
     $msg = 'ok';
-    die;
+//    die;
 } catch (Exception $e) {
     $code = 1;
     $msg = '99';

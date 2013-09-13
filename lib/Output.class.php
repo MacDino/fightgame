@@ -3,7 +3,7 @@ class Output {
     
     public static function generalOutPut()
     {   
-        global $code, $data, $doNotPut;
+        global $code, $data, $msg, $doNotPut;
         if($doNotPut)return;
         $code   = intval ( $code );
         echo self::outputJson ( $code, $data );

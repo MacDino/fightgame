@@ -4,7 +4,7 @@ class Test
 {
     public static function getMacAddress()
     {
-        switch(PHP_OS){
+        /*switch(PHP_OS){
             case 'WIN32':
             case 'WINNT':
             case 'Windows':
@@ -26,13 +26,13 @@ class Test
             
             }   
         
-        }
+        }*/
         return 'EC:6C:9F:0E:A4:36';
     }
 
     private static function _getWindowMacAddress()
     {
-        @exec("ipconfig /all", $macAddress); 
+       /* @exec("ipconfig /all", $macAddress); 
         if($macAddress)
         {
             return $macAddress;
@@ -45,7 +45,8 @@ class Test
               @exec($_SERVER["WINDIR"]."\system\ipconfig.exe /all", $macAddress);
             } 
             return $macAddress;
-        }
+        }*/
+        return 'EC:6C:9F:0E:A4:36';
     }
 
     private static function _getLinuxMacAddress()

@@ -5,8 +5,7 @@ error_reporting(2047);
 
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 try {
-	$res = Equip_Info::getEquipListByUserId($userId);
-    var_dump($res);
+	$data = Equip_Info::getEquipListByUserId($userId);
 	$code = 0;
 	$msg = 'OK';
 } catch (Exception $e) {

@@ -3,10 +3,10 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $doNotPut = TRUE;
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-
+//var_dump($_COOKIE['user_info']);
 $act   = isset($_REQUEST['act'])?$_REQUEST['act']:'';//动作
 //echo $act;
-$userInfo = json_decode($_REQUEST['user_info'], TRUE);
+$userInfo = json_decode($_COOKIE['user_info'], TRUE);
 $userId = $userInfo['user_id'];
 
 if($userId)
@@ -45,10 +45,13 @@ if($userId)
 			echo "<script>alert('添加失败');location.href='friend.php'</script>";
 		}
 	}else{
+		
 		$interFace = 'friend/listFriend';
 	    $params = array('user_id' => $userId);
 	    $data = Curl::sendRequest($interFace, $params);
+//	    var_dump($data);//
 		$res = json_decode($data, TRUE);
+//		var_dump($res);exit;
 		$result = $res['d'];
 	
     

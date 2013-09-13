@@ -16,7 +16,7 @@ if(!$userId)
 
 try {
     //显示好友
-    $data = Friend_Info::getFriendInfo($userId);
+    $data = Friend_Info::getApplyFriendInfo($userId);
 //    print_r($data);
 //    var_dump($data);exit;
     $code = 0;

@@ -94,6 +94,7 @@ class User_Info
      */
 	public static function getUserInfoFightAttribute($userId, $needvalue = FALSE){
 		//属性点
+//		echo $userId;exit;
 		$baseAttribute = array(
 			ConfigDefine::USER_ATTRIBUTE_POWER			=> 0,//力量
 			ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER	=> 0,//魔力
