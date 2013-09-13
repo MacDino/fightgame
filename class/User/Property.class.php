@@ -30,10 +30,9 @@ class User_Property{
 		
 		//是否有足够元宝
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-//		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
+		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
 		
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + 1 WHERE user_id = $userId AND property_id = $type";
-//		echo $sql;exit;
 		$res = MySql::query($sql);
 	}
 	
@@ -66,11 +65,22 @@ class User_Property{
 		$num = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type), array('property_num'));
 		return $num['property_num'];
 	}
-	
-	public static function createPropertylist($userId, $type){
+
+	/*
+	 * 获取某个道具详情
+	 */
+	public static function getPropertyInfo($userId, $type)
+	{
 		if(!$userId || !$type)return FALSE;
 		
-		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type));
+		$propert = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type));
+		return $propert;
+	}
+	
+	public static function createPropertylist($userId, $type, $num){
+		if(!$userId || !$type)return FALSE;
+		
+		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type, 'num' => $num,'last_time' => time()));
 		return $res;
 	}
 	
