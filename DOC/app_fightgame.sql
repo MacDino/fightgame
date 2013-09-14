@@ -304,13 +304,13 @@ LOCK TABLES `map_skill` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `property_info`
+-- Table structure for table `user_props`
 --
 
-DROP TABLE IF EXISTS `property_info`;
+DROP TABLE IF EXISTS `user_props`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `property_info` (
+CREATE TABLE `user_props` (
   `user_id` int(11) NOT NULL,
   `property_id` tinyint(1) NOT NULL COMMENT '道具ID',
   `property_num` int(3) DEFAULT '0' COMMENT '道具数量',
@@ -320,13 +320,13 @@ CREATE TABLE `property_info` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `property_info`
+-- Dumping data for table `user_props`
 --
 
-LOCK TABLES `property_info` WRITE;
-/*!40000 ALTER TABLE `property_info` DISABLE KEYS */;
-INSERT INTO `property_info` VALUES (27,1,0,NULL),(27,2,0,NULL),(27,3,0,NULL),(28,1,0,NULL),(28,2,0,NULL),(28,3,0,NULL),(29,1,0,NULL),(29,2,0,NULL),(29,3,0,NULL),(30,1,0,NULL),(30,2,0,NULL),(30,3,0,NULL),(31,1,0,NULL),(31,2,0,NULL),(31,3,0,NULL),(32,1,0,NULL),(32,2,0,NULL),(32,3,0,NULL),(33,1,0,NULL),(33,2,0,NULL),(33,3,0,NULL),(34,1,0,NULL),(34,2,0,NULL),(34,3,0,NULL),(35,1,0,NULL),(35,2,0,NULL),(35,3,0,NULL),(36,1,0,NULL),(36,2,0,NULL),(36,3,0,NULL),(37,1,0,NULL),(37,2,0,NULL),(37,3,0,NULL),(38,1,0,NULL),(38,2,0,NULL),(38,3,0,NULL),(39,1,0,NULL),(39,2,0,NULL),(39,3,0,NULL);
-/*!40000 ALTER TABLE `property_info` ENABLE KEYS */;
+LOCK TABLES `user_props` WRITE;
+/*!40000 ALTER TABLE `user_props` DISABLE KEYS */;
+INSERT INTO `user_props` VALUES (27,1,0,NULL),(27,2,0,NULL),(27,3,0,NULL),(28,1,0,NULL),(28,2,0,NULL),(28,3,0,NULL),(29,1,0,NULL),(29,2,0,NULL),(29,3,0,NULL),(30,1,0,NULL),(30,2,0,NULL),(30,3,0,NULL),(31,1,0,NULL),(31,2,0,NULL),(31,3,0,NULL),(32,1,0,NULL),(32,2,0,NULL),(32,3,0,NULL),(33,1,0,NULL),(33,2,0,NULL),(33,3,0,NULL),(34,1,0,NULL),(34,2,0,NULL),(34,3,0,NULL),(35,1,0,NULL),(35,2,0,NULL),(35,3,0,NULL),(36,1,0,NULL),(36,2,0,NULL),(36,3,0,NULL),(37,1,0,NULL),(37,2,0,NULL),(37,3,0,NULL),(38,1,0,NULL),(38,2,0,NULL),(38,3,0,NULL),(39,1,0,NULL),(39,2,0,NULL),(39,3,0,NULL);
+/*!40000 ALTER TABLE `user_props` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

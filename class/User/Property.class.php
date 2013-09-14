@@ -1,7 +1,7 @@
 <?php
 class User_Property{
 	
-	CONST TABLE_NAME = 'property_info';
+	CONST TABLE_NAME = 'user_props';
 	
 	/** 属性增强咒符*/
 	CONST ATTRIBUTE_ENHANCE = 1;
@@ -20,11 +20,33 @@ class User_Property{
 	//上古遗迹没考虑清楚,暂时没做
 	
 	/**
-	 * @param int $userId	用户ID
-	 * @param int $type		符咒类别
-	 * @return 购买符咒
+	 * 购买符咒
 	 */
-	public static function addAmulet($userId, $type)
+	public static function buyProps($userId, $propsId, $num){
+		if(!$userId || !$type)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		$propsInfo = Props_Info::getPropsInfo($propsId);
+		$price = $propsInfo['price'] * $num;
+		if($userInfo['ingot'] < $price) {
+			throw new Exception('您的元宝数不足,无法购买',1);	
+		}
+		/*
+		 * 扣除元宝
+		 */
+		$res = self::addAmulet($userId, $propsId, $num);
+		if($res){
+			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '-');
+			return $decreingot;
+		} 
+		return false;
+	}
+
+	
+
+	/*
+	 * 增加为用户增加道具
+	 */
+	public static function addAmulet($userId, $type, $num)
 	{
 		if(!$userId || !$type)return FALSE;
 		
@@ -32,7 +54,7 @@ class User_Property{
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
 		
-		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + 1 WHERE user_id = $userId AND property_id = $type";
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + " . $num . " WHERE user_id = $userId AND property_id = $type";
 		$res = MySql::query($sql);
 	}
 	
@@ -77,6 +99,9 @@ class User_Property{
 		return $propert;
 	}
 	
+	/*
+	 *  创建用户时做初始化
+	 */
 	public static function createPropertylist($userId, $type, $num){
 		if(!$userId || !$type)return FALSE;
 		

@@ -186,7 +186,14 @@ class Shop_IAPProduct{
 					if(!$propert){
 						$res = User_Property::createPropertylist($userId, $props_id, $num);
 					} else {
-						$res = User_Property::addAmulet($userId, $props_id);
+						/*
+						 * 处理pk咒符和其他咒符的不同入库表
+						 */
+						if($v2['is_pk'] && isset($v2['is_pk'])){
+						  $res = User_Info::updateSingleInfo($userId, 'pk_num', $num, '+');	
+						} else {
+							$res = User_Property::addAmulet($userId, $props_id, $num);
+						}
 					}
 				}				
 			} else if ($k == Props_Config::KEY_INGOT){
