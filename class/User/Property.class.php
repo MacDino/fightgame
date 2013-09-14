@@ -3,30 +3,36 @@ class User_Property{
 	
 	CONST TABLE_NAME = 'user_props';
 	
-	/** 属性增强咒符*/
-	CONST ATTRIBUTE_ENHANCE = 1;
-	CONST ATTRIBUTE_ENHANCE_PRICE = 10;
 	/** 双倍咒符 */
-	CONST DOUBLE_HARVEST = 2;
-	CONST DOUBLE_HARVEST_PRICE = 10;
+	CONST DOUBLE_HARVEST = 1;
+	CONST DOUBLE_HARVEST_PRICE = 20;
+
+	/** 属性增强咒符*/
+	CONST ATTRIBUTE_ENHANCE = 3;
+	CONST ATTRIBUTE_ENHANCE_PRICE = 20;
 	/** 挂机咒符 */
-	CONST AUTO_FIGHT = 3;
-	CONST AUTO_FIGHT_PRICE = 10;
-	/** 装备打造咒符 */
-	CONST EQUIP_FORGE = 4;
+	CONST AUTO_FIGHT = 6;
+	CONST AUTO_FIGHT_PRICE = 50;
+	/** 锻造成功咒符 */
+	CONST EQUIP_FORGE = 8;
+	CONST EQUIP_FORGE_PRICE = 100;
 	/** 装备成长咒符 */
-	CONST EQUIP_GROW = 5;
+	CONST EQUIP_GROW = 9;
 	
 	//上古遗迹没考虑清楚,暂时没做
 	
 	/**
-	 * 购买符咒
+	 * 购买符咒   适用于属性增强、双倍、挂机、装备打造、装备成长等咒符
+	 * pk咒符、背包上限需要各自调用自己的接口
 	 */
-	public static function buyProps($userId, $propsId, $num){
+	public static function buyUserProps($userId, $propsId, $num){
 		if(!$userId || !$type)return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		$propsInfo = Props_Info::getPropsInfo($propsId);
 		$price = $propsInfo['price'] * $num;
+		if(!$num || $num < 0 || !is_numeric($num)){
+			throw new Exception('购买数量不正确', 1);
+		}
 		if($userInfo['ingot'] < $price) {
 			throw new Exception('您的元宝数不足,无法购买',1);	
 		}
@@ -100,7 +106,7 @@ class User_Property{
 	}
 	
 	/*
-	 *  创建用户时做初始化
+	 *  创建用户时做初始化道具
 	 */
 	public static function createPropertylist($userId, $type, $num){
 		if(!$userId || !$type)return FALSE;
@@ -325,11 +331,25 @@ class User_Property{
 	}
 	
 	/**
-	 * 装备成长咒符
+	 * 使用锻造成功咒符
 	 */
+	public static function useEquipForge($userId)
+	{
+		if(!$userId){
+			throw new Exception('缺少用户id', 1);
+		}
+		//是否还有存数
+		$isHave = self::getPropertyNum($userId, self::EQUIP_FORGE);
+		if(!$isHave || empty($isHave)){
+			throw new Exception('该道具数量不足，您无法使用', 1);	
+		}
+		$res_num = self::UseAmulet($userId, self::EQUIP_FORGE);
+		return $res;
+	}
+	
 	
 	/**
-	 * 装备打造咒符
+	 * 装备成长咒符
 	 */
 		
 	/**
