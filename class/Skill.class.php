@@ -1,7 +1,7 @@
 <?php
 //技能
 class Skill
-{      
+{
     CONST SKILL_GROUP_WLGJ = 1;//物理攻击
     CONST SKILL_GROUP_FSGJ = 2;//法术攻击
     CONST SKILL_GROUP_BDJN = 3;//被动技能
@@ -9,7 +9,7 @@ class Skill
 
     CONST DEFAULT_SKILL_POINT   = 3;//默认用户拥有的技能点
 
-    /** 
+    /**
      * 技能array(技能缩写code,所属分组，消耗魔法值)
      *
      * */
@@ -121,7 +121,7 @@ class Skill
     //用户技能等级上限
     public static function skillLevelLimit($userLevel = 0)
     {
-        return $userLevel + 10; 
+        return $userLevel + 10;
     }
     //技能释放概率，基本释放概率和最高释放概率
     public static function skillUseProbability()
@@ -230,7 +230,7 @@ class Skill
      */
     public static function useSkill($skill_code, $skill_level, $data, $op_data){
         //成长属性
-        //$attributes = User_Attributes::getInfoByRaceAndLevel($role_info['race_id'], $role_info['user_level'], TRUE); 
+        //$attributes = User_Attributes::getInfoByRaceAndLevel($role_info['race_id'], $role_info['user_level'], TRUE);
         //技能加成属性
         //$attributes = self::getRoleAttributesWithSkill($data['attributes'], $data['skills']);
         //怪物加成

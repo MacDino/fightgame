@@ -5,11 +5,11 @@ class User_Race
     CONST RACE_HUMAN        = 1;//人族
     CONST RACE_TSIMSHIAN    = 2;//仙族
     CONST RACE_DEMON        = 3;//魔族
-    
+
     /**
      * 获取种族升级属性加成
-     * @param int	 $raceId	种族ID	
-     * @return array	
+     * @param int	 $raceId	种族ID
+     * @return array
      */
     public static function getDefaultAttributes($raceId)
     {
@@ -20,7 +20,7 @@ class User_Race
         }
         return FALSE;
     }
-    
+
     /**
      * 获取种族升级属性加成
      * @param int	 $raceId	种族ID
@@ -35,7 +35,7 @@ class User_Race
         }
         return FALSE;
     }
-    
+
     /**
      * 随机一把种族
      * @return int
@@ -75,7 +75,7 @@ class User_Race
         }elseif($raceId == self::RACE_TSIMSHIAN){
             $growUpAttributes = User_RaceConfig::tsimshianGrowUpAttributesFormula($userAttributes);
         }elseif($raceId == self::RACE_DEMON){
-            $growUpAttributes = User_RaceConfig::demonGrowUpAttributesFormula($userAttributes); 
+            $growUpAttributes = User_RaceConfig::demonGrowUpAttributesFormula($userAttributes);
         }
         return $growUpAttributes;
     }

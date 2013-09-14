@@ -26,7 +26,7 @@ class Skill_Config
         $hurt       = 0;
         $const  = Skill_Common::wlgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
         extract($const);
-        $hurt       = $hurt + $rand5 + $attributes[ConfigDefine::USER_ATTRIBUTE_HIT] / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + 4 * $attributes['skill_level'] + $randPower;  
+        $hurt       = $hurt + $rand5 + $attributes[ConfigDefine::USER_ATTRIBUTE_HIT] / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + 4 * $attributes['skill_level'] + $randPower;
         $hurt       = $hurt * $rate;
         $hurt_all   = 1.5 * $hurt - 3 * $attributes['op_defense'];
         /*
@@ -36,7 +36,7 @@ class Skill_Config
          */
         return $hurt_all;
     }
-    
+
     /**
      * @desc 灵犀一指技能公式
      *
@@ -47,12 +47,12 @@ class Skill_Config
         $hurt   = 0;
         $const  = Skill_Common::wlgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
         extract($const);
-        $hurt   = $hurt + $rand5 + ($attributes[ConfigDefine::USER_ATTRIBUTE_HIT] + 4 * $attributes['skill_level']) / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + 2 * $attributes['skill_level'] + $randPower; 
+        $hurt   = $hurt + $rand5 + ($attributes[ConfigDefine::USER_ATTRIBUTE_HIT] + 4 * $attributes['skill_level']) / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + 2 * $attributes['skill_level'] + $randPower;
         $hurt   = $hurt * $rate;
         $hurt   = $hurt - $attributes['op_defense'] + (20 + 4 * $attributes['skill_level']);
         return $hurt;
     }
-   
+
     /**
      * @desc 三味真火技能公式
      *
@@ -112,7 +112,7 @@ class Skill_Config
      */
     public static function wfxSkillFormula($attributes){
         //增加自身属性
-        $attrAdd[ConfigDefine::USER_ATTRIBUTE_BLOOD]    = 0.01 * $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD]; 
+        $attrAdd[ConfigDefine::USER_ATTRIBUTE_BLOOD]    = 0.01 * $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD];
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_DODGE]    = 0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_DODGE];
         $attrAdd[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]  = -0.005 * $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
         return $attrAdd;
