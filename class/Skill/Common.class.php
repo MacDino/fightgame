@@ -19,7 +19,7 @@ class Skill_Common {
      */
     public static function fsgjConst($role_level, $hurt){
         $const              = array();
-        $const['rand5']     = self::rand5RoleLevel($role_level); 
+        $const['rand5']     = self::rand5RoleLevel($role_level);
         $rate   = PerRand::getRandValue(array(0, 0.05));
         $const['rate']      = 2 * $rate;
         $const['hurt_rand'] = PerRand::getRandValue(array(0.03 * $hurt, 0.09 * $hurt));
@@ -38,7 +38,7 @@ class Skill_Common {
                 $result[] = PerRand::getRandValue($rand_key);
                 $rands --;
             }
-            if(sort($result)){
+            if(rsort($result)) {
                 //小数点是否处理 todo
                 $return = ($result[1] + $result[2] + $result[3]) / 3;
             }
@@ -51,7 +51,7 @@ class Skill_Common {
      */
     public static function randPower($power){
         $return = 0;
-        if(!empty($level) && $power > 0){
+        if(!empty($power) && $power > 0){
             $rand_key   = array(0, $power);
             $return     = PerRand::getRandValue($rand_key);
         }

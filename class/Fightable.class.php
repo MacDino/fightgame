@@ -271,7 +271,7 @@ class Fightable {
 
 		//检查是否命中
 		if ($this->magicHit() - $target->magicDodge() >= 1) {
-			$skill_level = $this->skills['attack'][$skill_id];
+			$skill_level = $this->skills['attack']['list'][$skill_id];
 			return Skill::useSkill($skill_id, $skill_level, $this->getFightParameters(), $target->getFightParameters());
 		}
 
