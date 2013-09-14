@@ -81,10 +81,11 @@ class Skill
     {
         $skillGroupList = array(
             self::SKILL_GROUP_WLGJ => array(ConfigDefine::SKILL_ZJ, ConfigDefine::SKILL_LSYZ,),
-            self::SKILL_GROUP_FSGJ => array(ConfigDefine::SKILL_SWZH, ConfigDefine::SKILL_HFHY, ConfigDefine::SKILL_WLJ,),
+            self::SKILL_GROUP_FSGJ => array(ConfigDefine::SKILL_SWZH, ConfigDefine::SKILL_HFHY, ConfigDefine::SKILL_WLJ,  ConfigDefine::SKILL_LXYZ),
             self::SKILL_GROUP_BDJN => array(ConfigDefine::SKILL_WFX, ConfigDefine::SKILL_FFX, ConfigDefine::SKILL_GX, ConfigDefine::SKILL_FX, ConfigDefine::SEILL_DZ,),
             self::SKILL_GROUP_FYJN => array(ConfigDefine::SKILL_FY, ConfigDefine::SKILL_FJ, ConfigDefine::SKILL_FD),
         );
+        return $skillGroupList;
     }
     //获取技能分组
     public static function getSkillGroupBySkillCode($skill_code){
@@ -239,9 +240,9 @@ class Skill
         $op_attributes  = $op_data['attributes'];
 
         //使用技能
-        if($skill_code){
+        if($skill_code) {
             //构造额外需要参数
-            $attributes['role_level']   = $data['level'];
+            $attributes['user_level']   = $data['level'];
             $attributes['skill_level']  = $skill_level;
             $attributes['op_defense']   = $op_attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE];
             $attributes['op_psychic']   = $op_attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
@@ -250,7 +251,8 @@ class Skill
             } else {
                 $skill      = $skill_code;
             }
-            return call_user_func(array('Skill_Config', $skill.'SkillFormula'), $attributes);
+            $result = call_user_func_array(array('Skill_Config', $skill.'SkillFormula'), $attributes);
+            return $result;
         } else {
             //普通攻击
             return $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] - $op_attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE];
@@ -338,5 +340,10 @@ class Skill
         }
 
         return $data;
+    }
+
+    public static function getSkillMagic($skillId) {
+        $magic = self::$skill_info[$skillId][2];
+        return $magic > 0 ? $magic : 0;
     }
 }

@@ -10,11 +10,10 @@ class Skill_Config
     public static function zjSkillFormula($attributes){
         $hurt   = 0;
         $const  = Skill_Common::wlgjConst($attributes['user_level'], $attributes[ConfigDefine::USER_ATTRIBUTE_POWER]);
-        extract($const);
-        $hurt   = $hurt + $rand5 + ($attributes[ConfigDefine::USER_ATTRIBUTE_HIT] + 12 * $attrubutes['skill_level']) / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + $randPower;
-        $hurt   = $hurt * $rate;
+        $hurt   = $rand5 + ($attributes[ConfigDefine::USER_ATTRIBUTE_HIT] + 4 * $attrubutes['skill_level']) / 3 + $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] + $randPower;
+        $hurt   = $hurt * $const['rate'];
         $hurt   = $hurt - $attributes['op_defense'];
-        $hurt   = $hurt * (1.5 + 0.01 * $attributes['skill_level']);
+        $hurt   = $hurt * (1.2 + 0.05 * $attributes['skill_level']);
         return $hurt;
     }
 
