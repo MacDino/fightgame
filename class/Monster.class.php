@@ -160,14 +160,11 @@ class Monster
 		return $ret;
 	}
 
-	public static function fightable($monster)
-	{
-		$skill = self::getMonsterSkill($monster);
-		$attribute = self::getMonsterAttribute($monster, $skill);
-
+	public static function fightable($monster) {
+		$skill      = self::getMonsterSkill($monster);
+		$attribute  = self::getMonsterAttribute($monster, $skill);
 		//技能加成后的属性
-		$attribute = self::attributeWithSkill($attribute, $skill);
-
+		$attribute  = self::attributeWithSkill($attribute, $skill);
 		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
 	}
 
