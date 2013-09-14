@@ -28,6 +28,30 @@ class Shop_IAPPurchaseLog{
 
 	public static function update($log_id, $data){
 		$res = MySql::update(self::TABLE_NAME, $data, array('user_id' => $log_id));
+		return $res;
 	}
 
+	/*
+	 * 获取购买记录列表
+	 */
+	public static function getPurchaseLogByUserIdAndProductId($user_id, $product_id){
+		$where = array(
+			'user_id' 	=> $user_id,
+			'product_id'=> $product_id,
+			'verify_status' => self::VERIFY_SUCCESS_STATUS,	
+		);	
+		$sort = array(
+			'ctime DESC'	
+		);
+		$res = MySql::select(self::TABLE_NAME, $where, $sort);
+		return $res;
+	} 
+
+	/*
+	 * 获取最后一次购买记录
+	 */
+	public static function getLastOne($user_id, $product_id){
+		$res = self::getPurchaseLogByUserIdAndProductId($user_id, $product_id);
+		return !empty($res) ? $res[0] : array();	
+	}
 }

@@ -1,4 +1,7 @@
 <?php
+/*
+ * 购买凭证验证接口
+ */
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 /*
  *  verify_data:
