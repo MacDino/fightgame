@@ -12,4 +12,13 @@ class Props_Info{
 		return $res;
 	}
 
+	/*
+	 *  产品详情
+	 */
+	public static function getPropsInfo($propsId){
+		if(!is_numeric($productId))return FALSE;
+		$res = MySql::selectOne(self::TABLE_NAME, array('props_id' => $propsId));
+		return $res;
+	}
+
 }
