@@ -7,8 +7,10 @@ class Skill_Common {
         $const              = array();
         $const['rand5']     = self::rand5RoleLevel($role_level); 
         $const['randPower'] = self::randPower(0.05 * $power); 
-        $rate   = PerRand::getRandValue(array(0, 0.05));
-        $const['rate']      = 2 * $rate;
+        $rateValue = 1;
+        $rateKey = PerRand::getRandResultKey(array(0.005));
+        if($rateKey)$rateValue = 2;
+        $const['rate']      = $rateValue;
         return $const;
     }
 
@@ -33,7 +35,7 @@ class Skill_Common {
             $rand_key   = array(0, $level);
             $result     = array();
             while($rands){
-                $result = PerRand::getRandValue($rand_key);
+                $result[] = PerRand::getRandValue($rand_key);
                 $rands --;
             }
             if(sort($result)){
