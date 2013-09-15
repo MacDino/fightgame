@@ -29,9 +29,20 @@ class Props_Config{
 		self::KEY_INGOT => 100 ,
 	);
 
-	public static $props = array(
-		array(
-			
-		)	
-	);
+
+	/*
+	 * 装备成长符价格表
+	 * key : user level
+	 * value : price
+	 */
+	public static $equip_grow_price = array(
+		30 => 2000,
+		40 => 3000,
+		50 => 4000,
+		60 => 5000,		
+		70 => 6000,
+		80 => 7000,
+		90 => 8000,
+	); 
+
 }

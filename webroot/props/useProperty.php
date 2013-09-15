@@ -2,7 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
-$props_id	     	= isset($_REQUEST['props_id'])?(int)$_REQUEST['props_id']:'';//道具ID
+$propsId	    = isset($_REQUEST['props_id'])?(int)$_REQUEST['props_id']:'';//道具ID
 if(!$userId || !$props_id)
 {
     $code = 1;
@@ -10,7 +10,7 @@ if(!$userId || !$props_id)
     die;
 }
 try{
-	switch ($props_id){
+	switch ($propsId){
 		case User_Property::ATTRIBUTE_ENHANCE:
 			$data = User_Property::useAttributeEnhance($userId);
 			break;
@@ -23,8 +23,10 @@ try{
 		case User_Property::EQUIP_FORGE:
 			$data = User_Property::useEquipForge($userId);
 			break;
-
-
+		case User_Property::EQUIP_GROW:
+			$equipId = isset($_REQUEST['equip_id'])?(int)$_REQUEST['equip_id']:'';
+			$data = User_Property::useEquipGrow($userId, $equipId);
+			break;
 	}
 } catch (Exception $e){
 	$code = $e->getCode();

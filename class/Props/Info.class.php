@@ -2,6 +2,8 @@
 class Props_Info{
 	
 	const TABLE_NAME = "props";
+	const PRICE_TYPE_STATIC　= 1;
+	const PRICE_TYPE_DYNAMIC = 2;
 
 	public static function getPropsListByCateId($cateId){
 		if(!$cateId) return false;
