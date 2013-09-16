@@ -12,11 +12,11 @@ if(!(is_array($userInfo) && count($userInfo))) {
     $msg  = '找不到用户';
     exit();
 }
-if($userInfo['user_level'] < 30) {
-    $code =1 ;
-    $msg  = '等级不够';
-    exit();
-}
+//if($userInfo['user_level'] < 30) {
+//    $code =1 ;
+//    $msg  = '等级不够';
+//    exit();
+//}
 //获取此用户挑战次数
 //@todo
 $challengeTimes = 5;
@@ -25,7 +25,6 @@ if($challengeTimes <= 0) {
     $msg  = '没有挑战次数了';
     exit();
 }
-
 $userFightTeam[] = User_Info::fightable($userId, $userInfo['user_id']);
 $userPetInfo    = array('user_id' => 27);
 if(is_array($userPetInfo) && count($userPetInfo)) {

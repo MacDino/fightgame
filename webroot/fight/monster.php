@@ -35,9 +35,9 @@ $monsterFightTeam[] = Monster::fightable($monster);
 $data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
 /**当前角色fight对象，如果有人宠，获取人宠**/
 $userInfo           = User_Info::getUserInfoByUserId($userId);
-$userFightTeam[]    = User_Info::fightable($userId, $userInfo['user_level']);
+$userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level']);
 
-$data['user'] = Fight::getPeopleFightInfo($userFightTeam[0]);
+$data['user']       = Fight::getPeopleFightInfo($userFightTeam[0]);
 
 if($userInfo['user_level'] > 40) {
     /**
@@ -48,7 +48,7 @@ if($userInfo['user_level'] > 40) {
     if(is_array($userPetInfo) && count($userPetInfo)) {
         $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
         //人宠进入队伍
-        $userFightTeam[] = User_Info::fightable($userPetInfo['user_id'], $userPetInfo['user_level']);
+        $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
         $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
     }
 }
