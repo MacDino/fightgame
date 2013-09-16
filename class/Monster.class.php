@@ -162,15 +162,6 @@ class Monster
 		return $ret;
 	}
 
-	public static function fightable($monster) {
-		$skill      = self::getMonsterSkill($monster);
-		$attribute  = self::getMonsterAttribute($monster);
-		//技能加成后的属性
-		$attribute  = array_map('intval', array_map('round',self::attributeWithSkill($attribute, $skill)));
-        //对各数据进行四舍五入取整
-		$attribute  = array_map('intval', array_map('round',(array)$attribute));
-		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
-	}
 
     /**
      * 对怪物的成长属性进行技能的加成

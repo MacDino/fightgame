@@ -183,56 +183,22 @@ class Fight {
     /**
      * @desc 根据user_id生成战斗对象
      */
-    public static function createUserFightable($user_id, $user_level, $isHelpfull = FALSE, $isHarmfull = FALSE){
-        //基本属性 成长属性 装备属性
-        $all_attr       = User_Info::getUserInfoFightAttribute($user_id);
+    public static function createUserFightable($user_id, $user_level, $isHelpfull = FALSE, $isHarmfull = FALSE) {
         $skill_list     = Skill_Info::getSkillList($user_id);
-        //技能属性加成
-        $all_attr       = Skill::getRoleAttributesWithSkill($all_attr, $skill_list);
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($user_id, TRUE);
 
         $fight_skill    = Skill::getFightSkillList($skill_list);
         return new Fightable($user_level, $attrbuteArr, $fight_skill, array('user_id' => $user_id));
     }
 
-    /**
-     * 战斗时，
-     * 同队相生时，所增加的基础属性点加成
-     * **/
-    public static function helpfullBaseAttribute($attribute) {
-        if(is_array($attribute)) {
-            $baseAttributeKey = self::getBaseAttributeKey();
-            foreach ($attribute as $key => $value) {
-                if(in_array($key, $baseAttributeKey)) {
-                    $attribute[$key] = number_format(($value*103)/100, 2, '.', '');
-                }
-            }
-        }
-        return $attribute;
-    }
-    /**
-     * 战斗时，
-     * 异队相克时，所减少的基础属性点加成
-     * **/
-    public static function harmfullBaseAttribute($attribute) {
-        if(is_array($attribute)) {
-            $baseAttributeKey = self::getBaseAttributeKey();
-            foreach ($attribute as $key => $value) {
-                if(in_array($key, $baseAttributeKey)) {
-                    $attribute[$key] = number_format(($value*97)/100, 2,'.','');
-                }
-            }
-        }
-        return $attribute;
-    }
 
-    private static function getBaseAttributeKey() {
-        return array(
-            ConfigDefine::USER_ATTRIBUTE_POWER,
-            ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER,
-            ConfigDefine::USER_ATTRIBUTE_PHYSIQUE,
-            ConfigDefine::USER_ATTRIBUTE_ENDURANCE,
-            ConfigDefine::USER_ATTRIBUTE_QUICK,
-        );
-    }
+	public static function createMonsterFightable($monster) {
+		$skill      = Monster::getMonsterSkill($monster);
+		$attribute  = Monster::getMonsterAttribute($monster);
+		//技能加成后的属性
+		$attribute  = array_map('intval', array_map('round',  Monster::attributeWithSkill($attribute, $skill)));
+        //对各数据进行四舍五入取整
+		$attribute  = array_map('intval', array_map('round',(array)$attribute));
+		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
+	}
 }

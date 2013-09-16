@@ -12,7 +12,7 @@ if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
 }
-$userLastResult     = Fight_Result::getResult($userId, $mapId);
+//$userLastResult     = Fight_Result::getResult($userId, $mapId);
 if(is_array($userLastResult) && count($userLastResult)) {
     $accessDiffTime = time() - $userLastResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastResult['use_time']) {
@@ -28,32 +28,33 @@ if($mapId <=0 ) {
     $code = 1; $msg = '请选择对应地图';
     exit();
 }
-/**初始化一个怪物**/
-$monster            = Map::getMonster($mapId);
-
-$monsterFightTeam[] = Monster::fightable($monster);
-$data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
-/**当前角色fight对象，如果有人宠，获取人宠**/
-$userInfo           = User_Info::getUserInfoByUserId($userId);
-$userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level']);
-
-$data['user']       = Fight::getPeopleFightInfo($userFightTeam[0]);
-
-if($userInfo['user_level'] > 40) {
-    /**
-     * 获取人宠
-     * @todo 获取郑毅锋的接口数据
-     * **/
-    $userPetInfo    = array('user_id' => 27);
-    if(is_array($userPetInfo) && count($userPetInfo)) {
-        $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
-        //人宠进入队伍
-        $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
-        $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
-    }
-}
 
 try {
+    /**初始化一个怪物**/
+    $monster            = Map::getMonster($mapId);
+
+    $monsterFightTeam[] = Fight::createMonsterFightable($monster);
+    $data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
+    /**当前角色fight对象，如果有人宠，获取人宠**/
+    $userInfo           = User_Info::getUserInfoByUserId($userId);
+    $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level']);
+
+    $data['user']       = Fight::getPeopleFightInfo($userFightTeam[0]);
+
+    if($userInfo['user_level'] > 40) {
+        /**
+         * 获取人宠
+         * @todo 获取郑毅锋的接口数据
+         * **/
+        $userPetInfo    = array('user_id' => 27);
+        if(is_array($userPetInfo) && count($userPetInfo)) {
+            $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
+            //人宠进入队伍
+            $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
+            $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
+        }
+    }
+
     /**进入多人对单怪的战斗**/
     $fightResult = Fight::multiFight($userFightTeam, $monsterFightTeam);
     /**此次战斗耗时 * **/
@@ -74,8 +75,11 @@ try {
         $data['money']              = Monster::getMonsterMoney($monster);
         $data['equipment_color']    = Monster::getMonsterEquipmentColor($monster);
         $msg                        = '怪物已消灭';
+        User_Info::addExperience($userId, $data['experience']);
+//        $data['level_up'] = User_Info::isLevel($userId);
+        User_Info::addMoney($userId, $data['money']);
+
         /**
-         * @todo 经验和金钱数据入用户库里
          * @todo 装备计算以及装备数据入用户库里
          * **/
     }
