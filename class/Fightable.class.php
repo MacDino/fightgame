@@ -138,8 +138,7 @@ class Fightable {
 		}
 
 		//连击后进入休息状态
-//		if (Skill::isLj($skill_id))没有此方法
-		if (FALSE) {
+		if (Skill::isLj($skill_id)) {
 			$this->setSleep();
 		}
 

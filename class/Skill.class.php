@@ -279,6 +279,14 @@ class Skill
         }
         return FALSE;
     }
+
+    public static function isLj($skillId) {
+        if($skillId == ConfigDefine::SKILL_LJ) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
     /**
      * @desc 判断出发的防御技能与当前攻击技能是否抵消
      */
