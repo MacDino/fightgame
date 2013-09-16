@@ -73,15 +73,18 @@ try {
     } else {
         $data['experience']         = Monster::getMonsterExperience($monster);
         $data['money']              = Monster::getMonsterMoney($monster);
-        $data['equipment_color']    = Monster::getMonsterEquipmentColor($monster);
+        $data['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['experience']);
 //        $data['level_up'] = User_Info::isLevel($userId);
         User_Info::addMoney($userId, $data['money']);
 
-        /**
-         * @todo 装备计算以及装备数据入用户库里
-         * **/
+        if(is_array($data['equipment']) && count($data['equipment'])) {
+            foreach ($data['equipment'] as $equipment) {
+                Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
+            }
+        }
+
     }
 	$code   = 0;
 } catch (Exception $e) {

@@ -86,10 +86,10 @@ class Monster_PrefixConfig
 		Monster::MONSTER_PREFIX_QUICK => array(
 			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
-				ConfigDefine::USER_ATTRIBUTE_POWER       => 1.5,//力量
-				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.5,//魔力
-				ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 1.5,//体质
-				ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 1.5,//耐力
+				ConfigDefine::USER_ATTRIBUTE_POWER       => 1.25,//力量
+				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.25,//魔力
+				ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 1.25,//体质
+				ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 1.25,//耐力
 				ConfigDefine::USER_ATTRIBUTE_QUICK       => 2,//敏捷
 			),
 			'experience_change' => 1.5, //经验加成

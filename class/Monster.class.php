@@ -8,12 +8,12 @@ class Monster
 	CONST MONSTER_PREFIX_QUICK    = 5;//敏捷的
 
 	CONST MONSTER_SUFFIX_BOSS         = 1;//Boss
-	CONST MONSTER_SUFFIX_SACRED       = 2;//神圣的
-	CONST MONSTER_SUFFIX_UNKNOWN      = 3;//未知的
-	CONST MONSTER_SUFFIX_ADVANCED     = 4;//进阶的
-	CONST MONSTER_SUFFIX_WILL_EXTINCT = 5;//将要灭绝的
-	CONST MONSTER_SUFFIX_CURSED       = 6;//被诅咒的
-	CONST MONSTER_SUFFIX_ANCIENT      = 7;//远古的
+	CONST MONSTER_SUFFIX_SACRED       = 2;//圣灵
+	CONST MONSTER_SUFFIX_UNKNOWN      = 3;//领主
+	CONST MONSTER_SUFFIX_ADVANCED     = 4;//巨魔
+	CONST MONSTER_SUFFIX_WILL_EXTINCT = 5;//将领
+	CONST MONSTER_SUFFIX_CURSED       = 6;//魔王
+	CONST MONSTER_SUFFIX_ANCIENT      = 7;//长老
 	CONST MONSTER_SUFFIX_HEAD         = 8;//头头
 
 	/**
@@ -90,15 +90,57 @@ class Monster
 	}
 
 	// 获取怪物的装备顔色(前后缀加成后)
-	public static function getMonsterEquipmentColor($monster)
-	{
+	public static function getMonsterEquipmentColor($monster) {
 		$prefix_probability = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'equip_get_probability');
 		$suffix_probability = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'equip_get_probability');
-
 		return PerRand::getMultiRandResultKey(array($prefix_probability, $suffix_probability));
 	}
 
-	// 获取怪物的技能
+    public static function getMonsterEquipmentLevel($mapId) {
+        $mapInfo    = Map_Config::getMapConfig($mapId);
+        $baseLevel  = rand($mapInfo['start_level'], $mapInfo['end_level']);
+        $probability= PerRand::getRandResultKey(array(1 => 0.05,2 => 0.9,3 => 0.05));
+        switch ($probability) {
+            case 1:
+                $equipmentLevel = $baseLevel - 10 > 0 ? $baseLevel - 10 : 0;
+                break;
+            case 3:
+                $equipmentLevel = $baseLevel + 10;
+                break;
+            default :
+                $equipmentLevel = $baseLevel;
+                break;
+        }
+        return $equipmentLevel;
+    }
+
+    /**
+     * 先去获取颜色，如果没有颜色，则不生成装备
+     * 有一个颜色，就生成一个装备
+     * 随即出来一个等级
+     * **/
+    public static function getMonsterEquipment($monster) {
+        $color = self::getMonsterEquipmentColor($monster);
+        if(is_array($color)) {
+            foreach ($color as $equipmentColor) {
+                if ($equipmentColor > 0) {
+                    $equipment[] = array(
+                        'equipment' => self::randomEquipment(),
+                        'color'     => $equipmentColor,
+                        'level'     => self::getMonsterEquipmentLevel($monster['map_id']),
+                    );
+                }
+            }
+        }
+        return $equipment;
+    }
+
+    private static function randomEquipment() {
+        //6件装备随即掉落
+        return rand(1, 6);
+    }
+
+    // 获取怪物的技能
 	public static function getMonsterSkill($monster)
 	{
 		$map_skills_list    = Map_Skill::getAllSkills($monster['map_id']);
