@@ -115,4 +115,20 @@ class Skill_Info {
         }
         return $spend['money'];
     }
+    
+    //使用技能 通过skill_type和skill_location来判断唯一性,没有的话直接添加,有的话添加的同时去掉原来的使用
+    public static function useSkill($userId, $skillId, $skillType, $skillLocation){
+    	//应该先判断是否可以有某个数量,暂时略过,再补
+    	$old = MySql::selectOne(self::TN_SKILL_INFO, array('user_id' => $userId, 'skill_type' => $skillType, 'skill_location' => $skillLocation));
+    	if(!empty($old)){//下掉原位置的技能
+    		MySql::update(self::TN_SKILL_INFO, 
+		    		array('skill_location' => 0, 
+		    		array('user_id' => $old['user_id'], 'skill_id' => $old['skill_id'])));
+    	}
+    	$res = MySql::update(self::TN_SKILL_INFO, 
+    				array('skill_location' => $skillLocation), 
+    				array('user_id' => $userId, 'skill_id' => $skillId));
+    	return $res;
+    }
+ 
 }

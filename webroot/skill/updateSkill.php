@@ -7,6 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
 $user_id    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $skill_id   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
 $add_level  = isset($_REQUEST['add_level']) ? $_REQUEST['add_level'] : 1;
+
 $skill_level    = Skill_Info::getSkillInfo($user_id, $skill_id);
 $user_info  = User_Info::getUserInfoByUserId($user_id); 
 //金钱判断
