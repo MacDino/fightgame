@@ -1,4 +1,7 @@
 <?php
+/*
+ * 内购产品列表接口
+ */
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 try {
 	$data = Shop_IAPProduct::getIAPProductList();

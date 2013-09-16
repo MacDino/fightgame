@@ -16,10 +16,12 @@ class Monster
 	CONST MONSTER_SUFFIX_ANCIENT      = 7;//远古的
 	CONST MONSTER_SUFFIX_HEAD         = 8;//头头
 
-	//获取杀死怪物获得的金钱，没有计算加成
-	public static function getMonsterBaseMoney($level)
-	{
-		if(!$level || (int)$level < 1)return 0;
+	/**
+     * 获取杀死怪物获得的金钱，没有计算加成
+     * review by lishengwei
+     */
+	public static function getMonsterBaseMoney($level) {
+		if(!$level || (int)$level < 1)return 1;
 		$baseNum = ($level/10)*2*($level*(1 + 0.09))+3;
 		$randBegin = $baseNum*(1 - 0.09);
 		$randEnd = $baseNum*(1+0.09);
@@ -28,56 +30,62 @@ class Monster
 		return $randValue/$ration;
 	}
 
-	//获取杀死怪物获得的经验，没有计算加成
-	public static function getMonsterBaseExperience($level)
-	{
+	/***
+     * 获取杀死怪物获得的经验，没有计算加成
+     * review by lishengwei
+     */
+	public static function getMonsterBaseExperience($level) {
 		return (float)41.4 + 10.33*(int)$level;
 	}
 
-	//获取某指定等级怪物的基本属性值,没有计算加成
-	public static function getMonsterBaseAttribute($level)
-	{
+	/****
+     * 获取某指定等级怪物的基本属性值,没有计算加成
+     */
+	public static function getMonsterBaseAttribute($level) {
 		$level = (int)$level;
 		$totalBaseAttribute = Monster_Config::getMonsterBaseAttributeTotal($level);
 		$userAttributeList  = Monster_Config::getMonsterBaseAttributeList($level);
 		$useAttributeTotal  = array_sum($userAttributeList);
-		if($useAttributeTotal >= $totalBaseAttribute)
-		{
+		if($useAttributeTotal >= $totalBaseAttribute) {
 			return $userAttributeList;
 		}
 		$surplusAttribute = $totalBaseAttribute - $useAttributeTotal;
 		return self::_randAttribute($surplusAttribute, $userAttributeList);
 	}
 
-	// 获取怪物的金钱(前后缀加成后)
-	public static function getMonsterMoney($monster)
-	{
+	/****
+     * 获取怪物的金钱(前后缀加成后)
+     * review by lishengwei
+     */
+	public static function getMonsterMoney($monster) {
 		$base_money = self::getMonsterBaseMoney($monster['level']);
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'money_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'money_change');
-
-		return self::_multiply($base_money, 1+$prefix_change, 1+$suffix_change);
+		return (int)self::_multiply($base_money, 1+$prefix_change, 1+$suffix_change);
 	}
 
-	// 获取怪物的经验(前后缀加成后)
-	public static function getMonsterExperience($monster)
-	{
+	/**
+     *  获取怪物的经验(前后缀加成后)
+     *  review by lishengwei
+     * **/
+	public static function getMonsterExperience($monster) {
 		$base_experience = self::getMonsterBaseExperience($monster['level']);
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'experience_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'experience_change');
-
-		return self::_multiply($base_experience, 1+$prefix_change, 1+$suffix_change);
+		return (int)self::_multiply($base_experience, 1+$prefix_change, 1+$suffix_change);
 	}
 
-	// 获取怪物的属性(前后缀加成后)
-	public static function getMonsterAttribute($monster)
-	{
+	/*
+     * 统一计算怪物的基础属性以及成长属性
+     * 获取怪物的属性(前后缀加成后)
+     */
+	public static function getMonsterAttribute($monster) {
 		$base_attribute = self::getMonsterBaseAttribute($monster['level']);
-		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'attribute_change_list');
-		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'attribute_change_list');
-
-		$attribute =  Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
-		$growup_attribute = User_Race::getGrowUpAttributes($monster['race_id'], $attribute);
+        //附带前后缀的针对各个属性点的计算率
+		$prefix_change      = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'attribute_change_list');
+		$suffix_change      = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'attribute_change_list');
+		$attribute          =  Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
+		$growup_attribute   = User_Race::getGrowUpAttributes($monster['race_id'], $attribute);
 		return $attribute + $growup_attribute;
 	}
 
@@ -93,10 +101,10 @@ class Monster
 	// 获取怪物的技能
 	public static function getMonsterSkill($monster)
 	{
-		$map_skills_list = Map_Skill::getAllSkills($monster['map_id']);
-		$must_skills_list = self::_getMustSkills($monster);
-		$min_count_list = self::_getMinSkillCount($monster);
-		$skill_rate_list = self::_getSkillRate($monster);
+		$map_skills_list    = Map_Skill::getAllSkills($monster['map_id']);
+		$must_skills_list   = self::_getMustSkills($monster);
+		$min_count_list     = self::_getMinSkillCount($monster);
+		$skill_rate_list    = self::_getSkillRate($monster);
 
 		$ret = array('attack' => array(), 'defense' => array(), 'passive' => array());
 		foreach ($ret as $skill_type => &$skills)
@@ -154,33 +162,37 @@ class Monster
 		return $ret;
 	}
 
-	public static function fightable($monster)
-	{
-		$skill = self::getMonsterSkill($monster);
-		$attribute = self::getMonsterAttribute($monster, $skill);
-
+	public static function fightable($monster) {
+		$skill      = self::getMonsterSkill($monster);
+		$attribute  = self::getMonsterAttribute($monster);
 		//技能加成后的属性
-		$attribute = self::attributeWithSkill($attribute, $skill);
-
+		$attribute  = array_map('intval', array_map('round',self::attributeWithSkill($attribute, $skill)));
+        //对各数据进行四舍五入取整
+		$attribute  = array_map('intval', array_map('round',(array)$attribute));
 		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
 	}
 
-	public static function attributeWithSkill($attribute, $skill)
-	{
+    /**
+     * 对怪物的成长属性进行技能的加成
+     * **/
+	public static function attributeWithSkill($attribute, $skill) {
 		$skill_list = array();
-		foreach ($skill as $_skill)
-		{
-			$skill_list = array_merge($skill_list, $_skill['list']);
-		}
+        if(is_array($skill)) {
+            foreach ($skill as $value) {
+                if(is_array($value['list'])) {
+                    $skill_list = $skill_list + $value['list'];
+                }
+            }
+        }
 
 		return Skill::getRoleAttributesWithSkill($attribute, $skill_list);
 	}
 
-	//多余属性随机分配
-	private static function _randAttribute($surplusAttribute, $userAttributeList)
-	{
-		for($i=1;$i<=$surplusAttribute;$i++)
-		{
+	/****
+     * 多余属性随机分配
+     */
+	private static function _randAttribute($surplusAttribute, $userAttributeList) {
+		for($i=1;$i<=$surplusAttribute;$i++) {
 			$key = array_rand($userAttributeList, 1);
 			++$userAttributeList[$key];
 		}

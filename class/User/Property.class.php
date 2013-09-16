@@ -1,39 +1,111 @@
 <?php
 class User_Property{
 	
-	CONST TABLE_NAME = 'property_info';
+	CONST TABLE_NAME = 'user_props';
 	
-	/** 属性增强咒符*/
-	CONST ATTRIBUTE_ENHANCE = 1;
-	CONST ATTRIBUTE_ENHANCE_PRICE = 10;
 	/** 双倍咒符 */
-	CONST DOUBLE_HARVEST = 2;
-	CONST DOUBLE_HARVEST_PRICE = 10;
+	CONST DOUBLE_HARVEST = 1;
+	CONST DOUBLE_HARVEST_PRICE = 20;
+
+	/** 属性增强咒符*/
+	CONST ATTRIBUTE_ENHANCE = 3;
+	CONST ATTRIBUTE_ENHANCE_PRICE = 20;
 	/** 挂机咒符 */
-	CONST AUTO_FIGHT = 3;
-	CONST AUTO_FIGHT_PRICE = 10;
-	/** 装备打造咒符 */
-	CONST EQUIP_FORGE = 4;
+	CONST AUTO_FIGHT = 6;
+	CONST AUTO_FIGHT_PRICE = 50;
+	/** 锻造成功咒符 */
+	CONST EQUIP_FORGE = 8;
+	CONST EQUIP_FORGE_PRICE = 100;
 	/** 装备成长咒符 */
-	CONST EQUIP_GROW = 5;
+	CONST EQUIP_GROW = 9;
 	
 	//上古遗迹没考虑清楚,暂时没做
 	
 	/**
-	 * @param int $userId	用户ID
-	 * @param int $type		符咒类别
-	 * @return 购买符咒
+	 * 购买符咒   适用于属性增强、双倍、挂机、装备打造等静态价格的咒符
+	 * 动态价格咒符和pk咒符、背包上限需要各自调用自己的接口
 	 */
-	public static function addAmulet($userId, $type)
+	public static function buyUserProps($userId, $propsId, $num){
+		if(!$userId || !$type)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if(!$num || $num < 0 || !is_numeric($num)){
+			throw new Exception('购买数量不正确', 1);
+		}
+		$propsInfo = Props_Info::getPropsInfo($propsId);
+		$priceType = $propsInfo['price_type'];
+		if( $priceType == Props_Config::PRICE_TYPE_DYNAMIC){
+			throw new Exception('此接口只能购买固定价格的道具',1);	
+		}
+		if($userInfo['ingot'] < $price) {
+			throw new Exception('您的元宝数不足,无法购买',1);	
+		}
+		/*
+		 * 扣除元宝
+		 */
+		$res = self::addAmulet($userId, $propsId, $num);
+		if($res){
+			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '-');
+			return $decreingot;
+		} 
+		return false;
+	}
+
+	/*
+	 * 购买装备成长符
+	 */
+	public static function buyEquipGrow($userId, $equipId, $num){
+		if(!$userId || !$type)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if(!$num || $num < 0 || !is_numeric($num)){
+			throw new Exception('购买数量不正确', 1);
+		}
+		/*
+		 * 获取装备level
+		 */
+		$equipInfo = Equip_info::getEquipInfoById($equipId);
+		$equipLev  = $equipInfo['equip_level'];
+		$price = self::getEquipGrowPrice($equipLev);
+		if($userInfo['ingot'] < $price) {
+			throw new Exception('您的元宝数不足,无法购买',1);	
+		}
+		/*
+		 * 扣除元宝
+		 */
+		$res = self::addAmulet($userId, self::EQUIP_GROW, $num);
+		if($res){
+			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '-');
+			return $decreingot;
+		} 
+		return false;
+	}
+
+	/*
+	 * 获取装备成长的价格
+	 */
+	public static function getEquipGrowPrice($equipLevel){
+		if($equipLevel < 30){
+			throw new Exception ('当前装备等级不够30级,不能购买装备成长符', 1);	
+		}
+		$price_table = Props_Config::$equip_grow_price;
+		if(array_key_exists($equipLevel, $price_table)){
+			return $price_table[$equipLevel];	
+		}else {
+			throw new Exception ('当前的装备等级不在装备成长价格表的范围内', 1);
+		}
+	}
+
+	/*
+	 * 增加为用户增加道具
+	 */
+	public static function addAmulet($userId, $type, $num)
 	{
 		if(!$userId || !$type)return FALSE;
 		
 		//是否有足够元宝
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-//		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
+		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
 		
-		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + 1 WHERE user_id = $userId AND property_id = $type";
-//		echo $sql;exit;
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + " . $num . " WHERE user_id = $userId AND property_id = $type";
 		$res = MySql::query($sql);
 	}
 	
@@ -42,7 +114,7 @@ class User_Property{
 	 * @param int $type		符咒类别
 	 * @return 使用符咒
 	 */
-	public static function UseAmulet($userId, $type)
+	private static function UseAmulet($userId, $type)
 	{
 		if(!$userId || !$type)return FALSE;
 		
@@ -66,11 +138,25 @@ class User_Property{
 		$num = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type), array('property_num'));
 		return $num['property_num'];
 	}
-	
-	public static function createPropertylist($userId, $type){
+
+	/*
+	 * 获取某个道具详情
+	 */
+	public static function getPropertyInfo($userId, $type)
+	{
 		if(!$userId || !$type)return FALSE;
 		
-		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type));
+		$propert = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type));
+		return $propert;
+	}
+	
+	/*
+	 *  创建用户时做初始化道具
+	 */
+	public static function createPropertylist($userId, $type, $num){
+		if(!$userId || !$type)return FALSE;
+		
+		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type, 'num' => $num,'last_time' => time()));
 		return $res;
 	}
 	
@@ -239,7 +325,9 @@ class User_Property{
 	 * @return 检测是否在使用双倍符咒*/
 	public static function isuseDoubleHarvest($userId)
 	{
-		if(!$userId)return FALSE;
+		if(!$userId){
+			throw new Exception('缺少用户id', 1);
+		}
 		
 		$res = MySql::selectOne('double_harvest', array('user_id' => $userId));
 		
@@ -257,15 +345,21 @@ class User_Property{
 	 * @return 使用挂机符咒*/
 	public static function useAutoFight($userId)
 	{
-		if(!$userId)return FALSE;
+		if(!$userId){
+			throw new Exception('缺少用户id', 1);
+		}
 
 		//是否已经在用
 		$isUse = self::isuseAutoFight($userId);
-		if(!empty($isUse))return FALSE;
+		if(!empty($isUse)){
+			throw new Exception ('此道具已在使用', 1);	
+		}
 
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, self::AUTO_FIGHT);
-		if(empty($isHave))return FALSE;
+		if(!$isHave || empty($isHave)){
+			throw new Exception('该道具数量不足，您无法使用', 1);	
+		}
 
 		$res = MySql::insert('auto_fight', array('user_id' => $userId, 'add_time' => time()));
 		$res_num = self::UseAmulet($userId, self::AUTO_FIGHT);
@@ -275,7 +369,9 @@ class User_Property{
 	 * @return 检测是否在使用挂机符咒*/
 	public static function isuseAutoFight($userId)
 	{
-		if(!$userId)return FALSE;
+		if(!$userId){
+			throw new Exception('缺少用户id', 1);
+		}
 		
 		$res = MySql::selectOne('auto_fight', array('user_id' => $userId));
 		
@@ -290,12 +386,47 @@ class User_Property{
 	}
 	
 	/**
-	 * 装备成长咒符
+	 * 使用锻造成功咒符
 	 */
+	public static function useEquipForge($userId)
+	{
+		if(!$userId){
+			throw new Exception('缺少用户id', 1);
+		}
+		//是否还有存数
+		$isHave = self::getPropertyNum($userId, self::EQUIP_FORGE);
+		if(!$isHave || empty($isHave)){
+			throw new Exception('该道具数量不足，您无法使用', 1);	
+		}
+		$res_num = self::UseAmulet($userId, self::Equip);
+		return $res;
+	}
+	
 	
 	/**
-	 * 装备打造咒符
+	 * 装备成长咒符
 	 */
+	public static function useEquipGrow($userId, $equipId)
+	{
+		if(!$userId){
+			throw new Exception('缺少用户id', 1);
+		}
+		if(!$equipId){
+			throw new Exception('缺少装备id', 1);
+		}
+		$equipInfo = Equip_info::getEquipInfoById($equipId);
+		$equipLev  = $equipInfo['equip_level'];
+		if($equipLev < 30){
+			throw new Exception ('当前装备等级不够30级,不能购买装备成长符', 1);	
+		}
+		//是否还有存数
+		$isHave = self::getPropertyNum($userId, self::EQUIP_GROW);
+		if(!$isHave || empty($isHave)){
+			throw new Exception('该道具数量不足，您无法使用', 1);	
+		}
+		$res_num = self::UseAmulet($userId, self::Equip);
+		return $res;
+	}
 		
 	/**
 	 * 上古遗迹(宝箱)

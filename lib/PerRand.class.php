@@ -4,7 +4,6 @@ class PerRand
 {
 	public static function getRandValue($data)
 	{
-		//var_dump($data);
 		if(!is_array($data) || !$data)return FALSE;
 		$ration = Utility::getChangeIntRation($data);
 		$randValue = mt_rand($data[0]*$ration, $data[1]*$ration);
@@ -28,7 +27,7 @@ class PerRand
 		}
 
 		$data = array_filter($data);
-		if ( ! $data || array_sum($data) > 1) 
+		if ( ! $data || array_sum($data) > 1)
 		{
 			return false;
 		}

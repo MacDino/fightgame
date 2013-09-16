@@ -12,13 +12,14 @@ class Shop_IAPProduct{
 	const PRESENT_TYPE_MONTH_PAY = 1;	//欢乐月
 	const PRESENT_TYPE_INGOT = 2;		//元宝
 
+	const MONTH_PRODUCT_ID = 3;			//欢乐月套餐产品ID
 
 	/*
 	 * 套餐列表
 	 */
 	public static function getIAPProductList(){
 		$where = array(
-			'status' => 1,	
+			'status' => self::NORMAL_STATUS,	
 		);
 		$res = MySql::select(self::TABLE_NAME, $where);
 		return $res;
@@ -80,7 +81,11 @@ class Shop_IAPProduct{
 						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
 					} else if ($present_type == self::PRESENT_TYPE_MONTH_PAY){
 					//赠送欢乐月	
-							
+					/*
+					 * 欢乐月直接将元宝数入账
+					 * 欢乐月赠送套餐需要手动领取,so这里不处理套餐赠送的逻辑 ,由另外的接口完成
+					 */
+						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
 					}
 					return $verifyRes;
 				}
@@ -144,4 +149,61 @@ class Shop_IAPProduct{
 		);     
 	}     
 
+	/*
+	 * 领取欢乐月套餐赠送包
+	 */
+	public static function recordMonthPackage($userId){
+		if(!$userId) {
+			throw new Exception('用户ID为必传参数',1);
+		}
+		$user = User_Info::getUserInfoByUserId ($userId);
+		if(!$user){
+			throw new Exception('无此用户',1);
+		}
+		$lastPurchase = Shop_IAPPurchaseLog::getLastOne($userId, self::MONTH_PRODUCT_ID);
+		if(!$lastPurchase){
+			throw new Exception('未找到您的欢乐月套餐购买记录', 1);
+		}
+		$ctime = strtotime($lastPurchase['ctime')];
+		$endtime = strtotime("next month", $ctime);	
+		if(time() > $endtime){
+			throw new Exception('欢乐月套餐已过期,您不能进行赠品领取',1);	
+		}
+		$pack = Props_Config::$month_package;
+		/*
+		 * FIXME 一天一领,防止刷包
+		 */
+	
+		/*
+		 * 解包 
+		 */
+		foreach ($pack as $k => $v){
+			if($k == Props_Config::KEY_PROPS) {
+				foreach ($v => $v2){
+					$props_id = $v2['id'];	
+					$num = $v2['num'];
+					$propert = User_Property::getPropertyInfo($userId, $props_id);
+					if(!$propert){
+						$res = User_Property::createPropertylist($userId, $props_id, $num);
+					} else {
+						/*
+						 * 处理pk咒符和其他咒符的不同入库表
+						 */
+						if($v2['is_pk'] && isset($v2['is_pk'])){
+						  $res = User_Info::updateSingleInfo($userId, 'pk_num', $num, '+');	
+						} else {
+							$res = User_Property::addAmulet($userId, $props_id, $num);
+						}
+					}
+				}				
+			} else if ($k == Props_Config::KEY_INGOT){
+				$ingot = $v;		
+				$res = User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
+			}
+		}
+		/*
+		 * FIXME 记录领取日志,
+		 */
+		return $res;
+	}
 }
