@@ -16,7 +16,11 @@ class User_Info
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
-
+	
+	//判断是否升级
+	public static function isLevel($userId){
+		return 0;
+	}
 	/**
 	 * 获取角色列表
 	 * @param int $masterId	帐号ID

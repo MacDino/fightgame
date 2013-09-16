@@ -81,7 +81,7 @@ class Curl
         if(self::$_userAgent)curl_setopt($ch, CURLOPT_USERAGENT, self::$_userAgent);
         if(self::$_httpHeader)curl_setopt($ch, CURLOPT_HTTPHEADER, self::$_httpHeader);
         $data               = curl_exec($ch);
-        var_dump($data);exit;
+//        var_dump($data);exit;
         self::$_httpInfo    = curl_getinfo($ch);
         curl_close($ch);
         if(self::$_httpInfo['http_code'] == 200)

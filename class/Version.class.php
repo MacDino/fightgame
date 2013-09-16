@@ -7,7 +7,7 @@ class Version
 {
     CONST VERSION = 1;
 	CONST MAP_VERSION = 1.01;
-	CONST MONSTER_VERSION = 1.01;
+	CONST MONSTER_VERSION = 1.02;
 	CONST ACTION_VERSION = 1.03;
 
     public static function getStaticResourceVersion() {

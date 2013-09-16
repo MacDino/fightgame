@@ -20,7 +20,7 @@ class ConfigDefine
 //    CONST USER_ATTRIBUTE_LUCKY        	= '幸运';//幸运 - 成长属性
     
     CONST USER_ATTRIBUTE_POWER        	= 101;//力量 - 基本属性
-    CONST USER_ATTRIBUTE_MAGIC_POWER  	= 102;//魔力 - 基本属性
+    CONST USER_ATTRIBUTE_MAGIC_POWER  	= 102;//灵力 - 基本属性
     CONST USER_ATTRIBUTE_PHYSIQUE     	= 103;//体质 - 基本属性
     CONST USER_ATTRIBUTE_ENDURANCE    	= 104;//耐力 - 基本属性
     CONST USER_ATTRIBUTE_QUICK        	= 105;//敏捷 - 基本属性

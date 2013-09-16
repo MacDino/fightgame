@@ -20,7 +20,7 @@ try {
     }
     $data['equipInfo'] = $res;
 	//角色基本属性(点)
-//	$data['baseAttribute'] = User_Info::getUserInfoFightAttribute($userId);
+	$data['baseAttribute'] = User_Info::getUserInfoFightAttribute($userId);
 	//角色成长属性(值)
 	$data['valueAttribute'] = User_Info::getUserInfoFightAttribute($userId, TRUE);
 	

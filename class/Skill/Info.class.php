@@ -2,25 +2,37 @@
 class Skill_Info {
     CONST TN_SKILL_INFO = 'user_skill';
     CONST TN_SKILL_ALLOWED = 'level_allow_skill_num';
-    CONST TN_SKILL_POINT = 'level_skill_point';
-    CONST TN_SKILL_MONEY = 'level_skill_money';
+    CONST TN_SKILL_SPEND = 'level_skill_spend';
 
     /**
      * @desc 获取角色技能等级列表
      */
-    public static function getSkillList($user_id){
+    public static function getSkillList($user_id, $is_use=FALSE){
         $where      = array(
             'user_id' => $user_id,
         );
+        if(!empty($is_use)){//add by zhengyifeng 76387051@qq.com 2013.9.16 已装备技能
+        	$where['is_use'] = $is_use;
+        }
         $skill_list = DB::table(self::TN_SKILL_INFO)->select($where);
-        if(!empty($skill_list)){
+        /*if(!empty($skill_list)){
             foreach($skill_list as $k => $v){
                 $skill_list[$v['skill_id']] = $v;
                 unset($skill_list[$k]);
             }
-        }
+        }*/
         return $skill_list;
     }
+    
+    //可学习技能列表,实际就是所有技能,带着消费点数和金钱,此方法有问题,需修改
+    public static function getAllSkillList($user_id){
+    	$skill = self::getSkillList($user_id);
+    	foreach ($skill as $i){
+    		$skill['money'] = self::getSkillMoney($i['skill_level']);
+    	}
+    	return $skill;
+    }
+    
 
     /**
      * @desc 获取用户某一技能等级
@@ -93,24 +105,14 @@ class Skill_Info {
      * @desc 获取学习技能所需要的铜钱
      * 支持一次性多级技能提高
      */
-    public static function getSkillMoney($level_to, $level_from = NULL){
-        $all_money  = 0;
-        if($level_from && is_numeric($level_from)){
+    public static function getSkillMoney($level){
+
+        if($level && is_numeric($level_from)){
             $where  = array(
-                'skill_level >' => $skill_from, 
-                'skill_level <' => $skill_to
+                'skill_level >' => $level+1, 
             );
-            $money      = DB::table(self::TN_SKILL_MONEY)->select($where);
-            foreach($money as $v){
-                $all_money  += $v['money'];
-            }
-        } else {
-            $where  = array(
-                'skill_level'   => $level_to
-            );
-            $money      = DB::table(self::TN_SKILL_MONEY)->selectOne($where);
-            $all_money  = $money['money'];
+            $spend      = DB::table(self::TN_SKILL_SPEND)->selectOne($where);
         }
-        return $all_money;
+        return $spend['money'];
     }
 }
