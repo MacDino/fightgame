@@ -19,7 +19,7 @@ if($currentUserId) {
             echo $map['map_name'];
             echo "</td>";
             if($map['start_level'] <= $userInfo['user_level']) {
-                echo "<td><a href=''>进入";
+                echo "<td><a href='fight.php?map_id={$map['map_id']}&user_id={$currentUserId}'>进入";
                 echo '</a></td></tr>';
             }  else {
                 echo '<td></td></tr>';
