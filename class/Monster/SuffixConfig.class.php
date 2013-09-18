@@ -172,12 +172,12 @@ class Monster_SuffixConfig
 	{
 		$monsterSuffixList = array(
 			Monster::MONSTER_SUFFIX_BOSS         => 'Boss',
-			Monster::MONSTER_SUFFIX_SACRED       => '神圣的',
-			Monster::MONSTER_SUFFIX_UNKNOWN      => '未知的',
-			Monster::MONSTER_SUFFIX_ADVANCED     => '进阶的',
-			Monster::MONSTER_SUFFIX_WILL_EXTINCT => '将要灭绝的',
-			Monster::MONSTER_SUFFIX_CURSED       => '被诅咒的',
-			Monster::MONSTER_SUFFIX_ANCIENT      => '远古的',
+			Monster::MONSTER_SUFFIX_SACRED       => '圣灵',
+			Monster::MONSTER_SUFFIX_UNKNOWN      => '领主',
+			Monster::MONSTER_SUFFIX_ADVANCED     => '巨魔',
+			Monster::MONSTER_SUFFIX_WILL_EXTINCT => '将领',
+			Monster::MONSTER_SUFFIX_CURSED       => '魔王',
+			Monster::MONSTER_SUFFIX_ANCIENT      => '长老',
 			Monster::MONSTER_SUFFIX_HEAD         => '头头',
 		);
 		return $monsterSuffixList;
@@ -188,7 +188,7 @@ class Monster_SuffixConfig
 	{
 		$rate_list = array();
 
-		foreach (self::$suffix_config_list as $suffix => $config) 
+		foreach (self::$suffix_config_list as $suffix => $config)
 		{
 			$rat_list[$suffix] = $config['meet_probability'];
 		}
