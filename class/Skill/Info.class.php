@@ -15,12 +15,6 @@ class Skill_Info {
         	$where['is_use'] = $is_use;
         }
         $skill_list = DB::table(self::TN_SKILL_INFO)->select($where);
-        /*if(!empty($skill_list)){
-            foreach($skill_list as $k => $v){
-                $skill_list[$v['skill_id']] = $v;
-                unset($skill_list[$k]);
-            }
-        }*/
         return $skill_list;
     }
     
@@ -32,7 +26,6 @@ class Skill_Info {
     	}
     	return $skill;
     }
-    
 
     /**
      * @desc 获取用户某一技能等级

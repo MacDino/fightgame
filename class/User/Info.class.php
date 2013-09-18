@@ -363,5 +363,29 @@ class User_Info
 		}
 		return $res;
 	}
+	
+	public static function skillAttribute($data){
+		
+	}
+	
+	public static function levelUp($userId, $level = NULL){
+		//调用奖励
+	}
+	
+	//锻造成功率 isUse 是否使用锻造符
+	public static function forgeOdds($userId, $isUse = FALSE){
+		//技能本身成功率
+		$skillLevel = Skill_Info::getSkillInfo($userId, 2);
+		$skillOdds = Skill::getQuickAttributeForEquip($skillLevel);
+		//幸运加的成功率
+		$lucky = self::getUserInfoFightAttribute($userId, TRUE);
+		$luckyOdds = $lucky[ConfigDefine::USER_ATTRIBUTE_LUCKY];
+		//锻造符加的成功率 
+		if(!empty($isUse)){
+			$amulet = User::FORGEODDS;
+		}
+		
+		return $skillOdds+
+	}
 
 }

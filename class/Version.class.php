@@ -10,7 +10,7 @@ class Version
 	CONST MONSTER_VERSION = 1.02;
 	CONST ACTION_VERSION = 1.03;
 
-    public static function getStaticResourceVersion() {
+    public static function getStaticResourceVersion(){
         return self::VERSION;
     }
 	

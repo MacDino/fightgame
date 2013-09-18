@@ -49,6 +49,8 @@ class User
     CONST DOUBLEHARVESTTIME = 7200;
     /** 挂机,有效期2小时*/
     CONST AUTOFIGHTTIME = 7200;
+    
+    CONST FORGEODDS = '0.1';
 
     //获取登录用户的唯一标识
     public static function getLoginUserId($bindType, $bindValue)

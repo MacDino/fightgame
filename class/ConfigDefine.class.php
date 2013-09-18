@@ -97,5 +97,28 @@ class ConfigDefine
             self::RELEASE_PROBABILITY		  	=> '释放概率',
 		);
 	}
+	
+	//技能静态资源
+	public static function skillVersion(){
+		$res = array(
+			self::SKILL_ZJ      				=> '重击',
+			self::SKILL_LJ      				=> '连击',
+		    self::SKILL_LXYZ    				=> '灵犀一指',
+		    self::SKILL_SWZH    				=> '三昧真火',
+		    self::SKILL_HFHY    				=> '呼风唤雨',
+		    self::SKILL_WLJ     				=> '五雷决',
+		    self::SKILL_WFX     				=> '物防修',                                                   
+		    self::SKILL_FFX     				=> '法防修',
+		    self::SKILL_GX      				=> '攻修',
+		    self::SKILL_FX      				=> '法修',
+		    self::SKILL_DZ      				=> '锻造',
+		    self::SKILL_FY      				=> '防御',
+		    self::SKILL_FJ      				=> '反击',
+		    self::SKILL_FD      				=> '法盾',
+		);
+		return 	$res;
+	}
+	
+	//
 
 }
