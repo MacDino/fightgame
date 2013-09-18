@@ -66,9 +66,9 @@ try {
         $isUserAlive = $userFight->isAlive() || $isUserAlive;
     }
     foreach ($monsterFightTeam as $monsterFight) {
-        $isMonsterAlive = $monsterFight->isDead() || $isMonsterAlive;
+        $isMonsterAlive = $monsterFight->isAlive() || $isMonsterAlive;
     }
-    if(!$isUserAlive) {
+    if(!$isUserAlive && $isMonsterAlive) {
         $msg    = '您被打败了';
     } else {
         $data['experience']         = Monster::getMonsterExperience($monster);
