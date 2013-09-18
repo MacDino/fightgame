@@ -25,12 +25,12 @@ if($challengeTimes <= 0) {
     $msg  = '没有挑战次数了';
     exit();
 }
-$userFightTeam[] = User_Info::fightable($userId, $userInfo['user_id']);
-$userPetInfo    = array('user_id' => 27);
+$userFightTeam[] = Fight::createUserFightable($userId, $userInfo['user_id']);
+$userPetInfo     = array('user_id' => 27);
 if(is_array($userPetInfo) && count($userPetInfo)) {
     $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
     //人宠进入队伍
-    $userFightTeam[] = User_Info::fightable($userPetInfo['user_id'], $userPetInfo['user_level']);
+    $userFightTeam[] = Fight::createMonsterFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
     $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
 }
 
