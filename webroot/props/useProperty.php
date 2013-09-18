@@ -1,4 +1,7 @@
 <?php
+/*
+ * 宝箱类不能使用此接口
+ */
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
