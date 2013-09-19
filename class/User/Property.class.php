@@ -203,15 +203,22 @@ class User_Property{
 		
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pack_num'] >= User::DEFAULT_PACK_MAX)return FALSE;
+		if($userInfo['pack_num'] >= User::DEFAULT_PACK_MAX){
+			throw new Exception ('已经达到上限', 1);
+		}
 		
 		//验证是否有足够元宝购买
-		if($userInfo['ingot'] < User::PACK_PRICE)return FALSE;
+		if($userInfo['ingot'] < User::PACK_PRICE){
+			throw new Exception('元宝数不足，不能购买', 1);
+		}
 		
-		$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 5, '+');//增加包裹数
+		$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 5, '1');//增加包裹数
 		$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PACK_PRICE, '-');//减少相应元宝 
-		
-		if($res_ingot && $res_num)return TRUE;
+		if ($res_num){
+			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::FRIEND_PRICE, '2');//减少相应元宝 
+			return $res_ingot;
+		}
+		return FALSE;	
 	}
 	
 	/**
@@ -225,15 +232,19 @@ class User_Property{
 		
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['friend_num'] >= User::DEFAULT_FRIEND_MAX)return FALSE;
-		
+		if($userInfo['friend_num'] >= User::DEFAULT_FRIEND_MAX){
+			throw new Exception ('已经达到上限', 1);
+		}
 		//验证是否有足够元宝购买
-		if($userInfo['ingot'] < User::FRIEND_PRICE)return FALSE;
-		
-		$res_num = User_Info::updateSingleInfo($userId, 'friend_num', 1, '+');//增加包裹数
-		$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::FRIEND_PRICE, '-');//减少相应元宝 
-		
-		if($res_ingot && $res_num)return TRUE;
+		if($userInfo['ingot'] < User::FRIEND_PRICE){
+			throw new Exception('元宝数不足，不能购买', 1);
+		}
+		$res_num = User_Info::updateSingleInfo($userId, 'friend_num', 1, '1');//增加包裹数
+		if ($res_num){
+			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::FRIEND_PRICE, '2');//减少相应元宝 
+			return $res_ingot;
+		}
+		return FALSE;	
 	}
 	
 	/**
@@ -247,15 +258,20 @@ class User_Property{
 		
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pet_num'] >= User::DEFAULT_PET_MAX)return FALSE;
-		
+		if($userInfo['pet_num'] >= User::DEFAULT_PET_MAX) {
+			throw new Exception ('已经达到上限', 1);
+		}
 		//验证是否有足够元宝购买
-		if($userInfo['ingot'] < User::PET_PRICE)return FALSE;
+		if($userInfo['ingot'] < User::PET_PRICE) {
+			throw new Exception('元宝数不足，不能购买', 1);
+		}
 		
-		$res_num = User_Info::updateSingleInfo($userId, 'pet_num', 1, '+');//增加包裹数
-		$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PET_PRICE, '-');//减少相应元宝 
-		
-		if($res_ingot && $res_num)return TRUE;
+		$res_num = User_Info::updateSingleInfo($userId, 'pet_num', 1, '1');//增加包裹数
+		if($res_num) {
+			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PET_PRICE, '2');//减少相应元宝 
+			return $res_ingot;
+		}
+		return FALSE;
 	}
 	
 	/**
@@ -270,14 +286,17 @@ class User_Property{
 		
 		$num = isset($num)?$num:"1";
 		
-		//根据流水表检测已经购买次数
-		$alreadyBuyNum = 2;
-		if($alreadyBuyNum >= User::PK_BUY_NUM)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if($userInfo['pk_num'] >= User::PK_BUY_NUM) {
+			throw new Exception ('已经达到上限', 1);
+		}
 		
-		$res_num = User_Info::updateSingleInfo($userId, 'pk_num', $num, '+');
-		$res_ingot = User_Info::updateSingleInfo($userid, 'ingot', User::PET_PRICE * $num, '-');
-		
-		if($res_num && $res_ingot)return TRUE;
+		$res_num = User_Info::updateSingleInfo($userId, 'pk_num', $num, '1');
+		if($res_num){
+			$res_ingot = User_Info::updateSingleInfo($userid, 'ingot', User::PET_PRICE * $num, '2');
+			return $res_ingot;
+		}
+		return FALSE;
 	}
 		
 	/** 
