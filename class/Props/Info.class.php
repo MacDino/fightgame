@@ -21,7 +21,7 @@ class Props_Info{
 	 *  产品详情
 	 */
 	public static function getPropsInfo($propsId){
-		if(!is_numeric($productId))return FALSE;
+		if(!is_numeric($propsId))return FALSE;
 		$res = MySql::selectOne(self::TABLE_NAME, array('props_id' => $propsId));
 		return $res;
 	}

@@ -29,14 +29,18 @@ class User_Property{
 	 * 动态价格咒符和pk咒符、背包上限需要各自调用自己的接口
 	 */
 	public static function buyUserProps($userId, $propsId, $num){
-		if(!$userId || !$type)return FALSE;
+		if(!$userId || !$propsId)return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if(!$num || $num < 0 || !is_numeric($num)){
 			throw new Exception('购买数量不正确', 1);
 		}
 		$propsInfo = Props_Info::getPropsInfo($propsId);
+		if(!$propsInfo){
+			throw new Exception('此装备信息找不到', 1);
+		}
 		$priceType = $propsInfo['price_type'];
-		if( $priceType == Props_Config::PRICE_TYPE_DYNAMIC){
+		$price = $propsInfo['price'];
+		if( $priceType == Props_Info::PRICE_TYPE_DYNAMIC){
 			throw new Exception('此接口只能购买固定价格的道具',1);	
 		}
 		if($userInfo['ingot'] < $price) {
@@ -47,7 +51,7 @@ class User_Property{
 		 */
 		$res = self::addAmulet($userId, $propsId, $num);
 		if($res){
-			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '-');
+			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '2');
 			return $decreingot;
 		} 
 		return false;
@@ -57,7 +61,7 @@ class User_Property{
 	 * 购买装备成长符
 	 */
 	public static function buyEquipGrow($userId, $equipId, $num){
-		if(!$userId || !$type)return FALSE;
+		if(!$userId || !$equipId)return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if(!$num || $num < 0 || !is_numeric($num)){
 			throw new Exception('购买数量不正确', 1);
@@ -100,16 +104,12 @@ class User_Property{
 	/*
 	 * 增加为用户增加道具
 	 */
-	public static function addAmulet($userId, $type, $num)
+	public static function addAmulet($userId, $propsId, $num)
 	{
-		if(!$userId || !$type)return FALSE;
-		
-		//是否有足够元宝
+		if(!$userId || !$propsId)	return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['ingot'] < self::$type.'_PRICE')return FALSE;
-		
-		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + " . $num . " WHERE user_id = $userId AND property_id = $type";
-		$res = MySql::query($sql);
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + " . $num . " WHERE user_id = $userId AND property_id = $propsId";
+		return MySql::execute($sql);
 	}
 	
 	/**
@@ -126,7 +126,7 @@ class User_Property{
 		
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - 1 WHERE user_id = $userId AND property_id = $type";
 //		echo $sql;exit;
-		$res = MySql::query($sql);
+		return MySql::execute($sql);
 	}
 	
 	/**
