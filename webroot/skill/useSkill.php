@@ -7,7 +7,7 @@ $skillType    = isset($_REQUEST['skill_type']) ? $_REQUEST['skill_type'] : 0;
 $skillLocation    = isset($_REQUEST['skill_location']) ? $_REQUEST['skill_location'] : 0;
 
 try {
-	$data   = Skill_Info::getAllSkillList($userId, $skillId, $skillType, $skillLocation);
+	$data   = Skill_Info::useSkill($userId, $skillId, $skillType, $skillLocation);
 	$code   = 0;
 	$msg    = 'OK';
 } catch (Exception $e) {

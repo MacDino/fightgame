@@ -385,7 +385,7 @@ class User_Info
 			$amulet = User::FORGEODDS;
 		}
 		
-		return $skillOdds+
+		return $skillOdds;
 	}
 
 }

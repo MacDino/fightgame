@@ -5,6 +5,7 @@
  * 战斗结果的数据体结构需要进行重构
  * **/
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
+error_reporting(E_ALL || ~E_NOTICE); //显示除去 E_NOTICE 之外的所有错误信息
 
 $userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $mapId              = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
@@ -86,6 +87,7 @@ try {
         }
 
     }
+    print_r($data);
 	$code   = 0;
 } catch (Exception $e) {
 	$code   = 1;

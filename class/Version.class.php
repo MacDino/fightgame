@@ -9,6 +9,8 @@ class Version
 	CONST MAP_VERSION = 1.01;
 	CONST MONSTER_VERSION = 1.02;
 	CONST ACTION_VERSION = 1.03;
+	CONST SKILL_VERSION = 1.03;
+	CONST EXP_VERSION = 1.01;
 
     public static function getStaticResourceVersion(){
         return self::VERSION;
@@ -25,6 +27,22 @@ class Version
 	
 	public static function getMonsterList(){
 		$res = MySql::select('map_Monster', array(), array('monster_id', 'monster_name'));
+		return $res;
+	}
+	
+	public static function getActionList(){
+		$res = ConfigDefine::actionList();
+		return $res;
+	}
+	
+	public static function getSkillList(){
+		$res = ConfigDefine::skillList();
+		return $res;
+	}
+	
+	public static function getLevelExpList()
+	{
+		$res = MySql::select('level_info', array(), array('level', 'need_experience'));
 		return $res;
 	}
 }

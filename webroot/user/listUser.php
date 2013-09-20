@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $masterId   = isset($_REQUEST['master_id'])?$_REQUEST['master_id']:'';//帐号ID
 $area	  = isset($_REQUEST['area'])?$_REQUEST['area']:'';//分区
-//echo "bindType==$bindType&&bindValue==$bindValue";
+//echo "masterId==$masterId&&area==$area";
 
 if(!$masterId || !$area)
 {
@@ -16,7 +16,7 @@ if(!$masterId || !$area)
 
 try {
     //获取用户
-    $res = User_Info::listUser($masterId, $area);
+    $data = User_Info::listUser($masterId, $area);
 } catch (Exception $e) {
     $code = 0;
 //    $msg = '获取账户失败!';
@@ -25,7 +25,7 @@ try {
 }
 ?>
 
-<table>
+<!--<table>
 <form method="GET" action="createUser.php" name="createUser">
 <tr><td><input type="button" onclick="document.getElementById('div').style.display=(document.getElementById('div').style.display=='none')?'':'none'"  value="创建角色"/></td></tr>
 <tr><td>
@@ -50,4 +50,4 @@ try {
 		<td>等级:<?=$i['user_level']?></td><td>金钱:<?=$i['money']?></td><b><td>元宝:<?=$i['ingot']?></td>
 	</tr>
 <?php }?>
-</table>
+</table>-->

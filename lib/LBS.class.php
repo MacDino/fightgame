@@ -23,7 +23,7 @@ define('DISTANCE',500);			//距离
 define('EARTH_RADIUS',6378137);			//地球半径
 
 class LBS {
-	/*function __construct() {
+function __construct() {
 		parent::__construct(NULL);
 		//数据库
 		$this->mysql = new SaeMysql();
@@ -36,7 +36,7 @@ class LBS {
 		parent::__destruct();
 		//do something destroy
 		$this->mysql->closeDb();
-	}*/
+	}
 
 //=========================get_lng_and_lat======================================//
     public function getlng($lng = 0, $lat = 0){
@@ -56,8 +56,9 @@ class LBS {
 
     public static function delta_lng_lat($lng, $lat){
 
-        $lngx = $this->getlng($lng, $lat);
-        $latx = $this->getlat($lng, $lat);
+//    	echo "lng=====$lng&lat====$lat";exit;
+        $lngx = self::getlng($lng, $lat);
+        $latx = self::getlat($lng, $lat);
 
         $min_lng = $lng - $lngx;
         $max_lng = $lng + $lngx;
