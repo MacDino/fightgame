@@ -45,4 +45,81 @@ class Props_Config{
 		90 => 8000,
 	); 
 
+	/*
+	 * 宝箱类普通、精品定义
+	 */
+	public static $treasure_box_package = array(
+		//普通
+		array(
+			array(
+				'id' 	=> 10,
+				'level' => 30,
+			),
+			array(
+				'id' 	=> 12,
+				'level' => 40,
+			),
+			array(
+				'id' 	=> 14,
+				'level' => 50,
+			),
+			array(
+				'id' 	=> 16,
+				'level' => 60,
+			),
+			array(
+				'id' 	=> 18,
+				'level' => 70,
+			),
+			array(
+				'id' 	=> 20,
+				'level' => 80,
+			),
+			array(
+				'id' 	=> 22,
+				'level' => 90,
+			),
+			array(
+				'id' 	=> 24,
+				'level' => 100,
+			),
+		),		
+		//精品
+		array(
+			array(
+				'id' 	=> 11,
+				'level' => 30,
+			),
+			array(
+				'id' 	=> 13,
+				'level' => 40,
+			),
+			array(
+				'id' 	=> 15,
+				'level' => 50,
+			),
+			array(
+				'id' 	=> 17,
+				'level' => 60,
+			),
+			array(
+				'id' 	=> 19,
+				'level' => 70,
+			),
+			array(
+				'id' 	=> 21,
+				'level' => 80,
+			),
+			array(
+				'id' 	=> 23,
+				'level' => 90,
+			),
+			array(
+				'id' 	=> 25,
+				'level' => 100,
+			),
+			
+		),
+	);
+
 }

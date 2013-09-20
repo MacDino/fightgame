@@ -83,7 +83,7 @@ class User_Info
 		}
 
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
-		$res = MySql::query($sql);
+		$res = MySql::execute($sql);
 		return $res;
 	}
 

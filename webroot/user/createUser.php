@@ -30,6 +30,9 @@ try {
         User_Property::createPropertylist($userId, User_Property::DOUBLE_HARVEST);
         User_Property::createPropertylist($userId, User_Property::AUTO_FIGHT);
         User_Property::createPropertylist($userId, User_Property::EQUIP_FORGE);
+		//初始化宝箱道具仓位
+        User_Property::initTreasureBox($userId);
+
         //User_Property::createPropertylist($userId, User_Property::EQUIP_GROW);
         $data['user_info'] = User_Info::getUserInfoByUserId($userId); 
         die;
