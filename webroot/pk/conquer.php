@@ -4,8 +4,8 @@
  * **/
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
-$targetUserId = $_REQUEST['target_id'] > 0 ? $_REQUEST['target_id'] : 0;
+$userId         = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
+$targetUserId   = $_REQUEST['target_id'] > 0 ? $_REQUEST['target_id'] : 0;
 try{
     $userInfo = User_Info::getUserInfoByUserId($userId);
     $targetUserInfo = User_Info::getUserInfoByUserId($targetUserId);
@@ -14,6 +14,9 @@ try{
         $msg  = '不存在的用户';
         exit();
     }
+    /**
+     * @todo 获取用户的征服次数
+     * **/
     /**
      * @todo 不知道是否需要加载人宠
      * **/
@@ -30,14 +33,11 @@ try{
     foreach ($targetUserFightTeam as $targetUserFight) {
         $isTargetUserAlive = $targetUserFight->isAlive() || $isTargetUserAlive;
     }
-
-    if(!$isUserAlive && $isTargetUserAlive) {
-        $msg = '您输掉了此次战斗';
-    }  else {
-        //
-//        $data['']
-    }
-
+    $data['fight_procedure'] = $fightResult['fight_procedure'];
+    $data['winner'] =array('user_id' => $isUserAlive && !$isTargetUserAlive ? $userId : $targetUserId);
+    /**
+     * @todo 征服次数减一
+     * **/
 
 }  catch (Exception $e) {
     $code = $e->getCode();
