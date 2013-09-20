@@ -84,7 +84,7 @@ class Monster
         //附带前后缀的针对各个属性点的计算率
 		$prefix_change      = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'attribute_change_list');
 		$suffix_change      = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'attribute_change_list');
-		$attribute          =  Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
+		$attribute          = Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
 		$growup_attribute   = User_Race::getGrowUpAttributes($monster['race_id'], $attribute);
 		return $attribute + $growup_attribute;
 	}
