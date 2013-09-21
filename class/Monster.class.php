@@ -195,7 +195,7 @@ class Monster
     /**
      * 对怪物的成长属性进行技能的加成
      * **/
-	public static function attributeWithSkill($attribute, $skill) {
+	public static function attributeWithSkill($attribute, $skill, $monster) {
 		$skill_list = array();
         if(is_array($skill)) {
             foreach ($skill as $value) {
@@ -204,8 +204,7 @@ class Monster
                 }
             }
         }
-
-		return Skill::getRoleAttributesWithSkill($attribute, $skill_list);
+        return Monster_SkillConfig::getAttributeBySkillInfos($attribute, $skill_list, $monster);
 	}
 
 	/****
