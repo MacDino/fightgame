@@ -594,4 +594,12 @@ CREATE TABLE `map_skill_conf_must` (
 -- ----------------------------
 INSERT INTO `map_skill_conf_must` VALUES ('1', '1', 'suffix', '1', '{\"attack\":[201,202],\"defense\":[212],\"passive\":[207]}');
 
-
+DROP TABLE IF EXISTS `user_pk_times`;
+CREATE TABLE `user_pk_times` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `times` int(11) NOT NULL,
+  `update_time` datetime NOT NULL COMMENT 'PK的时间',
+  `type` varchar(10) NOT NULL COMMENT '挑战还是征服:challenge|conquer',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;

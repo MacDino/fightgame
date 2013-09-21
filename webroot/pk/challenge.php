@@ -19,8 +19,10 @@ if(!(is_array($userInfo) && count($userInfo))) {
 //}
 //获取此用户挑战次数
 //@todo
-$challengeTimes = 5;
-if($challengeTimes <= 0) {
+
+$isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
+
+if(!$isCanFight['is_can']) {
     $code = 1;
     $msg  = '没有挑战次数了';
     exit();
