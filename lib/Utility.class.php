@@ -23,7 +23,7 @@ class Utility
 	//获取数组全部转为INT所需要乘以的系数
 	public static function getChangeIntRation($data)
 	{
-		$data = array_filter($data, 'self::arrayFilterFloat');
+		$data = array_filter($data, "Utility::arrayFilterFloat");
 		$max_decimals = 0;
 		foreach($data as $value)
 		{
