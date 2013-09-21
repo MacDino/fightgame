@@ -2,17 +2,31 @@
 class User_Property{
 	
 	CONST TABLE_NAME = 'user_props';
-	
+
 	/** 双倍咒符 */
 	CONST DOUBLE_HARVEST = 1;
 	CONST DOUBLE_HARVEST_PRICE = 20;
 
+	/** pk咒符 */
+	CONST PK = 2;
+
 	/** 属性增强咒符*/
 	CONST ATTRIBUTE_ENHANCE = 3;
 	CONST ATTRIBUTE_ENHANCE_PRICE = 20;
+
+	/** 人宠增强咒符 */
+	CONST PET = 4;
+
+	/** 背包咒符 */
+	CONST PACKAGE = 5;
+
 	/** 挂机咒符 */
 	CONST AUTO_FIGHT = 6;
 	CONST AUTO_FIGHT_PRICE = 50;
+
+	/** 好友上限咒符 */
+	CONST FRIEND = 7;
+
 	/** 锻造成功咒符 */
 	CONST EQUIP_FORGE = 8;
 	CONST EQUIP_FORGE_PRICE = 100;
@@ -213,12 +227,23 @@ class User_Property{
 		}
 		
 		$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 5, '1');//增加包裹数
-		$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PACK_PRICE, '-');//减少相应元宝 
 		if ($res_num){
-			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::FRIEND_PRICE, '2');//减少相应元宝 
+			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PACK_PRICE, '2');//减少相应元宝 
 			return $res_ingot;
 		}
 		return FALSE;	
+	}
+	/*
+	 * 使用背包
+	 */
+	public static function usePackNum($userId) {
+		if(!$userId)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if($userInfo['pet_num'] <= 0) {
+			throw new Exception ('背包数量不足', 10011);
+		}
+		$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 1, '2');
+		return $res_num;	
 	}
 	
 	/**
@@ -245,6 +270,18 @@ class User_Property{
 			return $res_ingot;
 		}
 		return FALSE;	
+	}
+	/*
+	 * 使用好友上限
+	 */
+	public static function useFriendNum($userId) {
+		if(!$userId)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if($userInfo['friend_num'] <= 0) {
+			throw new Exception ('好友上限技能数量不足', 10011);
+		}
+		$res_num = User_Info::updateSingleInfo($userId, 'friend_num', 1, '2');
+		return $res_num;	
 	}
 	
 	/**
@@ -273,6 +310,18 @@ class User_Property{
 		}
 		return FALSE;
 	}
+	/*
+	 * 使用人宠
+	 */
+	public static function usePetNum($userId) {
+		if(!$userId)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if($userInfo['pet_num'] <= 0) {
+			throw new Exception ('人宠咒符数量不足', 10011);
+		}
+		$res_num = User_Info::updateSingleInfo($userId, 'pet_num', 1, '2');
+		return $res_num;	
+	}
 	
 	/**
 	 * 购买PK次数
@@ -284,19 +333,32 @@ class User_Property{
 	{
 		if(!$userId)return FALSE;
 		
-		$num = isset($num)?$num:"1";
+		$num = $num > 0 ? $num : "1";
 		
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if($userInfo['pk_num'] >= User::PK_BUY_NUM) {
-			throw new Exception ('已经达到上限', 1);
+			throw new Exception ('已经达到上限', 10010);
 		}
 		
 		$res_num = User_Info::updateSingleInfo($userId, 'pk_num', $num, '1');
 		if($res_num){
-			$res_ingot = User_Info::updateSingleInfo($userid, 'ingot', User::PET_PRICE * $num, '2');
-			return $res_ingot;
+			$res_ingot = User_Info::updateSingleInfo($userid, 'ingot', User::PK_PRICE * $num, '2');
+			return TRUE;
 		}
 		return FALSE;
+	}
+
+	/*
+	 * 使用pk咒符
+	 */
+	public static function usePkNum($userId) {
+		if(!$userId)return FALSE;
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if($userInfo['pk_num'] <= 0) {
+			throw new Exception ('pk咒符数量不足', 10011);
+		}
+		$res_num = User_Info::updateSingleInfo($userId, 'pk_num', 1, '2');
+		return $res_num;	
 	}
 		
 	/** 
@@ -341,11 +403,15 @@ class User_Property{
 	 * @return 使用双倍符咒*/
 	public static function useDoubleHarvest($userId)
 	{
-		if(!$userId)return FALSE;
+		if(!$userId) {
+			throw new Exception('缺少用户id', 10000);
+		}
 		
 		//是否已经在用
 		$isUse = self::isuseDoubleHarvest($userId);
-		if(!empty($isUse))return FALSE;
+		if(!empty($isUse)){
+			throw new Exception ('此道具已在使用', 10001);	
+		}
 		
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, self::DOUBLE_HARVEST);
@@ -360,7 +426,7 @@ class User_Property{
 	public static function isuseDoubleHarvest($userId)
 	{
 		if(!$userId){
-			throw new Exception('缺少用户id', 1);
+			throw new Exception('缺少用户id', 100000);
 		}
 		
 		$res = MySql::selectOne('double_harvest', array('user_id' => $userId));
