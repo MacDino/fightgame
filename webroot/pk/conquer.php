@@ -17,11 +17,14 @@ try{
     /**
      * @todo 获取用户的征服次数
      * **/
-    /**
-     * @todo 不知道是否需要加载人宠
-     * **/
-    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level']);
+    $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CONQUER);
+    if(!$isCanFight['is_free'] && $userInfo['pk_num'] <= 0) {
+        $code = 1;
+        $msg = '本日征服次数已用完';
+        exit;
+    }
 
+    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level']);
     $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level']);
     /**获取战斗结果**/
     $fightResult            = Fight::multiFight($userFightTeam, $targetUserFightTeam);
@@ -36,9 +39,14 @@ try{
     $data['fight_procedure'] = $fightResult['fight_procedure'];
     $data['winner'] =array('user_id' => $isUserAlive && !$isTargetUserAlive ? $userId : $targetUserId);
     /**
-     * @todo 征服次数减一
+     * @todo 是否在这里处理征服符咒减一？
+     * 还是说前端来自己调用接口减一？
      * **/
-
+    if($userInfo['pk_num'] > 0 && !$isCanFight['is_free']) {
+        User_Info::subtractPKNum($userId, 1);
+    }
+    //本次本用户征服次数加1
+    PK_Conf::setConquerTimes($userId);
 }  catch (Exception $e) {
     $code = $e->getCode();
     $msg  = $e->getMessage();
