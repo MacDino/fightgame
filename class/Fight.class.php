@@ -126,7 +126,8 @@ class Fight {
 		$skill      = Monster::getMonsterSkill($monster);
 		$attribute  = Monster::getMonsterAttribute($monster);
 		//技能加成后的属性
-		$attribute  = array_map('intval', array_map('round',  Monster::attributeWithSkill($attribute, $skill)));
+//		$attribute  = array_map('intval', array_map('round',  Monster::attributeWithSkill($attribute, $skill)));
+		$attribute  = Monster::attributeWithSkill($attribute, $skill);
         //对各数据进行四舍五入取整
 		$attribute  = array_map('intval', array_map('round',(array)$attribute));
 		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
