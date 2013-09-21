@@ -25,6 +25,10 @@ class Map_Skill extends Model {
 		),
 	);
 
+
+    const TABLE_NAME_CONF_MUST = 'map_skill_conf_must';
+    const TABLE_NAME_CONF_NUM  = 'map_skill_conf_num';
+
 	public static function getSkillRate($boss_type)
 	{
 		return isset(self::$skill_rates[$boss_type]) ? self::$skill_rates[$boss_type] : false;
@@ -42,22 +46,52 @@ class Map_Skill extends Model {
 		return self::_getSkillCount($map_id, 'boss_min_count', $skill_type);
 	}
 
-	// 获取该地图普通后缀怪物的最低技能数, 包括攻击，防御，被动
-	public static function getSuffixMinCount($map_id, $skill_type = null)
-	{
-		return self::_getSkillCount($map_id, 'suffix_min_count', $skill_type);
-	}
-
 	// 获取该地图怪物boss的必须技能，包括攻击，防御，被动
 	public static function getBossMustHave($map_id, $skill_type = null)
 	{
 		return self::_getSkillIds($map_id, 'boss_must_have', $skill_type);
 	}
 
-	// 获取该地图怪物普通后缀的必须技能，包括攻击，防御，被动
-	public static function getSuffixMustHave($map_id, $skill_type = null)
-	{
-		return self::_getSkillIds($map_id, 'suffix_must_have', $skill_type);
+
+	/**
+     * 根据后缀获取最少拥有技能的数量
+     * 所有后缀的值
+     * **/
+	public static function getSuffixMinCount($mapId, $suffix = 0) {
+        $return = array();
+        if($mapId > 0) {
+            $where = array(
+                'map_id' => intval($mapId),
+            );
+            $res = Mysql::selectOne(self::TABLE_NAME_CONF_NUM, $where);
+            $return = isset($res['can_have_num']) ? json_decode($res['can_have_num'], true) : array();
+        }
+        foreach ($return as $key => $val) {
+            if($suffix > 0) {
+                $ret[$key] = $val['suffix'][$suffix];
+            }  else {
+                $ret[$key] = $val['suffix'];
+            }
+        }
+        return $ret;
+	}
+
+    /**
+     * 根据后缀
+     * 获取配置的后缀必须拥有的技能ids
+     * **/
+	public static function getSuffixMustHave($mapId, $suffixId) {
+        $return = array();
+        if($mapId > 0 && $suffixId > 0) {
+            $where = array(
+                'map_id' => $mapId,
+                'type'   => 'suffix',
+                'type_id' => $suffixId,
+            );
+            $res = Mysql::selectOne(self::TABLE_NAME_CONF_MUST, $where);
+            $return = isset($res['skill_ids']) ? json_decode($res['skill_ids'], true) : array();
+        }
+        return $return;
 	}
 
 	public static function setBossMinCount($map_id, $count, $skill_type)

@@ -173,18 +173,18 @@ class Skill
      * @param $attributes 角色成长属性
      *
      */
-    public static function getRoleAttributesWithSkill($attributes, $skills){
+    public static function getRoleAttributesWithSkill($attributes, $skills) {
         if(empty($skills)){
             return $attributes;
         }
 
         $bdjn_skill = array();
-        foreach($skills as $skill => $level){
-            if($level == 0){
+        foreach((array)$skills as $skill => $level) {
+            if($level == 0) {
                 continue;
             }
             //主动技能+锻造技能
-            if(isset(self::$skill_info[$skill][1])){
+            if(isset(self::$skill_info[$skill][1])) {
                 $skill_group    = self::$skill_info[$skill][1];
                 if($skill_group == self::SKILL_GROUP_WLGJ  || $skill_group == self::SKILL_GROUP_FSGJ){
                     $skill_attr = self::$_skill_attributes[$skill];
