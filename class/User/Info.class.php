@@ -17,9 +17,15 @@ class User_Info
 		return $res;
 	}
 	
-	//判断是否升级
+	/** @desc 升级判断 */
 	public static function isLevel($userId){
-		return 0;
+		$userInfo = self::getUserInfoByUserId($userId);
+		$level = MySql::selectOne(self::TABLE_NAME, array('need_experience' => $userInfo['experience']), array('level'));
+		if($level['level'] > $userInfo['user_level']){
+			return $level['level'];
+		}else{
+			return FALSE;
+		}
 	}
 	/**
 	 * 获取角色列表
@@ -239,7 +245,6 @@ class User_Info
      */
 	public static function getUserInfoFightAttribute($userId, $needvalue = FALSE){
 		//属性点
-//		echo $userId;exit;
 		$baseAttribute = array(
 			ConfigDefine::USER_ATTRIBUTE_POWER			=> 0,//力量
 			ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER	=> 0,//魔力
@@ -263,11 +268,10 @@ class User_Info
 		//根据ID取出用户基本信息
 		$userInfo = self::getUserInfoByUserId($userId);
 
-		//根据ID取出所有装备,假设为getEquipInfoByUserId
-		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);
-		//把装备中的属性点放在一起,属性值放在一起
+		//装备加成
+		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);//根据ID取出所有装备,假设为getEquipInfoByUserId
 		foreach ($equipInfo as $p)
-		{
+		{//把装备中的属性点放在一起,属性值放在一起
 			//基础属性
 			$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
 			if(is_array($equipBaseAttribute)){
@@ -297,6 +301,25 @@ class User_Info
 				}
 			}
 		}
+		
+		//技能加成
+		$skillAttribute = Skill_Info::getSkillList($userId, 1);
+		foreach ($skillAttribute as $a){
+			$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
+			if(is_array($skillValue)){
+				foreach ($skillValue as $x=>$y)
+				{
+					if(array_key_exists($x, $baseAttribute))//技能加成中属性点部分
+					{
+						$baseAttribute[$x] += $y;
+					}elseif(array_key_exists($x, $valueAttribute)){//技能加成中属性值部分
+						$valueAttribute[$x] += $y;
+					}else{
+					}
+				}
+			}
+		}
+		
 		//根据种族和等级取出基本属性点
 		$userBaseAttribute = User_Attributes::getBaseAttribute($userInfo['race_id'], $userInfo['user_level']);
 
@@ -315,6 +338,8 @@ class User_Info
 		foreach ($valueAttribute as $key => $value){
 			$userAttributeValue[$key] += $value;
 		}
+		
+		
 
 		return $userAttributeValue;
 	}
@@ -364,12 +389,9 @@ class User_Info
 		return $res;
 	}
 	
-	public static function skillAttribute($data){
-		
-	}
-	
 	public static function levelUp($userId, $level = NULL){
 		//调用奖励
+		
 	}
 	
 	//锻造成功率 isUse 是否使用锻造符
@@ -387,5 +409,6 @@ class User_Info
 		
 		return $skillOdds;
 	}
-
+	
+	
 }

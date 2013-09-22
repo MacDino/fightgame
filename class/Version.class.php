@@ -32,12 +32,20 @@ class Version
 	
 	public static function getActionList(){
 		$res = ConfigDefine::actionList();
-		return $res;
+		foreach($res as $key=>$value)
+		{
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		return $result;
 	}
 	
 	public static function getSkillList(){
 		$res = ConfigDefine::skillList();
-		return $res;
+		foreach($res as $key=>$value)
+		{
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		return $result;
 	}
 	
 	public static function getLevelExpList()

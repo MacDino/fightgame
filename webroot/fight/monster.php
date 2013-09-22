@@ -33,7 +33,7 @@ if($mapId <=0 ) {
 try {
     /**初始化一个怪物**/
     $monster            = Map::getMonster($mapId);
-
+var_dump($monster);
     $monsterFightTeam[] = Fight::createMonsterFightable($monster);
     $data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
     /**当前角色fight对象，如果有人宠，获取人宠**/
@@ -87,7 +87,7 @@ try {
         }
 
     }
-    print_r($data);
+//    print_r($data);
 	$code   = 0;
 } catch (Exception $e) {
 	$code   = 1;

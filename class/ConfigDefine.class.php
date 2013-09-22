@@ -3,37 +3,37 @@
 class ConfigDefine
 {
 	//用户属性定义    
-    CONST USER_ATTRIBUTE_POWER        	= 101;//力量 - 基本属性
-    CONST USER_ATTRIBUTE_MAGIC_POWER  	= 102;//灵力 - 基本属性
-    CONST USER_ATTRIBUTE_PHYSIQUE     	= 103;//体质 - 基本属性
-    CONST USER_ATTRIBUTE_ENDURANCE    	= 104;//耐力 - 基本属性
-    CONST USER_ATTRIBUTE_QUICK        	= 105;//敏捷 - 基本属性
+    CONST USER_ATTRIBUTE_POWER        	= 1101;//力量 - 基本属性
+    CONST USER_ATTRIBUTE_MAGIC_POWER  	= 1102;//魔力 - 基本属性
+    CONST USER_ATTRIBUTE_PHYSIQUE     	= 1103;//体质 - 基本属性
+    CONST USER_ATTRIBUTE_ENDURANCE    	= 1104;//耐力 - 基本属性
+    CONST USER_ATTRIBUTE_QUICK        	= 1105;//敏捷 - 基本属性
 
-    CONST USER_ATTRIBUTE_HIT          	= 106;//命中 - 成长属性
-    CONST USER_ATTRIBUTE_HURT         	= 107;//伤害 - 成长属性
-    CONST USER_ATTRIBUTE_MAGIC        	= 108;//魔法 - 成长属性
-    CONST USER_ATTRIBUTE_BLOOD        	= 109;//气血 - 成长属性
-    CONST USER_ATTRIBUTE_PSYCHIC      	= 110;//灵力 - 成长属性
-    CONST USER_ATTRIBUTE_SPEED        	= 111;//速度 - 成长属性
-    CONST USER_ATTRIBUTE_DEFENSE      	= 112;//防御 - 成长属性
-    CONST USER_ATTRIBUTE_DODGE        	= 113;//躲闪 - 成长属性
-    CONST USER_ATTRIBUTE_LUCKY        	= 114;//幸运 - 成长属性
+    CONST USER_ATTRIBUTE_HIT          	= 1106;//命中 - 成长属性
+    CONST USER_ATTRIBUTE_HURT         	= 1107;//伤害 - 成长属性
+    CONST USER_ATTRIBUTE_MAGIC        	= 1108;//魔法 - 成长属性
+    CONST USER_ATTRIBUTE_BLOOD        	= 1109;//气血 - 成长属性
+    CONST USER_ATTRIBUTE_PSYCHIC      	= 1110;//灵力 - 成长属性
+    CONST USER_ATTRIBUTE_SPEED        	= 1111;//速度 - 成长属性
+    CONST USER_ATTRIBUTE_DEFENSE      	= 1112;//防御 - 成长属性
+    CONST USER_ATTRIBUTE_DODGE        	= 1113;//躲闪 - 成长属性
+    CONST USER_ATTRIBUTE_LUCKY        	= 1114;//幸运 - 成长属性
 
 	//技能定义
-	CONST SKILL_ZJ      				= 201;//重击
-	CONST SKILL_LJ      				= 202;//连击
-    CONST SKILL_LXYZ    				= 203;//灵犀一指
-    CONST SKILL_SWZH    				= 204;//三昧真火
-    CONST SKILL_HFHY    				= 205;//呼风唤雨 
-    CONST SKILL_WLJ     				= 206;//五雷决
-    CONST SKILL_WFX     				= 207;//物防修                                                     
-    CONST SKILL_FFX     				= 208;//法防修
-    CONST SKILL_GX      				= 209;//攻修
-    CONST SKILL_FX      				= 210;//法修
-    CONST SKILL_DZ      				= 211;//锻造
-    CONST SKILL_FY      				= 212;//防御
-    CONST SKILL_FJ      				= 213;//反击
-    CONST SKILL_FD      				= 214;//法盾
+	CONST SKILL_ZJ      				= 1201;//重击
+	CONST SKILL_LJ      				= 1202;//连击
+    CONST SKILL_LXYZ    				= 1203;//灵犀一指
+    CONST SKILL_SWZH    				= 1204;//三昧真火
+    CONST SKILL_HFHY    				= 1205;//呼风唤雨 
+    CONST SKILL_WLJ     				= 1206;//五雷决
+    CONST SKILL_WFX     				= 1207;//物防修                                                     
+    CONST SKILL_FFX     				= 1208;//法防修
+    CONST SKILL_GX      				= 1209;//攻修
+    CONST SKILL_FX      				= 1210;//法修
+    CONST SKILL_DZ      				= 1211;//锻造
+    CONST SKILL_FY      				= 1212;//防御
+    CONST SKILL_FJ      				= 1213;//反击
+    CONST SKILL_FD      				= 1214;//法盾
     
     //战斗动作
     CONST YOU							= 7100;//你
