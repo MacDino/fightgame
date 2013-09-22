@@ -1,7 +1,7 @@
 <?php
-//创建装备
+//装备锻造
 include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
 error_reporting(2047);
 $equipId = isset($_REQUEST['equip_id']) ? intval($_REQUEST['equip_id']) : 0;
-$r = Equip_Info::upgrade($equipId);
+$r = Equip_Info::forge($equipId);
 var_dump($r);
