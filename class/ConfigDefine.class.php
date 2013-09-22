@@ -35,6 +35,7 @@ class ConfigDefine
     CONST SKILL_FJ      				= 1213;//反击
     CONST SKILL_FD      				= 1214;//法盾
     CONST SKILL_TX						= 1215;//体修
+    CONST SKILL_PT						= 1216;//普通攻击
     
     //战斗动作
     CONST YOU							= 7100;//你
