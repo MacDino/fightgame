@@ -71,19 +71,28 @@ echo $html;
 
 
 <h1>宝箱咒符</h1>
-
-
-
+<?
+$html = "<table>";
+foreach ($box as $v) {
+	$html.= '<tr><td>宝箱名称:</td><td>'.$v["props_name"].'</td>';
+	$html.= '<td><a href="../props/buyUserProps.php?user_id='.$userId.'&props_id='.$v["props_id"].'">购买</a></td>';
+}
+$html.= "</table>";
+echo $html;
+?>
 <h1>锻造咒符</h1>
+<?php
 
-
-<? foreach ($propertyInfo as $i){?>
-<tr>
-	<th>道具名称:<?=$i["property_id"]?></th><th>道具数量:<?=$i["property_num"]?></th>
-	<th><a href=../props/useProperty.php?user_id=<?=$userId?>&type=<?=$i["property_id"]?>>使用道具</a></th>
-	<th><a href="../props/buyUserProps.php?user_id=<?=$userId?>&type=<?=$i["property_id"]?>">购买道具</a></th>
-
-<? }?>
+$html = "<table>";
+foreach ($forge as $v){
+	$num = User_Property::getPropertyNum($userId, $v['props_id']);
+	$html.= '<tr><td>道具名称:</td><td>'.$v["props_name"].'</td><td>道具数量:'.$num.'</td>';
+	$html.= '<td><a href="../props/buyUserProps.php?user_id='.$userId.'&props_id='.$v["props_id"].'">购买</a></td>';
+	$html.= '<td><a href="../props/useProperty.php?user_id='.$userId.'&props_id='.$v["props_id"].'">使用道具</a></td>';
+}
+$html.= "</table>";
+echo $html;
+?>
 </table>
 
 <a href="map.php">地图</a>
