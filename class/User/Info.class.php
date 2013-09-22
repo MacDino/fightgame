@@ -339,7 +339,10 @@ class User_Info
 			$userAttributeValue[$key] += $value;
 		}
 		
-		
+		//体修加成
+		if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
+			$userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] += $userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] * 0.01 * $skillAttribute[ConfigDefine::SKILL_TX]['skill_level'];
+		}	
 
 		return $userAttributeValue;
 	}

@@ -34,6 +34,7 @@ class ConfigDefine
     CONST SKILL_FY      				= 1212;//防御
     CONST SKILL_FJ      				= 1213;//反击
     CONST SKILL_FD      				= 1214;//法盾
+    CONST SKILL_TX						= 1215;//体修
     
     //战斗动作
     CONST YOU							= 7100;//你
@@ -94,6 +95,7 @@ class ConfigDefine
 		    self::SKILL_SWZH    				=> '三昧真火',
 		    self::SKILL_HFHY    				=> '呼风唤雨',
 		    self::SKILL_WLJ     				=> '五雷决',
+		    self::SKILL_TX						=> '体修',
 		    self::SKILL_WFX     				=> '物防修',                                                   
 		    self::SKILL_FFX     				=> '法防修',
 		    self::SKILL_GX      				=> '攻修',
