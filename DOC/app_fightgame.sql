@@ -603,3 +603,21 @@ CREATE TABLE `user_pk_times` (
   `type` varchar(10) NOT NULL COMMENT '挑战还是征服:challenge|conquer',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `fight_setting` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `log` tinyint(1) NOT NULL DEFAULT '0',
+  `result` tinyint(1) NOT NULL DEFAULT '0',
+  `gold` tinyint(1) NOT NULL DEFAULT '0',
+  `exp` tinyint(1) NOT NULL DEFAULT '0',
+  `prop` tinyint(1) NOT NULL DEFAULT '0',
+  `gray` tinyint(1) NOT NULL DEFAULT '0',
+  `white` tinyint(1) NOT NULL DEFAULT '0',
+  `green` tinyint(1) NOT NULL DEFAULT '0',
+  `blue` tinyint(1) NOT NULL DEFAULT '0',
+  `purple` tinyint(1) NOT NULL DEFAULT '0',
+  `orange` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
