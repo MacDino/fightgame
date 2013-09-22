@@ -10,7 +10,7 @@ if(!$userId)
     die;
 }
 try {
-    $data = User_Property::buyPackNum($userId);
+    $data = User_Property::buyPkNum($userId);
 } catch (Exception $e) {
 	$code = $e->getCode();
 	$msg = $e->getMessage();

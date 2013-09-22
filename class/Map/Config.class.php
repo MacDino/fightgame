@@ -18,14 +18,20 @@ class Map_Config extends Model {
 		if ( ! $map_config = self::getOneByMapId($map_id)) {
 			return false;
 		}
-
 		$map_config['monsters'] = array();
 
 		$monsters = DB::table('map_monster')->getByMapId($map_id);
 		foreach ($monsters as $monster) {
 			$map_config['monsters'][$monster['monster_id']] = $monster['monster_name'];
 		}
-
 		return isset($item) ? $map_config[$item] : $map_config;
 	}
+
+    public static function getOneByMapId($mapId) {
+        if($mapId > 0) {
+            $where = array('map_id' => $mapId);
+            return MySql::selectOne(self::$table_name, $where);
+        }
+        return FALSE;
+    }
 }

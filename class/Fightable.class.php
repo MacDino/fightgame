@@ -111,7 +111,10 @@ class Fightable {
 			return false;
 		}
 
-		//休息状态跳过
+		/**
+         * 休息状态下，此回合结束
+         * @todo 如何返回结构
+         * **/
 		if ( $this->isSleep()) {
 			$this->unsetSleep();
 			return false;

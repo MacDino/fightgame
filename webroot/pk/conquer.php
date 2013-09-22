@@ -4,8 +4,8 @@
  * **/
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
-$targetUserId = $_REQUEST['target_id'] > 0 ? $_REQUEST['target_id'] : 0;
+$userId         = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
+$targetUserId   = $_REQUEST['target_id'] > 0 ? $_REQUEST['target_id'] : 0;
 try{
     $userInfo = User_Info::getUserInfoByUserId($userId);
     $targetUserInfo = User_Info::getUserInfoByUserId($targetUserId);
@@ -15,10 +15,16 @@ try{
         exit();
     }
     /**
-     * @todo 不知道是否需要加载人宠
+     * @todo 获取用户的征服次数
      * **/
-    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level']);
+    $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CONQUER);
+    if(!$isCanFight['is_free'] && $userInfo['pk_num'] <= 0) {
+        $code = 1;
+        $msg = '本日征服次数已用完';
+        exit;
+    }
 
+    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level']);
     $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level']);
     /**获取战斗结果**/
     $fightResult            = Fight::multiFight($userFightTeam, $targetUserFightTeam);
@@ -30,15 +36,17 @@ try{
     foreach ($targetUserFightTeam as $targetUserFight) {
         $isTargetUserAlive = $targetUserFight->isAlive() || $isTargetUserAlive;
     }
-
-    if(!$isUserAlive && $isTargetUserAlive) {
-        $msg = '您输掉了此次战斗';
-    }  else {
-        //
-//        $data['']
+    $data['fight_procedure'] = $fightResult['fight_procedure'];
+    $data['winner'] =array('user_id' => $isUserAlive && !$isTargetUserAlive ? $userId : $targetUserId);
+    /**
+     * @todo 是否在这里处理征服符咒减一？
+     * 还是说前端来自己调用接口减一？
+     * **/
+    if($userInfo['pk_num'] > 0 && !$isCanFight['is_free']) {
+        User_Info::subtractPKNum($userId, 1);
     }
-
-
+    //本次本用户征服次数加1
+    PK_Conf::setConquerTimes($userId);
 }  catch (Exception $e) {
     $code = $e->getCode();
     $msg  = $e->getMessage();
