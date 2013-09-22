@@ -5,6 +5,7 @@
  * 战斗结果的数据体结构需要进行重构
  * **/
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
+error_reporting(E_ALL || ~E_NOTICE); //显示除去 E_NOTICE 之外的所有错误信息
 
 $userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $mapId              = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
@@ -12,7 +13,7 @@ if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
 }
-//$userLastResult     = Fight_Result::getResult($userId, $mapId);
+$userLastResult     = Fight_Result::getResult($userId, $mapId);
 if(is_array($userLastResult) && count($userLastResult)) {
     $accessDiffTime = time() - $userLastResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastResult['use_time']) {
@@ -22,17 +23,12 @@ if(is_array($userLastResult) && count($userLastResult)) {
         $data   = $result;
         exit();
     }
-    $mapId = $mapId > 0 ? $mapId : $userLastResult['map_id'];
 }
-if($mapId <=0 ) {
-    $code = 1; $msg = '请选择对应地图';
-    exit();
-}
+$mapId = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 
 try {
     /**初始化一个怪物**/
     $monster            = Map::getMonster($mapId);
-
     $monsterFightTeam[] = Fight::createMonsterFightable($monster);
     $data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
     /**当前角色fight对象，如果有人宠，获取人宠**/
@@ -76,7 +72,13 @@ try {
         $data['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['experience']);
-//        $data['level_up'] = User_Info::isLevel($userId);
+        $isLevelUp                  = User_Info::isLevel($userId);
+        if($isLevelUp) {
+            $data['level_up'] = $isLevelUp;
+            $levelUpNum = ($isLevelUp - $userInfo['user_level']) > 0 ? $isLevelUp - $userInfo['user_level'] : 1;
+            User_Info::addLevelNum($userId, $levelUpNum);
+        }
+
         User_Info::addMoney($userId, $data['money']);
 
         if(is_array($data['equipment']) && count($data['equipment'])) {

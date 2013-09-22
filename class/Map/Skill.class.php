@@ -94,42 +94,6 @@ class Map_Skill extends Model {
         return $return;
 	}
 
-	public static function setBossMinCount($map_id, $count, $skill_type)
-	{
-		$params = array(
-			'map_id' => $map_id,
-			'skill_type' => $skill_type,
-			'config_type' => 'boss_min_count',
-		);
-
-		//首先检查是否已存在旧的最小值
-		if (self::select($params))
-		{
-			return self::update(array('skill_id' => $count), $params);
-		}
-
-		$params['skill_id'] = $count;
-		return self::insert($params);
-	}
-
-	public static function setSuffixMinCount($map_id, $count, $skill_type)
-	{
-		$params = array(
-			'map_id' => $map_id,
-			'skill_type' => $skill_type,
-			'config_type' => 'suffix_min_count',
-		);
-
-		//首先检查是否已存在旧的最小值
-		if (self::select($params))
-		{
-			return self::update(array('skill_id' => $count), $params);
-		}
-
-		$params['skill_id'] = $count;
-		return self::insert($params);
-	}
-
 	protected static function _getSkillIds($map_id, $config_type, $skill_type = null)
 	{
 		$where = array(

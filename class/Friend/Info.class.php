@@ -195,8 +195,10 @@ class Friend_Info
 	{
 		//简单检测
 		if(!$userId || !$lng || !$lat)	return FALSE;
-		
-		$_array = LBS::delta_lng_lat($lon, $lat);  
+		//echo $_SERVER['DOCUMENT_ROOT'] . "/lib/LBS.class.php";
+		/*require_once $_SERVER['DOCUMENT_ROOT'] . "/lib/LBS.class.php";
+		$lbs = new LBS();*/
+		$_array = LBS::delta_lng_lat($lng, $lat);  
 
 		$min_lng = $_array[0];
 		$max_lng = $_array[1];

@@ -5,8 +5,9 @@ $doNotPut = TRUE;
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
 $act   = isset($_REQUEST['act'])?$_REQUEST['act']:'';//动作
-//echo $act;
-$userInfo = json_decode($_REQUEST['user_info'], TRUE);
+//echo $_COOKIE['user_info'];
+$userInfo = json_decode($_COOKIE['user_info'], TRUE);
+//var_dump($userInfo);
 $userId = $userInfo['user_id'];
 
 if($userId)
@@ -20,6 +21,7 @@ if($userId)
 		$interFace = 'skill/list';
 	    $params = array('user_id' => $userId);
 	    $data = Curl::sendRequest($interFace, $params);
+	    var_dump($data);
 		$res = json_decode($data, TRUE);
 		if($res['c'] == 0){
 			$result = $res['d'];
@@ -34,6 +36,8 @@ if($userId)
 ?>
 <tr>
 	<td>技能名称:<?=$i["skill_id"]?></td><td>技能等级:<?=$i["skill_level"]?></td>
+	<td>技能分类:<?=$i["skill_type"]?></td><td>是否使用:<?=$i["is_use"]?></td>
+	<td>位置:<?=$i["skill_location"]?></td>
 </tr>
 <? }}?>
 </table>

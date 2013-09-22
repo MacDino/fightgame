@@ -36,9 +36,26 @@ class Monster_SkillConfig {
     private static function _getFunctionList() {
         return array(
             ConfigDefine::SKILL_ZJ => 'zjAddAttribute',
+            ConfigDefine::SKILL_LJ => 'ljAddAttribute',
+            ConfigDefine::SKILL_LXYZ => 'lxyzAddAttribute',
+            ConfigDefine::SKILL_SWZH => 'swzhAddAttribute',
+            ConfigDefine::SKILL_HFHY => 'hfhyAddAttribute',
             ConfigDefine::SKILL_WLJ => 'wljAddAttribute',
             ConfigDefine::SKILL_DZ => 'dzAddAttribute',
+            ConfigDefine::SKILL_TX => 'txAddAttribute',
         );
+    }
+
+    /**
+     * 体修被动技能增加气血
+     * **/
+    private static function txAddAttribute($attributes, $skillLevel, $raceId) {
+        $skillLevel = intval($skillLevel);
+        if($skillLevel > 0) {
+            $blood = $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD];
+            $attributes[ConfigDefine::USER_ATTRIBUTE_BLOOD] = $blood + $blood * $skillLevel * 0.01;
+        }
+        return $attributes;
     }
 
     /**
@@ -64,12 +81,69 @@ class Monster_SkillConfig {
     }
 
     /**
+     * 连击增加的属性伤害点
+     * **/
+    private static function ljAddAttribute($attributes, $skillLevel, $raceId) {
+        $addHurt = 0;
+        $skillLevel = intval($skillLevel);
+        if($skillLevel > 0) {
+            switch ($raceId) {
+                case User_Race::RACE_HUMAN:
+                    $addHurt = 2.5 + 0.014*$skillLevel;
+                    break;
+                case User_Race::RACE_TSIMSHIAN:
+                    $addHurt = 2.01 + 0.02*$skillLevel;
+                    break;
+                case User_Race::RACE_DEMON:
+                    $addHurt = 2.02 + 0.01*$skillLevel;
+                    break;
+            }
+        }
+        $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] += $addHurt;
+        return $attributes;
+    }
+
+    /**
+     * 灵犀一指增加命中和伤害
+     * **/
+    private static function lxyzAddAttribute($attributes, $skillLevel, $raceId = '') {
+        $skillLevel = intval($skillLevel);
+        if($skillLevel > 0) {
+            $attributes[ConfigDefine::USER_ATTRIBUTE_HIT] += 4*$skillLevel;
+            $attributes[ConfigDefine::USER_ATTRIBUTE_HURT] += 2*$skillLevel;
+        }
+        return $attributes;
+    }
+
+    /*
+     * 叁味真火增加灵力
+     * **/
+    private static function swzhAddAttribute($attributes, $skillLevel, $raceId = '') {
+        $skillLevel = intval($skillLevel);
+        if($skillLevel > 0) {
+            $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] += 2*$skillLevel;
+        }
+        return $attributes;
+    }
+
+    /**
+     * 呼风唤雨增加灵力
+     * **/
+    private static function hfhyAddAttribute($attributes, $skillLevel, $raceId = '') {
+        $skillLevel = intval($skillLevel);
+        if($skillLevel > 0) {
+            $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] += 1*$skillLevel;
+        }
+        return $attributes;
+    }
+
+    /**
      * 五雷决增加携带者的灵力
      * **/
     private static function wljAddAttribute($attributes, $skillLevel, $raceId = '') {
         $skillLevel = intval($skillLevel);
         if($skillLevel > 0) {
-            $attributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE] += 1*$skillLevel;
+            $attributes[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] += 1*$skillLevel;
         }
         return $attributes;
     }

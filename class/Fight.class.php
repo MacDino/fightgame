@@ -121,7 +121,12 @@ class Fight {
         return new Fightable($user_level, $attrbuteArr, $fight_skill, array('user_id' => $user_id));
     }
 
-
+    /**
+     * 生成一个怪物的战斗对象
+     * 此时的怪物跟用户类似但
+     * 计算的属性加成点是自己进行计算的
+     * 并未跟用户那块的加成计算在一起。
+     * **/
 	public static function createMonsterFightable($monster) {
 		$skill      = Monster::getMonsterSkill($monster);
 		$attribute  = Monster::getMonsterAttribute($monster);

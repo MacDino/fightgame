@@ -57,4 +57,5 @@ class Skill_Common {
         }
         return $return;
     }
+    
 }
