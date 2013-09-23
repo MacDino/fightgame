@@ -183,6 +183,7 @@ class Skill_Output
             case ConfigDefine::SKILL_ZJ:
             case ConfigDefine::SKILL_LJ:
             case ConfigDefine::SKILL_LXYZ:
+            case ConfigDefine::SKILL_FJ:
                 $userAttributeDefence = $targetUserData['attributes'][ConfigDefine::USER_ATTRIBUTE_DEFENSE];
                 $userSkillDefence = self::_wlfy($targetUserData['skill_ids']);
                 break;
