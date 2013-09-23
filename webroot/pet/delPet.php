@@ -1,6 +1,6 @@
 <?php
 //对应前台 "角色-人宠"
-//驱使人宠  
+//释放人宠
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
