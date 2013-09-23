@@ -1,5 +1,45 @@
 <?php
 class Skill_Common {
+    
+    //随机5次用户等级，取最大三个值的平均值
+    public static function rand5UserLevelGetTop3Average($userLevel)
+    {
+        $userLevel = (int)$userLevel;
+        if($userLevel == 1)return 1;
+        if($userLevel < 1)return 0;
+        for($i=1;$i<=5;$i++)
+        {
+            $res[] = PerRand::getRandValue(array(0, $userLevel));
+        }
+        rsort($res);
+        $res = array_slice($res, 0, 3);
+        $averageValue = array_sum($res)/3;
+        return $averageValue;
+    }
+    //随机获取系数
+    public static function ratioValue()
+    {
+        $ratio = 0.05;
+        $ratioValue = 1;
+        $ratioKey = PerRand::getRandResultKey(array($ratio));
+        if($rationKey)$ratioValue = 2;
+        return $ratioValue; 
+    }
+    //随机获取用用户力量1%-5% 
+    public static function randUserAttributePower($userAttributePower)
+    {
+        return PerRand::getRandValue($userAttributePower*0.01, $userAttributePower*0.05);
+    }
+    //随机获取用用户伤害3%-9% 
+    public static function randUserAttributeHurt($userAttributeHurt)
+    {
+        return PerRand::getRandValue($userAttributePower*0.03, $userAttributePower*0.09);
+    }
+
+
+
+
+
     /**
      * @desc 物理攻击常用值
      */

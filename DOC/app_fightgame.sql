@@ -622,6 +622,20 @@ CREATE TABLE `fight_setting` (
   `orange` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `user_reward`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_reward` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `name` varchar(100) NOT NULL,
+        `desc` varchar(300) DEFAULT NULL,
+        `type` tinyint(3) NOT NULL DEFAULT '1' COMMENT '类型  1：登录奖励  2：首充奖励 3：升级奖励',
+        `status` int(11) NOT NULL COMMENT '状态 1：进行中 2：已完成',
+        `create_time` datetime NOT NULL COMMENT '记录创建时间',
+        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
 
 

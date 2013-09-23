@@ -55,6 +55,11 @@ class Equip_Info
         return $res;
     }
     
+    //装备升级
+    public static function upgrade($equipId){
+            
+    }
+
     //装备价格 add by zhengyifeng 76387051@qq.com  2013.9.13
     public static function priceEquip($userId, $equipId)
     {
