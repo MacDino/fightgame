@@ -12,7 +12,7 @@ try {
 //    print_r($data);
 //    var_dump($data);exit;
     $code = 0;
-    $msg = 'ok';
+    $msg = 'ok';  
     die;
 } catch (Exception $e) {
     $code = 1;
