@@ -1,27 +1,40 @@
 <?php
-//获取用户信息，包括用户基本信息，用户基本属性，用户成长属性
+//显示奖励列表
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
+$doNotPut = TRUE;
+echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
-$userId = isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'27';//用户ID
+$userId   = isset($_REQUEST['userId'])?$_REQUEST['userId']:'';
 
-if(!$userId)
+if($userId)
 {
-    echo "无法获得当前用户信息";
-}else{
+		$interFace = 'award/list';
+	    $params = array('user_id' => $userId);
+	    $data = Curl::sendRequest($interFace, $params);
+	    var_dump($data);
+		$res = json_decode($data, TRUE);
+		if($res['code'] == 0){
+			$result = $res['data'];
+		}
+}
 ?>
 
 <table>
-
-
+<? if(is_array($result)){
+	foreach ($result as $v){
+?>
+<tr>
+	<td><?=$v["name"]?></td>
+	<td><?=$v["desc"]?></td>
+	<td>
+    <?
+        if($v['status'] == 1){
+            echo '进行中';    
+        }elseif($v['status'] == 2){
+            echo '已完成';    
+        }
+    ?>
+    </td>
+</tr>
+<? }}?>
 </table>
-
-<p>
-<a href="map.php">地图</a>
-<a href="race.php">角色</a>
-<a href="pk.php">PK</a>
-<a href="shop.php">商店</a>
-<a href="friend.php">好友</a>
-<a href="other.php">其他</a>
-</p>
-
-<?php } ?>
