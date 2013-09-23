@@ -3,3 +3,4 @@
 //人宠列表  
 //动作: 驱使 释放 
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
+
