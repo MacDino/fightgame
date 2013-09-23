@@ -28,26 +28,26 @@ class Equip_Info
         return $res;
     }
 
-    //装备升级
-    public static function upgrade($equipId){
+    //装备打造
+    public static function forge($equipId){
         $res = FALSE;
         $info = self::getEquipInfoById($equipId);
         if($info){
             $hit = PerRand::getRandResultKey(Skill::getQuickAttributeForEquip($info['equip_level']));
-            if($hit == 'success'){ //装备等级升一级
+            if($hit == 'success'){ //装备锻造等级升一级
                 $attributeList = json_decode($info['attribute_base_list'], TRUE);
-                $upgradeAttributeList = Equip_Config::upgradeAttributeList();
+                $forgeAttributeList = Equip_Config::forgeAttributeList();
                 //增加属性值
                 foreach($attributeList AS $k=>$v){
-                    if(isset($upgradeAttributeList[$info['equip_type']][$k])){
-                        $attributeList[$k] = $upgradeAttributeList[$info['equip_type']][$k] + $v;
+                    if(isset($forgeAttributeList[$info['equip_type']][$k])){
+                        $attributeList[$k] = $forgeAttributeList[$info['equip_type']][$k] + $v;
                     }
                 }
                 $data = array();
                 $data['equip_level'] = $info['equip_level'] + 1;
                 $data['attribute_base_list'] = json_encode($attributeList);
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
-            }elseif($hit == 'no_less_dz' && $info['equip_level'] != 0){ //装备等级掉一级
+            }elseif($hit == 'no_less_dz' && $info['equip_level'] != 0){ //装备锻造等级掉一级
                 $data['equip_level'] = $info['equip_level'] - 1;
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
             }
@@ -55,6 +55,11 @@ class Equip_Info
         return $res;
     }
     
+    //装备升级
+    public static function upgrade($equipId){
+            
+    }
+
     //装备价格 add by zhengyifeng 76387051@qq.com  2013.9.13
     public static function priceEquip($userId, $equipId)
     {

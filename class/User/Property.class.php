@@ -601,6 +601,12 @@ class User_Property{
 			}
 			for( $i = 0; $i < 10; $i++ ){
 				/*
+				 * 两件套装
+				 */
+				if($i < 2) {
+					$equipQuality = Equip::EQUIP_QUALITY_HOLY;
+				}
+				/*
 				 * 至少四件橙色装备
 				 */
 				if( $i < 4) {
@@ -608,13 +614,14 @@ class User_Property{
 				} else {
 					$color = self::randEquipColor();	
 				}
-				$res = Equip_Create::createEquip($color, $userId, $level);
+				$res = Equip_Create::createEquip($color, $userId, $level, 0, $equipQuality);
 			}
 		}	
 		return $res;
 	}
 	/*
 	 * 随机普通宝箱装备颜色
+	 * 蓝色以上装备
 	 */
 	public function randEquipColor(){
 		$colors = array	(

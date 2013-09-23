@@ -28,7 +28,7 @@ class Equip_Config
 	}
 
     //打造增加的基本属性
-    public static function upgradeAttributeList(){
+    public static function forgeAttributeList(){
         $ret = array(
             Equip::EQUIP_TYPE_ARMS     => array(ConfigDefine::USER_ATTRIBUTE_HIT => 8),
             Equip::EQUIP_TYPE_HELMET   => array(ConfigDefine::USER_ATTRIBUTE_DEFENSE => 20), 
