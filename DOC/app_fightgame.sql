@@ -636,4 +636,14 @@ CREATE TABLE `user_reward` (
         `status` int(11) NOT NULL COMMENT '状态 1：进行中 2：已完成',
         `create_time` datetime NOT NULL COMMENT '记录创建时间',
         PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+
+
+DROP TABLE IF EXISTS `user_happy_month_log`;
+CREATE TABLE `user_happy_month_log` (
+  `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `content` varchar(500) NOT NULL DEFAULT '',
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
