@@ -623,3 +623,13 @@ CREATE TABLE `fight_setting` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+
+
+DROP TABLE IF EXISTS `user_happy_month_log`;
+CREATE TABLE `user_happy_month_log` (
+  `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `content` varchar(500) NOT NULL DEFAULT '',
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
