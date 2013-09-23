@@ -3,11 +3,11 @@
 class Skill_Output
 {
     //普通攻击
-    public static function ptSkill($userData) 
+    public static function ptSkill($userData)
     {
         $ret['is_double'] = 0;
         $averageUserLevel = Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributeHit = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HIT];
         $userAttributeHurt = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT];
@@ -22,7 +22,7 @@ class Skill_Output
     {
         $ret['is_double'] = 0;
         $averageUserLevel =Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributeHit = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HIT];
         $userAttributeHurt = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT];
@@ -37,7 +37,7 @@ class Skill_Output
     {
         $ret['is_double'] = 0;
         $averageUserLevel =Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributeHit = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HIT];
         $userAttributeHurt = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT];
@@ -54,7 +54,7 @@ class Skill_Output
     {
         $ret['is_double'] = 0;
         $averageUserLevel =Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributeHit = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HIT];
         $userAttributeHurt = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT];
@@ -69,7 +69,7 @@ class Skill_Output
     {
         $ret['is_double'] = 0;
         $averageUserLevel =Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributePsychic = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
         $randUserAttributteHurt = Skill_Common::randUserAttributeHurt($userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT]);
@@ -83,7 +83,7 @@ class Skill_Output
     {
         $ret['is_double'] = 0;
         $averageUserLevel =Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributePsychic = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
         $randUserAttributteHurt = Skill_Common::randUserAttributeHurt($userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT]);
@@ -99,7 +99,7 @@ class Skill_Output
     {
         $ret['is_double'] = 0;
         $averageUserLevel =Skill_Common::rand5UserLevelGetTop3Average($userData['user_level']);
-        $ratioValue = Skill_Common::ratioValue(); 
+        $ratioValue = Skill_Common::ratioValue();
         if($ratioValue == 2)$ret['is_double'] = 1;
         $userAttributePsychic = $userData['attributes'][ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
         $randUserAttributteHurt = Skill_Common::randUserAttributeHurt($userData['attributes'][ConfigDefine::USER_ATTRIBUTE_HURT]);
@@ -126,18 +126,18 @@ class Skill_Output
             case ConfigDefine::SKILL_LXYZ:
                 if(is_array($userHaveSkillIds) && isset($userHaveSkillIds[ConfigDefine::SKILL_GX]))
                 {
-                    $hurt = Skill_OutputData::wgxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_GX]); 
+                    $hurt = Skill_OutputData::wgxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_GX]);
                 }
-                break; 
+                break;
             //支持法攻修
             case ConfigDefine::SKILL_SWZH:
             case ConfigDefine::SKILL_HFHY:
             case ConfigDefine::SKILL_WLJ:
                 if(is_array($userHaveSkillIds) && isset($userHaveSkillIds[ConfigDefine::SKILL_FX]))
                 {
-                    $hurt = Skill_OutputData::fgxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_FX]); 
+                    $hurt = Skill_OutputData::fgxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_FX]);
                 }
-                break; 
+                break;
             default:
                 break;
         }
@@ -156,7 +156,7 @@ class Skill_Output
             case ConfigDefine::SKILL_LXYZ:
                 if(is_array($userHaveSkillIds) && isset($userHaveSkillIds[ConfigDefine::SKILL_WFX]))
                 {
-                    $hurt = Skill_OutputData::wgxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_WFX]); 
+                    $hurt = Skill_OutputData::wfxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_WFX]);
                 }
                 break;
             //支持法防修
@@ -165,7 +165,7 @@ class Skill_Output
             case ConfigDefine::SKILL_WLJ:
               if(is_array($userHaveSkillIds) && isset($userHaveSkillIds[ConfigDefine::SKILL_FFX]))
                 {
-                    $hurt = Skill_OutputData::wgxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_FFX]); 
+                    $hurt = Skill_OutputData::ffxSkill($hurt, $userHaveSkillIds[ConfigDefine::SKILL_FFX]);
                 }
                 break;
             default:
@@ -183,14 +183,14 @@ class Skill_Output
             case ConfigDefine::SKILL_ZJ:
             case ConfigDefine::SKILL_LJ:
             case ConfigDefine::SKILL_LXYZ:
-                $userAttributeDefence = $targetUserData['attributes'][ConfigDefine::USER_ATTRIBUTE_DEFENSE]; 
+                $userAttributeDefence = $targetUserData['attributes'][ConfigDefine::USER_ATTRIBUTE_DEFENSE];
                 $userSkillDefence = self::_wlfy($targetUserData['skill_ids']);
-                break; 
+                break;
             //支持法术防御
             case ConfigDefine::SKILL_SWZH:
             case ConfigDefine::SKILL_HFHY:
             case ConfigDefine::SKILL_WLJ:
-                $userAttributeDefence = $targetUserData['attributes'][ConfigDefine::USER_ATTRIBUTE_PSYCHIC]; 
+                $userAttributeDefence = $targetUserData['attributes'][ConfigDefine::USER_ATTRIBUTE_PSYCHIC];
                 $userSkillDefence = self::_fsfy($targetUserData['skill_ids']);
             default:
                 break;
@@ -199,31 +199,31 @@ class Skill_Output
     }
     //物理防御
     private static function _wlfy($skillIds)
-    { 
+    {
         if(!is_array($skillIds))return array();
         foreach($skillIds as $skillId => $skillLevel)
         {
           if($skillId == ConfigDefine::SKILL_FY)
           {
-              $res[] = Skill_OutputData::fySkill($skillLevel); 
+              $res[] = Skill_OutputData::fySkill($skillLevel);
           }else{
               $res[] = 0;
-          } 
+          }
         }
         return $res;
     }
     //法术防御
     private static function _fsfy($skillIds)
-    { 
+    {
         if(!is_array($skillIds))return array();
         foreach($skillIds as $skillId => $skillLevel)
         {
           if($skillId == ConfigDefine::SKILL_FD)
           {
-              $res[] = Skill_OutputData::fySkill($skillLevel); 
+              $res[] = Skill_OutputData::fySkill($skillLevel);
           }else{
               $res[] = 0;
-          } 
+          }
         }
         return $res;
     }

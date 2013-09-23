@@ -368,10 +368,9 @@ class Skill
          *  4、对于3的结果进行加成
          *  5、被动攻击确认
          *  6、被动防御确认
-         */ 
+         */
         $userSkillId = $userData['skill_id'];
-        $targetUserSkillIds = $userData['skill_ids'];
-        $functionName = self::_getFunctionName($userSkillId); 
+        $functionName = self::_getFunctionName($userSkillId);
         $hurtRes =  call_user_func(array('Skill_Output', $functionName.'Skill'), $userData);
         $defenceRes = Skill_Output::defenceFunction($userSkillId, $targetUserData);
 
@@ -382,7 +381,7 @@ class Skill
             $hurt['hurt'] = self::_filterHurt($hurt['hurt']);
             $hurt['hurt'] = call_user_func(array('Skill_OutputData', $functionName.'Addition'), $hurt['hurt'], $userData['skill_level']);//加成
             $hurt['hurt'] = Skill_Output::hurtPassive($userSkillId, $userData, $hurt['hurt']);
-            $hurt['hurt'] = Skill_Output::defencePassive($userSkillId, $userData, $hurt['hurt']);
+            $hurt['hurt'] = Skill_Output::defencePassive($userSkillId, $targetUserData, $hurt['hurt']);
             $hurtList[] = $hurt;
         }
         return $hurtList;
@@ -396,7 +395,7 @@ class Skill
         }else{
             $functionName = $userSkillId;
         }
-        return $functionName; 
+        return $functionName;
     }
 
     private static function _getSkillNameBySkillId($skillId)
@@ -422,6 +421,6 @@ class Skill
     }
     private static function _filterHurt($hurt)
     {
-        return ($hurt < 1)?1:$hurt;
+        return ($hurt < 0)?1:$hurt;
     }
 }
