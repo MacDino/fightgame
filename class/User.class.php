@@ -51,6 +51,9 @@ class User
     CONST AUTOFIGHTTIME = 7200;
     
     CONST FORGEODDS = '0.1';
+    
+    /** @desc 人宠有效期*/
+    CONST VALIDITY_TIME = 86400;
 
     //获取登录用户的唯一标识
     public static function getLoginUserId($bindType, $bindValue)
