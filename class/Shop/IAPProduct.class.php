@@ -164,22 +164,24 @@ class Shop_IAPProduct{
 		if(!$lastPurchase){
 			throw new Exception('未找到您的欢乐月套餐购买记录', 1);
 		}
-		$ctime = strtotime($lastPurchase['ctime')];
+		$ctime = strtotime($lastPurchase['ctime']);
 		$endtime = strtotime("next month", $ctime);	
 		if(time() > $endtime){
 			throw new Exception('欢乐月套餐已过期,您不能进行赠品领取',1);	
 		}
 		$pack = Props_Config::$month_package;
 		/*
-		 * FIXME 一天一领,防止刷包
+		 * 一天一领,防止刷包
 		 */
-	
+		if(!Shop_HappyMonthLog::isGeted($userId)) {
+			throw new Exception('您一天只能领取一次', 1);	
+		}	
 		/*
 		 * 解包 
 		 */
 		foreach ($pack as $k => $v){
 			if($k == Props_Config::KEY_PROPS) {
-				foreach ($v => $v2){
+				foreach ($v as $v2){
 					$props_id = $v2['id'];	
 					$num = $v2['num'];
 					$propert = User_Property::getPropertyInfo($userId, $props_id);
@@ -202,8 +204,9 @@ class Shop_IAPProduct{
 			}
 		}
 		/*
-		 * FIXME 记录领取日志,
+		 * 记录领取日志,
 		 */
+		Shop_HappyMonthLog::insert(array('user_id' => $user_id, 'content' => json_encode($pack)));
 		return $res;
 	}
 }
