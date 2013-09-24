@@ -130,6 +130,23 @@ class Skill
         return in_array($skillId, $magicDefenseSkillIds);
     }
 
+    /**
+     * 获得攻击的次数
+     * @author lishengwei
+     * **/
+    public static function getAttactTimes($skillId) {
+        $skillTimes = array(
+            ConfigDefine::SKILL_PT  => 1,
+            ConfigDefine::SKILL_ZJ => 1,
+            ConfigDefine::SKILL_LJ => 3,
+            ConfigDefine::SKILL_LXYZ => 1,
+            ConfigDefine::SKILL_SWZH => 1,
+            ConfigDefine::SKILL_HFHY => 2,
+            ConfigDefine::SKILL_WLJ  => 1,
+        );
+        return $skillTimes[$skillId] > 0 ? $skillTimes[$skillId] : 0;
+    }
+
     //技能分组名称
     private static function _skillGroupNameList()
     {
