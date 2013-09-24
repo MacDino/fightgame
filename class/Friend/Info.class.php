@@ -135,6 +135,8 @@ class Friend_Info
 		if($res & $result)
         {
         	//同时增加user_id声望
+        	User_Info::addReputationNum($user_info, 2);
+        	User_Info::addReputationNum($friend_info, 2);
             return TRUE;
         }else{
         	return FALSE;
@@ -155,6 +157,8 @@ class Friend_Info
         
         if($userId)
         {
+        	User_Info::subtractReputationNum($user_info, 2);
+        	User_Info::subtractReputationNum($friend_info, 2);
         	//同时减少user_id声望
             return TRUE;
         }else{

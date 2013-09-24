@@ -107,6 +107,46 @@ class Skill
         }
         return FALSE;
     }
+
+    /**
+     * 是否是防御物理攻击的防御技能
+     * @author lishengwei
+     * **/
+    public static function isPhysicDefense($skillId) {
+        $physicDefenseSkillIds = array(
+            ConfigDefine::SKILL_FY,  ConfigDefine::SKILL_FJ
+        );
+        return in_array($skillId, $physicDefenseSkillIds);
+    }
+
+    /**
+     * 是否是防御物理攻击的防御技能
+     * @author lishengwei
+     * **/
+    public static function isMagicDefense($skillId) {
+        $magicDefenseSkillIds = array(
+            ConfigDefine::SKILL_FD,
+        );
+        return in_array($skillId, $magicDefenseSkillIds);
+    }
+
+    /**
+     * 获得攻击的次数
+     * @author lishengwei
+     * **/
+    public static function getAttactTimes($skillId) {
+        $skillTimes = array(
+            ConfigDefine::SKILL_PT  => 1,
+            ConfigDefine::SKILL_ZJ => 1,
+            ConfigDefine::SKILL_LJ => 3,
+            ConfigDefine::SKILL_LXYZ => 1,
+            ConfigDefine::SKILL_SWZH => 1,
+            ConfigDefine::SKILL_HFHY => 2,
+            ConfigDefine::SKILL_WLJ  => 1,
+        );
+        return $skillTimes[$skillId] > 0 ? $skillTimes[$skillId] : 0;
+    }
+
     //技能分组名称
     private static function _skillGroupNameList()
     {
@@ -353,5 +393,74 @@ class Skill
     public static function getSkillMagic($skillId) {
         $magic = self::$skill_info[$skillId][2];
         return $magic > 0 ? $magic : 0;
+    }
+
+
+
+
+    public static function userSkillTest($userData, $targetUserData)
+    {
+        /**
+         *  流程：
+         *  1、获取攻击方的攻击数
+         *  2、获取防守方的防御
+         *  3、攻击减去防御值，如果小于1，则默认为1
+         *  4、对于3的结果进行加成
+         *  5、被动攻击确认
+         *  6、被动防御确认
+         */
+        $userSkillId = $userData['skill_id'];
+        $functionName = self::_getFunctionName($userSkillId);
+        $hurtRes =  call_user_func(array('Skill_Output', $functionName.'Skill'), $userData);
+        $defenceRes = Skill_Output::defenceFunction($userSkillId, $targetUserData);
+
+        if(!is_array($hurtRes))return FALSE;
+        foreach($hurtRes as $key => $hurt)
+        {
+            $hurt['hurt'] -= $defenceRes[$key];
+            $hurt['hurt'] = call_user_func(array('Skill_OutputData', $functionName.'Addition'), $hurt['hurt'], $userData['skill_level']);//加成
+            $hurt['hurt'] = Skill_Output::hurtPassive($userSkillId, $userData, $hurt['hurt']);
+            $hurt['hurt'] = Skill_Output::defencePassive($userSkillId, $targetUserData, $hurt['hurt']);
+            $hurt['hurt'] = self::_filterHurt($hurt['hurt']);
+            $hurtList[] = $hurt;
+        }
+        return $hurtList;
+    }
+
+    private static function _getFunctionName($userSkillId)
+    {
+        if(is_numeric($userSkillId))
+        {
+            $functionName = self::_getSkillNameBySkillId($userSkillId);
+        }else{
+            $functionName = $userSkillId;
+        }
+        return $functionName;
+    }
+
+    private static function _getSkillNameBySkillId($skillId)
+    {
+        $skillList = array(
+            ConfigDefine::SKILL_ZJ  => 'zj',
+            ConfigDefine::SKILL_LJ  => 'lj',
+            ConfigDefine::SKILL_LXYZ    => 'lxyz',
+            ConfigDefine::SKILL_SWZH    => 'swzh',
+            ConfigDefine::SKILL_HFHY    => 'hfhy',
+            ConfigDefine::SKILL_WLJ => 'wlj',
+            ConfigDefine::SKILL_WFX => 'wfx',
+            ConfigDefine::SKILL_FFX => 'ffx',
+            ConfigDefine::SKILL_GX  => 'gx',
+            ConfigDefine::SKILL_FX  => 'fx',
+            ConfigDefine::SKILL_DZ  => 'dz',
+            ConfigDefine::SKILL_FY  => 'fy',
+            ConfigDefine::SKILL_FJ  => 'fj',
+            ConfigDefine::SKILL_FD  => 'fd',
+            ConfigDefine::SKILL_PT  => 'pt',
+        );
+        return isset($skillList[$skillId])?$skillList[$skillId]:'pt';
+    }
+    private static function _filterHurt($hurt)
+    {
+        return ($hurt < 0)?1:$hurt;
     }
 }

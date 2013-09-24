@@ -1,6 +1,10 @@
 <?php
 /**
  * 挑战模式
+ * 单次会挑战很多人
+ * 怎么传输数据
+ *
+ *
  * **/
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
@@ -27,14 +31,39 @@ if(!$isCanFight['is_can']) {
     $msg  = '没有挑战次数了';
     exit();
 }
-$userFightTeam[] = Fight::createUserFightable($userId, $userInfo['user_id']);
-$userPetInfo     = array('user_id' => 27);
-if(is_array($userPetInfo) && count($userPetInfo)) {
-    $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
-    //人宠进入队伍
-    $userFightTeam[] = Fight::createMonsterFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
-    $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
+try {
+    $userFightTeam[] = Fight::createUserFightable($userId, $userInfo['user_id']);
+    $userPetInfo     = array('user_id' => 27);
+    if(is_array($userPetInfo) && count($userPetInfo)) {
+        $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
+        //人宠进入队伍
+        $userFightTeam[] = Fight::createMonsterFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
+        $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
+    }
+
+    /**@todo 随即出来一个战斗对象**/
+    $targetUserId   = '';
+    $targetUserInfo = User_Info::getUserInfoByUserId($targetUserId);
+    $targetUserFightTeam[] = Fight::createUserFightable($targetUserId, $targetUserInfo['user_level']);
+
+    $fightResult = Fight::multiFight($userFightTeam, $targetUserFightTeam);
+
+    $isUserAlive = $isTargetUserAlive = FALSE;
+    foreach ($userFightTeam as $userFight) {
+        $isUserAlive = $userFight->isAlive() || $isUserAlive;
+    }
+    foreach ($targetUserFightTeam as $targetUserFight) {
+        $isTargetUserAlive = $targetUserFight->isAlive() || $isTargetUserAlive;
+    }
+    $data['fight_procedure'] = $fightResult['fight_procedure'];
+    $data['winner'] =array('user_id' => $isUserAlive && !$isTargetUserAlive ? $userId : $targetUserId);
+    if($isUserAlive && !$isTargetUserAlive) {
+        /**@todo 记录声望，是否连胜5场，是的话记录积分，记录连胜场次**/
+    } else {
+        /**@todo 战斗退出 显示战果**/
+    }
+
+} catch (Exception $exc) {
+    $code = $e->getCode();
+    $msg  = $e->getMessage();
 }
-
-
-

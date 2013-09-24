@@ -234,6 +234,25 @@ class User_Info
 		$res = MySql::query($sql);
 		return $res;
 	}
+	
+	//增加声望
+	public static function addReputationNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `reputation` = `reputation` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	//减少声望
+	public static function subtractReputationNum($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `reputation` = `reputation` - '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
 	/**
      * 获取用户在战斗时的即时属性
      * 先计算数值,然后就算比率
