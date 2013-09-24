@@ -3,6 +3,10 @@ class Props_Config{
 
 	const KEY_PROPS = 1;
 	const KEY_INGOT = 2;
+
+	const KEY_GENERAL_BOX = 1;
+	const KEY_CHOICE_BOX  = 2;
+
 	/*
 	 * 欢乐月道具元宝套餐赠送包
 	 */
@@ -50,76 +54,85 @@ class Props_Config{
 	 */
 	public static $treasure_box_package = array(
 		//普通
-		array(
-			array(
-				'id' 	=> 10,
-				'level' => 30,
-			),
-			array(
-				'id' 	=> 12,
-				'level' => 40,
-			),
-			array(
-				'id' 	=> 14,
-				'level' => 50,
-			),
-			array(
-				'id' 	=> 16,
-				'level' => 60,
-			),
-			array(
-				'id' 	=> 18,
-				'level' => 70,
-			),
-			array(
-				'id' 	=> 20,
-				'level' => 80,
-			),
-			array(
-				'id' 	=> 22,
-				'level' => 90,
-			),
-			array(
-				'id' 	=> 24,
-				'level' => 100,
-			),
-		),		
+		self::KEY_GENERAL_BOX => array(
+				array(
+					'id' 	=> 10,
+					'level' => 30,
+				),
+				array(
+					'id' 	=> 12,
+					'level' => 40,
+				),
+				array(
+					'id' 	=> 14,
+					'level' => 50,
+				),
+				array(
+					'id' 	=> 16,
+					'level' => 60,
+				),
+				array(
+					'id' 	=> 18,
+					'level' => 70,
+				),
+				array(
+					'id' 	=> 20,
+					'level' => 80,
+				),
+				array(
+					'id' 	=> 22,
+					'level' => 90,
+				),
+				array(
+					'id' 	=> 24,
+					'level' => 100,
+				),
+			),		
 		//精品
-		array(
-			array(
-				'id' 	=> 11,
-				'level' => 30,
-			),
-			array(
-				'id' 	=> 13,
-				'level' => 40,
-			),
-			array(
-				'id' 	=> 15,
-				'level' => 50,
-			),
-			array(
-				'id' 	=> 17,
-				'level' => 60,
-			),
-			array(
-				'id' 	=> 19,
-				'level' => 70,
-			),
-			array(
-				'id' 	=> 21,
-				'level' => 80,
-			),
-			array(
-				'id' 	=> 23,
-				'level' => 90,
-			),
-			array(
-				'id' 	=> 25,
-				'level' => 100,
-			),
-			
+		self::KEY_CHOICE_BOX => array(
+				array(
+					'id' 	=> 11,
+					'level' => 30,
+				),
+				array(
+					'id' 	=> 13,
+					'level' => 40,
+				),
+				array(
+					'id' 	=> 15,
+					'level' => 50,
+				),
+				array(
+					'id' 	=> 17,
+					'level' => 60,
+				),
+				array(
+					'id' 	=> 19,
+					'level' => 70,
+				),
+				array(
+					'id' 	=> 21,
+					'level' => 80,
+				),
+				array(
+					'id' 	=> 23,
+					'level' => 90,
+				),
+				array(
+					'id' 	=> 25,
+					'level' => 100,
+				),
 		),
 	);
 
+	public static function isBoxProps($propsId){
+		foreach (self::$treasure_box_package as $k => $v){
+			foreach ($v as $v2){
+				if($propsId == $v2['id']){
+					return $k;	
+				}	
+			}
+		}
+		return FALSE;	
+	}
 }

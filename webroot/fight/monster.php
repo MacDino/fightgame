@@ -30,12 +30,12 @@ try {
     /**初始化一个怪物**/
     $monster            = Map::getMonster($mapId);
     $monsterFightTeam[] = Fight::createMonsterFightable($monster, 'monster[0]');
-    $data['joiner']['monster'][]    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
+    $data['participant']['monster'][]    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
     /**当前角色fight对象，如果有人宠，获取人宠**/
     $userInfo           = User_Info::getUserInfoByUserId($userId);
     $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level'], 'user');
 
-    $data['joiner']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+    $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
 
     if($userInfo['user_level'] > 40) {
         /**
@@ -47,7 +47,7 @@ try {
             $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
             //人宠进入队伍
             $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'],'pet');
-            $data['joiner']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
+            $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
         }
     }
 
@@ -56,7 +56,7 @@ try {
     /**此次战斗耗时 * **/
     $fightUseTime   = $fightResult['use_time'];
 
-    $data['fight']  =  $fightResult['fight_procedure'];
+    $data['fight_procedure']  =  $fightResult['fight_procedure'];
     $isUserAlive    = $isMonsterAlive = FALSE;
     foreach ($userFightTeam as $userFight) {
         $isUserAlive = $userFight->isAlive() || $isUserAlive;

@@ -14,10 +14,10 @@ if(!$userId || !$propsId)
     die;
 }
 try {
-	foreach(Props_Config::$treasure_box_package[0] as $v){
+	foreach(Props_Config::$treasure_box_package[Props_Config::KEY_GENERAL_BOX] as $v){
 		$general[] = $v['id'];	
 	}
-	foreach(Props_Config::$treasure_box_package[1] as $v){
+	foreach(Props_Config::$treasure_box_package[Props_Config::KEY_CHOICE_BOX] as $v){
 		$choice[] = $v['id'];	
 	}
 	if ( in_array( $propsId, $general )) {

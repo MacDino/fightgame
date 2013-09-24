@@ -1,6 +1,6 @@
 <?php
 //显示装备列表
-include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
+include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 error_reporting(2047);
 
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;

@@ -111,8 +111,8 @@ class Fight {
 		$attackInfo = $attacker->reportAttack();
         $targetInfo = $target->reportDefense();
         $info = array_merge($attackInfo, $targetInfo);
-        return self::translateFightResult($info);
-//        return $info;
+        $info['fight_content'] = self::translateFightResult($info);
+        return $info;
 	}
 
     private static function translateFightResult($fightInfo) {
