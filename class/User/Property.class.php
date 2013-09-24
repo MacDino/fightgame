@@ -60,15 +60,25 @@ class User_Property{
 		if($userInfo['ingot'] < $price) {
 			throw new Exception('您的元宝数不足,无法购买',1);	
 		}
+		$res = self::addAmulet($userId, $propsId, $num);
 		/*
 		 * 扣除元宝
 		 */
-		$res = self::addAmulet($userId, $propsId, $num);
 		if($res){
 			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '2');
-			return $decreingot;
 		} 
-		return false;
+		/*
+		 * 宝箱类为即买即用
+		 */
+		if(Props_Config::isBoxProps($propsId) == Props_Config::KEY_GENERAL_BOX){
+			self::useGeneralTreasureBox($userId, $propsId);
+		} elseif (Props_Config::isBoxProps($propsId) == Props_Config::KEY_CHOICE_BOX){
+			self::useChoiceTreasureBox($userId, $propsId);	
+		}
+		if($res && $decreingot) {
+			return TRUE;	
+		}
+		return FALSE;
 	}
 
 	/*
@@ -496,9 +506,9 @@ class User_Property{
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, self::EQUIP_FORGE);
 		if(!$isHave || empty($isHave)){
-			throw new Exception('该道具数量不足，您无法使用', 1);	
+			throw new Exception('该道具数量不足，您无法使用', 10001);	
 		}
-		$res_num = self::UseAmulet($userId, self::Equip);
+		$res_num = self::UseAmulet($userId, self::EQUIP_FORGE);
 		return $res;
 	}
 	
@@ -560,11 +570,11 @@ class User_Property{
 		if(!$userId){
 			throw new Exception('缺少用户id', 1);
 		}
-		if(!$equipId){
-			throw new Exception('缺少装备id', 1);
+		if(!$propsId){
+			throw new Exception('缺少道具id', 1);
 		}
 		//是否还有存数
-		$isHave = self::getPropertyNum($userId, self::EQUIP_GROW);
+		$isHave = self::getPropertyNum($userId, $propsId);
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 1);	
 		}
@@ -583,9 +593,9 @@ class User_Property{
 	private function extractEquip($userId, $propsId, $type){
 		//普通
 		if( $type == self::BOX_GENERAL){
-			$pack = Props_Config::$treasure_box_package[0];
+			$pack = Props_Config::$treasure_box_package[Props_Config::KEY_GENERAL_BOX];
 			$color = self::randEquipColor();	
-			foreach ( $pack as $v ) {
+			foreach ($pack as $v) {
 				if($propsId == $v['id']){
 					$level = $v['level'];	
 				}			
@@ -593,7 +603,7 @@ class User_Property{
 			$res = Equip_Create::createEquip($color, $userId, $level);
 		} else if($type == self::BOX_CHOICE){
 		//精品
-			$pack = Props_Config::$treasure_box_package[1];
+			$pack = Props_Config::$treasure_box_package[Props_Config::KEY_CHOICE_BOX];
 			foreach ( $pack as $v ) {
 				if($propsId == $v['id']){
 					$level = $v['level'];	
