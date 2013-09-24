@@ -107,6 +107,29 @@ class Skill
         }
         return FALSE;
     }
+
+    /**
+     * 是否是防御物理攻击的防御技能
+     * @author lishengwei
+     * **/
+    public static function isPhysicDefense($skillId) {
+        $physicDefenseSkillIds = array(
+            ConfigDefine::SKILL_FY,  ConfigDefine::SKILL_FJ
+        );
+        return in_array($skillId, $physicDefenseSkillIds);
+    }
+
+    /**
+     * 是否是防御物理攻击的防御技能
+     * @author lishengwei
+     * **/
+    public static function isMagicDefense($skillId) {
+        $magicDefenseSkillIds = array(
+            ConfigDefine::SKILL_FD,
+        );
+        return in_array($skillId, $magicDefenseSkillIds);
+    }
+
     //技能分组名称
     private static function _skillGroupNameList()
     {
