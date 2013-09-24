@@ -1,7 +1,21 @@
 <?php
 //装备升级
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
-error_reporting(2047);
 $equipId = isset($_REQUEST['equip_id']) ? intval($_REQUEST['equip_id']) : 0;
-$r = Equip_Info::upgrade($equipId);
-var_dump($r);
+if(!$equipId)
+{
+    $code = 1;
+    $msg = '传入参数不正确';
+    die;
+}
+
+try {
+    $data = Equip_Info::upgrade($equipId);
+    $code = 0;
+    $msg = 'ok';
+    die;
+} catch (Exception $e) {
+    $code = 1;
+    $msg = '99';
+    die;
+}
