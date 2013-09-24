@@ -307,7 +307,7 @@ class User_Info
 			}
 			//扩展属性
 			$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
-			if(is_array($equipBaseAttribute)){
+			if(is_array($equipExpandAttribute)){
 				foreach ($equipExpandAttribute as $x=>$y)
 				{
 					if(array_key_exists($x, $baseAttribute))//装备中属性点部分

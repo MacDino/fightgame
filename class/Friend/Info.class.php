@@ -17,7 +17,7 @@ class Friend_Info
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
 			//查询好友信息
-			$sql = "select u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '2'";
+			$sql = "select u.race_id as user_race, u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '2'";
 //			echo $sql;exit;
 			$friendInfo = MySql::query($sql);
 			
