@@ -378,10 +378,10 @@ class Skill
         foreach($hurtRes as $key => $hurt)
         {
             $hurt['hurt'] -= $defenceRes[$key];
-            $hurt['hurt'] = self::_filterHurt($hurt['hurt']);
             $hurt['hurt'] = call_user_func(array('Skill_OutputData', $functionName.'Addition'), $hurt['hurt'], $userData['skill_level']);//加成
             $hurt['hurt'] = Skill_Output::hurtPassive($userSkillId, $userData, $hurt['hurt']);
             $hurt['hurt'] = Skill_Output::defencePassive($userSkillId, $targetUserData, $hurt['hurt']);
+            $hurt['hurt'] = self::_filterHurt($hurt['hurt']);
             $hurtList[] = $hurt;
         }
         return $hurtList;
