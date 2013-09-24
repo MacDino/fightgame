@@ -498,7 +498,7 @@ class User_Property{
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 1);	
 		}
-		$res_num = self::UseAmulet($userId, self::Equip);
+		$res = self::UseAmulet($userId, self::Equip_FORGE);
 		return $res;
 	}
 	
@@ -524,7 +524,7 @@ class User_Property{
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 1);	
 		}
-		$res_num = self::UseAmulet($userId, self::Equip);
+		$res = self::UseAmulet($userId, self::Equip_GROW);
 		return $res;
 	}
 		

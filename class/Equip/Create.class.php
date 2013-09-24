@@ -93,6 +93,11 @@ class Equip_Create
                 );
     
     }
+
+    public static function getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel){
+        return self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);
+    }
+
     //获取装备属性配置信息
     private static function _getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel)
     {

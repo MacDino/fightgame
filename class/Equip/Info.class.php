@@ -33,7 +33,14 @@ class Equip_Info
         $res = FALSE;
         $info = self::getEquipInfoById($equipId);
         if($info){
-            $hit = PerRand::getRandResultKey(Skill::getQuickAttributeForEquip($info['equip_level']));
+            //使用锻造成功咒符
+            $use = User_Property::useEquipForge($info['user_id']);
+            if($use){
+                $opt = 0.1;    
+            }else{
+                $opt = 0;    
+            }
+            $hit = PerRand::getRandResultKey(Skill::getQuickAttributeForEquip($info['forge_level'], $opt));
             if($hit == 'success'){ //装备锻造等级升一级
                 $attributeList = json_decode($info['attribute_base_list'], TRUE);
                 $forgeAttributeList = Equip_Config::forgeAttributeList();
@@ -44,11 +51,11 @@ class Equip_Info
                     }
                 }
                 $data = array();
-                $data['equip_level'] = $info['equip_level'] + 1;
+                $data['forge_level'] = $info['forge_level'] + 1;
                 $data['attribute_base_list'] = json_encode($attributeList);
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
-            }elseif($hit == 'no_less_dz' && $info['equip_level'] != 0){ //装备锻造等级掉一级
-                $data['equip_level'] = $info['equip_level'] - 1;
+            }elseif($hit == 'no_less_dz' && $info['forge_level'] != 0){ //装备锻造等级掉一级
+                $data['forge_level'] = $info['forge_level'] - 1;
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
             }
         }
@@ -57,7 +64,18 @@ class Equip_Info
     
     //装备升级
     public static function upgrade($equipId){
-            
+        //装备成长咒符
+        $info = self::getEquipInfoById($equipId);
+        $use = User_Property::useEquipGrow($info['user_id'], $equipId);
+        if($use){
+            $data = array();
+            $data['equip_level'] = $info['equip_level'] + 10;
+            $attributeList = Equip_Create::getEquipAttributeInfo($info['equip_colour'], 
+                    $info['equip_quality'], $info['equip_type'], $info['equip_level']);
+            $data['attribute_base_list'] = json_encode($attributeList);
+            return MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
+        }
+        return FALSE;
     }
 
     //装备价格 add by zhengyifeng 76387051@qq.com  2013.9.13

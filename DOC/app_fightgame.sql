@@ -360,6 +360,7 @@ CREATE TABLE `user_equip` (
   `equip_type` int(11) NOT NULL COMMENT '装备名称ID',
   `equip_quality` tinyint(4) NOT NULL COMMENT '装备品质ID',
   `equip_level` int(11) NOT NULL COMMENT '装备等级',
+  `forge_level` int(11) NOT NULL COMMENT '锻造等级',
   `is_used` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否被使用',
   `race_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '种族ID',
   `attribute_list` text NOT NULL COMMENT '扩展属性',
@@ -636,8 +637,7 @@ CREATE TABLE `user_reward` (
         `status` int(11) NOT NULL COMMENT '状态 1：进行中 2：已完成',
         `create_time` datetime NOT NULL COMMENT '记录创建时间',
         PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
-
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_happy_month_log`;
 CREATE TABLE `user_happy_month_log` (
