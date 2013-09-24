@@ -2,7 +2,7 @@
 //公共属性定义
 class ConfigDefine
 {
-	//用户属性定义    
+	//用户属性定义
     CONST USER_ATTRIBUTE_POWER        	= 1101;//力量 - 基本属性
     CONST USER_ATTRIBUTE_MAGIC_POWER  	= 1102;//魔力 - 基本属性
     CONST USER_ATTRIBUTE_PHYSIQUE     	= 1103;//体质 - 基本属性
@@ -24,9 +24,9 @@ class ConfigDefine
 	CONST SKILL_LJ      				= 1202;//连击
     CONST SKILL_LXYZ    				= 1203;//灵犀一指
     CONST SKILL_SWZH    				= 1204;//三昧真火
-    CONST SKILL_HFHY    				= 1205;//呼风唤雨 
+    CONST SKILL_HFHY    				= 1205;//呼风唤雨
     CONST SKILL_WLJ     				= 1206;//五雷决
-    CONST SKILL_WFX     				= 1207;//物防修                                                     
+    CONST SKILL_WFX     				= 1207;//物防修
     CONST SKILL_FFX     				= 1208;//法防修
     CONST SKILL_GX      				= 1209;//攻修
     CONST SKILL_FX      				= 1210;//法修
@@ -36,8 +36,9 @@ class ConfigDefine
     CONST SKILL_FD      				= 1214;//法盾
     CONST SKILL_TX						= 1215;//体修
     CONST SKILL_PT						= 1216;//普通攻击
-    
+
     //战斗动作
+    const PET                           = 7009;//人宠
     CONST YOU							= 7100;//你
     CONST VS							= 7101;//对
     CONST YUDAO							= 7102;//遇到
@@ -57,8 +58,13 @@ class ConfigDefine
     CONST HUODE							= 7123;//获得
     CONST JINGYAN						= 7124;//经验
     CONST JINQIAN						= 7125;//金钱
+    const MISS                          = 7126;//miss
+    const CHUYU                         = 7127;//处于
+    const ZHUANGTAI                     = 7128;//状态
+    const BAOJI                         = 7129;//暴击
+    const DI                            = 7130;//第
 
-	//其它
+            //其它
 	CONST RELEASE_PROBABILITY 		  	= 301;//释放概率
 
     CONST PK_NUM                        = 'pk_num';//PVP次数
@@ -86,7 +92,7 @@ class ConfigDefine
             self::RELEASE_PROBABILITY		  	=> '释放概率',
 		);
 	}
-	
+
 	//技能静态资源
 	public static function skillList(){
 		$res = array(
@@ -97,7 +103,7 @@ class ConfigDefine
 		    self::SKILL_HFHY    				=> '呼风唤雨',
 		    self::SKILL_WLJ     				=> '五雷决',
 		    self::SKILL_TX						=> '体修',
-		    self::SKILL_WFX     				=> '物防修',                                                   
+		    self::SKILL_WFX     				=> '物防修',
 		    self::SKILL_FFX     				=> '法防修',
 		    self::SKILL_GX      				=> '攻修',
 		    self::SKILL_FX      				=> '法修',
@@ -108,7 +114,7 @@ class ConfigDefine
 		);
 		return 	$res;
 	}
-	
+
 	//战斗描述
 	public static function actionList(){
 		$res = array(
@@ -134,7 +140,7 @@ class ConfigDefine
 		);
 		return $res;
 	}
-	
-//	public static function 
+
+//	public static function
 
 }

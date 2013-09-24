@@ -13,7 +13,7 @@ if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
 }
-$userLastResult     = Fight_Result::getResult($userId, $mapId);
+//$userLastResult     = Fight_Result::getResult($userId, $mapId);
 if(is_array($userLastResult) && count($userLastResult)) {
     $accessDiffTime = time() - $userLastResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastResult['use_time']) {
@@ -29,13 +29,13 @@ $mapId = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult[
 try {
     /**初始化一个怪物**/
     $monster            = Map::getMonster($mapId);
-    $monsterFightTeam[] = Fight::createMonsterFightable($monster);
-    $data['monster']    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
+    $monsterFightTeam[] = Fight::createMonsterFightable($monster, 'monster[0]');
+    $data['joiner']['monster'][]    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
     /**当前角色fight对象，如果有人宠，获取人宠**/
     $userInfo           = User_Info::getUserInfoByUserId($userId);
-    $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level']);
+    $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level'], 'user');
 
-    $data['user']       = Fight::getPeopleFightInfo($userFightTeam[0]);
+    $data['joiner']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
 
     if($userInfo['user_level'] > 40) {
         /**
@@ -46,8 +46,8 @@ try {
         if(is_array($userPetInfo) && count($userPetInfo)) {
             $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
             //人宠进入队伍
-            $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level']);
-            $data['pet'] = Fight::getPeopleFightInfo($userFightTeam[1]);
+            $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'],'pet');
+            $data['joiner']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
         }
     }
 
@@ -56,20 +56,23 @@ try {
     /**此次战斗耗时 * **/
     $fightUseTime   = $fightResult['use_time'];
 
-    $data['fight_procedure'] =  $fightResult['fight_procedure'];
-    $isUserAlive = $isMonsterAlive = FALSE;
+    $data['fight']  =  $fightResult['fight_procedure'];
+    $isUserAlive    = $isMonsterAlive = FALSE;
     foreach ($userFightTeam as $userFight) {
         $isUserAlive = $userFight->isAlive() || $isUserAlive;
     }
     foreach ($monsterFightTeam as $monsterFight) {
         $isMonsterAlive = $monsterFight->isAlive() || $isMonsterAlive;
     }
+    $data['result']['use_time'] = $fightUseTime;
     if(!$isUserAlive && $isMonsterAlive) {
+        $data['result']['win']  = 0;
         $msg    = '您被打败了';
     } else {
-        $data['experience']         = Monster::getMonsterExperience($monster);
-        $data['money']              = Monster::getMonsterMoney($monster);
-        $data['equipment']          = Monster::getMonsterEquipment($monster);
+        $data['result']['win']  = 1;
+        $data['result']['experience']         = Monster::getMonsterExperience($monster);
+        $data['result']['money']              = Monster::getMonsterMoney($monster);
+        $data['result']['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['experience']);
         $isLevelUp                  = User_Info::isLevel($userId);

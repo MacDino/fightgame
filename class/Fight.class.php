@@ -42,19 +42,24 @@ class Fight {
         );
     }
 
-    public static function getPeopleFightInfo(Fightable $user) {
+    public static function getPeopleFightInfo(Fightable $user, $userInfo = array()) {
         $userIdentity = $user->getInfo();
         return array(
             'user_id'   => $userIdentity['user_id'],
+            'user_name' => $userInfo['user_name'],
             'blood'     => $user->getCurrentBlood(),
             'magic'     => $user->getCurrentMagic(),
         );
     }
 
     public static function getMonsterFightInfo(Fightable $monster, $monsterInfo = array()) {
-        $monsterInfo['blood'] = $monster->getCurrentBlood();
-        $monsterInfo['magic'] = $monster->getCurrentMagic();
-        return $monsterInfo;
+        return array(
+            'monster_id' => $monsterInfo['monster_id'],
+            'blood' => $monster->getCurrentBlood(),
+            'magic' => $monster->getCurrentMagic(),
+            'prefix' => $monsterInfo['prefix'],
+            'suffix' => $monsterInfo['suffix'],
+        );
     }
 
     /**
@@ -105,18 +110,88 @@ class Fight {
 	private static function _report(Fightable $attacker, Fightable $target) {
 		$attackInfo = $attacker->reportAttack();
         $targetInfo = $target->reportDefense();
-        return array_merge($attackInfo, $targetInfo);
+        $info = array_merge($attackInfo, $targetInfo);
+        return self::translateFightResult($info);
+//        return $info;
 	}
+
+    private static function translateFightResult($fightInfo) {
+        $attackCode    = self::getObjCode($fightInfo['attack_indentity']);
+        $targetCode    = self::getObjCode($fightInfo['target_indentity']);
+        if($fightInfo['status'] == 1) {
+            //[攻击者] 处于 练级 虚弱 状态，休息 一 回合
+            $res = $attackCode.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
+            return array($res);
+        }
+        //[攻击者] 对 [目标] 使用了 xx
+        $codes         = $attackCode.'|'.ConfigDefine::VS.'|'.$targetCode.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['skill'].'|';
+
+        $isMultiAttack = (count($fightInfo['fight']) > 1) ? TRUE : FALSE;
+        foreach ($fightInfo['fight'] as $k => $item) {
+            if($isMultiAttack) {
+                //第i次攻击
+                if($k == 0) {
+                    $return[] = trim($codes, '|');
+                }
+                $codes = ConfigDefine::DI.'|'.($k + 1).'|'.ConfigDefine::GONGJI;
+            }
+            $codes .= self::getFightCode($item, $attackCode, $targetCode);
+            $return[] = $codes;
+        }
+        return $return;
+    }
+
+    private static function getObjCode($indentity) {
+        switch ($indentity['marking']) {
+            case 'user':
+                $ret = ConfigDefine::YOU;
+                break;
+            case 'pet':
+                $ret = ConfigDefine::PET;
+                break;
+            default :
+                if($indentity['monster_id'] > 0) {
+                    $ret = $indentity['monster_id'];
+                } else {
+                    return FALSE;
+                }
+                break;
+        }
+        return $ret;
+    }
+
+    private static function getFightCode($item, $attackCode, $targetCode) {
+        $codes = '';
+        if($item['is_miss']) {
+            //[目标] 躲避 成功，攻击 miss
+            $codes .= $targetCode.'|'.ConfigDefine::DUOBI.'|'.ConfigDefine::CHENGGONG.'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::MISS;
+        }  elseif($item['fy_skill'] > 0 && $item['fy_skill'] != ConfigDefine::SKILL_FJ) {
+            //对象 使用了 [防御]，造成了 xx点 伤害
+            $codes .= $targetCode.'|'.ConfigDefine::SHIYONG.'|'.$item['fy_skill'].'|'.ConfigDefine::ZAOCHENG.'|H'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
+        }  elseif ($item['fy_skill'] > 0 && $item['fy_skill'] == ConfigDefine::SKILL_FJ) {
+            //造成了 xx点 伤害，[目标] 使用了 [反击]
+            $codes .= ConfigDefine::ZAOCHENG.'|H'.$item['harm'].'|'.$targetCode.'|'.ConfigDefine::SHIYONG.'|'.$item['fy_skill'].'|';
+            //对 [攻击者] 造成了 xx点 伤害
+            $codes .= ConfigDefine::VS.'|'.$attackCode.'|'.ConfigDefine::ZAOCHENG.'|H'.$item['fj_harm'].'|'.ConfigDefine::SHANGHAI;
+        }  elseif($item['is_bj']) {
+            //造成了 暴击 xxx点 伤害
+            $codes .= ConfigDefine::ZAOCHENG.'|'.ConfigDefine::BAOJI.'|H'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
+        }  else {
+            //造成了 xx点 伤害
+            $codes .= ConfigDefine::ZAOCHENG.'|H'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
+        }
+        return $codes;
+    }
 
     /**
      * @desc 根据user_id生成战斗对象
      */
-    public static function createUserFightable($user_id, $user_level, $isHelpfull = FALSE, $isHarmfull = FALSE) {
+    public static function createUserFightable($user_id, $user_level,$marking = '', $isHelpfull = FALSE, $isHarmfull = FALSE) {
         $skill_list     = Skill_Info::getSkillList($user_id);
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($user_id, TRUE);
 
         $fight_skill    = Skill::getFightSkillList($skill_list);
-        return new Fightable($user_level, $attrbuteArr, $fight_skill, array('user_id' => $user_id));
+        return new Fightable($user_level, $attrbuteArr, $fight_skill, array('user_id' => $user_id, 'marking' => $marking));
     }
 
     /**
@@ -125,11 +200,11 @@ class Fight {
      * 计算的属性加成点是自己进行计算的
      * 并未跟用户那块的加成计算在一起。
      * **/
-	public static function createMonsterFightable($monster) {
+	public static function createMonsterFightable($monster, $marking = '') {
 		$skill      = Monster::getMonsterSkill($monster);
 		$attribute  = Monster::getMonsterAttribute($monster);
 		//技能加成后的属性
 		$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
-		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id']));
+		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id'],'marking' => $marking));
 	}
 }

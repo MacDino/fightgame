@@ -136,30 +136,28 @@ class Fightable {
 
 	public function reportAttack() {
 		return array(
-			'attacker'      => $this->identity,
+			'attacker'      => $this->identity['marking'],
 			'skill'         => $this->last_attack_skill,
 			'status'        => $this->status,
 			'attacker_blood' => $this->current_blood,
 			'attacker_magic' => $this->current_magic,
             'fight'         => $this->fight,
+            'attack_indentity'     => $this->identity,
 		);
 	}
 
 	public function reportDefense() {
 		return array(
-			'target'        => $this->identity,
+			'target'        => $this->identity['marking'],
 			'target_blood' => $this->current_blood,
 			'target_magic' => $this->current_magic,
+            'target_indentity' => $this->identity,
 		);
 	}
 
     public function getInfo() {
         return $this->identity;
     }
-
-
-
-
 
     //进行一次回合
     public function doOneRound(Fightable $target) {
@@ -193,20 +191,20 @@ class Fightable {
         $defenseSkillIds = array_keys($targetData['skill_ids']);
         $harmRes    = Skill::userSkillTest($attackData, $targetData);
         foreach ((array)$harmRes as $key => $harmInfo) {
-            $this->fight = array(
+            $this->fight[$key] = array(
                 'is_miss'   => 1,
                 'is_bj'     => $harmInfo['is_double'],
-                'fy_skill'  => $defenseSkillIds[$key],
+                'fy_skill'  => $defenseSkillIds[$key] > 100 ? $defenseSkillIds[$key] : 0,
                 'harm'      => $harmInfo['hurt'],
             );
             if($attackSkillType == 'magic') {
                 if($this->magicHit() - $target->magicDodge() >= 1) {
-                    $this->fight['is_miss'] = 0;
+                    $this->fight[$key]['is_miss'] = 0;
                     $target->current_blood = $target->current_blood - $harmInfo['hurt'];
                 }
             } else {
                 if($this->physicHit() - $target->physicDodge() >= 1) {
-                    $this->fight['is_miss'] = 0;
+                    $this->fight[$key]['is_miss'] = 0;
                     $target->current_blood = $target->current_blood - $harmInfo['hurt'];
                 }
             }
@@ -218,14 +216,16 @@ class Fightable {
                 $fjAttackData = $target->makeSkillData(ConfigDefine::SKILL_PT, 0, 'physic');
                 $fjTargetData = $this->doDefense('physic');
                 $fjHarmInfo   = Skill::userSkillTest($fjAttackData, $fjTargetData);
-                $this->fight['is_fj'] = 1;
-                $this->fight['fj_bj'] = $fjHarmInfo['is_double'];
-                $this->fight['fj_miss'] = 1;
-                if($target->physicHit() - $this->physicDodge() >= 1) {
-                    $this->fight['fj_miss'] = 0;
-                    $this->current_blood = $this->current_blood - $fjHarmInfo['hurt'];
-                }
-                $this->fight['fj_harm'] = $fjHarmInfo['hurt'];
+                //暂时不做反击的命中、闪避判断。如果反击，直接命中
+//                $this->fight['is_fj'] = 1;
+//                $this->fight['fj_bj'] = $fjHarmInfo['is_double'];
+//                $this->fight['fj_miss'] = 1;
+//                if($target->physicHit() - $this->physicDodge() >= 1) {
+//                $this->fight['fj_miss'] = 0;
+                $fjHarm = $fjHarmInfo['is_double'] ? $fjHarmInfo['hurt']/2 : $fjHarmInfo['huit'];
+                $this->current_blood = $this->current_blood - $fjHarm;
+//                }
+                $this->fight[$key]['fj_harm'] = $fjHarm;
             }
         }
         //连击时设置状态为虚弱
