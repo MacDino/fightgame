@@ -1,6 +1,6 @@
 <?php
 class Pet{
-	CONST TABLE_NAME = 'friend_info';
+	CONST TABLE_NAME = 'user_pet';
 	
 	/** @desc 添加人宠 */
 	public static function addPet($userId, $petId){
@@ -29,7 +29,12 @@ class Pet{
 	/** @desc 人宠列表 */
 	public static function listPet($userId){
 		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
-		return $res;
+//		var_dump($res);
+		foreach ($res as $i=>$value){
+			$result[$i] = User_Info::getUserInfoByUserId($value['pet_id']);
+			$result[$i]['validity_time'] = $value['validity_time'];
+		}
+		return $result;
 	}
 	
 	/** @desc 人宠自动释放 */

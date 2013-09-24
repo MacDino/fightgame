@@ -1,5 +1,5 @@
 <?php
-//装备锻造
+//装备升级
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $equipId = isset($_REQUEST['equip_id']) ? intval($_REQUEST['equip_id']) : 0;
 if(!$equipId)
@@ -10,12 +10,12 @@ if(!$equipId)
 }
 
 try {
-    $data = Equip_Info::forge($equipId);
+    $data = Equip_Info::upgrade($equipId);
     $code = 0;
     $msg = 'ok';
     die;
 } catch (Exception $e) {
     $code = 1;
     $msg = '99';
-    die;    
+    die;
 }

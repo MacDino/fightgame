@@ -31,8 +31,8 @@ class Fight {
 				if (empty($target)) {
 					break;
 				}
-				$harm = $attacker->attack($target);
-				$fight_procedure[] = self::_report($attacker, $target, $harm);
+				$harm = $attacker->doOneRound($target);
+				$fight_procedure[] = self::_report($attacker, $target);
                 $times++;
 			}
 		}
@@ -102,12 +102,10 @@ class Fight {
 		return $target;
 	}
 
-	private static function _report($attacker, $target, $harm) {
-		return array(
-			'attacker'  => $attacker->reportAttack(),
-			'target'    => $target->reportDefense(),
-			'harm'      => $harm,
-		);
+	private static function _report(Fightable $attacker, Fightable $target) {
+		$attackInfo = $attacker->reportAttack();
+        $targetInfo = $target->reportDefense();
+        return array_merge($attackInfo, $targetInfo);
 	}
 
     /**

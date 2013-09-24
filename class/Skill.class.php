@@ -107,6 +107,46 @@ class Skill
         }
         return FALSE;
     }
+
+    /**
+     * 是否是防御物理攻击的防御技能
+     * @author lishengwei
+     * **/
+    public static function isPhysicDefense($skillId) {
+        $physicDefenseSkillIds = array(
+            ConfigDefine::SKILL_FY,  ConfigDefine::SKILL_FJ
+        );
+        return in_array($skillId, $physicDefenseSkillIds);
+    }
+
+    /**
+     * 是否是防御物理攻击的防御技能
+     * @author lishengwei
+     * **/
+    public static function isMagicDefense($skillId) {
+        $magicDefenseSkillIds = array(
+            ConfigDefine::SKILL_FD,
+        );
+        return in_array($skillId, $magicDefenseSkillIds);
+    }
+
+    /**
+     * 获得攻击的次数
+     * @author lishengwei
+     * **/
+    public static function getAttactTimes($skillId) {
+        $skillTimes = array(
+            ConfigDefine::SKILL_PT  => 1,
+            ConfigDefine::SKILL_ZJ => 1,
+            ConfigDefine::SKILL_LJ => 3,
+            ConfigDefine::SKILL_LXYZ => 1,
+            ConfigDefine::SKILL_SWZH => 1,
+            ConfigDefine::SKILL_HFHY => 2,
+            ConfigDefine::SKILL_WLJ  => 1,
+        );
+        return $skillTimes[$skillId] > 0 ? $skillTimes[$skillId] : 0;
+    }
+
     //技能分组名称
     private static function _skillGroupNameList()
     {
@@ -155,9 +195,9 @@ class Skill
     /**
      * @desc 锻造技能对装备的影响
      */
-    public static function getQuickAttributeForEquip($level){
+    public static function getQuickAttributeForEquip($level, $opt = 0){
         $data               = array();
-        $data['success']    = 0.5 + 0.002 * $level;
+        $data['success']    = 0.5 + 0.002 * $level + $opt;
         $data['no_less_dz'] = 0.01 * ceil($level / 2);
         return $data;
     }
@@ -378,10 +418,10 @@ class Skill
         foreach($hurtRes as $key => $hurt)
         {
             $hurt['hurt'] -= $defenceRes[$key];
-            $hurt['hurt'] = self::_filterHurt($hurt['hurt']);
             $hurt['hurt'] = call_user_func(array('Skill_OutputData', $functionName.'Addition'), $hurt['hurt'], $userData['skill_level']);//加成
             $hurt['hurt'] = Skill_Output::hurtPassive($userSkillId, $userData, $hurt['hurt']);
             $hurt['hurt'] = Skill_Output::defencePassive($userSkillId, $targetUserData, $hurt['hurt']);
+            $hurt['hurt'] = self::_filterHurt($hurt['hurt']);
             $hurtList[] = $hurt;
         }
         return $hurtList;

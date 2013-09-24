@@ -1,33 +1,6 @@
 <?php
-/**
- * 单人/多人 对战 单怪物
- * @author lishengwei
- * 战斗结果的数据体结构需要进行重构
- * **/
-include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
-error_reporting(E_ALL || ~E_NOTICE); //显示除去 E_NOTICE 之外的所有错误信息
 
-$userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$mapId              = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
-if($userId <=0 ) {
-    $code = 1; $msg = '没有对应的人物';
-    exit();
-}
-$userLastResult     = Fight_Result::getResult($userId, $mapId);
-if(is_array($userLastResult) && count($userLastResult)) {
-    $accessDiffTime = time() - $userLastResult['fight_start_time'];//一定为大于0的值
-    if($accessDiffTime < $userLastResult['use_time']) {
-        //调用时间小于应该花费的时间
-        $result = json_decode($userLastResult['last_fight_result']);
-        $code   = 0;
-        $data   = $result;
-        exit();
-    }
-}
-$mapId = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
-
-try {
-    $data = array(
+$data = array(
 	'participant' => array(
 		'user' => array(
 			'name' => '郑毅枫',
@@ -251,18 +224,3 @@ try {
 		),//只给名字和颜色即可
 	),
 );
-//print_r($data);
-	$code   = 0;
-} catch (Exception $e) {
-	$code   = 1;
-	$msg    = '攻击操作失败';
-}
-
- /**记录战斗结果入库，战斗记录一个用户永远只保存一条**/
-$result = array(
-    'user_id'   => $userId,
-    'map_id'    => $mapId,
-    'use_time'  => $fightUseTime,
-    'last_fight_result' => $data,
-);
-Fight_Result::create($result);
