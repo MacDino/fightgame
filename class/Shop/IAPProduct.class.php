@@ -140,7 +140,7 @@ class Shop_IAPProduct{
 		//返回产品的信息              
 		return array(     
 			'quantity'       =>  $data->receipt->quantity,     
-			'product_id'     =>  $data->receipt->product_id,     
+			'iap_product_id' =>  $data->receipt->product_id,     
 			'transaction_id' =>  $data->receipt->transaction_id,     
 			'purchase_date'  =>  $data->receipt->purchase_date,     
 			'app_item_id'    =>  $data->receipt->app_item_id,     
