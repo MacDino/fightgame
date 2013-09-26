@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId         = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
 $targetUserId   = $_REQUEST['target_id'] > 0 ? $_REQUEST['target_id'] : 0;
 try{
-    $userInfo = User_Info::getUserInfoByUserId($userId);
+    $userInfo       = User_Info::getUserInfoByUserId($userId);
     $targetUserInfo = User_Info::getUserInfoByUserId($targetUserId);
     if(!(is_array($userInfo) && count($userInfo)) || !(is_array($targetUserInfo) && count($targetUserInfo))) {
         $code = 1;
@@ -24,8 +24,8 @@ try{
         exit;
     }
 
-    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level']);
-    $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level']);
+    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level'],'user');
+    $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level'],'target');
     /**获取战斗结果**/
     $fightResult            = Fight::multiFight($userFightTeam, $targetUserFightTeam);
 
@@ -36,8 +36,10 @@ try{
     foreach ($targetUserFightTeam as $targetUserFight) {
         $isTargetUserAlive = $targetUserFight->isAlive() || $isTargetUserAlive;
     }
-    $data['fight_procedure'] = $fightResult['fight_procedure'];
-    $data['winner'] =array('user_id' => $isUserAlive && !$isTargetUserAlive ? $userId : $targetUserId);
+    $data['participant']['user']    = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+    $data['participant']['target']  = Fight::getPeopleFightInfo($userFightTeam[0], $targetUserInfo);
+    $data['fight_procedure']        = $fightResult['fight_procedure'];
+    $data['result']['win']          = $isUserAlive && !$isTargetUserAlive ? 1 : 0;
     /**
      * @todo 是否在这里处理征服符咒减一？
      * 还是说前端来自己调用接口减一？
