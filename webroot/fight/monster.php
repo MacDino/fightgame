@@ -42,9 +42,9 @@ try {
          * 获取人宠
          * @todo 获取郑毅锋的接口数据
          * **/
-        $userPetInfo    = array('user_id' => 27);
+        $petInfo    = Pet::usedPet($userId);
         if(is_array($userPetInfo) && count($userPetInfo)) {
-            $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
+            $userPetInfo = User_Info::getUserInfoByUserId($petInfo['pet_id']);
             //人宠进入队伍
             $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'],'pet');
             $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
@@ -80,8 +80,11 @@ try {
         User_Info::addMoney($userId, $data['money']);
 
         if(is_array($data['equipment']) && count($data['equipment'])) {
+            $getEquipSetting = Fight_Setting::isEquipMentCan($userId);
             foreach ($data['equipment'] as $equipment) {
-                Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
+                if($getEquipSetting[$equipment['color']]) {
+                    Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
+                }
             }
         }
 
