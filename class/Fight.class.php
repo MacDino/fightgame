@@ -112,6 +112,10 @@ class Fight {
         $targetInfo = $target->reportDefense();
         $info = array_merge($attackInfo, $targetInfo);
         $info['fight_content'] = self::translateFightResult($info);
+        $info['attacker_blood'] = intval($info['attacker_blood']);
+        $info['attacker_magic'] = intval($info['attacker_magic']);
+        $info['target_blood'] = intval($info['target_blood']);
+        $info['target_magic'] = intval($info['target_magic']);
         unset($info['attack_indentity']);
         unset($info['target_indentity']);
         unset($info['fight']);
