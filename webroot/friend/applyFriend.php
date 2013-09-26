@@ -1,5 +1,5 @@
 <?php
-//显示好友
+//申请中好友
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID

@@ -22,7 +22,7 @@ $friendInfo = User_Info::getUserInfoByUserId($friendId);
 //print_r($user_info);exit;
 if(!$userInfo || !$friendInfo)
 {
-	$code = 1;
+	$code = 123;
     //$msg = '用户信息错误!';
     $msg = '2';
     die;
@@ -30,8 +30,9 @@ if(!$userInfo || !$friendInfo)
 
 //查看是否还有位置添加好友
 $friendNum = Friend_Info::getFriendNum($userId);
+//echo $userInfo['friend_num'];
 if($friendNum == $userInfo['friend_num']){
-	$code = 1;
+	$code = 144;
     //$msg = '好友已达上限!';
     $msg = '5';
     die;

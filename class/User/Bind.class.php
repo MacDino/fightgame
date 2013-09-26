@@ -28,6 +28,13 @@ class User_Bind
         $loginUserId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
         return $loginUserId;
     }
+    
+    //自己创建用户
+    public static function createAccount($account, $passWord){
+    	if(!$account || !$passWord)return;
+    	$masterId = MySql::insert(self::TABLE_NAME, array('bind_type' => 'self', 'bind_value' => $bindValue, 'password' => $passWord), true);
+    	return $masterId;
+    }
 
     private static function _getBindUerInfo($bindType, $bindValue)
     {

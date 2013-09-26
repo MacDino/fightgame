@@ -102,7 +102,7 @@ class Friend_Info
 		$is_friend = self::getUserFrined($userId, $friendId);
 		if(!empty($is_friend)) return FALSE;
         
-        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId), true);//默认未通过
+        $userId = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));//默认未通过
         //echo $userId;exit;
         
         if($userId)
@@ -129,14 +129,14 @@ class Friend_Info
 		$friend_info = User_Info::getUserInfoByUserId($friendId);
 		if(!$user_info || !$friend_info) return FALSE;
 		
-		$res = MySql::update(self::TABLE_NAME, array('is_pass' => 2), array('user_id' => $userId, 'friend_id' => $friendId));//通过状态
+		$res = MySql::update(self::TABLE_NAME, array('is_pass' => 2), array('user_id' => $userId, 'friend_id' => $friendId ));//通过状态
 		//通过好友申请的同时添加对方为好友,默认通过
-		$result = MySql::insert(self::TABLE_NAME, array('user_id' => $friendId, 'friend_id' => $userId, 'is_pass' => 2), true);//默认通过
-		if($res & $result)
+		$result = MySql::insert(self::TABLE_NAME, array('user_id' => $friendId, 'friend_id' => $userId, 'is_pass' => 2));//默认通过
+		if($res && $result)
         {
         	//同时增加user_id声望
-        	User_Info::addReputationNum($user_info, 2);
-        	User_Info::addReputationNum($friend_info, 2);
+        	User_Info::addReputationNum($user_info['user_id'], 2);
+        	User_Info::addReputationNum($friend_info['user_id'], 2);
             return TRUE;
         }else{
         	return FALSE;
@@ -150,20 +150,30 @@ class Friend_Info
     	if(!$userId || !$friendId)	return FALSE;
     	
     	//好友是否存在
-    	$is_friend = self::getUserFrined($userId, $friendId);
-    	if(empty($is_friend)) return FALSE;
+    	$user_info = User_Info::getUserInfoByUserId($userId);
+		$friend_info = User_Info::getUserInfoByUserId($friendId);
     	
-        $userId = MySql::delete(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
+        $res = MySql::delete(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
+        $result = MySql::delete(self::TABLE_NAME, array('user_id' => $friendId, 'friend_id' => $userId));
         
-        if($userId)
+        if($res && $result)
         {
-        	User_Info::subtractReputationNum($user_info, 2);
-        	User_Info::subtractReputationNum($friend_info, 2);
+        	User_Info::subtractReputationNum($user_info['user_id'], 2);
+        	User_Info::subtractReputationNum($friend_info['user_id'], 2);
         	//同时减少user_id声望
             return TRUE;
         }else{
         	return FALSE;
         }
+    }
+    
+    //拒绝好友
+    public static function refuseFriend($userId, $friendId){
+    	//简单检测
+    	if(!$userId || !$friendId)	return FALSE;
+    	
+    	$res = MySql::delete(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
+    	return $res;
     }
 
     /**

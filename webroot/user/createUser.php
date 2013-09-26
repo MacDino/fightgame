@@ -37,7 +37,8 @@ try {
         $data['user_info'] = User_Info::getUserInfoByUserId($userId); 
         die;
     }
-    $code = 1;
+    $code = 0;
+    $msg = 'ok';
 } catch (Exception $e) {
     $code = 1;
 }
