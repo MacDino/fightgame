@@ -91,7 +91,6 @@ try {
         }
 
     }
-//    print_r($data);
 	$code   = 0;
 } catch (Exception $e) {
 	$code   = 1;
