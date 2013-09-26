@@ -40,9 +40,9 @@ try {
     }
 
     $userFightTeam      = array();
-    $userPetInfo        = array('user_id' => 27);
-    if(is_array($userPetInfo) && count($userPetInfo)) {
-        $userPetInfo    = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
+    $petInfo            = Pet::usedPet($userId);
+    if(is_array($petInfo) && count($petInfo)) {
+        $userPetInfo    = User_Info::getUserInfoByUserId($petInfo['pet_id']);
         //人宠进入队伍
         $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'], 'pet');
         $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[0], $userPetInfo);
