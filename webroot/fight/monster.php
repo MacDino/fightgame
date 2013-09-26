@@ -13,7 +13,7 @@ if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
 }
-//$userLastResult     = Fight_Result::getResult($userId, $mapId);
+$userLastResult     = Fight_Result::getResult($userId, $mapId);
 if(is_array($userLastResult) && count($userLastResult)) {
     $accessDiffTime = time() - $userLastResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastResult['use_time']) {

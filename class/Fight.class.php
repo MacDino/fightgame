@@ -112,6 +112,9 @@ class Fight {
         $targetInfo = $target->reportDefense();
         $info = array_merge($attackInfo, $targetInfo);
         $info['fight_content'] = self::translateFightResult($info);
+        unset($info['attack_indentity']);
+        unset($info['target_indentity']);
+        unset($info['fight']);
         return $info;
 	}
 
@@ -152,6 +155,8 @@ class Fight {
             default :
                 if($indentity['monster_id'] > 0) {
                     $ret = $indentity['monster_id'];
+                } elseif($indentity['user_id'] > 0) {
+                    $ret = $indentity['user_id'];
                 } else {
                     return FALSE;
                 }
