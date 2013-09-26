@@ -2,14 +2,13 @@
 /**
  * 地图配置类
  */
-class Map_Config extends Model {
+class Map_Config {
 
 	protected static $table_name = 'map_list';
 
 	// 获取地图列表
 	public static function getMapList() {
-		$ret = array();
-		$map_list = self::select();
+		$map_list   = MySql::select(self::$table_name);
         return $map_list;
 	}
 
@@ -20,7 +19,7 @@ class Map_Config extends Model {
 		}
 		$map_config['monsters'] = array();
 
-		$monsters = DB::table('map_monster')->getByMapId($map_id);
+        $monsters = self::getMonsterByMapId($map_id);
 		foreach ($monsters as $monster) {
 			$map_config['monsters'][$monster['monster_id']] = $monster['monster_name'];
 		}
@@ -31,6 +30,14 @@ class Map_Config extends Model {
         if($mapId > 0) {
             $where = array('map_id' => $mapId);
             return MySql::selectOne(self::$table_name, $where);
+        }
+        return FALSE;
+    }
+
+    public static function getMonsterByMapId($mapId) {
+        if($mapId > 0) {
+            $where = array('map_id' => $mapId);
+            return MySql::select('map_monster', $where);
         }
         return FALSE;
     }

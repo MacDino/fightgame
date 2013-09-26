@@ -78,4 +78,28 @@ class Fight_Setting {
         }
         return $return;
     }
+
+    //何种颜色的装备拾取
+    public static function isEquipMentCan($userId) {
+        $setting = self::getSettingByUserId($userId);
+        $equipmentColor = self::getColorTransToId();
+        foreach ($setting as $key => $v) {
+            if(array_key_exists($key, $equipmentColor)) {
+                $colorId = $equipmentColor[$key];
+                $return[$colorId] = $v;
+            }
+        }
+        return $return;
+    }
+
+    private static function getColorTransToId() {
+        return array(
+            'gray'      => Equip::EQUIP_COLOUR_GRAY,
+            'green'     => Equip::EQUIP_COLOUR_GREEN,
+            'blue'      => Equip::EQUIP_COLOUR_BLUE,
+            'white'     => Equip::EQUIP_COLOUR_WHITE,
+            'purple'    => Equip::EQUIP_COLOUR_PURPLE,
+            'orange'    => Equip::EQUIP_COLOUR_ORANGE
+        );
+    }
 }

@@ -80,8 +80,11 @@ try {
         User_Info::addMoney($userId, $data['money']);
 
         if(is_array($data['equipment']) && count($data['equipment'])) {
+            $getEquipSetting = Fight_Setting::isEquipMentCan($userId);
             foreach ($data['equipment'] as $equipment) {
-                Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
+                if($getEquipSetting[$equipment['color']]) {
+                    Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
+                }
             }
         }
 
