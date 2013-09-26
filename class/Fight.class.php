@@ -212,4 +212,38 @@ class Fight {
 		$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
 		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id'],'marking' => $marking));
 	}
+
+    public static function calculateHelpAndHarmfull($userRaceId, $petRaceId, $targetRaceId) {
+        $return['user'] = array(
+            'helpfull' => self::isHelpfull($userRaceId, $petRaceId),
+            'harmfull' => self::isHarmfull($userRaceId, $targetRaceId),
+        );
+        return $return;
+    }
+
+    //同队的种族
+    public static function isHelpfull($raceId, $teamRaceId) {
+        $helpfullRaceMatch = array(
+            User_Race::RACE_HUMAN       => User_Race::RACE_TSIMSHIAN,       //人生仙 即 同队的种族是人，对应与我的种族是仙族。有益，下同
+            User_Race::RACE_TSIMSHIAN   => User_Race::RACE_DEMON,           //仙生魔
+            User_Race::RACE_DEMON       => User_Race::RACE_HUMAN            //魔生人
+        );
+        if($helpfullRaceMatch[$teamRaceId] == $raceId) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    //异队的种族
+    public static function isHarmfull($raceId, $targetRaceId) {
+        $harmfullRaceMatch = array(
+            User_Race::RACE_HUMAN       => User_Race::RACE_DEMON,           //人克魔 即 异队的种族是人，对应与我的种族是魔族。有害，下同
+            User_Race::RACE_DEMON       => User_Race::RACE_TSIMSHIAN,       //魔克仙
+            User_Race::RACE_TSIMSHIAN   => User_Race::RACE_HUMAN            //仙克人
+        );
+        if($harmfullRaceMatch[$targetRaceId] == $raceId) {
+            return TRUE;
+        }
+        return FALSE;
+    }
 }
