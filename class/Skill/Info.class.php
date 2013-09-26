@@ -14,7 +14,7 @@ class Skill_Info {
         if(!empty($is_use)){//add by zhengyifeng 76387051@qq.com 2013.9.16 已装备技能
         	$where['is_use'] = $is_use;
         }
-        $skill_list = DB::table(self::TN_SKILL_INFO)->select($where);
+        $skill_list = MySql::select(self::TN_SKILL_INFO, $where);
         return $skill_list;
     }
     
