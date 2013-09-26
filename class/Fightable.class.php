@@ -38,6 +38,7 @@ class Fightable {
     protected $is_miss;
 
     protected $fight;
+    protected $isSleep;
 
 
     protected $attackAction = 'attack';
@@ -63,6 +64,7 @@ class Fightable {
 		$this->attributes   = $attributes;
 		$this->skills       = $skills;
 		$this->identity     = $identity;
+        $this->status       = 0;
         if(is_array($this->skills) && count($this->skills)) {
             foreach ($this->skills as $skillGroup) {
                 if(is_array($skillGroup['list']) && count($skillGroup['list'])) {
@@ -84,21 +86,22 @@ class Fightable {
 		return ! $this->isAlive();
 	}
 
-	public function isSleep() {
-		return $this->status & self::STATUS_SLEEP;
+	public function isStatus() {
+		return $this->status;
 	}
 
-	public function setSleep() {
-		$this->status |= self::STATUS_SLEEP;
+	public function setStatus() {
+		$this->status = 1;
 	}
 
-	public function unsetSleep() {
-		$this->status &= ~self::STATUS_SLEEP;
+	public function unsetStatus() {
+		$this->status = 0;
 	}
 
 	public function clearLastInfo() {
 		$this->last_attack_skill = NULL;
         $this->fight = NULL;
+        $this->isSleep = 0;
 	}
 
 	public function getCurrentBlood() {
@@ -121,24 +124,11 @@ class Fightable {
 		return $this->attributes[ConfigDefine::USER_ATTRIBUTE_SPEED] * $rand_rate;
 	}
 
-	//获取使用技能所必须的参数
-	public function getFightParameters() {
-		$attributes = $this->attributes;
-		if ($this->isSleep()) {
-			$attributes[ConfigDefine::USER_ATTRIBUTE_DEFENSE] *= 0.8;
-		}
-
-		return array(
-			'level' => $this->level,
-			'attributes' => $attributes,
-		);
-	}
-
 	public function reportAttack() {
 		return array(
 			'attacker'      => $this->identity['marking'],
 			'skill'         => $this->last_attack_skill,
-			'status'        => $this->status,
+			'status'        => $this->isSleep,
 			'attacker_blood' => $this->current_blood,
 			'attacker_magic' => $this->current_magic,
             'fight'         => $this->fight,
@@ -171,9 +161,10 @@ class Fightable {
          * 休息状态下，此回合结束
          * @todo 如何返回结构
          * **/
-		if ( $this->isSleep()) {
-			$this->unsetSleep();
-			return FALSE;
+		if ($this->isStatus()) {
+            $this->isSleep = 1;
+			$this->unsetStatus();
+			return TRUE;
 		}
         $skillId        = $this->randAttackSkill();
         if(Skill::isMagicSkill($skillId)) {
@@ -230,7 +221,7 @@ class Fightable {
         }
         //连击时设置状态为虚弱
         if($attackData['skill_id'] == ConfigDefine::SKILL_LJ) {
-            $this->setSleep();
+            $this->setStatus();
         }
         return TRUE;
     }
