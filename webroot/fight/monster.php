@@ -42,9 +42,9 @@ try {
          * 获取人宠
          * @todo 获取郑毅锋的接口数据
          * **/
-        $userPetInfo    = array('user_id' => 27);
+        $petInfo    = Pet::usedPet($userId);
         if(is_array($userPetInfo) && count($userPetInfo)) {
-            $userPetInfo = User_Info::getUserInfoByUserId($userPetInfo['user_id']);
+            $userPetInfo = User_Info::getUserInfoByUserId($petInfo['pet_id']);
             //人宠进入队伍
             $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'],'pet');
             $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
