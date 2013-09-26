@@ -29,7 +29,7 @@ class Fight_Result {
         if(is_array($existResult) && count($existResult)) {
             return MySql::update(self::TABLE_NAME, $data, array('user_id' => intval($params['user_id'])));
         } else {
-            return Mysql::insert(self::TABLE_NAME, $data, TRUE);
+            return MySql::insert(self::TABLE_NAME, $data, TRUE);
         }
     }
 
