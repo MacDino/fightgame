@@ -1031,4 +1031,15 @@ CREATE TABLE `user_happy_month_log` (
   `content` varchar(500) NOT NULL DEFAULT '',
   `ctime` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `user_pk_challenge_res`;
+CREATE TABLE `user_pk_challenge_res` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `win_num` int(11) NOT NULL COMMENT '战胜总场次',
+  `win_continue_num` int(11) NOT NULL COMMENT '连胜场数',
+  `update_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
