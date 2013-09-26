@@ -26,6 +26,6 @@ class Monster_Config
 	}
 
     public static function getList() {
-        return Mysql::select(self::TABLE_NAME, NULL, NULL, array('monster_id ASC'));
+        return MySql::select(self::TABLE_NAME, NULL, NULL, array('monster_id ASC'));
     }
 }

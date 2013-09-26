@@ -54,9 +54,9 @@ class Fight_Setting {
         }
 
         if(is_array($existInfo) && count($existInfo)) {
-            return Mysql::update(self::TABLE_NAME, $data, array('user_id' => $params['user_id']));
+            return MySql::update(self::TABLE_NAME, $data, array('user_id' => $params['user_id']));
         }
-        return Mysql::insert(self::TABLE_NAME, $data);
+        return MySql::insert(self::TABLE_NAME, $data);
     }
 
     private static function getFightSettingByUserId($userId) {
@@ -64,7 +64,7 @@ class Fight_Setting {
             $where = array(
                 'user_id' => $userId,
             );
-            return Mysql::selectOne(self::TABLE_NAME, $where);
+            return MySql::selectOne(self::TABLE_NAME, $where);
         }
         return FALSE;
     }

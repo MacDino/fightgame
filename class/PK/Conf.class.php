@@ -53,9 +53,9 @@ class PK_Conf {
             if($infoUpdateStamp >= $todayZeroStamp) {
                 $data['times'] = intval($existInfo['times']) + 1;
             }
-            return Mysql::update(self::TABLE_NAME_TIMES, $data, array('user_id' => $userId,'type' => $type));
+            return MySql::update(self::TABLE_NAME_TIMES, $data, array('user_id' => $userId,'type' => $type));
         }
-        return Mysql::insert(self::TABLE_NAME_TIMES, $data);
+        return MySql::insert(self::TABLE_NAME_TIMES, $data);
     }
 
     public static function getTimesByUserIdAndType($userId, $type = self::PK_MODEL_CHALLENGE) {

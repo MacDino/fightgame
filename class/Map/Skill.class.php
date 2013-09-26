@@ -50,7 +50,7 @@ class Map_Skill {
             $where = array(
                 'map_id' => intval($mapId),
             );
-            $res = Mysql::selectOne(self::TABLE_NAME_CONF_NUM, $where);
+            $res = MySql::selectOne(self::TABLE_NAME_CONF_NUM, $where);
             $return = isset($res['can_have_num']) ? json_decode($res['can_have_num'], true) : array();
         }
         foreach ($return as $key => $val) {
@@ -75,7 +75,7 @@ class Map_Skill {
                 'type'   => 'suffix',
                 'type_id' => $suffixId,
             );
-            $res = Mysql::selectOne(self::TABLE_NAME_CONF_MUST, $where);
+            $res = MySql::selectOne(self::TABLE_NAME_CONF_MUST, $where);
             $return = isset($res['skill_ids']) ? json_decode($res['skill_ids'], true) : array();
         }
         return $return;
