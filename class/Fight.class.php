@@ -166,24 +166,25 @@ class Fight {
     }
 
     private static function getFightCode($item, $attackCode, $targetCode) {
+        $item['harm'] = intval($item['harm']);
         $codes = '';
         if($item['is_miss']) {
             //[目标] 躲避 成功，攻击 miss
             $codes .= $targetCode.'|'.ConfigDefine::DUOBI.'|'.ConfigDefine::CHENGGONG.'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::MISS;
         }  elseif($item['fy_skill'] > 0 && $item['fy_skill'] != ConfigDefine::SKILL_FJ) {
             //对象 使用了 [防御]，造成了 xx点 伤害
-            $codes .= $targetCode.'|'.ConfigDefine::SHIYONG.'|'.$item['fy_skill'].'|'.ConfigDefine::ZAOCHENG.'|H'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
+            $codes .= $targetCode.'|'.ConfigDefine::SHIYONG.'|'.$item['fy_skill'].'|'.ConfigDefine::ZAOCHENG.'|H:'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
         }  elseif ($item['fy_skill'] > 0 && $item['fy_skill'] == ConfigDefine::SKILL_FJ) {
             //造成了 xx点 伤害，[目标] 使用了 [反击]
-            $codes .= ConfigDefine::ZAOCHENG.'|H'.$item['harm'].'|'.$targetCode.'|'.ConfigDefine::SHIYONG.'|'.$item['fy_skill'].'|';
+            $codes .= ConfigDefine::ZAOCHENG.'|H:'.$item['harm'].'|'.$targetCode.'|'.ConfigDefine::SHIYONG.'|'.$item['fy_skill'].'|';
             //对 [攻击者] 造成了 xx点 伤害
-            $codes .= ConfigDefine::VS.'|'.$attackCode.'|'.ConfigDefine::ZAOCHENG.'|H'.$item['fj_harm'].'|'.ConfigDefine::SHANGHAI;
+            $codes .= ConfigDefine::VS.'|'.$attackCode.'|'.ConfigDefine::ZAOCHENG.'|H:'.$item['fj_harm'].'|'.ConfigDefine::SHANGHAI;
         }  elseif($item['is_bj']) {
             //造成了 暴击 xxx点 伤害
-            $codes .= ConfigDefine::ZAOCHENG.'|'.ConfigDefine::BAOJI.'|H'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
+            $codes .= ConfigDefine::ZAOCHENG.'|'.ConfigDefine::BAOJI.'|H:'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
         }  else {
             //造成了 xx点 伤害
-            $codes .= ConfigDefine::ZAOCHENG.'|H'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
+            $codes .= ConfigDefine::ZAOCHENG.'|H:'.$item['harm'].'|'.ConfigDefine::SHANGHAI;
         }
         return $codes;
     }

@@ -57,13 +57,8 @@ try {
     $fightUseTime   = $fightResult['use_time'];
 
     $data['fight_procedure']  =  $fightResult['fight_procedure'];
-    $isUserAlive    = $isMonsterAlive = FALSE;
-    foreach ($userFightTeam as $userFight) {
-        $isUserAlive = $userFight->isAlive() || $isUserAlive;
-    }
-    foreach ($monsterFightTeam as $monsterFight) {
-        $isMonsterAlive = $monsterFight->isAlive() || $isMonsterAlive;
-    }
+    $isUserAlive = Fight::isTeamAlive($userFightTeam);
+    $isMonsterAlive = Fight::isTeamAlive($monsterFightTeam);
     $data['result']['use_time'] = $fightUseTime;
     if(!$isUserAlive && $isMonsterAlive) {
         $data['result']['win']  = 0;
