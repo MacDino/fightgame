@@ -2,7 +2,7 @@
 /**
  * 地图技能相关配置
  */
-class Map_Skill extends Model {
+class Map_Skill {
 
 	protected static $table_name = 'map_skill';
 
@@ -39,19 +39,6 @@ class Map_Skill extends Model {
 	{
 		return self::_getSkillIds($map_id, 'all', $skill_type);
 	}
-
-	// 获取该地图怪物boss的最低技能数，包括攻击，防御，被动
-	public static function getBossMinCount($map_id, $skill_type = null)
-	{
-		return self::_getSkillCount($map_id, 'boss_min_count', $skill_type);
-	}
-
-	// 获取该地图怪物boss的必须技能，包括攻击，防御，被动
-	public static function getBossMustHave($map_id, $skill_type = null)
-	{
-		return self::_getSkillIds($map_id, 'boss_must_have', $skill_type);
-	}
-
 
 	/**
      * 根据后缀获取最少拥有技能的数量
@@ -101,30 +88,12 @@ class Map_Skill extends Model {
 			'config_type' => $config_type,
 		);
 
-		$data = self::select($where);
+		$data = MySql::select(self::$table_name, $where);
 
 		$ret = array();
 		foreach ($data as $one)
 		{
 			$ret[$one['skill_type']][] = $one['skill_id'];
-		}
-
-		return isset($skill_type) ? $ret[$skill_type] : $ret;
-	}
-
-	protected static function _getSkillCount($map_id, $config_type, $skill_type = null)
-	{
-		$where = array(
-			'map_id' => $map_id,
-			'config_type' => $config_type,
-		);
-
-		$data = self::select($where);
-
-		$ret = array();
-		foreach ($data as $one)
-		{
-			$ret[$one['skill_type']] = $one['skill_id'];
 		}
 
 		return isset($skill_type) ? $ret[$skill_type] : $ret;
