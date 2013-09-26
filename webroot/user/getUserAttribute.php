@@ -2,7 +2,7 @@
 //获取用户信息，包括用户已穿装备，用户基本属性，用户成长属性
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'27';//用户ID
+$userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 //echo $userId;exit;
 if(!$userId)
 {
@@ -23,7 +23,7 @@ try {
 	$data['baseAttribute'] = User_Info::getUserInfoFightAttribute($userId);
 	//角色成长属性(值)
 	$data['valueAttribute'] = User_Info::getUserInfoFightAttribute($userId, TRUE);
-	
+//	print_r($data);
     $code = 0;
     $msg = 'ok';
 //    die;

@@ -20,7 +20,7 @@ try {
         die;
     }
 } catch (Exception $e) {
-    
+    $code = 1;
+	$msg = '获取账户失败!';
 }
-$code = 1;
-$msg = '获取账户失败!';
+

@@ -25,29 +25,3 @@ try {
 }
 ?>
 
-<!--<table>
-<form method="GET" action="createUser.php" name="createUser">
-<tr><td><input type="button" onclick="document.getElementById('div').style.display=(document.getElementById('div').style.display=='none')?'':'none'"  value="创建角色"/></td></tr>
-<tr><td>
-<div id="div" style="width: 300px;border: 1px dashed #CCCCCC;background-color: #FFFFCC; display:none">
-<input align="left" id="user_name" name="user_name" value="">用户名
-<select name="race_id" id="race_id">
-<option selected="1" value="1">人族
-<option value="2">仙族
-<option value="3">魔族
-</select>种族
-<input id="master_id" name="master_id" value="<?=$masterId?>" style="display:none;">
-<input id="area" name="area" value="<?=$area?>" style="display:none;">
-<input type="submit" value="提交"></div>
-</td></tr>
-</form>
-</table>
-
-<table>
-<?php foreach ($res as $i){?>
-	<tr>
-		<td>用户ID:<?=$i['user_id']?></td><td><a href="../test/index.php?user_id=<?=$i['user_id']?>">用户名:<?=$i['user_name']?></a></td><td>种族:<?=$i['race_id']?></td><br>
-		<td>等级:<?=$i['user_level']?></td><td>金钱:<?=$i['money']?></td><b><td>元宝:<?=$i['ingot']?></td>
-	</tr>
-<?php }?>
-</table>-->
