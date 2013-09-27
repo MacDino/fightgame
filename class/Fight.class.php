@@ -141,7 +141,7 @@ class Fight {
                 if($k == 0) {
                     $return[] = trim($codes, '|');
                 }
-                $codes = ConfigDefine::DI.'|'.($k + 1).'|'.ConfigDefine::GONGJI;
+                $codes = ConfigDefine::DI.'|N:'.($k + 1).'|'.ConfigDefine::GONGJI;
             }
             $codes .= '|'.self::getFightCode($item, $attackCode, $targetCode);
             $return[] = $codes;
