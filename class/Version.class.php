@@ -19,15 +19,23 @@ class Version
 	public static function getVersionId(){
 		
 	}
-	
+	//地图
 	public static function getMapList(){
 		$res = MySql::select('map_list', array(), array('map_id', 'map_name'));
-		return $res;
+		foreach ($res as $key=>$value){
+			$result[$key]['id'] = $value['map_id'];
+			$result[$key]['name'] = $value['map_name'];
+		}
+		return $result;
 	}
-	
+	//怪物
 	public static function getMonsterList(){
-		$res = MySql::select('map_Monster', array(), array('monster_id', 'monster_name'));
-		return $res;
+		$res = MySql::select('map_monster', array(), array('monster_id', 'monster_name'));
+		foreach ($res as $key=>$value){
+			$result[$key]['id'] = $value['monster_id'];
+			$result[$key]['name'] = $value['monster_name'];
+		}
+		return $result;
 	}
 	
 	public static function getActionList(){

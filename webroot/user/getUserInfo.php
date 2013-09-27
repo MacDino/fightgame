@@ -17,8 +17,8 @@ try {
 	//人物血量,魔法,计算获得
 	$valueAttribute = User_Info::getUserInfoFightAttribute($userId, TRUE);
     if(!empty($valueAttribute)){
-    	$data['blood'] = $valueAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
-    	$data['magic'] = $valueAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+    	$data['blood'] = intval($valueAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
+    	$data['magic'] = intval($valueAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
     }
     
     //人宠信息
@@ -29,9 +29,13 @@ try {
 		$data['pet']['name'] = $petInfo['user_name'];
 //		$data['pet']['id']   = $petInfo['user_id'];
 		$data['pet']['level']   = $petInfo['user_level'];
-		$data['pet']['blood']   = $petAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
-		$data['pet']['magic']   = $petAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+		$data['pet']['blood']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
+		$data['pet']['magic']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
 	}
+	
+	//地图信息
+	$userLastResult     = Fight_Result::getResult($userId);
+	$data['map_id'] = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 //	print_r($data);
     $code = 0;
     $msg = 'ok';

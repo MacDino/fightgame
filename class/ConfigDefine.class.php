@@ -38,12 +38,12 @@ class ConfigDefine
     CONST SKILL_PT						= 1216;//普通攻击
 
     //战斗动作
-    const PET                           = 7009;//人宠
+    CONST PET                           = 7009;//人宠
     CONST YOU							= 7100;//你
     CONST VS							= 7101;//对
-    CONST YUDAO							= 7102;//遇到
-    CONST SHIYONG						= 7103;//使用
-    CONST ZAOCHENG						= 7104;//造成
+    CONST YUDAO							= 7102;//遇到了
+    CONST SHIYONG						= 7103;//使用了
+    CONST ZAOCHENG						= 7104;//造成了
     CONST DIAN							= 7105;//点
     CONST SHANGHAI						= 7106;//伤害
     CONST GONGJI						= 7107;//攻击
@@ -58,11 +58,11 @@ class ConfigDefine
     CONST HUODE							= 7123;//获得
     CONST JINGYAN						= 7124;//经验
     CONST JINQIAN						= 7125;//金钱
-    const MISS                          = 7126;//miss
-    const CHUYU                         = 7127;//处于
-    const ZHUANGTAI                     = 7128;//状态
-    const BAOJI                         = 7129;//暴击
-    const DI                            = 7130;//第
+    CONST MISS                          = 7126;//miss
+    CONST CHUYU                         = 7127;//处于
+    CONST ZHUANGTAI                     = 7128;//状态
+    CONST BAOJI                         = 7129;//暴击
+    CONST DI                            = 7130;//第
 
             //其它
 	CONST RELEASE_PROBABILITY 		  	= 301;//释放概率
@@ -118,6 +118,7 @@ class ConfigDefine
 	//战斗描述
 	public static function actionList(){
 		$res = array(
+			self:: PET                          => '人宠',
 			self::YOU							=> '你',
 		    self::VS							=> '对',
 		    self::YUDAO							=> '遇到',
@@ -137,6 +138,11 @@ class ConfigDefine
 		    self::HUODE							=> '获得',
 		    self::JINGYAN						=> '经验',
 		    self::JINQIAN						=> '金钱',
+		    self:: MISS                         => 'miss',
+		    self:: CHUYU                        => '处于',
+		    self:: ZHUANGTAI                    => '状态',
+		    self:: BAOJI                        => '暴击',
+		    self:: DI                           => '第',
 		);
 		return $res;
 	}
