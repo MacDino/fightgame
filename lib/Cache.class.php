@@ -13,7 +13,7 @@ class Cache
             $obj = self::_getCacheObj();
             if($obj)
             {
-                $obj->get($key)
+                $obj->get($key);
             }
         }
         return FALSE; 
@@ -45,3 +45,4 @@ class Cache
         return self::$_cacheObj;
     }
 }
+
