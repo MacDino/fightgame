@@ -10,6 +10,7 @@ class Version
 	CONST MONSTER_VERSION = 1.02;
 	CONST ACTION_VERSION = 1.03;
 	CONST SKILL_VERSION = 1.03;
+	CONST TITLE_VERSION = 1.03;
 	CONST EXP_VERSION = 1.01;
 
     public static function getStaticResourceVersion(){

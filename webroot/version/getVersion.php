@@ -51,6 +51,17 @@ if(is_array($VersionId) ){
 		$data['SKILL_VERSION']['value'] = Version::getSkillList();
 	}
 	
+	//前后缀
+	if(array_key_exists('TITLE_VERSION', $VersionId)){
+		if(Version::TITLE_VERSION > $VersionId['TITLE_VERSION']){
+			$data['TITLE_VERSION']['code'] = Version::TITLE_VERSION;
+			$data['TITLE_VERSION']['value'] = Version::getTitleList();
+		}
+	}else{
+		$data['TITLE_VERSION']['code'] = Version::TITLE_VERSION;
+		$data['TITLE_VERSION']['value'] = Version::getTitleList();
+	}
+	
 	//升级经验
 	if(array_key_exists('EXP_VERSION', $VersionId)){
 		if(Version::EXP_VERSION > $VersionId['EXP_VERSION']){
@@ -76,6 +87,9 @@ if(is_array($VersionId) ){
 	
 	$data['EXP_VERSION']['code'] = Version::EXP_VERSION;
 	$data['EXP_VERSION']['value'] = Version::getLevelExpList();
+	
+	$data['TITLE_VERSION']['code'] = Version::TITLE_VERSION;
+	$data['TITLE_VERSION']['value'] = Version::getTitleList();
 }
 //print_r($data);
 $code = 0;
