@@ -38,6 +38,17 @@ class Version
 		return $result;
 	}
 	
+	//前后缀
+	public static function getTitleList(){
+		$res = ConfigDefine::titleList();
+		foreach($res as $key=>$value)
+		{
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		return $result;
+	}
+	
+	//动作
 	public static function getActionList(){
 		$res = ConfigDefine::actionList();
 		foreach($res as $key=>$value)
@@ -46,7 +57,7 @@ class Version
 		}
 		return $result;
 	}
-	
+	//技能
 	public static function getSkillList(){
 		$res = ConfigDefine::skillList();
 		foreach($res as $key=>$value)
@@ -55,7 +66,7 @@ class Version
 		}
 		return $result;
 	}
-	
+	//升级经验
 	public static function getLevelExpList()
 	{
 		$res = MySql::select('level_info', array(), array('level', 'need_experience'));
