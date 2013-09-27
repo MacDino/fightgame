@@ -77,6 +77,6 @@ if(is_array($VersionId) ){
 	$data['EXP_VERSION']['code'] = Version::EXP_VERSION;
 	$data['EXP_VERSION']['value'] = Version::getLevelExpList();
 }
-//var_dump($data);
+//print_r($data);
 $code = 0;
 $msg = 'ok';
