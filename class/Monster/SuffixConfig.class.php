@@ -4,7 +4,7 @@ class Monster_SuffixConfig
 {
 	protected static $suffix_config_list = array(
 		Monster::MONSTER_SUFFIX_BOSS => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.005,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 10,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 10,//魔力
@@ -24,7 +24,7 @@ class Monster_SuffixConfig
 			),
 		),
 		Monster::MONSTER_SUFFIX_SACRED => array(
-			'meet_probability' => 0.05,//遇到几率
+			'meet_probability' => 0.02,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 5,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -44,7 +44,7 @@ class Monster_SuffixConfig
 			),
 		),
 		Monster::MONSTER_SUFFIX_UNKNOWN => array(
-			'meet_probability' => 0.05,//遇到几率
+			'meet_probability' => 0.02,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -65,7 +65,7 @@ class Monster_SuffixConfig
 		),
 
 		Monster::MONSTER_SUFFIX_ADVANCED => array(
-			'meet_probability' => 0.05,//遇到几率
+			'meet_probability' => 0.02,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -86,7 +86,7 @@ class Monster_SuffixConfig
 		),
 
 		Monster::MONSTER_SUFFIX_WILL_EXTINCT => array(
-			'meet_probability' => 0.05,//遇到几率
+			'meet_probability' => 0.02,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 5,//魔力
@@ -106,7 +106,7 @@ class Monster_SuffixConfig
 			),
 		),
 		Monster::MONSTER_SUFFIX_CURSED => array(
-			'meet_probability' => 0.05,//遇到几率
+			'meet_probability' => 0.02,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -126,7 +126,7 @@ class Monster_SuffixConfig
 			),
 		),
 		Monster::MONSTER_SUFFIX_ANCIENT => array(
-			'meet_probability' => 0.05,//遇到几率
+			'meet_probability' => 0.02,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1.25,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.25,//魔力
@@ -146,7 +146,7 @@ class Monster_SuffixConfig
 			),
 		),
 		Monster::MONSTER_SUFFIX_HEAD => array(
-			'meet_probability' => 0.1,//遇到几率
+			'meet_probability' => 0.03,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1.05,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.05,//魔力
