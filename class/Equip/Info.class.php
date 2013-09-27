@@ -16,7 +16,14 @@ class Equip_Info
             return FALSE;    
         }
         return $res;
-    }	
+    }
+    
+    //按照类别获取装备
+    public static function getEquipInfoByType($equipType, $userId, $is_used = FALSE){
+    	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId));
+    	return $res;
+    }
+    
 
     //根据装备id返回信息
     public static function getEquipInfoById($equipId){
@@ -85,7 +92,7 @@ class Equip_Info
     					WHERE e.equip_colour = p.equip_colour AND e.equip_level = p.equip_level AND e.user_equip_id = '$equipId'";
 //    	echo $sql;exit;
     	$res = MySql::query($sql);
-    	var_dump($res);
+//    	var_dump($res);
     	return $res[0]['price'];
     }
     
@@ -95,4 +102,19 @@ class Equip_Info
     	$res = MySql::delete(self::TABLE_NAME, array('user_equip_id' => $equipId));
     	return $res;
     }
+    
+    //使用装备
+    public static function useEquip($userId, $equipId){
+    	//获取此装备信息,主要是equip_type
+//    	echo 3333;
+    	$equipInfo = self::getEquipInfoById($equipId);
+    	var_dump($equipInfo);
+    	//下掉原来同类装备
+		$oldRes = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_id' => $userId, 'equip_type' => $equipInfo['equip_type'], 'is_used' => 1));
+    	//把装备安装上去
+    	$res = MySql::update(self::TABLE_NAME, array('is_used' => 1), array('user_equip_id' => $equipId));
+    	return $res;
+    }
+    
+    
 }
