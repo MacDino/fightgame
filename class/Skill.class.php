@@ -359,15 +359,15 @@ class Skill
         //主动技能数 防御技能数
         $skill_count    = count($skills);
 		$data = array('attack' => array(), 'defense' => array(), 'passive' => array());
-		foreach ($skills as $skill_code => $skill_level){
-            if(isset(self::$skill_info[$skill_code][1])){
-                $skill_group    = self::$skill_info[$skill_code][1];
+		foreach ((array)$skills as $skill) {
+            if(isset(self::$skill_info[$skill['skill_id']][1])) {
+                $skill_group    = self::$skill_info[$skill['skill_id']][1];
                 if($skill_group == self::SKILL_GROUP_WLGJ || $skill_group == self::SKILL_GROUP_FSGJ){
-                    $data['attack']['list'][$skill_code]    = $skill_level;
+                    $data['attack']['list'][$skill['skill_id']]    = intval($skill['skill_level']);
                 } elseif ($skill_group == self::SKILL_GROUP_FYJN){
-                    $data['defense']['list'][$skill_code]   = $skill_level;
+                    $data['defense']['list'][$skill['skill_id']]   =  intval($skill['skill_level']);
                 } elseif ($skill_group == self::SKILL_GROUP_BDJN){
-                    $data['passive']['list'][$skill_code]   = $skill_level;
+                    $data['passive']['list'][$skill['skill_id']]   =  intval($skill['skill_level']);
                 }
             }
         }
