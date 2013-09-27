@@ -149,23 +149,7 @@ class Fight {
     }
 
     private static function getObjCode($indentity) {
-        switch ($indentity['marking']) {
-            case 'user':
-                $ret = ConfigDefine::YOU;
-                break;
-            case 'pet':
-                $ret = ConfigDefine::PET;
-                break;
-            default :
-                if($indentity['monster_id'] > 0) {
-                    $ret = $indentity['monster_id'];
-                } elseif($indentity['user_id'] > 0) {
-                    $ret = $indentity['user_id'];
-                } else {
-                    return FALSE;
-                }
-                break;
-        }
+        return $indentity['marking'];
         return $ret;
     }
 
