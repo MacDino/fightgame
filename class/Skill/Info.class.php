@@ -47,7 +47,7 @@ class Skill_Info {
             'user_id'   => $user_id,
             'skill_id'  => $skill_id
         );
-        $skill_info = DB::table(self::TN_SKILL_INFO)->field('skill_level')->selectOne($where);
+        $skill_info = MySql::selectOne(self::TN_SKILL_INFO, $where, array('skill_level'));
         if(!empty($skill_info) && $skill_info['skill_level']){
             return $skill_info['skill_level'];
         }
@@ -62,7 +62,7 @@ class Skill_Info {
             'user_id'   => $user_id,
             'skill_id'  => $skill_id
         );
-        return DB::table(self::TN_SKILL_INFO)->total($where);
+        return MySql::selectCount(self::TN_SKILL_INFO, $where);
     }
 
 
@@ -77,11 +77,11 @@ class Skill_Info {
         );
         if($level){
             //update
-            return DB::table(self::TN_SKILL_INFO)->update(array('skill_level' => ($level+$add_level)),$where);
+            return MySql::update(self::TN_SKILL_INFO, array('skill_level' => ($level+$add_level)), $where);
         } else {
             $level  = $add_level;
             $data   = array_merge($where, array('skill_level' => $level));
-            return DB::table(self::TN_SKILL_INFO)->insert($data);
+            return MySql::insert(self::TN_SKILL_INFO, $data, $where);
         }
     }
     /**
@@ -93,7 +93,7 @@ class Skill_Info {
         $where  = array(
             'level' => $user_level
         );
-        return DB::table(self::TN_SKILL_ALLOWED)->selectOne($where);
+        return MySql::selectOne(self::TN_SKILL_ALLOWED, $where);
     }
     /**
      * @desc 获取当前等级技能点数
@@ -103,7 +103,7 @@ class Skill_Info {
         $where  = array(
             'level' => $user_level
         );
-        $point = DB::table(self::TN_SKILL_ALLOWED)->selectOne($where);
+        $point = MySql::selectOne(self::TN_SKILL_ALLOWED, $where);
         return $point['point_num'] ? $point['point_num'] : 0;
     }
     /**
