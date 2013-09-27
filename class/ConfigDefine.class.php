@@ -147,6 +147,27 @@ class ConfigDefine
 		return $res;
 	}
 
+	//前后缀描述
+	//战斗描述
+	public static function titleList(){
+		$res = array(
+			Monster::MONSTER_PREFIX_PUNY     => '弱小的',
+			Monster::MONSTER_PREFIX_SLOW     => '缓慢的',
+			Monster::MONSTER_PREFIX_ORDINARY => '普通的',
+			Monster::MONSTER_PREFIX_POWERFUL => '强大的',
+			Monster::MONSTER_PREFIX_QUICK    => '敏捷的',
+		
+			Monster::MONSTER_SUFFIX_BOSS         => 'Boss',
+			Monster::MONSTER_SUFFIX_SACRED       => '圣灵',
+			Monster::MONSTER_SUFFIX_UNKNOWN      => '领主',
+			Monster::MONSTER_SUFFIX_ADVANCED     => '巨魔',
+			Monster::MONSTER_SUFFIX_WILL_EXTINCT => '将领',
+			Monster::MONSTER_SUFFIX_CURSED       => '魔王',
+			Monster::MONSTER_SUFFIX_ANCIENT      => '长老',
+			Monster::MONSTER_SUFFIX_HEAD         => '头头',
+		);
+		return $res;
+	}
 //	public static function
 
 }
