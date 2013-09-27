@@ -65,19 +65,19 @@ try {
         $data['result']['money']              = Monster::getMonsterMoney($monster);
         $data['result']['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
-        User_Info::addExperience($userId, $data['experience']);
+        User_Info::addExperience($userId, $data['result']['experience']);
         $isLevelUp                  = User_Info::isLevel($userId);
         if($isLevelUp) {
-            $data['level_up'] = $isLevelUp;
+            $data['result']['level_up'] = $isLevelUp;
             $levelUpNum = ($isLevelUp - $userInfo['user_level']) > 0 ? $isLevelUp - $userInfo['user_level'] : 1;
             User_Info::addLevelNum($userId, $levelUpNum);
         }
 
-        User_Info::addMoney($userId, $data['money']);
+        User_Info::addMoney($userId, $data['result']['money']);
 
-        if(is_array($data['equipment']) && count($data['equipment'])) {
+        if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
             $getEquipSetting = Fight_Setting::isEquipMentCan($userId);
-            foreach ($data['equipment'] as $equipment) {
+            foreach ($data['result']['equipment'] as $equipment) {
                 if($getEquipSetting[$equipment['color']]) {
                     Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
                 }
