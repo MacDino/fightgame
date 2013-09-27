@@ -20,9 +20,13 @@ class User_Info
 	/** @desc 升级判断 */
 	public static function isLevel($userId){
 		$userInfo = self::getUserInfoByUserId($userId);
-		$level = MySql::selectOne(self::TABLE_NAME, array('need_experience' => $userInfo['experience']), array('level'));
-		if($level['level'] > $userInfo['user_level']){
-			return $level['level'];
+		$newExp = $userInfo['experience'];
+		$level = MySql::query("SELECT max(level) as level FROM level_info WHERE need_experience <= $newExp");
+//		print_r($level);
+//		echo $level[0]['level']."====".$userInfo['user_level'];
+		if($level[0]['level'] > $userInfo['user_level']){
+			self::addLevelNum($userId, $level[0]['level']);
+			return $level[0]['level'];
 		}else{
 			return FALSE;
 		}
@@ -185,7 +189,8 @@ class User_Info
 	{
 		if(!$userId || !$num)return FALSE;
 
-		$sql = "UPDATE " . self::TABLE_NAME . " SET `user_level` = `user_level` + '$num' WHERE user_id = '$userId'";
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `user_level` = '$num' WHERE user_id = '$userId'";
+//		echo $sql;
 		$res = MySql::query($sql);
 		return $res;
 	}

@@ -111,6 +111,7 @@ class ConfigDefine
 		    self::SKILL_FY      				=> '防御',
 		    self::SKILL_FJ      				=> '反击',
 		    self::SKILL_FD      				=> '法盾',
+		    self::SKILL_PT						=> '普通攻击',
 		);
 		return 	$res;
 	}
