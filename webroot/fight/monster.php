@@ -38,10 +38,6 @@ try {
     $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
 
     if($userInfo['user_level'] > 40) {
-        /**
-         * 获取人宠
-         * @todo 获取郑毅锋的接口数据
-         * **/
         $petInfo    = Pet::usedPet($userId);
         if(is_array($petInfo) && count($petInfo)) {
             $userPetInfo = User_Info::getUserInfoByUserId($petInfo['pet_id']);
