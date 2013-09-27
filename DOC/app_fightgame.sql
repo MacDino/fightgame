@@ -1043,3 +1043,6 @@ CREATE TABLE `user_pk_challenge_res` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+ALTER table iap_product DROP product_desc;
+
+ALTER table props DROP props_desc;
