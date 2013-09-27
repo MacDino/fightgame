@@ -55,6 +55,7 @@ class Fight {
     public static function getMonsterFightInfo(Fightable $monster, $monsterInfo = array()) {
         return array(
             'monster_id' => $monsterInfo['monster_id'],
+            'level' => $monsterInfo['level'],
             'blood' => $monster->getCurrentBlood(),
             'magic' => $monster->getCurrentMagic(),
             'prefix' => $monsterInfo['prefix'],
