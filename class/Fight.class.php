@@ -123,8 +123,8 @@ class Fight {
 	}
 
     private static function translateFightResult($fightInfo) {
-        $attackCode    = self::getObjCode($fightInfo['attack_indentity']);
-        $targetCode    = self::getObjCode($fightInfo['target_indentity']);
+        $attackCode    = 'attacker';
+        $targetCode    = 'target';
         if($fightInfo['status'] == 1) {
             //[攻击者] 处于 练级 虚弱 状态，休息 一 回合
             $res = $attackCode.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
