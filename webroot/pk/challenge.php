@@ -49,11 +49,16 @@ try {
     }
 
     /**@todo 随即出来一个战斗对象**/
-    $targetUserId   = '27';
-    //找不到战斗对象的时候，表示此轮挑战结束
+    $targetUserId   = PK_Challenge::getUserOneNearFightTarget($userId, $_REQUEST['lng'], $_REQUEST['lat']);
+    //找不到战斗对象的时候，判断是否是连胜局。连胜局的话，表示此轮挑战结束
     if($targetUserId <= 0) {
-        //获得战果并展示
-        $data['result'] = PK_Challenge::dealResult($userId);
+        $code = 1;
+        if($fightStatus['win_continue_num'] > 0) {
+            //获得战果并展示
+            $data['result'] = PK_Challenge::dealResult($userId);
+        } else {
+            $msg = '未获取到附近用户';
+        }
         exit;
     }
 

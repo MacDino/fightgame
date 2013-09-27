@@ -96,4 +96,30 @@ class PK_Challenge{
         PK_Conf::setChallengeTimes($userId);
         return $return;
     }
+
+    public static function getUserOneNearFightTarget($userId, $lng = '', $lat = '') {
+        if($userId <= 0) {
+            return FALSE;
+        }
+        if(!$lng || !$lat) {
+            $userLbs = MySql::selectOne('user_lbs', array('user_id' => $userId));
+            if(is_array($userLbs) && count($userLbs)) {
+                $lng = $userLbs['longitude'];
+                $lat = $userLbs['latitude'];
+            }
+        }
+        if($lat && $lng) {
+            $friends = Friend_Info::getNearbyFriend($userId, $lng, $lat);
+            foreach ((array)$friends as $user) {
+                if($user['user_id'] > 0) {
+                    $friendIds[] = $user['user_id'];
+                }
+            }
+            if(is_array($friendIds) && count($friendIds)) {
+                shuffle($friendIds);
+                return $friendIds[0];
+            }
+        }
+        return FALSE;
+    }
 }
