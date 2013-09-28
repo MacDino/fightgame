@@ -167,7 +167,7 @@ class Equip_Create
     //随机装备位置
 	private static function _getRandEquipType()
 	{
-		return mt_rand(1, 6);
+		return mt_rand(3901, 3906);
 	}
     //随机一把品质
 	private static function _randQuality()

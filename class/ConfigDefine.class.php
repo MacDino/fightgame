@@ -169,6 +169,30 @@ class ConfigDefine
 		);
 		return $res;
 	}
+	
+	public static function equipList(){
+		$res = array(
+			Equip::EQUIP_COLOUR_GRAY 	=> '灰色',
+			Equip::EQUIP_COLOUR_WHITE 	=> '白色',
+			Equip::EQUIP_COLOUR_GREEN 	=> '绿色',
+			Equip::EQUIP_COLOUR_BLUE 	=> '蓝色',
+			Equip::EQUIP_COLOUR_PURPLE 	=> '紫色',
+			Equip::EQUIP_COLOUR_ORANGE 	=> '橙色',
+						
+			Equip::EQUIP_TYPE_ARMS 		=> '武器',
+			Equip::EQUIP_TYPE_HELMET 	=> '头盔',
+			Equip::EQUIP_TYPE_NECKLACE 	=> '项链',
+			Equip::EQUIP_TYPE_CLOTHES 	=> '衣服',
+			Equip::EQUIP_TYPE_BELT 		=> '腰带',
+			Equip::EQUIP_TYPE_SHOES 	=> '鞋子',
+			
+			Equip::EQUIP_QUALITY_GENERAL 	=> '普通',
+			Equip::EQUIP_QUALITY_ADVANCED 	=> '进阶',
+			Equip::EQUIP_QUALITY_SUBLIME 	=> '升华',
+			Equip::EQUIP_QUALITY_HOLY 		=> '圣品',
+		);
+		return $res;
+	}
 //	public static function
 
 }
