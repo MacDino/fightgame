@@ -978,8 +978,6 @@ CREATE TABLE `version_list` (
 -- ----------------------------
 -- Records of version_list
 -- ----------------------------
-<<<<<<< HEAD
-=======
 INSERT INTO `map_skill_conf_must` VALUES ('1', '1', 'suffix', '1', '{\"attack\":[1201,1202],\"defense\":[1212],\"passive\":[1207]}');
 
 DROP TABLE IF EXISTS `user_pk_times`;
@@ -1042,7 +1040,216 @@ CREATE TABLE `user_pk_challenge_res` (
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+-- MySQL dump 10.13  Distrib 5.1.60, for unknown-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: app_fightgame
+-- ------------------------------------------------------
+-- Server version	5.1.60-log
 
-ALTER table iap_product DROP product_desc;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-ALTER table props DROP props_desc;
+--
+-- Table structure for table `iap_product`
+--
+
+DROP TABLE IF EXISTS `iap_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `iap_product` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `iap_product_id` varchar(100) NOT NULL,
+  `static_code` int(6) DEFAULT NULL,
+  `product_name` varchar(150) NOT NULL,
+  `ingot` int(6) NOT NULL,
+  `price` decimal(5,2) DEFAULT NULL,
+  `present_type` tinyint(3) NOT NULL,
+  `present_num` int(6) NOT NULL,
+  `status` tinyint(3) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`product_id`),
+  UNIQUE KEY `iap_product_id` (`iap_product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `iap_product`
+--
+
+LOCK TABLES `iap_product` WRITE;
+/*!40000 ALTER TABLE `iap_product` DISABLE KEYS */;
+INSERT INTO `iap_product` VALUES (2,'com.fightgame.60',6102,'6元包套餐',60,'6.00',2,0,1),(4,'com.fightgame.300',6104,'30元包套餐',330,'30.00',2,30,1);
+/*!40000 ALTER TABLE `iap_product` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+-- MySQL dump 10.13  Distrib 5.1.60, for unknown-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: app_fightgame
+-- ------------------------------------------------------
+-- Server version	5.1.60-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `iap_purchase_log`
+--
+
+DROP TABLE IF EXISTS `iap_purchase_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `iap_purchase_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `purchase_receipt` varchar(300) NOT NULL,
+  `verify_status` tinyint(3) NOT NULL DEFAULT '-1',
+  `ctime` datetime NOT NULL,
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `iap_purchase_log`
+--
+
+LOCK TABLES `iap_purchase_log` WRITE;
+/*!40000 ALTER TABLE `iap_purchase_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `iap_purchase_log` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-09-27 19:00:17
+
+-- MySQL dump 10.13  Distrib 5.1.60, for unknown-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: app_fightgame
+-- ------------------------------------------------------
+-- Server version	5.1.60-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `props`
+--
+
+DROP TABLE IF EXISTS `props`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `props` (
+  `props_id` int(11) NOT NULL AUTO_INCREMENT,
+  `props_cate_id` int(11) NOT NULL,
+  `static_code` int(6) DEFAULT NULL,
+  `props_name` varchar(100) NOT NULL,
+  `price_type` tinyint(3) NOT NULL DEFAULT '1' COMMENT '价格类型  1：固定价格  2：动态价格',
+  `price` int(11) NOT NULL COMMENT '花费的元宝数',
+  PRIMARY KEY (`props_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `props`
+--
+
+LOCK TABLES `props` WRITE;
+/*!40000 ALTER TABLE `props` DISABLE KEYS */;
+INSERT INTO `props` VALUES (1,1,6301,'双倍咒符',1,20),(2,1,6302,'PK咒符',1,10),(3,1,6303,'属性增强咒符',1,20),(4,1,6304,'人宠增强咒符',1,10),(5,1,6305,'背包咒符',1,10),(6,1,6306,'挂机咒符',1,50),(7,1,6307,'好友上限咒符',1,100),(8,2,6308,'锻造成功咒符',1,100),(9,2,6309,'装备成长咒符',2,0),(10,3,6310,'30级普通宝箱',1,300),(11,3,6311,'30级精品宝箱',1,2400),(12,3,6312,'40级普通宝箱',1,400),(13,3,6313,'40级精品宝箱',1,3200),(14,3,6314,'50级普通宝箱',1,500),(15,3,6315,'50级精品宝箱',1,4000),(16,3,6316,'60级普通宝箱',1,600),(17,3,6317,'60级精品宝箱',1,4800),(18,3,6318,'70级普通宝箱',1,700),(19,3,6319,'70级精品宝箱',1,5600),(20,3,6320,'80级普通宝箱',1,800),(21,3,6321,'80级精品宝箱',1,6400),(22,3,6322,'90级普通宝箱',1,900),(23,3,6323,'90级精品宝箱',1,7200),(24,3,6324,'100级普通宝箱',1,1000),(25,3,6325,'100级精品宝箱',1,8000);
+/*!40000 ALTER TABLE `props` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-09-27 19:00:45
+
+-- MySQL dump 10.13  Distrib 5.1.60, for unknown-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: app_fightgame
+-- ------------------------------------------------------
+-- Server version	5.1.60-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `props_cate`
+--
+
+DROP TABLE IF EXISTS `props_cate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `props_cate` (
+  `props_cate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `static_code` int(6) DEFAULT NULL,
+  `cate_name` varchar(30) NOT NULL,
+  PRIMARY KEY (`props_cate_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `props_cate`
+--
+
+LOCK TABLES `props_cate` WRITE;
+/*!40000 ALTER TABLE `props_cate` DISABLE KEYS */;
+INSERT INTO `props_cate` VALUES (1,6201,'辅助类'),(2,6202,'锻造类'),(3,6203,'上古遗迹');
+/*!40000 ALTER TABLE `props_cate` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-09-27 19:05:05

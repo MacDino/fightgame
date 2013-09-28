@@ -93,7 +93,7 @@ class Shop_IAPProduct{
 				new Exception($e->getErrorMsg(), $e->getErrorCode());	
 			}
 		} else{
-			throw new Exception ("请传入验证相关字段", 1);	
+			throw new Exception ("请传入验证相关字段", 100002);	
 		}
 	}
 
@@ -129,12 +129,12 @@ class Shop_IAPProduct{
 
 		$data = json_decode($response);     
 		if (!is_object($data)) {     
-			throw new Exception('Invalid response data');     
+			throw new Exception('Invalid response data', 100021);     
 		}     
 
 		//处理验证失败
 		if (!isset($data->status) || $data->status != 0) {     
-			throw new Exception('Invalid receipt');     
+			throw new Exception('Invalid receipt', 100022);     
 		}     
 
 		//返回产品的信息              
@@ -154,27 +154,27 @@ class Shop_IAPProduct{
 	 */
 	public static function recordMonthPackage($userId){
 		if(!$userId) {
-			throw new Exception('用户ID为必传参数',1);
+			throw new Exception('用户ID为必传参数',100030);
 		}
 		$user = User_Info::getUserInfoByUserId ($userId);
 		if(!$user){
-			throw new Exception('无此用户',1);
+			throw new Exception('无此用户',100031);
 		}
 		$lastPurchase = Shop_IAPPurchaseLog::getLastOne($userId, self::MONTH_PRODUCT_ID);
 		if(!$lastPurchase){
-			throw new Exception('未找到您的欢乐月套餐购买记录', 1);
+			throw new Exception('未找到您的欢乐月套餐购买记录', 100032);
 		}
 		$ctime = strtotime($lastPurchase['ctime']);
 		$endtime = strtotime("next month", $ctime);	
 		if(time() > $endtime){
-			throw new Exception('欢乐月套餐已过期,您不能进行赠品领取',1);	
+			throw new Exception('欢乐月套餐已过期,您不能进行赠品领取',100033);	
 		}
 		$pack = Props_Config::$month_package;
 		/*
 		 * 一天一领,防止刷包
 		 */
 		if(!Shop_HappyMonthLog::isGeted($userId)) {
-			throw new Exception('您一天只能领取一次', 1);	
+			throw new Exception('您一天只能领取一次', 100034);	
 		}	
 		/*
 		 * 解包 
