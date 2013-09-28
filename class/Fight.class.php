@@ -56,8 +56,8 @@ class Fight {
         return array(
             'monster_id' => $monsterInfo['monster_id'],
             'level' => $monsterInfo['level'],
-            'blood' => $monster->getCurrentBlood(),
-            'magic' => $monster->getCurrentMagic(),
+            'blood' => intval($monster->getCurrentBlood()),
+            'magic' => intval($monster->getCurrentMagic()),
             'prefix' => $monsterInfo['prefix'],
             'suffix' => $monsterInfo['suffix'],
         );
