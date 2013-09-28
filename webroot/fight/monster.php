@@ -72,11 +72,9 @@ try {
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['result']['experience']);
         $isLevelUp                  = User_Info::isLevel($userId);
-        /*if($isLevelUp) {
+        if($isLevelUp) {
             $data['result']['level_up'] = $isLevelUp;
-            $levelUpNum = ($isLevelUp - $userInfo['user_level']) > 0 ? $isLevelUp - $userInfo['user_level'] : 1;
-            User_Info::addLevelNum($userId, $levelUpNum);
-        }*/
+        }
 
         User_Info::addMoney($userId, $data['result']['money']);
 
