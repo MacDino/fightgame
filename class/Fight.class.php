@@ -141,9 +141,9 @@ class Fight {
                 if($k == 0) {
                     $return[] = trim($codes, '|');
                 }
-                $codes = ConfigDefine::DI.'|N:'.($k + 1).'|'.ConfigDefine::GONGJI;
+                $codes = ConfigDefine::DI.'|N:'.($k + 1).'|'.ConfigDefine::GONGJI.'|';
             }
-            $codes .= '|'.self::getFightCode($item, $attackCode, $targetCode);
+            $codes .= self::getFightCode($item, $attackCode, $targetCode);
             $return[] = $codes;
         }
         return $return;
@@ -156,6 +156,7 @@ class Fight {
 
     private static function getFightCode($item, $attackCode, $targetCode) {
         $item['harm'] = intval($item['harm']);
+        $item['fj_harm'] = intval($item['fj_harm']);
         $codes = '';
         if($item['is_miss']) {
             //[目标] 躲避 成功，攻击 miss
