@@ -82,7 +82,7 @@ try {
             $getEquipSetting = Fight_Setting::isEquipMentCan($userId);
             foreach ($data['result']['equipment'] as $equipment) {
                 if($getEquipSetting[$equipment['color']]) {
-                    Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
+                    Equip::createEquip($equipment['color'], $userId, $equipment['level']);
                 }
             }
         }

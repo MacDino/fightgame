@@ -30,11 +30,12 @@ if(!$isCanFight['is_can']) {
     exit();
 }
 try {
-    //连胜30局的跳出计算
+    //连胜30分钟的跳出计算
     $fightStatus = PK_Challenge::getResByUserId($userId);
     if(is_array($fightStatus) && count($fightStatus)) {
         if(time() - strtotime($fightStatus['update_time']) > 1800 && $fightStatus['win_continue_num'] > 0) {
             $data['result'] = PK_Challenge::dealResult($userId);
+            PK_Challenge::setWinContinueNumZero($userId);
             exit();
         }
     }
@@ -56,6 +57,8 @@ try {
         if($fightStatus['win_continue_num'] > 0) {
             //获得战果并展示
             $data['result'] = PK_Challenge::dealResult($userId);
+            PK_Challenge::setWinContinueNumZero($userId);
+            PK_Challenge::delFightedUserIds($userId);
         } else {
             $msg = '未获取到附近用户';
         }
@@ -85,6 +88,7 @@ try {
     } else {
         $data['result'] = PK_Challenge::dealResult($userId);
         $data['result']['win'] = 0;
+        PK_Challenge::whenFail($userId);
     }
     PK_Challenge::updateFightedUserIdInCache($userId, $targetUserId, $fightStatus);
 } catch (Exception $exc) {
