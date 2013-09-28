@@ -10,8 +10,11 @@ if(!$user_id || !$product_id){
 	die;
 }
 try {
-	$data = Shop_IAPPurchaseLog::getLastOne($user_id, $product_id);
-	$code   = 0;
+	$res = Shop_IAPPurchaseLog::getLastOne($user_id, $product_id);
+	$data['product_id'] = $res['product_id'];
+	$data['user_id'] = $res['user_id'];
+	$data['ctime']   = $res['ctime'];
+	$code = 0;
 } catch (Exception $e) {
 	$code   = 1;
 }
