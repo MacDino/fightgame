@@ -1,5 +1,6 @@
 <?php
 
+echo strtotime(date("Y-m-d 00:00:00"));
 $data = array(
 	'participant' => array(
 		'user' => array(

@@ -1,8 +1,8 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
+include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$user_id    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$level_id   = isset($_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
+$user_id    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : '';
+$level_id   = isset($_REQUEST['level_id']) ? $_REQUEST['level_id'] : '';
 
 try {
 	$data   = Skill_Info::getSkillInfo($user_id);

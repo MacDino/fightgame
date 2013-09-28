@@ -251,5 +251,11 @@ class Skill_Info {
 		$res = MySql::selectOne('skill_attributes', array('skill_id'=>$skillId, 'skill_level'=>$skillLevel, 'race_id'=>$raceId), array('attribute'));
 		return json_decode($res['attribute'], TRUE);
 	}
+	
+	/** @desc 技能权重设置 */
+	public static function setSkillOdds($userId, $skillId, $oddsSet){
+		$res = MySql::update(self::TN_SKILL_INFO, array('odds_set' => $oddsSet), array('user_id' => $userId, 'skill_id' => $skillId));
+		return $res;
+	}
  
 }
