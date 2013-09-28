@@ -5,6 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $VersionId     = isset($_REQUEST['version_id'])?$_REQUEST['version_id']:'';//版本ID,数组
 
 $VersionId = json_decode($VersionId, TRUE);
+if(empty($VersionId)){$VersionId = array();}
 
 	//地图
 	if(array_key_exists('MAP_VERSION', $VersionId)){
