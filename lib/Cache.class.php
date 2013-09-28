@@ -8,7 +8,7 @@ class Cache
     {
         if(DEVELOPER)
         {
-            return apc_get($key); 
+            return apc_get($key);
         }else{
             $obj = self::_getCacheObj();
             if($obj)
@@ -16,23 +16,23 @@ class Cache
                 $obj->get($key);
             }
         }
-        return FALSE; 
+        return FALSE;
     }
     public static function set($key, $value, $ttl = 60)
     {
         if(DEVELOPER)
         {
-            return apc_add($key, $value, self::$_ttl); 
+            return apc_add($key, $value, self::$_ttl);
         }else{
             $obj = self::_getCacheObj();
             if($obj)
             {
-                return $obj->set($key, $value, $ttl)
+                return $obj->set($key, $value, $ttl);
             }
         }
         return FALSE;
     }
-    
+
     public static function del($key)
     {
         if(DEVELOPER)
