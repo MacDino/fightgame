@@ -93,7 +93,7 @@ class PK_Challenge{
         $return['ranking_all']      = self::rankingAll($userId);
         $return['ranking_friend']   = self::rankingFriend($userId);
         //将连胜数目置为0，并增加一次挑战次数
-        PK_Challenge::setWinContinueNumZero($userId);
+        self::setWinContinueNumZero($userId);
         PK_Conf::setChallengeTimes($userId);
         return $return;
     }
@@ -133,21 +133,25 @@ class PK_Challenge{
         return FALSE;
     }
 
-    public static function updateFightedUserIdInCache($userId, $targetId, $fightStatusInfo = array()) {
+    public static function updateFightedUserIdInCache($userId, $targetId) {
+        $fightStatusInfo = self::getResByUserId($userId);
         $cacheTime = 30*60;//半个小时
+        //打完计入已经战斗过的用户中去
+        $fightedUserIds     = Cache::get(PK_Challenge::PK_FIGHTED_USER_ID.$userId);
         if($fightStatusInfo['win_continue_num'] > 0) {
             $fightStartTime = strtotime($fightStatusInfo['update_time']);
             $t              = time() - $fightStartTime;
             if($t > 0 && $t < $cacheTime) {
                 $cacheTime  = $cacheTime - $t;
             } else {
-                Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
+                //这个时候不正常，如果有cache需要删掉
+                if(is_array($fightedUserIds) && count($fightStartTime)) {
+                    Cache::del(PK_Challenge::PK_FIGHTED_USER_ID.$userId);
+                }
             }
+            $fightedUserIds[]   = $targetId;
+            Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
         }
-        //打完计入已经战斗过的用户中去
-        $fightedUserIds     = Cache::get(PK_Challenge::PK_FIGHTED_USER_ID.$userId);
-        $fightedUserIds[]   = $targetId;
-        Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
         return ;
     }
 }
