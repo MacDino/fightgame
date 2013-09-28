@@ -7,6 +7,7 @@
 class PK_Challenge{
 
     const TABLE_NAME = 'user_pk_challenge_res';
+    const PK_FIGHTED_USER_ID = 'user_pk_fighted_user_ids_';
 
     //记录用户胜利的场次，只在胜利的时候进行保存结果
     public static function whenWin($userId) {
@@ -89,15 +90,15 @@ class PK_Challenge{
         $challengeInfo              = self::getResByUserId($userId);
         $return['win_count']        = $challengeInfo['win_num'];
         $return['point']            = intval($challengeInfo['win_continue_num'] / 5);
-        $return['ranking_all']        = self::rankingAll($userId);
-        $return['ranking_friend']     = self::rankingFriend($userId);
+        $return['ranking_all']      = self::rankingAll($userId);
+        $return['ranking_friend']   = self::rankingFriend($userId);
         //将连胜数目置为0，并增加一次挑战次数
         PK_Challenge::setWinContinueNumZero($userId);
         PK_Conf::setChallengeTimes($userId);
         return $return;
     }
 
-    public static function getUserOneNearFightTarget($userId, $lng = '', $lat = '') {
+    public static function getUserOneNearFightTarget($userId, $isContinueWin = FALSE, $lng = '', $lat = '') {
         if($userId <= 0) {
             return FALSE;
         }
@@ -110,8 +111,17 @@ class PK_Challenge{
         }
         if($lat && $lng) {
             $friends = Friend_Info::getNearbyFriend($userId, $lng, $lat);
+            if($isContinueWin) {
+                //从cache里拿出已经打过的人的ids
+                $fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
+            }
             foreach ((array)$friends as $user) {
                 if($user['user_id'] > 0) {
+                    if(is_array($fightedTarget) && count($fightedTarget)) {
+                        if(in_array($user['user_id'], $fightedTarget)) {
+                            continue;
+                        }
+                    }
                     $friendIds[] = $user['user_id'];
                 }
             }
@@ -121,5 +131,23 @@ class PK_Challenge{
             }
         }
         return FALSE;
+    }
+
+    public static function updateFightedUserIdInCache($userId, $targetId, $fightStatusInfo = array()) {
+        $cacheTime = 30*60;//半个小时
+        if($fightStatusInfo['win_continue_num'] > 0) {
+            $fightStartTime = strtotime($fightStatusInfo['update_time']);
+            $t              = time() - $fightStartTime;
+            if($t > 0 && $t < $cacheTime) {
+                $cacheTime  = $cacheTime - $t;
+            } else {
+                Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
+            }
+        }
+        //打完计入已经战斗过的用户中去
+        $fightedUserIds     = Cache::get(PK_Challenge::PK_FIGHTED_USER_ID.$userId);
+        $fightedUserIds[]   = $targetId;
+        Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
+        return ;
     }
 }

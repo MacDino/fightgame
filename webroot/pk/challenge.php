@@ -16,11 +16,11 @@ if(!(is_array($userInfo) && count($userInfo))) {
     $msg  = '找不到用户';
     exit();
 }
-//if($userInfo['user_level'] < 30) {
-//    $code =1 ;
-//    $msg  = '等级不够';
-//    exit();
-//}
+if($userInfo['user_level'] < 30) {
+    $code =1 ;
+    $msg  = '等级不够';
+    exit();
+}
 
 $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
 
@@ -49,7 +49,7 @@ try {
     }
 
     /**@todo 随即出来一个战斗对象**/
-    $targetUserId   = PK_Challenge::getUserOneNearFightTarget($userId, $_REQUEST['lng'], $_REQUEST['lat']);
+    $targetUserId   = PK_Challenge::getUserOneNearFightTarget($userId, $fightStatus['win_continue_num'] > 0 ? TRUE : FALSE, $_REQUEST['lng'], $_REQUEST['lat']);
     //找不到战斗对象的时候，判断是否是连胜局。连胜局的话，表示此轮挑战结束
     if($targetUserId <= 0) {
         $code = 1;
@@ -86,7 +86,7 @@ try {
         $data['result'] = PK_Challenge::dealResult($userId);
         $data['result']['win'] = 0;
     }
-
+    PK_Challenge::updateFightedUserIdInCache($userId, $targetUserId, $fightStatus);
 } catch (Exception $exc) {
     $code = $e->getCode();
     $msg  = $e->getMessage();
