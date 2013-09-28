@@ -47,8 +47,8 @@ class Fight {
         return array(
             'user_id'   => $userIdentity['user_id'],
             'user_name' => $userInfo['user_name'],
-            'blood'     => $user->getCurrentBlood(),
-            'magic'     => $user->getCurrentMagic(),
+            'blood'     => intval($user->getCurrentBlood()),
+            'magic'     => intval($user->getCurrentMagic()),
         );
     }
 
