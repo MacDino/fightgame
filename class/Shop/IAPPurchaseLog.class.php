@@ -54,4 +54,15 @@ class Shop_IAPPurchaseLog{
 		$res = self::getPurchaseLogByUserIdAndProductId($user_id, $product_id);
 		return !empty($res) ? $res[0] : array();	
 	}
+	
+	/*
+	 * 获取列表 
+	 */
+	public static function getList($where){
+		if(empty($where)) {
+			return '';
+		}
+		$res = MySql::select(self::TABLE_NAME, $where);
+		return $res;
+	}
 }

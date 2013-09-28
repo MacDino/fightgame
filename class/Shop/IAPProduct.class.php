@@ -100,7 +100,7 @@ class Shop_IAPProduct{
 	/*
 	 * 向apple发起凭证数据
 	 */
-	private function sendReceiptToApple($receipt){
+	public function sendReceiptToApple($receipt){
 		if (IAP_IS_SANDBOX) {     
 			$endpoint = self::SANDBOX_VERIFY_URL;    
 		}  else {     
