@@ -594,7 +594,7 @@ class User_Property{
 		//普通
 		if( $type == self::BOX_GENERAL){
 			$pack = Props_Config::$treasure_box_package[Props_Config::KEY_GENERAL_BOX];
-			$color = self::randEquipColor();	
+			$color = self::randGeneralEquipColor();	
 			foreach ($pack as $v) {
 				if($propsId == $v['id']){
 					$level = $v['level'];	
@@ -622,7 +622,7 @@ class User_Property{
 				if( $i < 4) {
 					$color = Equip::EQUIP_COLOUR_ORANGE;
 				} else {
-					$color = self::randEquipColor();	
+					$color = self::randChoiceEquipColor();	
 				}
 				$res = Equip_Create::createEquip($color, $userId, $level, 0, $equipQuality);
 			}
@@ -633,13 +633,26 @@ class User_Property{
 	 * 随机普通宝箱装备颜色
 	 * 蓝色以上装备
 	 */
-	public function randEquipColor(){
+	public function randGeneralEquipColor(){
 		$colors = array	(
-			Equip::EQUIP_COLOUR_BLUE,
-			Equip::EQUIP_COLOUR_PURPLE,
-			Equip::EQUIP_COLOUR_ORANGE,
+			Equip::EQUIP_COLOUR_BLUE 	=> 0.2,
+			Equip::EQUIP_COLOUR_PURPLE	=> 0.2,
+			Equip::EQUIP_COLOUR_ORANGE	=> 0.4,
 		);
-		return $colors[mt_rand(0,2)];
+		$res = PerRand::getRandResultKey($colors);
+		return $res;
+	}
+	/*
+	 * 随机精品宝箱装备颜色
+	 * 蓝色以上装备
+	 */
+	public function randChoiceEquipColor(){
+		$colors = array	(
+			Equip::EQUIP_COLOUR_BLUE 	=> 0.6,
+			Equip::EQUIP_COLOUR_PURPLE	=> 0.4,
+		);
+		$res = PerRand::getRandResultKey($colors);
+		return $res;
 	}
 
 }
