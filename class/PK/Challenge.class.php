@@ -17,12 +17,32 @@ class PK_Challenge{
         $existRes = self::getResByUserId($userId);
         $data = array(
             'user_id' => intval($userId),
+            'fight_num' => intval($existRes['fight_num']) + 1,
             'win_num' => intval($existRes['win_num']) + 1,
             'win_continue_num' => intval($existRes['win_continue_num']) + 1,
         );
         if($data['win_continue_num'] == 1) {
             //表示第一场的连胜,更新这次的时间，为了连胜不能超过30分钟做准备
             $data['update_time'] = date('Y-m-d H:i:s');
+        }
+        if(is_array($existRes) && count($existRes)) {
+            return MySql::update(self::TABLE_NAME, $data, array('user_id' => $userId));
+        } else {
+            return MySql::insert(self::TABLE_NAME, $data);
+        }
+    }
+
+    public static function whenFail($userId) {
+        if($userId <= 0) {
+            return FALSE;
+        }
+        $existRes = self::getResByUserId($userId);
+        $data = array(
+            'user_id' => intval($userId),
+            'fight_num' => intval($existRes['fight_num']) + 1,
+        );
+        if($data['win_continue_num'] > 0) {
+            $data['win_continue_num'] = 0;
         }
         if(is_array($existRes) && count($existRes)) {
             return MySql::update(self::TABLE_NAME, $data, array('user_id' => $userId));
@@ -92,8 +112,6 @@ class PK_Challenge{
         $return['point']            = intval($challengeInfo['win_continue_num'] / 5);
         $return['ranking_all']      = self::rankingAll($userId);
         $return['ranking_friend']   = self::rankingFriend($userId);
-        //将连胜数目置为0，并增加一次挑战次数
-        PK_Challenge::setWinContinueNumZero($userId);
         PK_Conf::setChallengeTimes($userId);
         return $return;
     }
@@ -133,21 +151,31 @@ class PK_Challenge{
         return FALSE;
     }
 
-    public static function updateFightedUserIdInCache($userId, $targetId, $fightStatusInfo = array()) {
+    public static function updateFightedUserIdInCache($userId, $targetId) {
+        $fightStatusInfo = self::getResByUserId($userId);
         $cacheTime = 30*60;//半个小时
+        //打完计入已经战斗过的用户中去
+        $fightedUserIds     = Cache::get(PK_Challenge::PK_FIGHTED_USER_ID.$userId);
         if($fightStatusInfo['win_continue_num'] > 0) {
             $fightStartTime = strtotime($fightStatusInfo['update_time']);
             $t              = time() - $fightStartTime;
             if($t > 0 && $t < $cacheTime) {
                 $cacheTime  = $cacheTime - $t;
             } else {
-                Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
+                self::delFightedUserIds($userId);
             }
+            $fightedUserIds[]   = $targetId;
+            Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
         }
-        //打完计入已经战斗过的用户中去
-        $fightedUserIds     = Cache::get(PK_Challenge::PK_FIGHTED_USER_ID.$userId);
-        $fightedUserIds[]   = $targetId;
-        Cache::set(PK_Challenge::PK_FIGHTED_USER_ID.$userId, $fightedUserIds, $cacheTime);
+        return ;
+    }
+
+    public static function delFightedUserIds($userId) {
+        $cacheKey = self::PK_FIGHTED_USER_ID.$userId;
+        $cacheValue = Cache::get($cacheKey);
+        if(is_array($cacheValue) && count($cacheValue)) {
+            Cache::del($cacheKey);
+        }
         return ;
     }
 }
