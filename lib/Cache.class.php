@@ -27,7 +27,22 @@ class Cache
             $obj = self::_getCacheObj();
             if($obj)
             {
-                $obj->set($key, $value, $ttl)
+                return $obj->set($key, $value, $ttl)
+            }
+        }
+        return FALSE;
+    }
+    
+    public static function del($key)
+    {
+        if(DEVELOPER)
+        {
+            return apc_delete($key);
+        }else{
+            $obj = self::_getCacheObj();
+            if($obj)
+            {
+                return $obj->delete($key);
             }
         }
         return FALSE;
