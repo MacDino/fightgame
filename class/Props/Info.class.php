@@ -17,6 +17,11 @@ class Props_Info{
 		return $res;
 	}
 
+	public static function getCateList(){
+		$res = MySql::select(self::TABLE_NAME);
+		return $res;
+	}
+
 	/*
 	 *  产品详情
 	 */
