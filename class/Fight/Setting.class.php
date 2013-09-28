@@ -8,10 +8,11 @@
 class Fight_Setting {
     const TABLE_NAME = 'fight_setting';
 
-    public static function create($userId, $params) {
+    public static function create($userId, $colors) {
         if($userId <= 0) {
             return FALSE;
         }
+        $params = (array)json_decode($colors,TRUE);
         $existInfo  = self::getFightSettingByUserId($userId);
         $data       = array(
             'user_id' => intval($userId),

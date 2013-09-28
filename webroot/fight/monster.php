@@ -28,7 +28,7 @@ if(is_array($userLastResult) && count($userLastResult)) {
 $mapId = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 
 //装备保留的颜色组
-if(is_array($_REQUEST['colors']) && count($_REQUEST['colors'])) {
+if(isset($_REQUEST['colors'])) {
     Fight_Setting::create($userId, $_REQUEST['colors']);
 }
 try {
