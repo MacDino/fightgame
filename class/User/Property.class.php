@@ -635,8 +635,8 @@ class User_Property{
 	 */
 	public function randGeneralEquipColor(){
 		$colors = array	(
-			Equip::EQUIP_COLOUR_BLUE 	=> 0.2,
-			Equip::EQUIP_COLOUR_PURPLE	=> 0.2,
+			Equip::EQUIP_COLOUR_BLUE 	=> 0.3,
+			Equip::EQUIP_COLOUR_PURPLE	=> 0.3,
 			Equip::EQUIP_COLOUR_ORANGE	=> 0.4,
 		);
 		$res = PerRand::getRandResultKey($colors);
