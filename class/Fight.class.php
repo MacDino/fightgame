@@ -47,8 +47,8 @@ class Fight {
         return array(
             'user_id'   => $userIdentity['user_id'],
             'user_name' => $userInfo['user_name'],
-            'blood'     => $user->getCurrentBlood(),
-            'magic'     => $user->getCurrentMagic(),
+            'blood'     => intval($user->getCurrentBlood()),
+            'magic'     => intval($user->getCurrentMagic()),
         );
     }
 
@@ -56,8 +56,8 @@ class Fight {
         return array(
             'monster_id' => $monsterInfo['monster_id'],
             'level' => $monsterInfo['level'],
-            'blood' => $monster->getCurrentBlood(),
-            'magic' => $monster->getCurrentMagic(),
+            'blood' => intval($monster->getCurrentBlood()),
+            'magic' => intval($monster->getCurrentMagic()),
             'prefix' => $monsterInfo['prefix'],
             'suffix' => $monsterInfo['suffix'],
         );
