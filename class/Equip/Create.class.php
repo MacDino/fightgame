@@ -37,7 +37,6 @@ class Equip_Create
     private static function _insertDataToValue($data)
     {
         $res = MySql::insert(self::TABLE_USER_EQUIP, $data);
-        echo MySql::getLastSql();
         return $res;
     }
 
