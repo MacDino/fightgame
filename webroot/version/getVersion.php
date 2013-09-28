@@ -5,8 +5,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $VersionId     = isset($_REQUEST['version_id'])?$_REQUEST['version_id']:'';//版本ID,数组
 
 $VersionId = json_decode($VersionId, TRUE);
-if(is_array($VersionId) ){
-//	echo 1111;exit;
+if(empty($VersionId)){$VersionId = array();}
+
 	//地图
 	if(array_key_exists('MAP_VERSION', $VersionId)){
 		if(Version::MAP_VERSION > $VersionId['MAP_VERSION']){
@@ -51,6 +51,17 @@ if(is_array($VersionId) ){
 		$data['SKILL_VERSION']['value'] = Version::getSkillList();
 	}
 	
+	//装备属性
+	if(array_key_exists('EQUIP_VERSION', $VersionId)){
+		if(Version::EQUIP_VERSION > $VersionId['EQUIP_VERSION']){
+			$data['EQUIP_VERSION']['code'] = Version::EQUIP_VERSION;
+			$data['EQUIP_VERSION']['value'] = Version::getEquipList();
+		}
+	}else{
+		$data['EQUIP_VERSION']['code'] = Version::EQUIP_VERSION;
+		$data['EQUIP_VERSION']['value'] = Version::getEquipList();
+	}
+	
 	//前后缀
 	if(array_key_exists('TITLE_VERSION', $VersionId)){
 		if(Version::TITLE_VERSION > $VersionId['TITLE_VERSION']){
@@ -72,7 +83,7 @@ if(is_array($VersionId) ){
 		$data['EXP_VERSION']['code'] = Version::EXP_VERSION;
 		$data['EXP_VERSION']['value'] = Version::getLevelExpList();
 	}
-}else{
+/*}else{
 	$data['MAP_VERSION']['code'] = Version::MAP_VERSION;
 	$data['MAP_VERSION']['value'] = Version::getMapList();
 	
@@ -90,7 +101,7 @@ if(is_array($VersionId) ){
 	
 	$data['TITLE_VERSION']['code'] = Version::TITLE_VERSION;
 	$data['TITLE_VERSION']['value'] = Version::getTitleList();
-}
+}*/
 //print_r($data);
 $code = 0;
 $msg = 'ok';

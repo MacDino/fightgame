@@ -57,7 +57,11 @@ class Pet{
 	//正在使用的人宠
 	public static function usedPet($userId){
 		$res = MySql::selectOne(self::TABLE_NAME, array('is_use' => 1));
-//		var_dump($res);
-		return $res;
+		if(time() > $res['validity_time']){
+			self::delPet($userId, $res['user_id']);
+			return FALSE;
+		}else{
+			return $res;
+		}
 	}
 }

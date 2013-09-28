@@ -9,6 +9,7 @@ error_reporting(E_ALL || ~E_NOTICE); //显示除去 E_NOTICE 之外的所有错�
 
 $userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $mapId              = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
+
 if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
@@ -26,6 +27,10 @@ if(is_array($userLastResult) && count($userLastResult)) {
 }
 $mapId = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 
+//装备保留的颜色组
+if(is_array($_REQUEST['colors']) && count($_REQUEST['colors'])) {
+    Fight_Setting::create($userId, $_REQUEST['colors']);
+}
 try {
     /**初始化一个怪物**/
     $monster            = Map::getMonster($mapId);
@@ -67,11 +72,11 @@ try {
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['result']['experience']);
         $isLevelUp                  = User_Info::isLevel($userId);
-        if($isLevelUp) {
+        /*if($isLevelUp) {
             $data['result']['level_up'] = $isLevelUp;
             $levelUpNum = ($isLevelUp - $userInfo['user_level']) > 0 ? $isLevelUp - $userInfo['user_level'] : 1;
             User_Info::addLevelNum($userId, $levelUpNum);
-        }
+        }*/
 
         User_Info::addMoney($userId, $data['result']['money']);
 

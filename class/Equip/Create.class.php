@@ -37,7 +37,10 @@ class Equip_Create
     private static function _insertDataToValue($data)
     {
         $res = MySql::insert(self::TABLE_USER_EQUIP, $data);
-        echo MySql::getLastSql();
+<<<<<<< HEAD
+        //echo MySql::getLastSql();
+=======
+>>>>>>> 8a2e04c4b4bced45479da159c8353dfaf5c1bf72
         return $res;
     }
 
@@ -167,7 +170,7 @@ class Equip_Create
     //随机装备位置
 	private static function _getRandEquipType()
 	{
-		return mt_rand(1, 6);
+		return mt_rand(3901, 3906);
 	}
     //随机一把品质
 	private static function _randQuality()

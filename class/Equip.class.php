@@ -2,36 +2,35 @@
 //武器装备
 class Equip
 {
-	CONST EQUIP_COLOUR_GRAY 	= 1;//灰色
-	CONST EQUIP_COLOUR_WHITE 	= 2;//白色
-	CONST EQUIP_COLOUR_GREEN 	= 3;//绿色
-	CONST EQUIP_COLOUR_BLUE 	= 4;//蓝色
-	CONST EQUIP_COLOUR_PURPLE 	= 5;//紫色
-	CONST EQUIP_COLOUR_ORANGE 	= 6;//橙色
-
+	CONST EQUIP_COLOUR_GRAY 	= 3801;//灰色
+	CONST EQUIP_COLOUR_WHITE 	= 3802;//白色
+	CONST EQUIP_COLOUR_GREEN 	= 3803;//绿色
+	CONST EQUIP_COLOUR_BLUE 	= 3804;//蓝色
+	CONST EQUIP_COLOUR_PURPLE 	= 3805;//紫色
+	CONST EQUIP_COLOUR_ORANGE 	= 3806;//橙色
 
 	CONST EQUIP_BASE_ATTRIBUTE_GENERAL 	= 'general';//普通
 	CONST EQUIP_BASE_ATTRIBUTE_HIGH 	= 'high';//高
 	CONST EQUIP_BASE_ATTRIBUTE_VH 		= 'vh';//很高
 
-	CONST EQUIP_TYPE_ARMS 		= 1;//武器
-	CONST EQUIP_TYPE_HELMET 	= 2;//头盔
-	CONST EQUIP_TYPE_NECKLACE 	= 3;//项链
-	CONST EQUIP_TYPE_CLOTHES 	= 4;//衣服
-	CONST EQUIP_TYPE_BELT 		= 5;//腰带
-	CONST EQUIP_TYPE_SHOES 		= 6;//鞋子
+	CONST EQUIP_TYPE_ARMS 		= 3901;//武器
+	CONST EQUIP_TYPE_HELMET 	= 3902;//头盔
+	CONST EQUIP_TYPE_NECKLACE 	= 3903;//项链
+	CONST EQUIP_TYPE_CLOTHES 	= 3904;//衣服
+	CONST EQUIP_TYPE_BELT 		= 3905;//腰带
+	CONST EQUIP_TYPE_SHOES 		= 3906;//鞋子
 
-	CONST EQUIP_QUALITY_GENERAL 	= 1;//品质-普通
-	CONST EQUIP_QUALITY_ADVANCED 	= 2;//品质-进阶
-	CONST EQUIP_QUALITY_SUBLIME 	= 3;//品质-升华
-	CONST EQUIP_QUALITY_HOLY 		= 4;//品质-圣品
-
+	CONST EQUIP_QUALITY_GENERAL 	= 3701;//品质-普通
+	CONST EQUIP_QUALITY_ADVANCED 	= 3702;//品质-进阶
+	CONST EQUIP_QUALITY_SUBLIME 	= 3703;//品质-升华
+	CONST EQUIP_QUALITY_HOLY 		= 3704;//品质-圣品
+	
 	CONST TABLE_EQUID_ATTRIBUTES = 'equip_attributes';
 
 	//创建一个装备
 	public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL)
 	{
-		return Equip_create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality);
+		return Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality);
 	}
 
 
