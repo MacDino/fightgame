@@ -11,6 +11,7 @@ class Version
 	CONST ACTION_VERSION = 1.03;
 	CONST SKILL_VERSION = 1.03;
 	CONST TITLE_VERSION = 1.03;
+	CONST EQUIP_VERSION = 1.03;
 	CONST EXP_VERSION = 1.01;
 
     public static function getStaticResourceVersion(){
@@ -72,5 +73,16 @@ class Version
 	{
 		$res = MySql::select('level_info', array(), array('level', 'need_experience'));
 		return $res;
+	}
+	
+	//装备属性
+	public static function getEquipList(){
+
+		$res = ConfigDefine::equipList();
+		foreach($res as $key=>$value)
+		{
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		return $result;
 	}
 }
