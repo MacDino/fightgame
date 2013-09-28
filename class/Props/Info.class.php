@@ -18,7 +18,7 @@ class Props_Info{
 	}
 
 	public static function getCateList(){
-		$res = MySql::select(self::TABLE_NAME);
+		$res = MySql::select("props_cate");
 		return $res;
 	}
 
