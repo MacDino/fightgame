@@ -97,8 +97,15 @@ class Monster
 	}
 
     public static function getMonsterEquipmentLevel($mapId) {
-        $mapInfo    = Map_Config::getMapConfig($mapId);
-        $baseLevel  = rand($mapInfo['start_level'], $mapInfo['end_level']);
+        $mapInfo        = Map_Config::getMapConfig($mapId);
+        $maxEquipLevel  = $mapInfo['end_level'];
+        $minEquipLevel  = $mapInfo['start_level'];
+        if($minEquipLevel - 1 > 0) {
+            $v = intval(($minEquipLevel-1)/10);
+            $baseLevel = $v * 10;
+        }  else {
+            $baseLevel = 0;
+        }
         $probability= PerRand::getRandResultKey(array(1 => 0.05,2 => 0.9,3 => 0.05));
         switch ($probability) {
             case 1:
