@@ -13,6 +13,7 @@ class Version
 	CONST TITLE_VERSION = 1.03;
 	CONST EQUIP_VERSION = 1.03;
 	CONST EXP_VERSION = 1.01;
+	CONST ATTRIBUTE_VERSION = 1.04;
 
     public static function getStaticResourceVersion(){
         return self::VERSION;
@@ -73,6 +74,16 @@ class Version
 	{
 		$res = MySql::select('level_info', array(), array('level', 'need_experience'));
 		return $res;
+	}
+	
+	//基本属性
+	public static function getAttributeList(){
+		$res = ConfigDefine::attributeList();
+		foreach($res as $key=>$value)
+		{
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		return $result;
 	}
 	
 	//装备属性
