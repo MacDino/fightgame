@@ -1249,3 +1249,51 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2013-09-27 19:05:05
+DROP TABLE IF EXISTS `copies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `copies` (
+  `copies_id` int(11) NOT NULL AUTO_INCREMENT,
+  `copies_name` varchar(50) NOT NULL COMMENT '副本名称',
+  `level_limit` int(5) NOT NULL COMMENT '级别限制',
+  `static_code` int(6) DEFAULT NULL COMMENT '静态资源编码',
+  `monster_num` int(6) NOT NULL COMMENT '怪物数量',
+  PRIMARY KEY (`copies_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `copies`
+--
+
+LOCK TABLES `copies` WRITE;
+/*!40000 ALTER TABLE `copies` DISABLE KEYS */;
+INSERT INTO `copies` VALUES (1,'玲珑宝塔',10,7100,100);
+/*!40000 ALTER TABLE `copies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `copies_level`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `copies_level` (
+  `level_id` int(11) NOT NULL AUTO_INCREMENT,
+  `level_name` varchar(300) NOT NULL,
+  `copies_id` int(11) NOT NULL COMMENT '副本id',
+  `monster_level` int(2) NOT NULL COMMENT '怪物等级',
+  `monster_level_type` tinyint(3) NOT NULL COMMENT '怪物等级类型  1：小于  2：大于',
+  `monster_suffix` int(6) DEFAULT NULL COMMENT '怪物后缀',
+  `monster_skill` varchar(300) NOT NULL COMMENT '怪物技能',
+  PRIMARY KEY (`level_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `copies_level`
+--
+
+LOCK TABLES `copies_level` WRITE;
+/*!40000 ALTER TABLE `copies_level` DISABLE KEYS */;
+INSERT INTO `copies_level` VALUES (1,'第一层',1,4,1,3208,'1201,1202,1203,1204,1205,1206'),(2,'第二层',1,3,1,3205,'1204,1205,1206'),(3,'第三层',1,2,1,3204,'1201,1202,1203'),(4,'第四层',1,1,1,3206,'1204,1205,1206,1212,1214'),(5,'第五层',1,0,2,3207,'1201,1202,1203,1212,1214'),(6,'第六层',1,1,3,3203,'1203,1204,1205,1212,1213,1214'),(7,'第七层',1,2,3,3202,'1201,1202,1203');
+/*!40000 ALTER TABLE `copies_level` ENABLE KEYS */;
+UNLOCK TABLES;
