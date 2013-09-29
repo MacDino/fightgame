@@ -65,13 +65,13 @@ class ConfigDefine
     CONST DI                            = 7130;//第
 
             //其它
-	CONST RELEASE_PROBABILITY 		  	= 7301;//释放概率
+	CONST RELEASE_PROBABILITY 		  	= 301;//释放概率
 
     CONST PK_NUM                        = 'pk_num';//PVP次数
     CONST USER_BASE_ATTRIBUTE           = 'user_base_attribute';//用户基本属性
     CONST USER_GROWUP_ATTRIBUTE         = 'user_growup_attribute';//用户成长属性
 
-	public static function attributeList()
+	public static function AttributeList()
 	{
 		$configDefineNameList = array(
 			self::USER_ATTRIBUTE_POWER        	=> '力量',
@@ -91,6 +91,7 @@ class ConfigDefine
 
             self::RELEASE_PROBABILITY		  	=> '释放概率',
 		);
+		return $configDefineNameList;
 	}
 
 	//技能静态资源
