@@ -108,11 +108,24 @@ class Equip_Info
     	//获取此装备信息,主要是equip_type
 //    	echo 3333;
     	$equipInfo = self::getEquipInfoById($equipId);
-    	var_dump($equipInfo);
+//    	var_dump($equipInfo);
     	//下掉原来同类装备
 		$oldRes = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_id' => $userId, 'equip_type' => $equipInfo['equip_type'], 'is_used' => 1));
     	//把装备安装上去
     	$res = MySql::update(self::TABLE_NAME, array('is_used' => 1), array('user_equip_id' => $equipId));
+    	return $res;
+    }
+    
+    //脱下装备
+    public static function useEquip($userId, $equipId){
+    	//获取此装备信息,主要是equip_type
+//    	echo 3333;
+    	//$equipInfo = self::getEquipInfoById($equipId);
+//    	var_dump($equipInfo);
+    	//下掉原来同类装备
+		//$oldRes = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_id' => $userId, 'equip_type' => $equipInfo['equip_type'], 'is_used' => 1));
+    	//把装备安装上去
+    	$res = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_equip_id' => $equipId));
     	return $res;
     }
     
