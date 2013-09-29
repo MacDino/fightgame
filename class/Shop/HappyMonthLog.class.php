@@ -24,7 +24,7 @@ class Shop_HappyMonthLog {
 		$sort = array(
 			'ctime DESC'	
 		);
-		$res = MySql::select(self::TABLE_NAME, $where, $sort);
+		$res = MySql::select(self::TABLE_NAME, $where, NULL, $sort);
 		return $res;
 	} 
 
@@ -39,7 +39,7 @@ class Shop_HappyMonthLog {
 	/*
 	 * 是否24小时内领取
 	 */
-	public static function isGeted($user_id){
+	public static function isGeted($userId){
 		$res = self::getLastOne($userId);
 		if ( time() <  $res['ctime'] + (24 * 3600)) {
 			return false;	

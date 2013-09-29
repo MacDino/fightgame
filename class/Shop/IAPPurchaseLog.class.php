@@ -43,7 +43,7 @@ class Shop_IAPPurchaseLog{
 		$sort = array(
 			'ctime DESC'	
 		);
-		$res = MySql::select(self::TABLE_NAME, $where, $sort);
+		$res = MySql::select(self::TABLE_NAME, $where, NULL, $sort);
 		return $res;
 	} 
 

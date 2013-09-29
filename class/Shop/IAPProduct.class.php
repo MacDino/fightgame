@@ -192,7 +192,7 @@ class Shop_IAPProduct{
 						 * 处理pk咒符和其他咒符的不同入库表
 						 */
 						if($v2['is_pk'] && isset($v2['is_pk'])){
-						  $res = User_Info::updateSingleInfo($userId, 'pk_num', $num, '+');	
+						  $res = User_Info::updateSingleInfo($userId, 'pk_num', $num, 1);	
 						} else {
 							$res = User_Property::addAmulet($userId, $props_id, $num);
 						}
@@ -200,13 +200,13 @@ class Shop_IAPProduct{
 				}				
 			} else if ($k == Props_Config::KEY_INGOT){
 				$ingot = $v;		
-				$res = User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
+				$res = User_Info::updateSingleInfo($userId, 'ingot', $ingot, 1);
 			}
 		}
 		/*
 		 * 记录领取日志,
 		 */
-		Shop_HappyMonthLog::insert(array('user_id' => $user_id, 'content' => json_encode($pack)));
+		Shop_HappyMonthLog::insert(array('user_id' => $userId, 'content' => json_encode($pack)));
 		return $res;
 	}
 }
