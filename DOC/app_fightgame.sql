@@ -30,6 +30,24 @@ CREATE TABLE `attribute_enhance` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `integral_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `integral_info`;
+CREATE TABLE `integral_info` (
+  `user_id` int(11) NOT NULL,
+  `before` int(11) DEFAULT NULL COMMENT '变化前',
+  `num` int(11) DEFAULT NULL COMMENT '数量',
+  `after` int(11) DEFAULT NULL COMMENT '变化后',
+  `type` tinyint(1) DEFAULT '0' COMMENT '积分增减(1增加,2减少,3不变)',
+  `action` tinyint(1) DEFAULT NULL COMMENT '动作(1战斗奖励,2积分抽奖)',
+  `time` int(11) DEFAULT NULL COMMENT '时间戳',
+  PRIMARY KEY (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of integral_info
+
+-- ----------------------------
 -- Table structure for `auto_fight`
 -- ----------------------------
 DROP TABLE IF EXISTS `auto_fight`;
@@ -887,6 +905,7 @@ CREATE TABLE `user_info` (
   `login_user_id` int(11) NOT NULL COMMENT '帐号ID',
   `area_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '分区',
   `reputation` int(11) NOT NULL COMMENT '声望',
+  `integral` int(11) DEFAULT NULL COMMENT '积分',
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='用户信息';
 
@@ -947,6 +966,7 @@ CREATE TABLE `user_skill` (
   `skill_type` enum('4','3','2','1') NOT NULL DEFAULT '1' COMMENT '技能类别 1物理2法术3防御4被动',
   `is_use` enum('1','2') DEFAULT '1' COMMENT '是否被使用 1未被使用 2使用中',
   `skill_location` int(11) DEFAULT NULL COMMENT '技能位置',
+  `odds_set` tinyint(3) DEFAULT NULL COMMENT '使用频率',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 

@@ -9,6 +9,10 @@ class User
     CONST DEFAULT_MONEY = 0;
 	/** 默认经验数*/
     CONST DEFAULT_EXP  = 0;
+    /** @desc 默认技能点 */
+    CONST DEFAULT_SKILL = 3;
+    /** @desc 默认声望数 */
+    CONST DEFAULT_REPUTATION = 0;
     
     /** 好友数量原始上限,可增加*/
     CONST DEFAULT_FRIEND_NUM = 20;

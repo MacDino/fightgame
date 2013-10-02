@@ -49,6 +49,8 @@ try {
             //人宠进入队伍
             $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'],'pet');
             $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
+        }else{
+        	$data['participant']['pet'] = NULL;//没有人宠时给空值
         }
     }
 

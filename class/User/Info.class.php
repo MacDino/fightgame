@@ -53,22 +53,24 @@ class User_Info
 	{
 		if(!$data || !is_array($data))return FALSE;
         if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
-        $userInfo = self::listUser($data['login_user_id'], $data['area_id']);
+        //$userInfo = self::listUser($data['login_user_id'], $data['area_id']);
         if($userInfo)throw new Exception('用户已存在', 100001);
-
         $res = MySql::insert(self::TABLE_NAME,
               array(
                   'user_name'     => $data['user_name'],
                   'race_id'       => $data['race_id'],
-                  'user_level'    => User::DEFAULT_USER_LEVEL,
-                  'experience'    => User::DEFAULT_EXP,
-                  'money'         => User::DEFAULT_MONEY,
-                  'ingot'         => User::DEFAULT_INGOT,
-                  'pack_num'      => User::DEFAULT_PACK_NUM,
-                  'friend_num'    => User::DEFAULT_FRIEND_NUM,
-                  'pet_num'       => User::DEFAULT_PET_NUM,
+                  'user_level' => User::DEFAULT_USER_LEVEL,
+			    	'experience' => User::DEFAULT_EXP,
+			    	'money'	=> User::DEFAULT_MONEY,
+			    	'ingot' => User::DEFAULT_INGOT,
+			    	'skil_point' => User::DEFAULT_SKILL,
+			    	'pack_num' => User::DEFAULT_PACK_NUM,
+			    	'friend_num' => User::DEFAULT_FRIEND_NUM,
+			    	'pet_num'	=> User::DEFAULT_PET_NUM,
+			    	'reputation' => User::DEFAULT_REPUTATION,
                   'login_user_id'     => $data['login_user_id'],
                   'area_id'          => $data['area_id'],
+                  'sex'             => $data['sex'],
                 ), TRUE);
 		return $res;
 	}
