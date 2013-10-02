@@ -22,6 +22,7 @@ class Equip_Create
             $attributeBaseList = self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);//装备信息      
             $attributeList = self::_getEquipAttributeValue($equipLevel, $equipQuality);
             $equipInfo = self::_getEquipData($equipLevel, $equipType, $equipColour, $attributeList, $attributeBaseList, $equipQuality); 
+            self::_cleanData();
             if($userId)
             {
                 $equipInfo['user_id'] = $userId;
@@ -32,6 +33,13 @@ class Equip_Create
         }catch(Exception $e){
             return FALSE;
         }
+    }
+
+    private static function _cleanData()
+    {
+        self::$_equipGetAttribute = array();
+        self::$_equipSuitRaceId = NULL;
+        self::$_equipAttributeConfigList = array();
     }
 
     private static function _insertDataToValue($data)
