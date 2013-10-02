@@ -38,7 +38,7 @@ class User_Info
 	 * @return 角色列表
 	 */
 	public static function listUser($loginUserId, $areaId){
-		if(!$loginUserId || !$areaId)return FALSE;
+		if(!empty($loginUserId) || !$areaId)return FALSE;
 		$res = MySql::select(self::TABLE_NAME, array('login_user_id' => $loginUserId, 'area_id' => $areaId));
 		return $res;
 	}

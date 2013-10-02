@@ -8,13 +8,14 @@ $userName   = isset($_REQUEST['user_name'])?$_REQUEST['user_name']:'';//用户�
 $areaId   = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'';//分区
 $sex   = isset($_REQUEST['sex'])?$_REQUEST['sex']:'';//性别
 
-if(!$raceId || !$userName || !$masterId || !$areaId || !$sex)
+if(!$userName || !$masterId || !$areaId)
 {
     $code = 9;
     die;
 }
 
 try {
+
     //创建用户
     $userId = User_Info::createUserInfo(array(
     	'race_id' => $raceId, 
@@ -23,7 +24,7 @@ try {
     	'area_id' => $areaId, 
     	'sex' => $sex,
     	));
-    echo $userId;
+
     if($userId)
     {
         //创建蓝色0级装备一套
@@ -42,13 +43,14 @@ try {
         User_Property::initTreasureBox($userId);
         //初始化奖励列表
         //初始化...
-		echo "<script>location.href='getUserInfo.php?user_id=$userId';</script>"; 
+//		echo "<script>location.href='getUserInfo.php?user_id=$userId';</script>"; 
         //User_Property::createPropertylist($userId, User_Property::EQUIP_GROW);
-//        $data['user_info'] = User_Info::getUserInfoByUserId($userId); 
-//        die;
+        $data = $userId;
+        $code = 0;
+   		$msg = 'ok';
+        die;
     }
-    $code = 0;
-    $msg = 'ok';
+    
 } catch (Exception $e) {
     $code = 1;
 }

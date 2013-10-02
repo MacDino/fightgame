@@ -31,6 +31,8 @@ try {
 		$data['pet']['level']   = $petInfo['user_level'];
 		$data['pet']['blood']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
 		$data['pet']['magic']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
+	}else{
+		$data['pet'] = null;
 	}
 	
 	//地图信息

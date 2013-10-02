@@ -16,7 +16,7 @@ try {
     $res = User::getLoginUserId($bindType, $bindValue);
     if($res)
     {
-        $data = array('login_user_id' => $res); 
+        $data = array('master_id' => $res); 
         die;
     }
 } catch (Exception $e) {
