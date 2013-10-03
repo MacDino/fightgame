@@ -4,11 +4,23 @@ class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
 
-	/** @desc 是否存在这个用户 */
-	public static function isExistUser($userId){
-		if(!is_numeric($userId))return FALSE;
-		$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
-		return $res;
+	/** @desc 是否存在这个用户,可同时检测多个*/
+	public static function isExistUser($arrayUserId){
+		if(is_array($arrayUserId)){
+			$num = 0;
+			foreach ($arrayUserId as $UserId){
+				if(!is_numeric($userId))return FALSE;
+				$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+				if(empty($res)){
+					return FALSE;
+				}else{
+					$num += 1;
+				}
+			}
+			if($num == count($arrayUserId))return TRUE;
+		}else{
+			return FALSE;
+		}
 	}
 	
 	/**

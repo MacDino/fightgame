@@ -450,7 +450,7 @@ CREATE TABLE `friend_info` (
   `user_id` int(11) NOT NULL,
   `friend_id` int(11) NOT NULL,
   `channel` enum('sina','weixin','lbs','game') DEFAULT 'game' COMMENT '添加来源',
-  `is_pass` enum('2','1') DEFAULT '1' COMMENT '1未通过2通过',
+  `is_pass` tinyint(1) DEFAULT '0' COMMENT '0未通过1通过',
   PRIMARY KEY (`user_id`,`friend_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

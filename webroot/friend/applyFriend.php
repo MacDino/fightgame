@@ -14,6 +14,15 @@ if(!$userId)
     die;
 }
 
+//查询用户ID是否在用户表里存在
+$userInfo = User_Info::isExistUser(array($userId, $friendId));
+if(!$userInfo)
+{
+	$code = 2;
+    $msg = '用户信息错误!';
+    die;
+}
+
 try {
     //显示好友
     $data = Friend_Info::getApplyFriendInfo($userId);

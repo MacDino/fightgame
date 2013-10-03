@@ -10,19 +10,16 @@ $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 if(!$userId || !$friendId)
 {
     $code = 1;
-    //$msg = '传入参数不正确!';
-    $msg = '1';
+    $msg = '传入参数不正确!';
     die;
 }
 
 //查询用户ID是否在用户表里存在
-$userInfo = User_Info::getUserInfoByUserId($userId);
-$friendInfo = User_Info::getUserInfoByUserId($friendId);
-if(!$userInfo || !$friendInfo)
+$userInfo = User_Info::isExistUser(array($userId, $friendId));
+if(!$userInfo)
 {
-	$code = 1;
-    //$msg = '用户信息错误!';
-    $msg = '2';
+	$code = 2;
+    $msg = '用户信息错误!';
     die;
 }
 
@@ -30,25 +27,19 @@ if(!$userInfo || !$friendInfo)
 $friendNum = Friend_Info::getFriendNum($userId);
 //var_dump($friendNum);exit;
 if($friendNum == $userInfo['friend_num']){
-	$code = 1;
-    //$msg = '好友已达上限!';
-    $msg = '5';
+	$code = 3;
+    $msg = '好友已达上限!';
     die;
 }
 
 try {
     //添加好友
     $data = Friend_Info::agreeFriendInfo($userId, $friendId);
-    /*if($res){
-    	$data = Friend_Info::getApplyFriendInfo($userId);
-    }*/
-    //增加声望
     $code = 0;
     $msg = 'OK';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    //$msg = '添加好友失败!';
-    $msg = '99';
+    $code = 99;
+    $msg = '添加好友失败!';
     die;    
 }
