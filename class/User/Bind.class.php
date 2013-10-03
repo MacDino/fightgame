@@ -41,7 +41,7 @@ class User_Bind
         $loginUserInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue));
         if($loginUserInfo)
         {
-        	$masterId = $loginUserInfo['matser_id'];
+        	$masterId = $loginUserInfo['master_id'];
             return $masterId;
         }else{
         	return FALSE;

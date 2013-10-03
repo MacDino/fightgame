@@ -9,18 +9,19 @@ $area	  = isset($_REQUEST['area'])?$_REQUEST['area']:'';//分区
 if(!$masterId || !$area)
 {
 	$code = 1;
-//    $msg = '传入参数不正确';
-	$msg = '1';
+    $msg = '传入参数不正确';
     die;
 }
 
 try {
     //获取用户
     $data = User_Info::listUser($masterId, $area);
-} catch (Exception $e) {
+//    print_r($data);
     $code = 0;
-//    $msg = '获取账户失败!';
-	$msg = '999';
+    die;
+} catch (Exception $e) {
+    $code = 99;
+	$msg = '内部错误';
     die;    
 }
 ?>

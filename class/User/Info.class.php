@@ -57,10 +57,46 @@ class User_Info
 	 * @return 角色列表
 	 */
 	public static function listUser($masterId, $areaId){
-		//echo "$masterId, $areaId";
+//		echo "$masterId, $areaId";
 		if(empty($masterId) || !$areaId)return FALSE;
-		$res = MySql::select(self::TABLE_NAME, array('matser_id' => $masterId, 'area_id' => $areaId));
+		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area_id' => $areaId));
 		return $res;
+	}
+	
+	//根据条件搜索用户 后台用
+	public static function searchUser($array){
+		$res = MySql::select(self::TABLE_NAME, $array);
+		return $res;
+	}
+	
+	/** @desc 校验重名 */
+	public static function verifyUserName($userName){
+		$res = MySql::selectOne(self::TABLE_NAME, array('user_name' => $userName));
+//		print_r($res);
+		if(!empty($res)){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+	
+	/** @desc 校验数量 */
+	public static function verifyUserNum($masterId){
+		$res = MySql::selectCount(self::TABLE_NAME, array('master_id' => $masterId));
+//		echo $res;
+		if($res >= 3){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+	
+	/** @desc 删除好友,暂时不做 */
+	public static function delUser($userId){
+		//用户表打状态
+		//好友表
+		//人宠表
+		//咒符表
 	}
 
 	/**
@@ -73,7 +109,7 @@ class User_Info
 	{
 		if(!$data || !is_array($data))return FALSE;
         if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
-        //$userInfo = self::listUser($data['matser_id'], $data['area_id']);
+        //$userInfo = self::listUser($data['master_id'], $data['area_id']);
         if($userInfo)throw new Exception('用户已存在', 100001);
         $res = MySql::insert(self::TABLE_NAME,
               array(
@@ -88,7 +124,7 @@ class User_Info
 			    	'friend_num' => User::DEFAULT_FRIEND_NUM,
 			    	'pet_num'	=> User::DEFAULT_PET_NUM,
 			    	'reputation' => User::DEFAULT_REPUTATION,
-                  	'matser_id'     => $data['matser_id'],
+                  	'master_id'     => $data['master_id'],
                   	'area_id'          => $data['area_id'],
                   	'sex'             => $data['sex'],
                 ), TRUE);
@@ -116,6 +152,12 @@ class User_Info
 
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
 		$res = MySql::execute($sql);
+		return $res;
+	}
+	
+	/** @desc 整体更新 */
+	public static function editUserInfo($array, $userId){
+		$res = MySql::update(self::TABLE_NAME, $array, array('user_id' => $userId));
 		return $res;
 	}
 

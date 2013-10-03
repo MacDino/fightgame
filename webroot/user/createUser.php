@@ -3,10 +3,11 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $masterId     = isset($_REQUEST['master_id'])?$_REQUEST['master_id']:'';//账户ID
-$raceId     = isset($_REQUEST['race_id'])?(int)$_REQUEST['race_id']:'';//种族ID
+$raceId     = isset($_REQUEST['race_id'])?(int)$_REQUEST['race_id']:'1';//种族ID
 $userName   = isset($_REQUEST['user_name'])?$_REQUEST['user_name']:'';//用户昵称
-$areaId   = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'';//分区
-$sex   = isset($_REQUEST['sex'])?$_REQUEST['sex']:'';//性别
+$areaId   = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'1';//分区
+$sex   = isset($_REQUEST['sex'])?$_REQUEST['sex']:'0';//性别
+//echo "$masterId==$raceId==$userName==$areaId==$sex";exit;
 
 if(!$userName || !$masterId || !$areaId)
 {
@@ -14,13 +15,26 @@ if(!$userName || !$masterId || !$areaId)
     die;
 }
 
-try {
+$num = User_Info::verifyUserNum($masterId);
+if(!$num){
+	$code = 3;
+	$msg  = "只能创建3个角色";
+	die;
+}
 
+$name = User_Info::verifyUserName($userName);
+if(!$name){
+	$code = 4;
+	$msg  = "角色名已经被使用";
+	die;
+}
+
+try {
     //创建用户
     $userId = User_Info::createUserInfo(array(
     	'race_id' => $raceId, 
     	'user_name' => $userName, 
-    	'matser_id' => $masterId, 
+    	'master_id' => $masterId, 
     	'area_id' => $areaId, 
     	'sex' => $sex,
     	));
@@ -43,7 +57,6 @@ try {
         User_Property::initTreasureBox($userId);
         //初始化奖励列表
         //初始化...
-//		echo "<script>location.href='getUserInfo.php?user_id=$userId';</script>"; 
         //User_Property::createPropertylist($userId, User_Property::EQUIP_GROW);
         $data = $userId;
         $code = 0;
@@ -53,4 +66,5 @@ try {
     
 } catch (Exception $e) {
     $code = 1;
+    die;
 }

@@ -12,6 +12,13 @@ if(!$bindType || !$bindValue)
     die;
 }
 
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
+	die;
+}
+
 try {
     $res = User::getLoginUserId($bindType, $bindValue);
     if($res)
@@ -20,7 +27,8 @@ try {
         die;
     }
 } catch (Exception $e) {
-    $code = 1;
-	$msg = '获取账户失败!';
+    $code = 99;
+	$msg = '内部错误';
+	die;
 }
 
