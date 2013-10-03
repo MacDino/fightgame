@@ -41,7 +41,7 @@ try {
     $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level'], 'user');
 
     $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
-    print_r($data['participant']['user']);
+//    print_r($data['participant']['user']);
 
     if($userInfo['user_level'] > 40) {
         $petInfo    = Pet::usedPet($userId);

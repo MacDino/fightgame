@@ -4,6 +4,13 @@ class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
 
+	/** @desc 是否存在这个用户 */
+	public static function isExistUser($userId){
+		if(!is_numeric($userId))return FALSE;
+		$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+		return $res;
+	}
+	
 	/**
      * 根据UserId获取用户基本信息
      * @param int $userId	用户ID

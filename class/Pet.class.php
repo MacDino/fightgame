@@ -70,4 +70,11 @@ class Pet{
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'is_use' => 1));
 		return $res;
 	}
+	
+	//是否是人宠
+	public static function isPet($userId, $petId){
+		self::atuoDelPet($userId);
+		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'pet_id' => $petId));
+		return count($res);
+	}
 }
