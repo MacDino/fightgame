@@ -41,6 +41,7 @@ try {
     $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level'], 'user');
 
     $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+    print_r($data['participant']['user']);
 
     if($userInfo['user_level'] > 40) {
         $petInfo    = Pet::usedPet($userId);
@@ -90,7 +91,7 @@ try {
         }
 
     }
-	$code   = 0;
+	//$code   = 0;
 } catch (Exception $e) {
 	$code   = 1;
 	$msg    = '攻击操作失败';

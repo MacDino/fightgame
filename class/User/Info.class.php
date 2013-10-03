@@ -12,7 +12,7 @@ class User_Info
 	public static function getUserInfoByUserId($userId)
 	{
 		if(!is_numeric($userId))return FALSE;
-
+		
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
@@ -38,7 +38,8 @@ class User_Info
 	 * @return 角色列表
 	 */
 	public static function listUser($loginUserId, $areaId){
-		if(!empty($loginUserId) || !$areaId)return FALSE;
+		//echo "$loginUserId, $areaId";
+		if(empty($loginUserId) || !$areaId)return FALSE;
 		$res = MySql::select(self::TABLE_NAME, array('login_user_id' => $loginUserId, 'area_id' => $areaId));
 		return $res;
 	}

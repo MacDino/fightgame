@@ -18,6 +18,13 @@ class Equip_Info
         return $res;
     }
     
+    //获取背包内装备数量
+    public static function getEquipNum($userId){
+    	if(!$userId)return ;
+    	$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+    	return $res;
+    }
+    
     //按照类别获取装备
     public static function getEquipInfoByType($equipType, $userId, $is_used = FALSE){
     	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId));
