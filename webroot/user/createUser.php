@@ -20,7 +20,7 @@ try {
     $userId = User_Info::createUserInfo(array(
     	'race_id' => $raceId, 
     	'user_name' => $userName, 
-    	'login_user_id' => $masterId, 
+    	'matser_id' => $masterId, 
     	'area_id' => $areaId, 
     	'sex' => $sex,
     	));

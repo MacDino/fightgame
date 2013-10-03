@@ -6,9 +6,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $petId     = isset($_REQUEST['pet_id'])?$_REQUEST['pet_id']:'';//人宠ID
 
-$is_exist_user = User_Info::getUserInfoByUserId($userId);//是否存在用户ID
-$is_exist_pet = User_Info::getUserInfoByUserId($petId);//是否存在人宠ID
-if(!$is_exist_user || !$is_exist_pet){
+$userInfo = User_Info::isExistUser(array($userId, $petId));
+if(!$userInfo){
 	$code = 1;
 	$msg = "没有这个用户";
 }

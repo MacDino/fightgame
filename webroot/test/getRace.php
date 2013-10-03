@@ -4,14 +4,14 @@ $doNotPut = TRUE;
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
 $areaId = isset($_GET['area_id'])?$_GET['area_id']:'';
-$loginUserId = isset($_COOKIE['login_user_id'])?$_COOKIE['login_user_id']:'';
+$masterId = isset($_COOKIE['matser_id'])?$_COOKIE['matser_id']:'';
 
-if(!$areaId || !$loginUserId)
+if(!$areaId || !$masterId)
 {
     echo "<script>location.href='index.php'</script>"; 
 }
 $interFace = 'user/getUserRaceList';
-$params = array('login_user_id' => $loginUserId, 'area_id' => $areaId);
+$params = array('matser_id' => $masterId, 'area_id' => $areaId);
 $data = Curl::sendRequest($interFace, $params);
 
 $data = json_decode($data, true);

@@ -56,10 +56,10 @@ class User_Info
 	 * @param int $area		分区
 	 * @return 角色列表
 	 */
-	public static function listUser($loginUserId, $areaId){
-		//echo "$loginUserId, $areaId";
-		if(empty($loginUserId) || !$areaId)return FALSE;
-		$res = MySql::select(self::TABLE_NAME, array('login_user_id' => $loginUserId, 'area_id' => $areaId));
+	public static function listUser($masterId, $areaId){
+		//echo "$masterId, $areaId";
+		if(empty($masterId) || !$areaId)return FALSE;
+		$res = MySql::select(self::TABLE_NAME, array('matser_id' => $masterId, 'area_id' => $areaId));
 		return $res;
 	}
 
@@ -73,7 +73,7 @@ class User_Info
 	{
 		if(!$data || !is_array($data))return FALSE;
         if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
-        //$userInfo = self::listUser($data['login_user_id'], $data['area_id']);
+        //$userInfo = self::listUser($data['matser_id'], $data['area_id']);
         if($userInfo)throw new Exception('用户已存在', 100001);
         $res = MySql::insert(self::TABLE_NAME,
               array(
@@ -88,9 +88,9 @@ class User_Info
 			    	'friend_num' => User::DEFAULT_FRIEND_NUM,
 			    	'pet_num'	=> User::DEFAULT_PET_NUM,
 			    	'reputation' => User::DEFAULT_REPUTATION,
-                  'login_user_id'     => $data['login_user_id'],
-                  'area_id'          => $data['area_id'],
-                  'sex'             => $data['sex'],
+                  	'matser_id'     => $data['matser_id'],
+                  	'area_id'          => $data['area_id'],
+                  	'sex'             => $data['sex'],
                 ), TRUE);
 		return $res;
 	}

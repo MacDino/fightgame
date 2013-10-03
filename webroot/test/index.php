@@ -4,11 +4,11 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $doNotPut = TRUE;
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
-$loginUserId = isset($_COOKIE['login_user_id'])?$_COOKIE['login_user_id']:'';
+$masterId = isset($_COOKIE['matser_id'])?$_COOKIE['matser_id']:'';
 $act = isset($_GET['act'])?$_GET['act']:'';
 if($act == '')
 {
-    if($loginUserId)
+    if($masterId)
     {
         echo "<a href='getRace.php?area_id=1'>1区 上古之战-双 繁忙</a>";
     }else{
@@ -24,10 +24,10 @@ if($act == '')
    $data = json_decode($data, true);
    if($data['code'] == 0)
    {
-      $loginUserId = $data['d']['login_user_id'];
-      if($loginUserId)
+      $masterId = $data['d']['matser_id'];
+      if($masterId)
       {
-          setcookie('login_user_id', $loginUserId, time()+360000);
+          setcookie('matser_id', $masterId, time()+360000);
           echo "<script>location.href='index.php'</script>"; 
      }
    }

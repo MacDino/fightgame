@@ -13,16 +13,11 @@ if(!$userId || !$friendId)
     $msg = '1';
     die;
 }
-//查询好友ID是否在用户表里存在
-//echo $userId;exit;
-$userInfo = User_Info::getUserInfoByUserId($userId);
-//print_r($user_info);exit;
-if(!$userInfo)
-{
+
+$userInfo = User_Info::isExistUser(array($userId, $friendId));
+if(!$userInfo){
 	$code = 1;
-    //$msg = '用户信息错误!';
-    $msg = '2';
-    die;
+	$msg = "没有这个用户";
 }
 
 //好友ID是否存在

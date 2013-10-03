@@ -4,9 +4,9 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $areaId = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'';
-$loginUserId = isset($_REQUEST['login_user_id'])?$_REQUEST['login_user_id']:'';
+$masterId = isset($_REQUEST['matser_id'])?$_REQUEST['matser_id']:'';
 
-if(!$areaId || !$loginUserId)
+if(!$areaId || !$masterId)
 {
     $code = 1;
     die;
@@ -14,7 +14,7 @@ if(!$areaId || !$loginUserId)
 
 $raceList = User_Race::getRaceList();
 
-$userRaceList =  User_Info::listUser($loginUserId, $areaId); 
+$userRaceList =  User_Info::listUser($masterId, $areaId); 
 
 
 $data['race_list'] = $raceList;

@@ -16,6 +16,12 @@ if(!$userId)
     die;
 }
 
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
+}
+
 try {
     //显示好友
     $data = Friend_Info::getNearbyFriend($userId, $lng, $lat);

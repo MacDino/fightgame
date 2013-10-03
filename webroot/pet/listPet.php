@@ -5,14 +5,15 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
-if(!$userId){
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
 	$code = 1;
-	$msg = "没有ID";
+	$msg = "没有这个用户";
 }
 
-$userInfo = User_Info::isExistUser($userId);
+$userInfo = User_Info::isExistUser(array($userId));
 if(empty($userInfo)){
-	$code = 1;
+	$code = 2;
 	$msg = "没有这个用户";
 }
 

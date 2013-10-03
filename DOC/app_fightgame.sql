@@ -819,10 +819,10 @@ INSERT INTO `property_info` VALUES ('39', '3', '0', null);
 -- ----------------------------
 DROP TABLE IF EXISTS `user_bind`;
 CREATE TABLE `user_bind` (
-  `login_user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账户ID',
+  `master_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账户ID',
   `bind_type` varchar(4) NOT NULL COMMENT '绑定类型',
   `bind_value` varchar(500) NOT NULL COMMENT '绑定值',
-  PRIMARY KEY (`login_user_id`)
+  PRIMARY KEY (`matser_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='用户绑定表';
 
 -- ----------------------------
@@ -902,7 +902,7 @@ CREATE TABLE `user_info` (
   `pk_num` int(11) NOT NULL DEFAULT '0' COMMENT 'PK次数',
   `friend_num` int(11) NOT NULL DEFAULT '0' COMMENT '好友数量',
   `pet_num` int(11) NOT NULL DEFAULT '0' COMMENT '人宠数量',
-  `login_user_id` int(11) NOT NULL COMMENT '帐号ID',
+  `matser_id` int(11) NOT NULL COMMENT '帐号ID',
   `area_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '分区',
   `reputation` int(11) NOT NULL COMMENT '声望',
   `integral` int(11) DEFAULT NULL COMMENT '积分',

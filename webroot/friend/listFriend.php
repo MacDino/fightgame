@@ -5,9 +5,6 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 //echo "UserId=====".$userId;exit;
 
-/*for ($i=40;$i<130;$i++){
-	MySql::insert('user_lbs', array('user_id' => $i, 'longitude'=> '116.417381', 'latitude'=>'39.941463'));
-}*/
 //数据进行校验,非空,数据内
 if(!$userId)
 {
@@ -15,6 +12,12 @@ if(!$userId)
     //$msg = '传入参数不正确!';
     $msg = '1';
     die;
+}
+
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
 }
 
 try {

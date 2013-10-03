@@ -11,12 +11,12 @@ class User_Bind
         try{
            self::_allowBindType($bindType);
            self::_checkValue($bindType, $bindValue);
-           $loginUserId = self::_getBindUerInfo($bindType, $bindValue);
-           if(!$loginUserId && $createNew)
+           $masterId = self::_getBindUerInfo($bindType, $bindValue);
+           if(!$masterId && $createNew)
            {
-               $loginUserId = self::_createBindUserInfo($bindType, $bindValue);  
+               $masterId = self::_createBindUserInfo($bindType, $bindValue);  
            }
-           return $loginUserId;
+           return $masterId;
         }catch (Exception $e){
            return FALSE;
         } 
@@ -25,8 +25,8 @@ class User_Bind
     private static function _createBindUserInfo($bindType, $bindValue)
     {
         if(!$bindType || !$bindValue)return;
-        $loginUserId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
-        return $loginUserId;
+        $masterId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
+        return $masterId;
     }
     
     //自己创建用户
@@ -41,8 +41,8 @@ class User_Bind
         $loginUserInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue));
         if($loginUserInfo)
         {
-        	$loginUserId = $loginUserInfo['login_user_id'];
-            return $loginUserId;
+        	$masterId = $loginUserInfo['matser_id'];
+            return $masterId;
         }else{
         	return FALSE;
         }

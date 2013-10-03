@@ -9,8 +9,7 @@ $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 if(!$userId)
 {
     $code = 1;
-    //$msg = '传入参数不正确!';
-    $msg = '1';
+    $msg = '传入参数不正确';
     die;
 }
 
@@ -27,7 +26,6 @@ try {
     //显示好友
     $data = Friend_Info::getApplyFriendInfo($userId);
 //    print_r($data);
-//    var_dump($data);exit;
     $code = 0;
     $msg = 'ok';
     die;
