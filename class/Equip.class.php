@@ -28,9 +28,9 @@ class Equip
 	CONST TABLE_EQUID_ATTRIBUTES = 'equip_attributes';
 
 	//创建一个装备
-	public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL)
+	public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL, $equipSuitRaceId = NULL)
 	{
-		return Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality);
+		return Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality, $equipSuitRaceId);
 	}
 
 

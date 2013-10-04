@@ -9,7 +9,7 @@ class Equip_Create
     private static $_equipAttributeConfigList = array();
 
     //创建一件装备
-    public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL)
+    public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL, $equipSuitRaceId = NULL)
     {
         if(!$equipColour)return FALSE;//装备颜色
         $equipLevel = self::_getEquipLevel($equipLevel);
@@ -18,6 +18,7 @@ class Equip_Create
         self::$_equipAttributeConfigList = Equip_Config::equipAttributeList();//获取装备的附加属性配置信息
         
         try{
+        	if($equipSuitRaceId)self::$_equipSuitRaceId = $equipSuitRaceId;
             self::_getEquipSuitAttributeInfo($equipColour, $equipQuality, $equipType);//套装信息
             $attributeBaseList = self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);//装备信息      
             $attributeList = self::_getEquipAttributeValue($equipLevel, $equipQuality);
@@ -128,7 +129,7 @@ class Equip_Create
     {
         if($equipColour != Equip::EQUIP_COLOUR_ORANGE)return array();
         if($equipQuality != Equip::EQUIP_QUALITY_HOLY)return array();
-        self::$_equipSuitRaceId = User_Race::randRaceId();
+        if(!self::$_equipSuitRaceId)self::$_equipSuitRaceId = User_Race::randRaceId();
         $equipSuitAttribute = self::getEquipSuitAttributeByRaceIdAndEquipType(self::$_equipSuitRaceId, $equipType);
         $equipSuitAttribute = PerRand::getMultiRandResultKey($equipSuitAttribute);
         if($equipSuitAttribute && is_array($equipSuitAttribute))
