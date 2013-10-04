@@ -7,37 +7,74 @@ class Skill_Info {
     /**
      * @desc 获取角色技能等级列表
      */
-    public static function getSkillList($user_id, $is_use=FALSE){
+    public static function getSkillList($user_id){
         $where      = array(
             'user_id' => $user_id,
+            'is_use'  => 1,
         );
-        if(!empty($is_use)){//add by zhengyifeng 76387051@qq.com 2013.9.16 已装备技能
-        	$where['is_use'] = $is_use;
-        }
-        $skill_list = MySql::select(self::TN_SKILL_INFO, $where);
-        return $skill_list;
+        $res = MySql::select(self::TN_SKILL_INFO, $where);
+        return $res;
     }
     
-    //可学习技能列表,实际就是所有技能,带着消费点数和金钱,此方法有问题,需修改
-    public static function getAllSkillList($user_id){
+    /** @desc 获取用户正在使用技能 1为攻击2为防御*/
+    public static function getUserUsedSkill($userId, $type){
+    	if($type == 1){
+    		$sql = "SELECT skill_id, skill_level, skill_location, odds_set FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND is_use = 1 AND skill_type IN (" . Skill::SKILL_GROUP_WLGJ . "," .Skill::SKILL_GROUP_FSGJ .")";
+    	}else{
+    		$sql = "SELECT skill_id, skill_level, skill_location, odds_set FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND is_use = 1 AND skill_type = " . Skill::SKILL_GROUP_FYJN;
+    	}
+    	
+//    	echo $sql;
+    	$res = MySql::query($sql);
+    	return $res;
+    }
+    
+    /** @desc 可使用技能列表 */
+    public static function getCanDoSkillList($userId, $type){
+    	if($type == 1){
+    		$sql = "SELECT skill_id, skill_level, is_use FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND skill_type IN (" . Skill::SKILL_GROUP_WLGJ . "," .Skill::SKILL_GROUP_FSGJ .")";
+    	}else{
+    		$sql = "SELECT skill_id, skill_level, is_use FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND skill_type = " . Skill::SKILL_GROUP_FYJN;
+    	}
+    	
+    	$res = MySql::query($sql);
+    	return $res;
+    }
+    
+    /** @desc 可学习技能列表,带着金钱 */
+    public static function getStudySkillList($userId, $type){
     	$skill = array();
-    	$userSkill = self::getSkillList($user_id);//用户已学习技能
+    	$userSkill = self::getSkillList($userId);//用户已学习技能
     	foreach ($userSkill as $i=>$key) {
         	$res[$key['skill_id']] = array('skill_level' => $key['skill_level']);
         }
-    	$skillList = ConfigDefine::skillList();//所有技能
-//    	var_dump($res);
+        
+        if($type == 1){
+        	$skillList = Skill::skillListWLGJ();
+        }elseif ($type == 2){
+        	$skillList = Skill::skillListFSGJ();
+        }elseif ($type == 3){
+        	$skillList = Skill::skillListBDJN();
+        }elseif ($type == 4){
+        	$skillList = Skill::skillListFYJN();
+        }
+    	
     	foreach ($skillList as $i=>$key){
     		if(array_key_exists($i, $res)){//已学习
+    			$skill[$i]['skill_name']		= $key;
 				$skill[$i]['skill_level'] = $res[$i]['skill_level'];
     			$skill[$i]['money'] = self::getSkillMoney($res[$i]['skill_level']);
     		}else{//未学习
+    			$skill[$i]['skill_name']		= $key;
     			$skill[$i]['skill_level'] = 0;
     			$skill[$i]['money'] = self::getSkillMoney(0);
     		}
     	}
+//    	print_r($skill);
     	return $skill;
     }
+    
+    
 
     /**
      * @desc 获取用户某一技能等级
@@ -69,20 +106,15 @@ class Skill_Info {
     /**
      * @desc 技能学习
      */
-    public static function updateSkill($user_id, $skill_id, $add_level = 1){
+    public static function updateSkill($user_id, $skill_id){
         $level = self::getSkillInfo($user_id, $skill_id);
         $where  = array(
             'user_id'   => $user_id,
             'skill_id'  => $skill_id
         );
-        if($level){
-            //update
-            return MySql::update(self::TN_SKILL_INFO, array('skill_level' => ($level+$add_level)), $where);
-        } else {
-            $level  = $add_level;
-            $data   = array_merge($where, array('skill_level' => $level));
-            return MySql::insert(self::TN_SKILL_INFO, $data, $where);
-        }
+
+        //增加技能等级
+        return MySql::update(self::TN_SKILL_INFO, array('skill_level' => ($level+1)), $where);
     }
     /**
      * @desc 获取当前等级可使用技能数
@@ -110,27 +142,40 @@ class Skill_Info {
      * @desc 获取学习下一级技能所需要的铜钱
      */
     public static function getSkillMoney($level=0){
-        $where  = array(
-            'skill_level >' => $level+1, 
-        );
         $spend      = MySql::selectOne(self::TN_SKILL_SPEND, array('skill_level' => $level+1));
         return $spend['money'];
     }
     
-    //使用技能 通过skill_type和skill_location来判断唯一性,没有的话直接添加,有的话添加的同时去掉原来的使用
-    public static function useSkill($userId, $skillId, $skillType, $skillLocation){
+    /**
+     * @desc 使用技能
+     * 通过type和skill_location来判断唯一性,没有的话直接添加,有的话添加的同时去掉原来的使用状态和位置
+     */ 
+    public static function useSkill($userId, $skillId, $type, $skillLocation){
     	//应该先判断是否可以有某个数量,暂时略过,再补
-    	$old = MySql::selectOne(self::TN_SKILL_INFO, array('user_id' => $userId, 'skill_type' => $skillType, 'skill_location' => $skillLocation));
+    	if($type == 1)
+    		$sql = "SELECT user_id, skill_id FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND 'skill_location' = $skillLocation
+    				AND skill_type IN (" . Skill::SKILL_GROUP_WLGJ . "," .Skill::SKILL_GROUP_FSGJ .")";
+    	elseif($type == 2){
+    		$sql = "SELECT user_id, skill_id FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND 'skill_location' = $skillLocation
+    				AND skill_type = " . Skill::SKILL_GROUP_FYJN;
+    	}
+    	$old = MySql::query($sql);
     	if(!empty($old)){//下掉原位置的技能
     		MySql::update(self::TN_SKILL_INFO, 
-		    		array('skill_location' => 0, 
-		    		array('user_id' => $old['user_id'], 'skill_id' => $old['skill_id'])));
+		    		array('skill_location' => 0, 'is_use' => 0),
+		    		array('user_id' => $old['user_id'], 'skill_id' => $old['skill_id']));
     	}
     	$res = MySql::update(self::TN_SKILL_INFO, 
-    				array('skill_location' => $skillLocation), 
+    				array('skill_location' => $skillLocation, 'is_use' => 1), 
     				array('user_id' => $userId, 'skill_id' => $skillId));
     	return $res;
     }
+    
+    /** @desc 技能权重设置 */
+	public static function setSkillOdds($userId, $skillId, $oddsSet){
+		$res = MySql::update(self::TN_SKILL_INFO, array('odds_set' => $oddsSet), array('user_id' => $userId, 'skill_id' => $skillId));
+		return $res;
+	}
     
     /** @desc 重击属性加成 */
 	public static function zhongjiAttr($type = FALSE){
@@ -252,10 +297,6 @@ class Skill_Info {
 		return json_decode($res['attribute'], TRUE);
 	}
 	
-	/** @desc 技能权重设置 */
-	public static function setSkillOdds($userId, $skillId, $oddsSet){
-		$res = MySql::update(self::TN_SKILL_INFO, array('odds_set' => $oddsSet), array('user_id' => $userId, 'skill_id' => $skillId));
-		return $res;
-	}
+	
  
 }

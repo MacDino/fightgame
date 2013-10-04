@@ -8,7 +8,7 @@ class User_Info
 	public static function isExistUser($arrayUserId){
 		if(is_array($arrayUserId)){
 			$num = 0;
-			foreach ($arrayUserId as $UserId){
+			foreach ($arrayUserId as $userId){
 				if(!is_numeric($userId))return FALSE;
 				$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
 				if(empty($res)){
