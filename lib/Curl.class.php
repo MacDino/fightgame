@@ -17,6 +17,7 @@ class Curl
     private static      $_errorCode     = 0;
     private static      $_errorMsg      = '';
     private static      $_interFaceExt  = '.php';
+    private static 		$_httpsMethod   = FALSE;
 
     //设置参数
     public static function setConfig($configParams)
@@ -29,6 +30,7 @@ class Curl
         if(isset($configParams['user_agent']))self::$_userAgent = $configParams['user_agent'];
         if(isset($configParams['http_header']))self::$_httpHeader = $configParams['http_header'];
         if(isset($configParams['inter_face_ext']))self::$_interFaceExt = $configParams['inter_face_ext'];
+        if(isset($configParams['https_method']))self::$_httpsMethod = $configParams['https_method'];
     }
     //发送请求
     public static function sendRequest($interface, $params)
@@ -63,7 +65,6 @@ class Curl
 
     private static function _sendRequest($interface, $params)
     {
-//    	echo $interface;var_dump($params);exit;
         if(!is_array($params))return FALSE;
         $params = self::_getCurlValue($params);
         $uri    = self::_getCurlUri($interface, $params);
@@ -77,6 +78,11 @@ class Curl
         }
         curl_setopt($ch, CURLOPT_TIMEOUT, self::$_timeout);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$_connectTimeOut);
+		if(self::$_httpsMethod)
+		{
+			curl_setopt($ch, CURLOPT_PROTOCOLS , true);
+			curl_setopt($ch, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTPS);
+		}
         if(self::$_userAgent)curl_setopt($ch, CURLOPT_USERAGENT, self::$_userAgent);
         if(self::$_httpHeader)curl_setopt($ch, CURLOPT_HTTPHEADER, self::$_httpHeader);
         $data               = curl_exec($ch);
@@ -84,7 +90,6 @@ class Curl
         curl_close($ch);
         if(self::$_httpInfo['http_code'] == 200)
         {
-        	
             return $data;
         }else{
             return FALSE;
