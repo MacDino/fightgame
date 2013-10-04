@@ -8,9 +8,9 @@ class Equip_Info
 	public static function getEquipListByUserId($userId, $is_used = FALSE){
         if($userId){
         	if(!$is_used){
-            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId,), array(), array('user_equip_id desc'));
         	}else{
-        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1));
+        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1), array(), array('user_equip_id desc'));
         	}
         }else{
             return FALSE;    

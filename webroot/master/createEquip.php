@@ -9,11 +9,12 @@ $equip_colour   	= isset($_REQUEST['equip_colour'])?$_REQUEST['equip_colour']:''
 $equip_type  		= isset($_REQUEST['equip_type'])?$_REQUEST['equip_type']:'';//类型
 $equip_quality 		= isset($_REQUEST['equip_quality'])?$_REQUEST['equip_quality']:'';//品质
 $equip_level   		= isset($_REQUEST['equip_level'])?$_REQUEST['equip_level']:'';//等级
+$race_id   		= isset($_REQUEST['race_id'])?$_REQUEST['race_id']:'';//种族
 
 $userId     	= isset($_COOKIE['user_id'])?$_COOKIE['user_id']:'';//用户ID
 if($act == 'add'){
 //	print_r($_POST);
-	$res = Equip_Create::createEquip($equip_colour, $userId, $equip_level, $equip_type);
+	$res = Equip_Create::createEquip($equip_colour, $userId, $equip_level, $equip_type, $equip_quality, $race_id);
 	if($res){
 		echo "<script>location.href='createEquip.php';</script>";
 	}
@@ -60,13 +61,13 @@ if($act == 'add'){
 		</select>
 		</td></tr>
 
-		<!--<tr><td>种族:
+		<tr><td>种族:
 		<select name="race_id">
 			<option value ="1" >人族</option>
 		    <option value ="2" >魔族</option>
 		    <option value="3" >仙族</option>
 		</select>
-		</td></tr>-->
+		</td></tr>
 		
 		<tr><td>品质:
 		<select name="equip_quality">
@@ -88,7 +89,7 @@ if($act == 'add'){
 	?>
 		<tr>
 			<td>等级:<?=$i['equip_level']?></td>
-			<td>种族:
+			<td>状态:
 				<? if($i['is_used'] == 0)echo "未使用";?>
 			    <? if($i['is_used'] == 1)echo "使用中";?>
 			</td>
@@ -119,8 +120,9 @@ if($act == 'add'){
 				<? if($i['equip_quality'] == 3703)echo "升华";?>
 				<? if($i['equip_quality'] == 3704)echo "圣品";?>
 			</td>
+			<td>
+			<a href="detailsEquip.php?equip_id=<?=$i['user_equip_id']?>" target="_blank">详细属性</a>
+			</td>
 		</tr>
-		
-		
 <? }}?>
 </table>

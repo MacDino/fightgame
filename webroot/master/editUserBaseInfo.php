@@ -96,5 +96,6 @@ if($act == 'edit'){
 	<tr><td>防御:<? echo $value['1112'];?></td></tr>
 	<tr><td>躲闪:<? echo $value['1113'];?></td></tr>
 	<tr><td>幸运:<? echo $value['1114'];?></td></tr>
+	<tr><td>释放概率:<? echo $value['301'];?></td></tr>
 </table>
 <? }?> 

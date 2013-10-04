@@ -58,19 +58,19 @@ class Skill_Info {
         }elseif ($type == 4){
         	$skillList = Skill::skillListFYJN();
         }
-    	
+    	$o = (int)'-1';
     	foreach ($skillList as $i=>$key){
+    		$o++;
     		if(array_key_exists($i, $res)){//已学习
-    			$skill[$i]['skill_name']		= $key;
-				$skill[$i]['skill_level'] = $res[$i]['skill_level'];
-    			$skill[$i]['money'] = self::getSkillMoney($res[$i]['skill_level']);
+    			$skill[$o]['skill_id']		= $i;
+				$skill[$o]['skill_level'] = $res[$i]['skill_level'];
+    			$skill[$o]['money'] = self::getSkillMoney($res[$i]['skill_level']);
     		}else{//未学习
-    			$skill[$i]['skill_name']		= $key;
-    			$skill[$i]['skill_level'] = 0;
-    			$skill[$i]['money'] = self::getSkillMoney(0);
+    			$skill[$o]['skill_id']		= $i;
+    			$skill[$o]['skill_level'] = 0;
+    			$skill[$o]['money'] = self::getSkillMoney(0);
     		}
     	}
-//    	print_r($skill);
     	return $skill;
     }
     

@@ -25,12 +25,11 @@ class Equip_Create
             $attributeBaseList = self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);//装备信息      
             $attributeList = self::_getEquipAttributeValue($equipLevel, $equipQuality);
             $equipInfo = self::_getEquipData($equipLevel, $equipType, $equipColour, $attributeList, $attributeBaseList, $equipQuality); 
-            print_r($equipInfo);
             self::_cleanData();
             if($userId)
             {
                 $equipInfo['user_id'] = $userId;
-                self::_insertDataToValue($equipInfo);
+                return self::_insertDataToValue($equipInfo);
             }else{
                 return $equipInfo;
             }
@@ -65,7 +64,7 @@ class Equip_Create
         $equipInfo['attribute_base_list'] = json_encode($attributeBaseList);
         return $equipInfo;
     }
-
+	/** @desc 成长属性 */
     private static function _getEquipAttributeValue($equipLevel, $equipQuality)
     {
         if(self::$_equipGetAttribute && is_array(self::$_equipGetAttribute))
@@ -110,6 +109,7 @@ class Equip_Create
         return self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);
     }
 
+    /** @desc 基本属性 */
     //获取装备属性配置信息
     private static function _getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel)
     {
