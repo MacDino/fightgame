@@ -2,13 +2,55 @@
 //技能
 class Skill
 {
-    CONST SKILL_GROUP_WLGJ = 1;//物理攻击
-    CONST SKILL_GROUP_FSGJ = 2;//法术攻击
-    CONST SKILL_GROUP_BDJN = 3;//被动技能
-    CONST SKILL_GROUP_FYJN = 4;//防御技能
+    CONST SKILL_GROUP_WLGJ = 1291;//物理攻击
+    CONST SKILL_GROUP_FSGJ = 1292;//法术攻击
+    CONST SKILL_GROUP_BDJN = 1293;//被动技能
+    CONST SKILL_GROUP_FYJN = 1294;//防御技能
+    
+    CONST PROPORTION_HIGH	= 1281;//高比例
+    CONST PROPORTION_MIDDLE	= 1282;//中比例
+    CONST PROPORTION_LOW	= 1283;//低比例
 
     CONST DEFAULT_SKILL_POINT   = 3;//默认用户拥有的技能点
 
+    public static function skillListWLGJ(){
+		$res = array(
+			ConfigDefine::SKILL_ZJ      				=> '重击',
+			ConfigDefine::SKILL_LJ      				=> '连击',
+		    ConfigDefine::SKILL_LXYZ    				=> '灵犀一指',
+		);
+		return 	$res;
+	}
+	
+	public static function skillListFSGJ(){
+		$res = array(
+		    ConfigDefine::SKILL_SWZH    				=> '三昧真火',
+		    ConfigDefine::SKILL_HFHY    				=> '呼风唤雨',
+		    ConfigDefine::SKILL_WLJ     				=> '五雷决',
+		);
+		return 	$res;
+	}
+	
+	public static function skillListBDJN(){
+		$res = array(
+		    ConfigDefine::SKILL_TX						=> '体修',
+		    ConfigDefine::SKILL_WFX     				=> '物防修',
+		    ConfigDefine::SKILL_FFX     				=> '法防修',
+		    ConfigDefine::SKILL_GX      				=> '攻修',
+		    ConfigDefine::SKILL_FX      				=> '法修',
+		    ConfigDefine::SKILL_DZ      				=> '锻造',
+		);
+		return 	$res;
+	}
+	
+	public static function skillListFYJN(){
+		$res = array(
+		    ConfigDefine::SKILL_FY      				=> '防御',
+		    ConfigDefine::SKILL_FJ      				=> '反击',
+		    ConfigDefine::SKILL_FD      				=> '法盾',
+		);
+		return 	$res;
+	}
     /**
      * 技能array(技能缩写code,所属分组，消耗魔法值)
      *

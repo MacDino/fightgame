@@ -2,45 +2,55 @@
 /**
  * @desc 技能学习
  */
-include $_SERVER['DOCUMENT_ROOT'].'/../init.inc.php';
+include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$user_id    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$skill_id   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
-$add_level  = isset($_REQUEST['add_level']) ? $_REQUEST['add_level'] : 1;
+$userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
+$skillId   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
 
-$skill_level    = Skill_Info::getSkillInfo($user_id, $skill_id);
-$user_info  = User_Info::getUserInfoByUserId($user_id); 
+$skillLevel    = Skill_Info::getSkillInfo($userId, $skillId);
+$userInfo  = User_Info::getUserInfoByUserId($userId); 
 //金钱判断
-$need_money = Skill_Info::getSkillMoney(($skill_level + $add_level), $skill_level);
-if($user_info['money'] < $need_money){
+$needMoney = Skill_Info::getSkillMoney($skillLevel);
+if($userInfo['money'] < $needMoney){
+	$code = 2;
     $msg    = '您金钱不足';
-    exit;
+    die;
 }
-//新学技能
-if(empty($skill_level) || $skill_level < 1){
-    $learned_skill_num  = Skill_Info::getLearnedSkillNum($user_id, $skill_id);
-    $allowed_skill_num  = Skill_Info::getAllowedSkillNum($user_info['user_level']);
+/*//新学技能
+if(empty($skillLevel) || $skillLevel < 1){
+    $learned_skill_num  = Skill_Info::getLearnedSkillNum($userId, $skillId);
+    $allowed_skill_num  = Skill_Info::getAllowedSkillNum($userInfo['user_level']);
     if($learned_skill_num >= $allowed_skill_num){
         $code   = 1;
         $msg    = '您已达到技能学习最大数';
-        exit;
+        die;
     }
+}*/
+if($skillLevel+1 > $userInfo['user_level']+10){
+	$code = 3;
+	$msg = "不能高过人物等级10级";
+	die;
 }
+
 //技能点数判断
-if($user_info['skill_point'] < 1){
+if($userInfo['skill_point'] < 1){
+	$code = 4;
     $msg    = '您技能点数不足';
-    exit;
+    die;
 }
 try {
-	$data   = Skill_Info::updateSkill($user_id, $skill_id, $add_level);
+	$data   = Skill_Info::updateSkill($userId, $skillId);
     if($data){
         //扣除金钱
-        User_Info::updateUserInfo($user_id, array('money' => ($user_info['money'] - $need_money)));
+        User_Info::subtractMoney($userId, $needMoney);
         //减技能点数
+        User_Info::subtractPointNum($userId, 1);
     }
 	$code   = 0;
 	$msg    = 'OK';
+	die;
 } catch (Exception $e) {
-	$code   = 1;
-	$msg    = '技能学习失败';
+	$code   = 99;
+	$msg    = '内部错误';
+	die;
 }

@@ -6,7 +6,7 @@ echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 $act = isset($_REQUEST['act'])?$_REQUEST['act']:'';
 $areaId = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'';
 $raceId = isset($_REQUEST['race_id'])?$_REQUEST['race_id']:'';
-$masterId = isset($_COOKIE['matser_id'])?$_COOKIE['matser_id']:'';
+$masterId = isset($_COOKIE['master_id'])?$_COOKIE['master_id']:'';
 if(!$areaId || !$raceId || !$masterId)
 {
     echo '无法获得信息！';
@@ -18,7 +18,7 @@ if($act == 'create')
     if($userName)
     {
         $interFace = 'user/createUser';
-        $params = array('matser_id' => $masterId, 'area_id' => $areaId, 'race_id' => $raceId, 'user_name' => $userName);
+        $params = array('master_id' => $masterId, 'area_id' => $areaId, 'race_id' => $raceId, 'user_name' => $userName);
         $data = Curl::sendRequest($interFace, $params);
         $data = json_decode($data, true);
         if($data['c'] == 0)

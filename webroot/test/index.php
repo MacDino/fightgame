@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $doNotPut = TRUE;
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
-$masterId = isset($_COOKIE['matser_id'])?$_COOKIE['matser_id']:'';
+$masterId = isset($_COOKIE['master_id'])?$_COOKIE['master_id']:'';
 $act = isset($_GET['act'])?$_GET['act']:'';
 if($act == '')
 {
@@ -24,10 +24,10 @@ if($act == '')
    $data = json_decode($data, true);
    if($data['code'] == 0)
    {
-      $masterId = $data['d']['matser_id'];
+      $masterId = $data['d']['master_id'];
       if($masterId)
       {
-          setcookie('matser_id', $masterId, time()+360000);
+          setcookie('master_id', $masterId, time()+360000);
           echo "<script>location.href='index.php'</script>"; 
      }
    }

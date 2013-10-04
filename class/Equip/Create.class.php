@@ -11,10 +11,12 @@ class Equip_Create
     //创建一件装备
     public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL, $equipSuitRaceId = NULL)
     {
+//    	echo "equipColour==$equipColour, userId===$userId, equipLevel===$equipLevel, equipType===$equipType, equipQuality===$equipQuality";
         if(!$equipColour)return FALSE;//装备颜色
         $equipLevel = self::_getEquipLevel($equipLevel);
         $equipType  = self::_getEquipType($equipType);
         $equipQuality = self::_getEquipQuality($equipQuality);
+//        echo $equipQuality;
         self::$_equipAttributeConfigList = Equip_Config::equipAttributeList();//获取装备的附加属性配置信息
         
         try{
@@ -23,6 +25,7 @@ class Equip_Create
             $attributeBaseList = self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);//装备信息      
             $attributeList = self::_getEquipAttributeValue($equipLevel, $equipQuality);
             $equipInfo = self::_getEquipData($equipLevel, $equipType, $equipColour, $attributeList, $attributeBaseList, $equipQuality); 
+            print_r($equipInfo);
             self::_cleanData();
             if($userId)
             {

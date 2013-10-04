@@ -10,6 +10,13 @@ if(!$userId)
     die;
 }
 
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
+	die;
+}
+
 try {    
     //人物基本属性,数据库读取
 	$data = User_Info::getUserInfoByUserId($userId);
@@ -32,18 +39,19 @@ try {
 		$data['pet']['blood']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
 		$data['pet']['magic']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
 	}else{
-		$data['pet'] = null;
+		$data['pet'] = FLASE;
 	}
 	
 	//地图信息
 	$userLastResult     = Fight_Result::getResult($userId);
 	$data['map_id'] = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
+	$data['colors'] = Fight_Setting::getSettingByUserId($userId);
 //	print_r($data);
     $code = 0;
     $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
+    $code = 99;
+    $msg = '内部错误';
     die;    
 }

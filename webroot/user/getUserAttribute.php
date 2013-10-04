@@ -11,6 +11,13 @@ if(!$userId)
     die;
 }
 
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
+	die;
+}
+
 try {
     //使用中装备
     $res = Equip_Info::getEquipListByUserId($userId, 1);
@@ -26,10 +33,10 @@ try {
 //	print_r($data);
     $code = 0;
     $msg = 'ok';
-//    die;
+    die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
+    $code = 99;
+    $msg = '内部错误';
     die;    
 }
 

@@ -12,6 +12,7 @@ if(!$bindType || !$bindValue)
     die;
 }
 
+
 try {
     $res = User::getLoginUserId($bindType, $bindValue);
     if($res)
@@ -20,7 +21,8 @@ try {
         die;
     }
 } catch (Exception $e) {
-    $code = 1;
-	$msg = '获取账户失败!';
+    $code = 99;
+	$msg = '内部错误';
+	die;
 }
 

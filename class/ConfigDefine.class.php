@@ -191,6 +191,10 @@ class ConfigDefine
 			Equip::EQUIP_QUALITY_ADVANCED 	=> '进阶',
 			Equip::EQUIP_QUALITY_SUBLIME 	=> '升华',
 			Equip::EQUIP_QUALITY_HOLY 		=> '圣品',
+			
+			Equip::EQUIP_BASE_ATTRIBUTE_GENERAL => '普通',
+			Equip::EQUIP_BASE_ATTRIBUTE_HIGH 	=> '高',
+			Equip::EQUIP_BASE_ATTRIBUTE_VH 		=> '很高',
 		);
 		return $res;
 	}
