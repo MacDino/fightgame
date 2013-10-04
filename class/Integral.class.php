@@ -37,7 +37,7 @@ class Intergral{
 		$num = 0;
 		$beginTime = strtotime(date("Y-m-d 00:00:00"));
 		$endTime = strtotime(data("Y-m-d 23:59:59"));
-		$res = "SELECT num FROM " . self::INTEGRAL_LIST . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";\
+		$res = "SELECT num FROM " . self::INTEGRAL_LIST . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
 		if(is_array($res)){
 			foreach ($res as $i){
 				$num += $i['num'];
