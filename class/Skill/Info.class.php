@@ -18,11 +18,13 @@ class Skill_Info {
     /**
      * @desc 获取角色技能等级列表
      */
-    public static function getSkillList($user_id){
+    public static function getSkillList($user_id, $is_use=false){
         $where      = array(
             'user_id' => $user_id,
-            //'is_use'  => 1,
         );
+        if($is_use){
+        	$where['is_use']  = 1;
+        }
         $res = MySql::select(self::TN_SKILL_INFO, $where);
         return $res;
     }
