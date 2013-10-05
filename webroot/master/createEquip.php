@@ -27,6 +27,7 @@ if($act == 'add'){
 <table>
 		<tr><td>等级:
 		<select name="equip_level">
+			<option value ="0" >0</option>
 			<option value ="10" >10</option>
 		    <option value ="20" >20</option>
 		    <option value ="30" >30</option>
@@ -64,8 +65,8 @@ if($act == 'add'){
 		<tr><td>种族:
 		<select name="race_id">
 			<option value ="1" >人族</option>
-		    <option value ="2" >魔族</option>
-		    <option value="3" >仙族</option>
+		    <option value ="2" >仙族</option>
+		    <option value="3" >魔族</option>
 		</select>
 		</td></tr>
 		

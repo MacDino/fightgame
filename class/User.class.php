@@ -4,7 +4,7 @@ class User
 	/** 初始化用户的等级*/
     CONST DEFAULT_USER_LEVEL = 0;
     /** 默认元宝数*/
-    CONST DEFAULT_INGOT    = 10;
+    CONST DEFAULT_INGOT    = 100;
     /** 默认金钱数*/
     CONST DEFAULT_MONEY = 50000;
 	/** 默认经验数*/

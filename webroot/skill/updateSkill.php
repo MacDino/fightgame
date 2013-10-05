@@ -26,14 +26,15 @@ if(empty($skillLevel) || $skillLevel < 1){
         die;
     }
 }*/
-if($skillLevel+1 > $userInfo['user_level']+10){
+if($skillLevel+1 > $userInfo['user_level']+30){
 	$code = 3;
 	$msg = "不能高过人物等级10级";
 	die;
 }
 
 //技能点数判断
-if($userInfo['skill_point'] < 1){
+
+if($userInfo['skil_point'] < 1){
 	$code = 4;
     $msg    = '您技能点数不足';
     die;

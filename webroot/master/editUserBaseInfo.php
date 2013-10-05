@@ -25,7 +25,8 @@ $skil_point   	= isset($_REQUEST['skil_point'])?$_REQUEST['skil_point']:'';//技
 $reputation   	= isset($_REQUEST['reputation'])?$_REQUEST['reputation']:'';//声望
 $resultntegral   	= isset($_REQUEST['integral'])?$_REQUEST['integral']:'';//积分
 
-$userId     	= isset($_COOKIE['user_id'])?$_COOKIE['user_id']:'';//用户ID
+$userId     	= isset($_COOKIE['user_id'])?$_COOKIE['user_id']:'';//用户ID\
+echo $userId;
 if($act == 'edit'){
 	$res = User_Info::editUserInfo($_POST, $userId);
 	if($res){
@@ -33,6 +34,7 @@ if($act == 'edit'){
 	}
 }else{
 	$result = User_Info::getUserInfoByUserId($userId);
+	print_r($result);
 	$base = User_Info::getUserInfoFightAttribute($userId);
 	$value = User_Info::getUserInfoFightAttribute($userId, TRUE);
 }
@@ -45,8 +47,8 @@ if($act == 'edit'){
 		<tr><td>种族:
 		<select name="race_id">
 			<option value ="1" <? if($result['race_id'] == 1)echo "selected";?>>人族</option>
-		    <option value ="2" <? if($result['race_id'] == 2)echo "selected";?>>魔族</option>
-		    <option value="3" <? if($result['race_id'] == 3)echo "selected";?>>仙族</option>
+		    <option value ="2" <? if($result['race_id'] == 2)echo "selected";?>>仙族</option>
+		    <option value ="3" <? if($result['race_id'] == 3)echo "selected";?>>魔族</option>
 		</select>
 		</td></tr>
 		<tr><td>性别:

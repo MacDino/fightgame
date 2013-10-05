@@ -45,6 +45,11 @@ class User_Info
 //		echo $level[0]['level']."====".$userInfo['user_level'];
 		if($level[0]['level'] > $userInfo['user_level']){
 			self::addLevelNum($userId, $level[0]['level']);
+			//增加技能点
+			for($i=$userInfo['user_level']+1; $i<=$level[0]['level']; $i++){
+				$addSkill = Skill_Info::addSkillNum($i);
+				self::addPointNum($userId, $addSkill);
+			}
 			return $level[0]['level'];
 		}else{
 			return FALSE;

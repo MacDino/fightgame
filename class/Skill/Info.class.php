@@ -3,7 +3,18 @@ class Skill_Info {
     CONST TN_SKILL_INFO = 'user_skill';
     CONST TN_SKILL_ALLOWED = 'level_allow_skill_num';
     CONST TN_SKILL_SPEND = 'level_skill_spend';
+    
+    CONST DENGJIDUAN = 10;//每隔多少级技能点数增加
+    CONST ZENGZHANGLV= 1;//每次增加多少
 
+    
+    /** @desc 技能点增加规律 */
+    public static function addSkillNum($level){
+    	$num = ceil($level/self::DENGJIDUAN);
+    	$res = $num + self::ZENGZHANGLV;
+    	return $res;
+    }
+    
     /**
      * @desc 获取角色技能等级列表
      */
@@ -44,10 +55,13 @@ class Skill_Info {
     /** @desc 可学习技能列表,带着金钱 */
     public static function getStudySkillList($userId, $type){
     	$skill = array();
+    	$res = array();
     	$userSkill = self::getSkillList($userId);//用户已学习技能
-    	foreach ($userSkill as $i=>$key) {
-        	$res[$key['skill_id']] = array('skill_level' => $key['skill_level']);
-        }
+    	if(!empty($userSkill)){
+	    	foreach ($userSkill as $i=>$key) {
+	        	$res[$key['skill_id']] = array('skill_level' => $key['skill_level']);
+	        }
+    	}
         
         if($type == 1){
         	$skillList = Skill::skillListWLGJ();
