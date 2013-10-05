@@ -5,7 +5,10 @@ $userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] :"";
 $type		= isset($_REQUEST['type']) ? $_REQUEST['type'] :"";
 
 try {
-	$data   = Skill_Info::getStudySkillList($userId, $type);
+	$userInfo = User_Info::getUserInfoByUserId($userId);
+	$data['skill_info']   = Skill_Info::getStudySkillList($userId, $type);
+	$data['skill_point'] = $userInfo['skil_point'];
+	$data['money'] = $userInfo['money'];
 //	print_r($data);
 	$code   = 0;
 	$msg    = 'OK';

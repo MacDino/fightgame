@@ -4,8 +4,9 @@
  */
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$skillId   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
+$userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : "";
+$skillId   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : "";
+$type   = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
 
 $skillLevel    = Skill_Info::getSkillInfo($userId, $skillId);
 $userInfo  = User_Info::getUserInfoByUserId($userId); 
@@ -26,7 +27,7 @@ if(empty($skillLevel) || $skillLevel < 1){
         die;
     }
 }*/
-if($skillLevel+1 > $userInfo['user_level']+30){
+if($skillLevel+1 > $userInfo['user_level']+10){
 	$code = 3;
 	$msg = "不能高过人物等级10级";
 	die;
@@ -40,7 +41,7 @@ if($userInfo['skil_point'] < 1){
     die;
 }
 try {
-	$data   = Skill_Info::updateSkill($userId, $skillId);
+	$data   = Skill_Info::updateSkill($userId, $skillId, $type);
     if($data){
         //扣除金钱
         User_Info::subtractMoney($userId, $needMoney);

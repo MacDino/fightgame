@@ -14,7 +14,7 @@ if(!$userId)
 }
 
 //查询用户ID是否在用户表里存在
-$userInfo = User_Info::isExistUser(array($userId, $friendId));
+$userInfo = User_Info::isExistUser(array($userId));
 if(!$userInfo)
 {
 	$code = 2;

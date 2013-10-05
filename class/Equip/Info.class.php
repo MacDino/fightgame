@@ -8,9 +8,9 @@ class Equip_Info
 	public static function getEquipListByUserId($userId, $is_used = FALSE){
         if($userId){
         	if(!$is_used){
-            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId,), array(), array('user_equip_id desc'));
+            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId,), array(), array('is_used desc', 'user_equip_id desc'));
         	}else{
-        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1), array(), array('user_equip_id desc'));
+        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1), array(), array('is_used desc', 'user_equip_id desc'));
         	}
         }else{
             return FALSE;    
@@ -27,7 +27,7 @@ class Equip_Info
     
     //按照类别获取装备
     public static function getEquipInfoByType($equipType, $userId, $is_used = FALSE){
-    	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId));
+    	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId), array(), array('is_used desc', 'user_equip_id desc'));
     	return $res;
     }
     

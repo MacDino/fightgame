@@ -21,7 +21,7 @@ class Skill_Info {
     public static function getSkillList($user_id){
         $where      = array(
             'user_id' => $user_id,
-            'is_use'  => 1,
+            //'is_use'  => 1,
         );
         $res = MySql::select(self::TN_SKILL_INFO, $where);
         return $res;
@@ -62,7 +62,6 @@ class Skill_Info {
 	        	$res[$key['skill_id']] = array('skill_level' => $key['skill_level']);
 	        }
     	}
-        
         if($type == 1){
         	$skillList = Skill::skillListWLGJ();
         }elseif ($type == 2){
@@ -120,15 +119,20 @@ class Skill_Info {
     /**
      * @desc 技能学习
      */
-    public static function updateSkill($user_id, $skill_id){
+    public static function updateSkill($user_id, $skill_id, $type){
         $level = self::getSkillInfo($user_id, $skill_id);
         $where  = array(
             'user_id'   => $user_id,
             'skill_id'  => $skill_id
         );
 
-        //增加技能等级
-        return MySql::update(self::TN_SKILL_INFO, array('skill_level' => ($level+1)), $where);
+        if(!empty($level)){
+       		//增加技能等级
+        	return MySql::update(self::TN_SKILL_INFO, array('skill_level' => ($level+1)), $where);
+        }else{
+        	//学习新技能
+        	return MySql::insert(self::TN_SKILL_INFO, array('user_id' => $user_id, 'skill_id' => $skill_id, 'skill_level' => 1, 'skill_type' => 1290+$type));
+        }
     }
     /**
      * @desc 获取当前等级可使用技能数

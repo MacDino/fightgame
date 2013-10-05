@@ -43,7 +43,7 @@ try {
     $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
 //    print_r($data['participant']['user']);
 
-    if($userInfo['user_level'] > 40) {
+    if($userInfo['user_level'] > 10) {
         $petInfo    = Pet::usedPet($userId);
         if(is_array($petInfo) && count($petInfo)) {
             $userPetInfo = User_Info::getUserInfoByUserId($petInfo['pet_id']);
