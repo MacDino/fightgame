@@ -47,6 +47,7 @@ class Fight {
         return array(
             'user_id'   => $userIdentity['user_id'],
             'user_name' => $userInfo['user_name'],
+            'level'     => $userInfo['user_level'],
             'blood'     => intval($user->getCurrentBlood()),
             'magic'     => intval($user->getCurrentMagic()),
         );
