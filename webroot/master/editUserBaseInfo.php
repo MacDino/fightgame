@@ -26,7 +26,7 @@ $reputation   	= isset($_REQUEST['reputation'])?$_REQUEST['reputation']:'';//声
 $resultntegral   	= isset($_REQUEST['integral'])?$_REQUEST['integral']:'';//积分
 
 $userId     	= isset($_COOKIE['user_id'])?$_COOKIE['user_id']:'';//用户ID\
-echo $userId;
+
 if($act == 'edit'){
 	$res = User_Info::editUserInfo($_POST, $userId);
 	if($res){
