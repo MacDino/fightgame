@@ -118,6 +118,7 @@ class Equip_Create
     		$randAttributeIdList =  array_keys(self::$_equipAttributeConfigList);//允许获取的属性ID
     		$randAttributeIdList = array_diff($randAttributeIdList, self::$_equipGetAttribute);
     		$getAttribute = array_rand($randAttributeIdList, $randNum);
+    		if(!is_array($getAttribute))$getAttribute = (array)$getAttribute;
     		foreach($getAttribute as $attributeId)
     		{
     			self::$_equipGetAttribute[] = $randAttributeIdList[$attributeId];
