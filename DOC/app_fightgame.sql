@@ -1081,7 +1081,7 @@ CREATE TABLE `iap_product` (
 
 LOCK TABLES `iap_product` WRITE;
 /*!40000 ALTER TABLE `iap_product` DISABLE KEYS */;
-INSERT INTO `iap_product` VALUES (2,'com.fightgame.60',6102,'6元包套餐',60,'6.00',2,0,1),(4,'com.fightgame.300',6104,'30元包套餐',330,'30.00',2,30,1);
+INSERT INTO `iap_product` VALUES (1,'com.fightgame.baoyue',6101,'战斗宝',300,'30.00',1,0,1),(2,'com.fightgame.6yuan',6102,'6元包套餐',60,'6.00',2,0,1),('3','com.fightgame.12yuan',6103,'12元包',125,'12.00',2,5,1),(4,'com.fightgame.30yuan',6104,'30元包套餐',330,'30.00',2,30,1),(5,'com.fightgame.80yuan',6105,'78元包套餐',900,'78.00',2,120,1),(6,'com.fightgame.158yuan',6106,'158元包套餐',1900,'158.00',2,320,1),(7,'com.fightgame.318yuan',6107,'318元包套餐',3795,'318.00',2,795,1),(8,'com.fightgame.648yuan',6108,'648元包套餐',8424,'648.00',2,1944,1);
 /*!40000 ALTER TABLE `iap_product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
