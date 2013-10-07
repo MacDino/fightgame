@@ -6,7 +6,12 @@ error_reporting(2047);
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : '';
 $equipType     = isset($_REQUEST['equip_type']) ? $_REQUEST['equip_type'] : '';
 try {
-	$data = Equip_Info::getEquipInfoByType($equipType, $userId);
+	$res = Equip_Info::getEquipInfoByType($equipType, $userId);
+	 foreach ($res as $i=>$key){
+    	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
+    	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
+    }
+    $data = $res;
 	$code = 0;
 	$msg = 'OK';
 } catch (Exception $e) {

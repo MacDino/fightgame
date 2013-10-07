@@ -356,6 +356,7 @@ class User_Info
 		    ConfigDefine::USER_ATTRIBUTE_DEFENSE      	=> 0,//防御 - 成长属性
 		    ConfigDefine::USER_ATTRIBUTE_DODGE        	=> 0,//躲闪 - 成长属性
 		    ConfigDefine::USER_ATTRIBUTE_LUCKY        	=> 0,//幸运 - 成长属性
+		    ConfigDefine::RELEASE_PROBABILITY 		  	=> 0,//释放概率
 		);
 
 		//根据ID取出用户基本信息

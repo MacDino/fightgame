@@ -18,6 +18,9 @@ class ConfigDefine
     CONST USER_ATTRIBUTE_DEFENSE      	= 1112;//防御 - 成长属性
     CONST USER_ATTRIBUTE_DODGE        	= 1113;//躲闪 - 成长属性
     CONST USER_ATTRIBUTE_LUCKY        	= 1114;//幸运 - 成长属性
+    
+     //其它
+	CONST RELEASE_PROBABILITY 		  	= 1301;//释放概率
 
 	//技能定义
 	CONST SKILL_ZJ      				= 1201;//重击
@@ -36,7 +39,7 @@ class ConfigDefine
     CONST SKILL_FD      				= 1214;//法盾
     CONST SKILL_TX						= 1215;//体修
     CONST SKILL_PT						= 1216;//普通攻击
-
+    
     //战斗动作
     CONST PET                           = 7009;//人宠
     CONST YOU							= 7100;//你
@@ -64,8 +67,7 @@ class ConfigDefine
     CONST BAOJI                         = 7129;//暴击
     CONST DI                            = 7130;//第
 
-            //其它
-	CONST RELEASE_PROBABILITY 		  	= 301;//释放概率
+           
 
     CONST PK_NUM                        = 'pk_num';//PVP次数
     CONST USER_BASE_ATTRIBUTE           = 'user_base_attribute';//用户基本属性

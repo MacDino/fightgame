@@ -173,17 +173,19 @@ class Skill_Info {
     public static function useSkill($userId, $skillId, $type, $skillLocation){
     	//应该先判断是否可以有某个数量,暂时略过,再补
     	if($type == 1)
-    		$sql = "SELECT user_id, skill_id FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND 'skill_location' = $skillLocation
+    		$sql = "SELECT user_id, skill_id FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND skill_location = '$skillLocation'
     				AND skill_type IN (" . Skill::SKILL_GROUP_WLGJ . "," .Skill::SKILL_GROUP_FSGJ .")";
     	elseif($type == 2){
-    		$sql = "SELECT user_id, skill_id FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND 'skill_location' = $skillLocation
+    		$sql = "SELECT user_id, skill_id FROM " . self::TN_SKILL_INFO . " WHERE user_id = $userId AND skill_location = '$skillLocation'
     				AND skill_type = " . Skill::SKILL_GROUP_FYJN;
     	}
     	$old = MySql::query($sql);
     	if(!empty($old)){//下掉原位置的技能
-    		MySql::update(self::TN_SKILL_INFO, 
-		    		array('skill_location' => 0, 'is_use' => 0),
-		    		array('user_id' => $old['user_id'], 'skill_id' => $old['skill_id']));
+    		foreach ($old as $i){
+	    		MySql::update(self::TN_SKILL_INFO, 
+			    		array('skill_location' => 0, 'is_use' => 0),
+			    		array('user_id' => $i['user_id'], 'skill_id' => $i['skill_id']));
+    		}
     	}
     	$res = MySql::update(self::TN_SKILL_INFO, 
     				array('skill_location' => $skillLocation, 'is_use' => 1), 
@@ -315,6 +317,34 @@ class Skill_Info {
 	public static function getSkillAttribute($skillId, $skillLevel, $raceId){
 		$res = MySql::selectOne('skill_attributes', array('skill_id'=>$skillId, 'skill_level'=>$skillLevel, 'race_id'=>$raceId), array('attribute'));
 		return json_decode($res['attribute'], TRUE);
+	}
+	
+	/**
+	 * @desc 释放概率百分比
+	 * @param string $totalProbability	总释放概率
+	 * @param array $skill_info			技能信息(正在使用的技能ID,技能权重)
+	 */
+	public static function releaseProbability($totalProbability, $skill_info){
+		$skill = array();
+		$num = 0;//总点数
+		foreach ($skill_info as $i=>$key){
+			if($key['odds_set'] == Skill::PROPORTION_HIGH){
+				$skill[$key['skill_id']] = Skill::PROPORTION_HIGH_RELEASE;
+				$num += Skill::PROPORTION_HIGH_RELEASE;
+			}elseif ($key['odds_set'] == Skill::PROPORTION_MIDDLE){
+				$skill[$key['skill_id']] = Skill::PROPORTION_MIDDLE_RELEASE;
+				$num += Skill::PROPORTION_MIDDLE_RELEASE;
+			}elseif ($key['odds_set'] == Skill::PROPORTION_LOW){
+				$skill[$key['skill_id']] = Skill::PROPORTION_LOW_RELEASE;
+				$num += Skill::PROPORTION_LOW_RELEASE;
+			}
+		}
+		
+		foreach ($skill as $o=>$key){
+			$skill[$o] = $key/$num * $totalProbability * 100;
+		}
+		
+		return $skill;
 	}
 	
 	

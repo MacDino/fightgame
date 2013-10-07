@@ -19,7 +19,7 @@ try {
     //循环装备ID得到总价值
     $price = 0;
     foreach ($equipId as $i=>$key){
-    	$price += Equip_Info::priceEquip($userId, $key);
+    	$price += Equip_Info::priceEquip($key);
     }
     //删除选中的装备,标签式删除
     foreach ($equipId as $o=>$key){

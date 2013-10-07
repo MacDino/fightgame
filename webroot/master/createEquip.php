@@ -18,6 +18,12 @@ if($act == 'add'){
 	if($res){
 		echo "<script>location.href='createEquip.php';</script>";
 	}
+}elseif($act == 'del'){
+	$equip_id   		= isset($_REQUEST['equip_id'])?$_REQUEST['equip_id']:'';//等级
+	$res = Equip_Info::delEquip($equip_id);
+	if($res){
+		echo "<script>location.href='createEquip.php';</script>";
+	}
 }else{
 	$result = Equip_Info::getEquipListByUserId($userId);
 }
@@ -64,6 +70,7 @@ if($act == 'add'){
 
 		<tr><td>种族:
 		<select name="race_id">
+			<option value ="" >无种族</option>
 			<option value ="1" >人族</option>
 		    <option value ="2" >仙族</option>
 		    <option value="3" >魔族</option>
@@ -96,8 +103,8 @@ if($act == 'add'){
 			</td>
 			<td>种族:
 				<? if($i['race_id'] == 1)echo "人族";?>
-			    <? if($i['race_id'] == 2)echo "魔族";?>
-				<? if($i['race_id'] == 3)echo "仙族";?>
+			    <? if($i['race_id'] == 2)echo "仙族";?>
+				<? if($i['race_id'] == 3)echo "魔族";?>
 			</td>
 			<td>颜色:
 				<? if($i['equip_colour'] == 3801)echo "灰色";?>
@@ -120,6 +127,9 @@ if($act == 'add'){
 			    <? if($i['equip_quality'] == 3702)echo "进阶";?>
 				<? if($i['equip_quality'] == 3703)echo "升华";?>
 				<? if($i['equip_quality'] == 3704)echo "圣品";?>
+			</td>
+			<td>
+			<a href="?act=del&equip_id=<?=$i['user_equip_id']?>">删除</a>
 			</td>
 			<td>
 			<a href="detailsEquip.php?equip_id=<?=$i['user_equip_id']?>" target="_blank">详细属性</a>
