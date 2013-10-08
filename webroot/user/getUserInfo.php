@@ -39,12 +39,12 @@ try {
 		$data['pet']['blood']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
 		$data['pet']['magic']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
 	}else{
-		$data['pet'] = FLASE;
+		$data['pet'] = false;
 	}
 	
 	//地图信息
 	$userLastResult     = Fight_Result::getResult($userId);
-	$data['map_id'] = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
+//	$data['map_id'] = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 	$data['colors'] = Fight_Setting::getSettingByUserId($userId);
 //	print_r($data);
     $code = 0;

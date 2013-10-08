@@ -398,8 +398,10 @@ class User_Info
 		
 		//技能加成
 		$skillAttribute = Skill_Info::getSkillList($userId, 1);
+		
 		foreach ($skillAttribute as $a){
 			$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
+//			print_r($skillValue);
 			if(is_array($skillValue)){
 				foreach ($skillValue as $x=>$y)
 				{
@@ -427,6 +429,7 @@ class User_Info
 
 		//根据种族ID和总属性点算出基本属性值
 		$userAttributeValue = User_Attributes::getAttributesValue($userInfo['race_id'], $userBaseAttribute);
+//		print_r($userAttributeValue);
 
 		//把装备带来的属性值融合进基本属性值里
 		foreach ($valueAttribute as $key => $value){

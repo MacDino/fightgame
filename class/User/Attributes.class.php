@@ -50,6 +50,7 @@ class User_Attributes
     public static function getAttributesValue($raceId, $data){
     	if(!$raceId || !is_array($data))return FALSE;
     	$res = User_Race::getGrowUpAttributes($raceId, $data);
+    	$res[ConfigDefine::RELEASE_PROBABILITY] = 0;
 		return $res;
     }
     
