@@ -128,5 +128,7 @@ class Equip_Info
     	return $res;
     }
     
+    //判断是否为套装
+    
     
 }
