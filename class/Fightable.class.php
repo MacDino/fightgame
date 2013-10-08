@@ -111,6 +111,10 @@ class Fightable {
 	public function getCurrentMagic() {
 		return $this->current_magic;
 	}
+	
+	public function getAttributes(){
+		return $this->attributes;
+	}
 
 	// 出手速度
 	public function speed() {
