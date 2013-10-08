@@ -211,12 +211,12 @@ class Skill_Info {
 			}
 			$num2 = 0;
 			for ($i=1; $i<100; $i++){
-				$num1 += (1.01 + $i*0.02);
+				$num2 += (1.01 + $i*0.02);
 				MySql::insert('skill_attributes', array('skill_id' => ConfigDefine::SKILL_ZJ, 'skill_level' => $i, 'race_id' => 2, 'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HIT => $num2))));
 			}
 			$num3 = 0;
 			for ($i=1; $i<100; $i++){
-				$num1 += (2.01 + $i*0.02);
+				$num3 += (2.01 + $i*0.02);
 				MySql::insert('skill_attributes', array('skill_id' => ConfigDefine::SKILL_ZJ, 'skill_level' => $i, 'race_id' => 1, 'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HIT => $num3))));
 			}
 		}
@@ -234,12 +234,12 @@ class Skill_Info {
 			}
 			$num2 = 0;
 			for ($i=1; $i<100; $i++){
-				$num1 += (2.01 + $i*0.02);
+				$num2 += (2.01 + $i*0.02);
 				MySql::insert('skill_attributes', array('skill_id' => ConfigDefine::SKILL_LJ, 'skill_level' => $i, 'race_id' => 2, 'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HURT => $num2))));
 			}
 			$num3 = 0;
 			for ($i=1; $i<100; $i++){
-				$num1 += (2.5 + $i*0.014);
+				$num3 += (2.5 + $i*0.014);
 				MySql::insert('skill_attributes', array('skill_id' => ConfigDefine::SKILL_LJ, 'skill_level' => $i, 'race_id' => 1, 'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HURT => $num3))));
 			}
 		}
@@ -258,15 +258,15 @@ class Skill_Info {
 			}
 			$num2 = 0;
 			for ($i=1; $i<100; $i++){
-				$num1 += ($i*2);
+				$num2 += ($i*2);
 				MySql::insert('skill_attributes', array('skill_id' => ConfigDefine::SKILL_LXYZ, 'skill_level' => $i, 'race_id' => 2, 
-				'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HURT => $num2, ConfigDefine::USER_ATTRIBUTE_HIT => $num1 * 2))));
+				'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HURT => $num2, ConfigDefine::USER_ATTRIBUTE_HIT => $num2 * 2))));
 			}
 			$num3 = 0;
 			for ($i=1; $i<100; $i++){
-				$num1 += ($i*2);
+				$num3 += ($i*2);
 				MySql::insert('skill_attributes', array('skill_id' => ConfigDefine::SKILL_LXYZ, 'skill_level' => $i, 'race_id' => 1, 
-				'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HURT => $num3, ConfigDefine::USER_ATTRIBUTE_HIT => $num1 * 2))));
+				'attribute' => json_encode(array(ConfigDefine::USER_ATTRIBUTE_HURT => $num3, ConfigDefine::USER_ATTRIBUTE_HIT => $num3 * 2))));
 			}
 		}
 	}

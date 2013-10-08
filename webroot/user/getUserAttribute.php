@@ -30,7 +30,7 @@ try {
 	$data['baseAttribute'] = User_Info::getUserInfoFightAttribute($userId);
 	//角色成长属性(值)
 	$data['valueAttribute'] = User_Info::getUserInfoFightAttribute($userId, TRUE);
-//	print_r($data);
+	print_r($data['valueAttribute']);
     $code = 0;
     $msg = 'ok';
     die;

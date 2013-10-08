@@ -5,7 +5,19 @@ error_reporting(2047);
 
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : '';
 $equipId     = isset($_REQUEST['equip_id']) ? $_REQUEST['equip_id'] : '';
+
+$userInfo = User_Info::getUserInfoByUserId($userId);
+$equipInfo = Equip_Info::getEquipInfoById($equipId);
+
+//限制穿戴等级
+if((int)$equipInfo['equip_level'] > (int)$userInfo['user_level']){
+	$code = 3;
+	$msg = "等级不够";
+	die;
+}
 try {
+	
+	
 	$data = Equip_Info::useEquip($userId, $equipId);
 	$code = 0;
 	$msg = 'OK';
