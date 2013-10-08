@@ -429,6 +429,7 @@ class User_Info
 
 		//根据种族ID和总属性点算出基本属性值
 		$userAttributeValue = User_Attributes::getAttributesValue($userInfo['race_id'], $userBaseAttribute);
+//		print_r($userAttributeValue);
 
 		//把装备带来的属性值融合进基本属性值里
 		foreach ($valueAttribute as $key => $value){
