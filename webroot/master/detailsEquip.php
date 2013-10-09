@@ -47,7 +47,7 @@ print_r($value);
 	<tr><td>法防修:<? echo $base['1208'];?></td></tr>
 	<tr><td>攻修:<? echo $base['1209'];?></td></tr>
 	<tr><td>法修:<? echo $base['1210'];?></td></tr>
-	<tr><td>锻造:<? echo $base['1212'];?></td></tr>
+	<tr><td>锻造:<? echo $base['1211'];?></td></tr>
 	<tr><td>防御:<? echo $base['1212'];?></td></tr>
 	<tr><td>反击:<? echo $base['1213'];?></td></tr>
 	<tr><td>法盾:<? echo $base['1214'];?></td></tr>
@@ -84,7 +84,7 @@ print_r($value);
 	<tr><td>法防修:<? echo $value['1208'];?></td></tr>
 	<tr><td>攻修:<? echo $value['1209'];?></td></tr>
 	<tr><td>法修:<? echo $value['1210'];?></td></tr>
-	<tr><td>锻造:<? echo $value['1212'];?></td></tr>
+	<tr><td>锻造:<? echo $value['1211'];?></td></tr>
 	<tr><td>防御:<? echo $value['1212'];?></td></tr>
 	<tr><td>反击:<? echo $value['1213'];?></td></tr>
 	<tr><td>法盾:<? echo $value['1214'];?></td></tr>

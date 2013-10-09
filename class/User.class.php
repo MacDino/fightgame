@@ -46,6 +46,8 @@ class User
     CONST ATTEIBUTEBEGETS	= '0.03';
     /** 属性相克损失*/
     CONST ATTEIBUTERESTRAINT= '0.03';
+    /** @desc 套装增益 */
+    CONST EMBOITEMENT = '0.03';
     
     /** 属性增强,有效期.24小时*/
     CONST ATTEIBUTEENHANCETIME = 86400;

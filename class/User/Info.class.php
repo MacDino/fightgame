@@ -440,12 +440,20 @@ class User_Info
 		if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
 			$userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] += $userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] * 0.01 * $skillAttribute[ConfigDefine::SKILL_TX]['skill_level'];
 		}	
+		
+		if(Equip_Info::isEmboitement($userId, $userInfo['race_id'])){//套装增益
+			$userAttributeValue = self::emboitementUserAttribute($userAttributeValue);
+		}
+		
+		if(User_Property::isuseAttributeEnhance($userId)){
+			$userAttributeValue = self::strengthenUserAttribute($userAttributeValue);
+		}
 
 		return $userAttributeValue;
 	}
 
 	/**
-     * 使用属性增强符咒
+     * @desc 使用属性增强符咒
      * @param array $data	属性数组
      * @return array
      */
@@ -455,6 +463,21 @@ class User_Info
 		$res = array();
 		foreach ($data as $key => $value){
 			$res[$key] = $value * (1 + USER::ATTEIBUTEENHANCE);
+		}
+		return $res;
+	}
+	
+	/**
+     * @desc 套装增益
+     * @param array $data	属性数组
+     * @return array
+     */
+	public static function emboitementUserAttribute($data){
+		if(!is_array($data))return FALSE;
+
+		$res = array();
+		foreach ($data as $key => $value){
+			$res[$key] = $value * (1 + USER::EMBOITEMENT);
 		}
 		return $res;
 	}
