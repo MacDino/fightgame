@@ -192,7 +192,9 @@ class Monster
 			}
 			//获取技能概率
 			$rand_skill_count = count($rand_skills);
-			$skills['rate'] = $skill_rate_list[$skill_type][$rand_skill_count];
+            foreach ($rand_skills as $skill => $skillV) {
+                $skills['rate'][$skill] = $skill_rate_list[$skill_type][$rand_skill_count];
+            }
 		}
 
 		return $ret;

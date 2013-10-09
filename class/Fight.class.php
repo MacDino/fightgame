@@ -184,11 +184,9 @@ class Fight {
      * @desc 根据user_id生成战斗对象
      */
     public static function createUserFightable($user_id, $user_level,$marking = '', $isHelpfull = FALSE, $isHarmfull = FALSE) {
-        $skill_list     = Skill_Info::getSkillList($user_id);
+        $skill = self::getUserSkillList($user_id);
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($user_id, TRUE);
-
-        $fight_skill    = Skill::getFightSkillList($skill_list);
-        return new Fightable($user_level, $attrbuteArr, $fight_skill, array('user_id' => $user_id, 'marking' => $marking));
+        return new Fightable($user_level, $attrbuteArr, $skill, array('user_id' => $user_id, 'marking' => $marking));
     }
 
     /**
@@ -237,5 +235,23 @@ class Fight {
             return TRUE;
         }
         return FALSE;
+    }
+
+    public static function getUserSkillList($userId) {
+        $attack = Skill_Info::getReleaseProbability($userId, 1);
+        $defense = Skill_Info::getReleaseProbability($userId, 2);
+        foreach ((array)$attack as $attackSkill) {
+            if($attackSkill['skill_id'] > 0) {
+                $return['attack']['list'][$attackSkill['skill_id']] = $attackSkill['skill_level'];
+                $return['attack']['rate'][$attackSkill['skill_id']] = $attackSkill['probability']/100;
+            }
+        }
+        foreach ((array)$defense as $defenseSkill) {
+            if($defenseSkill['skill_id'] > 0) {
+                $return['defense']['list'][$defenseSkill['skill_id']] = $defenseSkill['skill_level'];
+                $return['defense']['rate'][$defenseSkill['skill_id']] = $defenseSkill['probability']/100;
+            }
+        }
+        return $return;
     }
 }

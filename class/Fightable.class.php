@@ -111,7 +111,7 @@ class Fightable {
 	public function getCurrentMagic() {
 		return $this->current_magic;
 	}
-	
+
 	public function getAttributes(){
 		return $this->attributes;
 	}
@@ -163,7 +163,6 @@ class Fightable {
 		}
 		/**
          * 休息状态下，此回合结束
-         * @todo 如何返回结构
          * **/
 		if ($this->isStatus()) {
             $this->isSleep = 1;
@@ -211,15 +210,8 @@ class Fightable {
                 $fjAttackData = $target->makeSkillData(ConfigDefine::SKILL_PT, 0, 'physic');
                 $fjTargetData = $this->doDefense('physic');
                 $fjHarmInfo   = Skill::userSkillTest($fjAttackData, $fjTargetData);
-                //暂时不做反击的命中、闪避判断。如果反击，直接命中
-//                $this->fight['is_fj'] = 1;
-//                $this->fight['fj_bj'] = $fjHarmInfo['is_double'];
-//                $this->fight['fj_miss'] = 1;
-//                if($target->physicHit() - $this->physicDodge() >= 1) {
-//                $this->fight['fj_miss'] = 0;
                 $fjHarm = $fjHarmInfo['is_double'] ? $fjHarmInfo['hurt']/2 : $fjHarmInfo['huit'];
                 $this->current_blood = $this->current_blood - $fjHarm;
-//                }
                 $this->fight[$key]['fj_harm'] = $fjHarm;
             }
         }
@@ -325,12 +317,12 @@ class Fightable {
 
     protected function randSkill($skill_list, $skill_rate) {
 		if (empty($skill_list)) {
-			return false;
+			return FALSE;
 		}
-		$rand = mt_rand(0, 99);
-		if ($rand > ($skill_rate * 100)) {
-			return false;
-		}
-		return array_rand($skill_list);
+        if(!is_array($skill_rate) && count($skill_rate)) {
+            return FALSE;
+        }
+        $skillId = PerRand::getRandResultKey($skill_rate);
+        return $skillId;
 	}
 }
