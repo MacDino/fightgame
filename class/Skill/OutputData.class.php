@@ -65,7 +65,7 @@ class Skill_OutputData
     //三昧真火加成
     public static function swzhAddition($hurt, $userSkillLevel = NULL)
     {
-        return $hurt*($userSkillLevel*(0.005 + 1.2));
+        return $hurt*($userSkillLevel*0.005 + 1.2);
     }
     //呼风唤雨
     public static function hfhySkill($averageUserLevel, $ratioValue = 1, $userAttributePsychic, $randUserAttributteHurt, $userSkillLevel)
