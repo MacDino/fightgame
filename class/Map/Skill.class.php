@@ -80,8 +80,24 @@ class Map_Skill {
         }
         return $return;
 	}
+    
+    public static function getAllSuffixMustHave($mapId) {
+        $return = array();
+        if($mapId > 0) {
+            $where = array(
+                'map_id' => $mapId,
+                'type'   => 'suffix',
+            );
+            $res = MySql::select(self::TABLE_NAME_CONF_MUST, $where);
+            foreach ((array)$res as $v) {
+                $vSkillIds = isset($v['skill_ids']) ? json_decode($v['skill_ids'], true) : array();
+                $return[$v['type_id']] = $vSkillIds;
+            }
+        }
+        return $return;
+    }
 
-	protected static function _getSkillIds($map_id, $config_type, $skill_type = null)
+    protected static function _getSkillIds($map_id, $config_type, $skill_type = null)
 	{
 		$where = array(
 			'map_id' => $map_id,
@@ -98,4 +114,95 @@ class Map_Skill {
 
 		return isset($skill_type) ? $ret[$skill_type] : $ret;
 	}
+    
+    //不能设置为空的
+    public static function saveMapSkill($mapId, $skillIds, $skillType = 'attack') {
+        if($mapId < 0) {
+            throw new Exception('未知地图', 1);
+        }
+        $skillIds = array_filter(array_unique(array_map('intval', (array)$skillIds)));
+        if(!(is_array($skillIds) && count($skillIds))) {
+            throw new Exception('地图的怪物使用技能必须设置', 1);
+        }
+        $haveSkillIds = self::getAllSkills($mapId, $skillType);
+        if(is_array($haveSkillIds) && count($haveSkillIds)) {
+            $commonSkill    = array_intersect($skillIds, $haveSkillIds);
+            $readyDel       = array_diff($haveSkillIds,$skillIds);
+            $readyAdd       = array_diff($skillIds, $haveSkillIds);
+            if(is_array($readyAdd) && count($readyAdd)) {
+                foreach ($readyAdd as $skillId) {
+                    $data = array(
+                        'map_id'        => $mapId,
+                        'skill_id'      => $skillId,
+                        'skill_type'    => $skillType,
+                        'config_type'   => 'all',
+                    );
+                    MySql::insert(self::$table_name, $data);
+                }
+            }
+            if(is_array($readyDel) && count($readyDel)) {
+                $whereDel = array(
+                    'map_id'        => $mapId,
+                    'skill_id'      => array(
+                        'opt' => 'in',
+                        'val' => implode(',', $readyDel),
+                    ),
+                    'skill_type'    => $skillType,
+                    'config_type'   => 'all',
+                );
+                MySql::delete(self::$table_name, $whereDel);
+            }
+        } else {
+            foreach ($skillIds as $skillId) {
+                $data = array(
+                    'map_id'        => $mapId,
+                    'skill_id'      => $skillId,
+                    'skill_type'    => $skillType,
+                    'config_type'   => 'all',
+                );
+                MySql::insert(self::$table_name, $data);
+            }
+        }
+        return true;
+    }
+    
+    public static function saveSuffixMustHave($mapId, $suffixId, $skillIds) {
+        if($mapId < 0) {
+            throw new Exception('未知地图', 1);
+        }
+        if($suffixId < 0) {
+            throw new Exception('未知的后缀', 1);
+        }
+        $isExistInfo = self::getSuffixMustHave($mapId, $suffixId);
+        $data = array(
+            'map_id' => $mapId,
+            'type'  => 'suffix',
+            'type_id' => $suffixId,
+            'skill_ids' => json_encode($skillIds),
+        );
+        if(is_array($isExistInfo) && count($isExistInfo)) {
+            return MySql::update(self::TABLE_NAME_CONF_MUST, $data, array('map_id' => $mapId,'type' => 'suffix','type_id' => $suffixId));
+        }  else {
+            return MySql::insert(self::TABLE_NAME_CONF_MUST, $data);
+        }
+    }
+    
+    public static function saveSuffixMinNum($mapId, $nums) {
+        if($mapId < 0) {
+            throw new Exception('未知地图', 1);
+        }
+        $data = array(
+            'map_id' => $mapId,
+            'can_have_num' => json_encode($nums),
+        );
+        $isExistInfo = self::getSuffixMinCount($mapId);
+        if(is_array($isExistInfo) && count($isExistInfo)) {
+            $whereArray = array(
+                'map_id' => $mapId,
+            );
+            return MySql::update(self::TABLE_NAME_CONF_NUM, $data, $whereArray);
+        }  else {
+            return MySql::insert(self::TABLE_NAME_CONF_NUM, $data);
+        }
+    }
 }
