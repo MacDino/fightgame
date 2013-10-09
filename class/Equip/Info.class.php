@@ -132,7 +132,6 @@ class Equip_Info
     public static function isEmboitement($userId, $race_id){
     	//武器的颜色和种族
     	$equipInfo = self::getEquipListByUserId($userId, true);
-    	
     	if(count($equipInfo) < 6)return false;//不到6个自然凑不起来套装
     	foreach ($equipInfo as $i){//不全是橙色装备或者不是本种族装备
     		if($i['equip_colour'] != Equip::EQUIP_COLOUR_ORANGE || $i['race_id'] != $race_id)return false;

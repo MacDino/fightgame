@@ -122,21 +122,22 @@ class Skill_Info {
     
     /** @desc 可学习技能列表,带着金钱 */
     public static function getStudySkillList($userId, $type){
+    	$type += 1290;//短期行为,有问题
     	$skill = array();
     	$res = array();
-    	$userSkill = self::getSkillList($userId);//用户已学习技能
+    	$userSkill = MySql::select(self::TN_SKILL_INFO, array('user_id'=>$userId, 'skill_type'=>$type), array('skill_id', 'skill_level'));//用户已学习技能
     	if(!empty($userSkill)){
 	    	foreach ($userSkill as $i=>$key) {
 	        	$res[$key['skill_id']] = array('skill_level' => $key['skill_level']);
 	        }
     	}
-        if($type == 1){
+        if($type == 1291){
         	$skillList = Skill::skillListWLGJ();
-        }elseif ($type == 2){
+        }elseif ($type == 1292){
         	$skillList = Skill::skillListFSGJ();
-        }elseif ($type == 3){
+        }elseif ($type == 1293){
         	$skillList = Skill::skillListBDJN();
-        }elseif ($type == 4){
+        }elseif ($type == 1294){
         	$skillList = Skill::skillListFYJN();
         }
     	$o = (int)'-1';

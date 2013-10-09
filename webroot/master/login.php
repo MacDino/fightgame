@@ -1,7 +1,7 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId 			= isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
+$userId 			= isset($_GET['user_id'])?$_GET['user_id']:'';//用户ID
 
 if(!empty($userId)){
 	setcookie('user_id', $userId);

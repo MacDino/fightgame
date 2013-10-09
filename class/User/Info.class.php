@@ -458,11 +458,12 @@ class User_Info
      * @return array
      */
 	public static function strengthenUserAttribute($data){
+        
 		if(!is_array($data))return FALSE;
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 + USER::ATTEIBUTEENHANCE);
+			$res[$key] = $value * (1 + User::ATTEIBUTEENHANCE);
 		}
 		return $res;
 	}
@@ -477,7 +478,7 @@ class User_Info
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 + USER::EMBOITEMENT);
+			$res[$key] = $value * (1 + User::EMBOITEMENT);
 		}
 		return $res;
 	}
@@ -492,7 +493,7 @@ class User_Info
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 - USER::ATTEIBUTEENHANCE);
+			$res[$key] = $value * (1 - User::ATTEIBUTEENHANCE);
 		}
 		return $res;
 	}
@@ -507,7 +508,7 @@ class User_Info
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 + USER::ATTEIBUTEENHANCE);
+			$res[$key] = $value * (1 + User::ATTEIBUTEENHANCE);
 		}
 		return $res;
 	}
