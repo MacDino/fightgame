@@ -296,6 +296,9 @@ class Fightable {
     //随机攻击技能
 	protected function randAttackSkill() {
         $attackSkillId = $this->randSkill($this->skills['attack']['list'], $this->skills['attack']['rate']);
+        if($attackSkillId > 0 && is_array($this->skillIds) && array_key_exists(ConfigDefine::SKILL_WLJ, $this->skillIds)) {
+            $attackSkillId = ConfigDefine::SKILL_WLJ;
+        }
 		return $this->last_attack_skill = $attackSkillId > 0 ? $attackSkillId : ConfigDefine::SKILL_PT;
 	}
 
