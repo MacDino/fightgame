@@ -397,7 +397,7 @@ class User_Info
 		}
 		
 		//技能加成
-		$skillAttribute = Skill_Info::getSkillList($userId, 1);
+		$skillAttribute = Skill_Info::getSkillList($userId);
 		
 		foreach ($skillAttribute as $a){
 			$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);

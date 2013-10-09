@@ -15,17 +15,79 @@ class Skill_Info {
     	return $res;
     }
     
+    /** @desc */
+    public static function equipSkill($userId){
+    	$Attribute = array(
+			ConfigDefine::SKILL_ZJ      				=> 0,//重击
+			ConfigDefine::SKILL_LJ      				=> 0,//连击
+		    ConfigDefine::SKILL_LXYZ    				=> 0,//灵犀一指
+		    ConfigDefine::SKILL_SWZH    				=> 0,//三昧真火
+		    ConfigDefine::SKILL_HFHY    				=> 0,//呼风唤雨
+		    ConfigDefine::SKILL_WLJ     				=> 0,//五雷决
+		    ConfigDefine::SKILL_WFX     				=> 0,//物防修
+		    ConfigDefine::SKILL_FFX     				=> 0,//法防修
+		    ConfigDefine::SKILL_GX      				=> 0,//攻修
+		    ConfigDefine::SKILL_FX      				=> 0,//法修
+		    ConfigDefine::SKILL_DZ      				=> 0,//锻造
+		    ConfigDefine::SKILL_FY      				=> 0,//防御
+		    ConfigDefine::SKILL_FJ      				=> 0,//反击
+		    ConfigDefine::SKILL_FD      				=> 0,//法盾
+		    ConfigDefine::SKILL_TX						=> 0,//体修
+		    ConfigDefine::SKILL_PT						=> 0,//普通攻击
+		);
+		
+		//装备加成
+		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);//根据ID取出所有装备,假设为getEquipInfoByUserId
+		foreach ($equipInfo as $p)
+		{//把装备中的属性点放在一起,属性值放在一起
+			//基础属性
+			$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
+			if(is_array($equipBaseAttribute)){
+				foreach ($equipBaseAttribute as $m=>$n)
+				{
+					if(array_key_exists($m, $Attribute))//装备中属性点部分
+					{
+						$Attribute[$m] += $n;
+					}
+				}
+			}
+			//扩展属性
+			$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
+			if(is_array($equipExpandAttribute)){
+				foreach ($equipExpandAttribute as $x=>$y)
+				{
+					if(array_key_exists($x, $Attribute))//装备中属性点部分
+					{
+						$Attribute[$x] += $y;
+					}
+				}
+			}
+		}
+		return $Attribute;
+    }
+    
     /**
      * @desc 获取角色技能等级列表
      */
-    public static function getSkillList($user_id, $is_use=false){
+    public static function getSkillList($userId, $is_use=false){
         $where      = array(
-            'user_id' => $user_id,
+            'user_id' => $userId,
         );
         if($is_use){
         	$where['is_use']  = 1;
         }
-        $res = MySql::select(self::TN_SKILL_INFO, $where);
+        $res = MySql::select(self::TN_SKILL_INFO, $where, array('skill_id', 'skill_level'));
+        $equip = self::equipSkill($userId);
+//        print_r($equip);
+        foreach ($res as $i=>$key){
+        	$res[$i]['skill_level'] += $equip[$key['skill_id']];
+        	unset($equip[$key['skill_id']]);
+        }
+        foreach ($equip as $o=>$key){
+        	$res[] = array(
+	        	'skill_id' => $o, 'skill_level' => $key,
+        	);
+        }
         return $res;
     }
     
@@ -39,6 +101,10 @@ class Skill_Info {
     	
 //    	echo $sql;
     	$res = MySql::query($sql);
+    	$equip = self::equipSkill($userId);
+        foreach ($res as $i=>$key){
+        	$res[$i]['skill_level'] += $equip[$key['skill_id']];
+        }
     	return $res;
     }
     
