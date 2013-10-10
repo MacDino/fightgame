@@ -16,11 +16,11 @@ if(!(is_array($userInfo) && count($userInfo))) {
     $msg  = '找不到用户';
     exit();
 }
-//if($userInfo['user_level'] < 30) {
-//    $code =1 ;
-//    $msg  = '等级不够';
-//    exit();
-//}
+if($userInfo['user_level'] < 30) {
+    $code =1 ;
+    $msg  = '等级不够';
+    exit();
+}
 
 $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
 
