@@ -50,7 +50,7 @@ try {
     }
 
     /**@todo 随即出来一个战斗对象**/
-    $targetUserId   = PK_Challenge::getUserOneNearFightTarget($userId, $fightStatus['win_continue_num'] > 0 ? TRUE : FALSE, $_REQUEST['lng'], $_REQUEST['lat']);
+    $targetUserId   = PK_Challenge::getUserOneNearFightTarget($userId, $fightStatus['win_continue_num'] > 0 ? TRUE : FALSE);
     //找不到战斗对象的时候，判断是否是连胜局。连胜局的话，表示此轮挑战结束
     if($targetUserId <= 0) {
         $code = 1;
