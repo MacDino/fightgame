@@ -14,7 +14,7 @@ try{
         $msg  = '不存在的用户';
         exit();
     }
-    
+
     $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CONQUER);
     if(!$isCanFight['is_free'] && $userInfo['pk_num'] <= 0) {
         $code = 1;
@@ -24,13 +24,14 @@ try{
 
     $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level'],'user');
     $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level'],'target');
+
+    $data['participant']['user']    = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+    $data['participant']['target']  = Fight::getPeopleFightInfo($userFightTeam[0], $targetUserInfo);
     /**获取战斗结果**/
     $fightResult            = Fight::multiFight($userFightTeam, $targetUserFightTeam);
 
     $isUserAlive = Fight::isTeamAlive($userFightTeam);
     $isTargetUserAlive = Fight::isTeamAlive($targetUserFightTeam);
-    $data['participant']['user']    = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
-    $data['participant']['target']  = Fight::getPeopleFightInfo($userFightTeam[0], $targetUserInfo);
     $data['fight_procedure']        = $fightResult['fight_procedure'];
     $data['result']['win']          = $isUserAlive && !$isTargetUserAlive ? 1 : 0;
     /**
