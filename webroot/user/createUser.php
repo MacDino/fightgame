@@ -2,20 +2,43 @@
 //创建角色
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$loginUserId     = isset($_REQUEST['login_user_id'])?$_REQUEST['login_user_id']:'';//账户ID
-$raceId     = isset($_REQUEST['race_id'])?(int)$_REQUEST['race_id']:'';//种族ID
+$masterId     = isset($_REQUEST['master_id'])?$_REQUEST['master_id']:'';//账户ID
+$raceId     = isset($_REQUEST['race_id'])?(int)$_REQUEST['race_id']:'1';//种族ID
 $userName   = isset($_REQUEST['user_name'])?$_REQUEST['user_name']:'';//用户昵称
-$areaId   = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'';//分区
+$areaId   = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'1';//分区
+$sex   = isset($_REQUEST['sex'])?$_REQUEST['sex']:'0';//性别
+//echo "$masterId==$raceId==$userName==$areaId==$sex";exit;
 
-if(!$raceId || !$loginUserId || !$userName || !$raceId)
+if(!$userName || !$masterId || !$areaId)
 {
-    $code = 1;
+    $code = 9;
     die;
+}
+
+$num = User_Info::verifyUserNum($masterId);
+if(!$num){
+	$code = 3;
+	$msg  = "只能创建3个角色";
+	die;
+}
+
+$name = User_Info::verifyUserName($userName);
+if(!$name){
+	$code = 4;
+	$msg  = "角色名已经被使用";
+	die;
 }
 
 try {
     //创建用户
-    $userId = User_Info::createUserInfo(array('race_id' => $raceId, 'user_name' => $userName, 'login_user_id' => $loginUserId, 'area_id' => $areaId));
+    $userId = User_Info::createUserInfo(array(
+    	'race_id' => $raceId, 
+    	'user_name' => $userName, 
+    	'master_id' => $masterId, 
+    	'area_id' => $areaId, 
+    	'sex' => $sex,
+    	));
+
     if($userId)
     {
         //创建蓝色0级装备一套
@@ -32,13 +55,16 @@ try {
         User_Property::createPropertylist($userId, User_Property::EQUIP_FORGE);
 		//初始化宝箱道具仓位
         User_Property::initTreasureBox($userId);
-
+        //初始化奖励列表
+        //初始化...
         //User_Property::createPropertylist($userId, User_Property::EQUIP_GROW);
-        $data['user_info'] = User_Info::getUserInfoByUserId($userId); 
+        $data = $userId;
+        $code = 0;
+   		$msg = 'ok';
         die;
     }
-    $code = 0;
-    $msg = 'ok';
+    
 } catch (Exception $e) {
     $code = 1;
+    die;
 }

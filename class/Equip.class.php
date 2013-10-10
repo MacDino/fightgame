@@ -9,9 +9,9 @@ class Equip
 	CONST EQUIP_COLOUR_PURPLE 	= 3805;//紫色
 	CONST EQUIP_COLOUR_ORANGE 	= 3806;//橙色
 
-	CONST EQUIP_BASE_ATTRIBUTE_GENERAL 	= 'general';//普通
-	CONST EQUIP_BASE_ATTRIBUTE_HIGH 	= 'high';//高
-	CONST EQUIP_BASE_ATTRIBUTE_VH 		= 'vh';//很高
+	CONST EQUIP_BASE_ATTRIBUTE_GENERAL 	= 3705;//普通
+	CONST EQUIP_BASE_ATTRIBUTE_HIGH 	= 3706;//高
+	CONST EQUIP_BASE_ATTRIBUTE_VH 		= 3707;//很高
 
 	CONST EQUIP_TYPE_ARMS 		= 3901;//武器
 	CONST EQUIP_TYPE_HELMET 	= 3902;//头盔
@@ -28,9 +28,9 @@ class Equip
 	CONST TABLE_EQUID_ATTRIBUTES = 'equip_attributes';
 
 	//创建一个装备
-	public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL)
+	public static function createEquip($equipColour, $userId = NULL, $equipLevel = 0, $equipType = NULL, $equipQuality = NULL, $equipSuitRaceId = NULL)
 	{
-		return Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality);
+		return Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType, $equipQuality, $equipSuitRaceId);
 	}
 
 

@@ -6,6 +6,12 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $petId     = isset($_REQUEST['pet_id'])?$_REQUEST['pet_id']:'';//人宠ID
 
+$userInfo = User_Info::isExistUser(array($userId, $petId));
+if(!$userInfo){
+	$code = 1;
+	$msg = "没有这个用户";
+}
+
 try {
     //显示好友
     $data = Pet::delPet($userId, $petId);

@@ -5,6 +5,18 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 1;
+	$msg = "没有这个用户";
+}
+
+$userInfo = User_Info::isExistUser(array($userId));
+if(empty($userInfo)){
+	$code = 2;
+	$msg = "没有这个用户";
+}
+
 try {
     //显示好友
     $data = Pet::ListPet($userId);
@@ -14,7 +26,7 @@ try {
     $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 1;
+    $code = 99;
     $msg = '99';
     die;    
 }

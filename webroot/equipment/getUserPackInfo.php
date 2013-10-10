@@ -19,6 +19,7 @@ try {
     foreach ($res as $i=>$key){
     	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
+    	$res[$i]['price'] = Equip_Info::priceEquip($key['user_equip_id']);
     }
     $data = $res;
     $code = 0;

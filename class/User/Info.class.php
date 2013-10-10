@@ -4,6 +4,25 @@ class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
 
+	/** @desc 是否存在这个用户,可同时检测多个*/
+	public static function isExistUser($arrayUserId){
+		if(is_array($arrayUserId)){
+			$num = 0;
+			foreach ($arrayUserId as $userId){
+				if(!is_numeric($userId))return FALSE;
+				$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+				if(empty($res)){
+					return FALSE;
+				}else{
+					$num += 1;
+				}
+			}
+			if($num == count($arrayUserId))return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+	
 	/**
      * 根据UserId获取用户基本信息
      * @param int $userId	用户ID
@@ -12,7 +31,7 @@ class User_Info
 	public static function getUserInfoByUserId($userId)
 	{
 		if(!is_numeric($userId))return FALSE;
-
+		
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
@@ -26,6 +45,11 @@ class User_Info
 //		echo $level[0]['level']."====".$userInfo['user_level'];
 		if($level[0]['level'] > $userInfo['user_level']){
 			self::addLevelNum($userId, $level[0]['level']);
+			//增加技能点
+			for($i=$userInfo['user_level']+1; $i<=$level[0]['level']; $i++){
+				$addSkill = Skill_Info::addSkillNum($i);
+				self::addPointNum($userId, $addSkill);
+			}
 			return $level[0]['level'];
 		}else{
 			return FALSE;
@@ -37,10 +61,47 @@ class User_Info
 	 * @param int $area		分区
 	 * @return 角色列表
 	 */
-	public static function listUser($loginUserId, $areaId){
-		if(!$loginUserId || !$areaId)return FALSE;
-		$res = MySql::select(self::TABLE_NAME, array('login_user_id' => $loginUserId, 'area_id' => $areaId));
+	public static function listUser($masterId, $areaId){
+//		echo "$masterId, $areaId";
+		if(empty($masterId) || !$areaId)return FALSE;
+		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area_id' => $areaId));
 		return $res;
+	}
+	
+	//根据条件搜索用户 后台用
+	public static function searchUser($array){
+		$res = MySql::select(self::TABLE_NAME, $array);
+		return $res;
+	}
+	
+	/** @desc 校验重名 */
+	public static function verifyUserName($userName){
+		$res = MySql::selectOne(self::TABLE_NAME, array('user_name' => $userName));
+//		print_r($res);
+		if(!empty($res)){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+	
+	/** @desc 校验数量 */
+	public static function verifyUserNum($masterId){
+		$res = MySql::selectCount(self::TABLE_NAME, array('master_id' => $masterId));
+//		echo $res;
+		if($res >= 3){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+	
+	/** @desc 删除好友,暂时不做 */
+	public static function delUser($userId){
+		//用户表打状态
+		//好友表
+		//人宠表
+		//咒符表
 	}
 
 	/**
@@ -53,22 +114,24 @@ class User_Info
 	{
 		if(!$data || !is_array($data))return FALSE;
         if(!isset($data['user_name']) || !isset($data['race_id']))return FALSE;
-        $userInfo = self::listUser($data['login_user_id'], $data['area_id']);
+        //$userInfo = self::listUser($data['master_id'], $data['area_id']);
         if($userInfo)throw new Exception('用户已存在', 100001);
-
         $res = MySql::insert(self::TABLE_NAME,
               array(
                   'user_name'     => $data['user_name'],
                   'race_id'       => $data['race_id'],
-                  'user_level'    => User::DEFAULT_USER_LEVEL,
-                  'experience'    => User::DEFAULT_EXP,
-                  'money'         => User::DEFAULT_MONEY,
-                  'ingot'         => User::DEFAULT_INGOT,
-                  'pack_num'      => User::DEFAULT_PACK_NUM,
-                  'friend_num'    => User::DEFAULT_FRIEND_NUM,
-                  'pet_num'       => User::DEFAULT_PET_NUM,
-                  'login_user_id'     => $data['login_user_id'],
-                  'area_id'          => $data['area_id'],
+                  'user_level' => User::DEFAULT_USER_LEVEL,
+			    	'experience' => User::DEFAULT_EXP,
+			    	'money'	=> User::DEFAULT_MONEY,
+			    	'ingot' => User::DEFAULT_INGOT,
+			    	'skil_point' => User::DEFAULT_SKILL,
+			    	'pack_num' => User::DEFAULT_PACK_NUM,
+			    	'friend_num' => User::DEFAULT_FRIEND_NUM,
+			    	'pet_num'	=> User::DEFAULT_PET_NUM,
+			    	'reputation' => User::DEFAULT_REPUTATION,
+                  	'master_id'     => $data['master_id'],
+                  	'area_id'          => $data['area_id'],
+                  	'sex'             => $data['sex'],
                 ), TRUE);
 		return $res;
 	}
@@ -94,6 +157,12 @@ class User_Info
 
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `$key` = `$key` $change $value WHERE user_id = $userId";
 		$res = MySql::execute($sql);
+		return $res;
+	}
+	
+	/** @desc 整体更新 */
+	public static function editUserInfo($array, $userId){
+		$res = MySql::update(self::TABLE_NAME, $array, array('user_id' => $userId));
 		return $res;
 	}
 
@@ -287,6 +356,7 @@ class User_Info
 		    ConfigDefine::USER_ATTRIBUTE_DEFENSE      	=> 0,//防御 - 成长属性
 		    ConfigDefine::USER_ATTRIBUTE_DODGE        	=> 0,//躲闪 - 成长属性
 		    ConfigDefine::USER_ATTRIBUTE_LUCKY        	=> 0,//幸运 - 成长属性
+		    ConfigDefine::RELEASE_PROBABILITY 		  	=> 0,//释放概率
 		);
 
 		//根据ID取出用户基本信息
@@ -327,9 +397,11 @@ class User_Info
 		}
 		
 		//技能加成
-		$skillAttribute = Skill_Info::getSkillList($userId, 1);
+		$skillAttribute = Skill_Info::getSkillList($userId);
+		
 		foreach ($skillAttribute as $a){
 			$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
+//			print_r($skillValue);
 			if(is_array($skillValue)){
 				foreach ($skillValue as $x=>$y)
 				{
@@ -357,6 +429,7 @@ class User_Info
 
 		//根据种族ID和总属性点算出基本属性值
 		$userAttributeValue = User_Attributes::getAttributesValue($userInfo['race_id'], $userBaseAttribute);
+//		print_r($userAttributeValue);
 
 		//把装备带来的属性值融合进基本属性值里
 		foreach ($valueAttribute as $key => $value){
@@ -367,21 +440,45 @@ class User_Info
 		if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
 			$userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] += $userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] * 0.01 * $skillAttribute[ConfigDefine::SKILL_TX]['skill_level'];
 		}	
+		
+		if(Equip_Info::isEmboitement($userId, $userInfo['race_id'])){//套装增益
+			$userAttributeValue = self::emboitementUserAttribute($userAttributeValue);
+		}
+		
+		if(User_Property::isuseAttributeEnhance($userId)){
+			$userAttributeValue = self::strengthenUserAttribute($userAttributeValue);
+		}
 
 		return $userAttributeValue;
 	}
 
 	/**
-     * 使用属性增强符咒
+     * @desc 使用属性增强符咒
      * @param array $data	属性数组
      * @return array
      */
 	public static function strengthenUserAttribute($data){
+        
 		if(!is_array($data))return FALSE;
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 + USER::ATTEIBUTEENHANCE);
+			$res[$key] = $value * (1 + User::ATTEIBUTEENHANCE);
+		}
+		return $res;
+	}
+	
+	/**
+     * @desc 套装增益
+     * @param array $data	属性数组
+     * @return array
+     */
+	public static function emboitementUserAttribute($data){
+		if(!is_array($data))return FALSE;
+
+		$res = array();
+		foreach ($data as $key => $value){
+			$res[$key] = $value * (1 + User::EMBOITEMENT);
 		}
 		return $res;
 	}
@@ -396,7 +493,7 @@ class User_Info
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 - USER::ATTEIBUTEENHANCE);
+			$res[$key] = $value * (1 - User::ATTEIBUTEENHANCE);
 		}
 		return $res;
 	}
@@ -411,7 +508,7 @@ class User_Info
 
 		$res = array();
 		foreach ($data as $key => $value){
-			$res[$key] = $value * (1 + USER::ATTEIBUTEENHANCE);
+			$res[$key] = $value * (1 + User::ATTEIBUTEENHANCE);
 		}
 		return $res;
 	}

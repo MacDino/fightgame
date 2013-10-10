@@ -61,7 +61,7 @@ class Monster
 		$base_money = self::getMonsterBaseMoney($monster['level']);
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'money_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'money_change');
-		return (int)self::_multiply($base_money, 1+$prefix_change, 1+$suffix_change);
+		return (int)self::_multiply($base_money, $prefix_change, $suffix_change);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Monster
 		$base_experience = self::getMonsterBaseExperience($monster['level']);
 		$prefix_change = Monster_PrefixConfig::getMonsterPrefixConfig($monster['prefix'], 'experience_change');
 		$suffix_change = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'experience_change');
-		return (int)self::_multiply($base_experience, 1+$prefix_change, 1+$suffix_change);
+		return (int)self::_multiply($base_experience, $prefix_change, $suffix_change);
 	}
 
 	/*
@@ -192,7 +192,9 @@ class Monster
 			}
 			//获取技能概率
 			$rand_skill_count = count($rand_skills);
-			$skills['rate'] = $skill_rate_list[$skill_type][$rand_skill_count];
+            foreach ($rand_skills as $skill => $skillV) {
+                $skills['rate'][$skill] = $skill_rate_list[$skill_type][$rand_skill_count];
+            }
 		}
 
 		return $ret;
@@ -225,8 +227,7 @@ class Monster
 		return $userAttributeList;
 	}
 
-	private static function _multiply()
-	{
+	private static function _multiply() {
 		$args = array_filter(func_get_args(), 'is_numeric');
 		return array_product($args);
 	}

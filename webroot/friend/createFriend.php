@@ -15,17 +15,10 @@ if(!$userId || !$friendId)
     die;
 }
 
-//查询用户ID和好友ID是否在用户表里存在
-//echo $userId;exit;
-$userInfo = User_Info::getUserInfoByUserId($userId);
-$friendInfo = User_Info::getUserInfoByUserId($friendId);
-//print_r($user_info);exit;
-if(!$userInfo || !$friendInfo)
-{
-	$code = 123;
-    //$msg = '用户信息错误!';
-    $msg = '2';
-    die;
+$userInfo = User_Info::isExistUser(array($userId, $friendId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
 }
 
 //查看是否还有位置添加好友

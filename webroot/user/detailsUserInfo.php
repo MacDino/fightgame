@@ -11,6 +11,13 @@ if(!$userId)
     die;
 }
 
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 2;
+	$msg = "没有这个用户";
+	die;
+}
+
 try {
 	//基本属性
 	$data['base_info'] = User_Info::getUserInfoByUserId($userId);
@@ -32,8 +39,8 @@ try {
     $msg = 'ok';
 //    die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
+    $code = 99;
+    $msg = '内部错误';
     die;    
 }
 

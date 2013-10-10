@@ -42,13 +42,15 @@ try {
 
     $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
 
-    if($userInfo['user_level'] > 40) {
+    if($userInfo['user_level'] > 10) {
         $petInfo    = Pet::usedPet($userId);
         if(is_array($petInfo) && count($petInfo)) {
             $userPetInfo = User_Info::getUserInfoByUserId($petInfo['pet_id']);
             //人宠进入队伍
             $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'],'pet');
             $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $userPetInfo);
+        }else{
+        	$data['participant']['pet'] = NULL;//没有人宠时给空值
         }
     }
 

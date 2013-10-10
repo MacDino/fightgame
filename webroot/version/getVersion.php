@@ -73,6 +73,17 @@ if(empty($VersionId)){$VersionId = array();}
 		$data['TITLE_VERSION']['value'] = Version::getTitleList();
 	}
 	
+	//基本属性
+	if(array_key_exists('ATTRIBUTE_VERSION', $VersionId)){
+		if(Version::ATTRIBUTE_VERSION > $VersionId['ATTRIBUTE_VERSION']){
+			$data['ATTRIBUTE_VERSION']['code'] = Version::ATTRIBUTE_VERSION;
+			$data['ATTRIBUTE_VERSION']['value'] = Version::getAttributeList();
+		}
+	}else{
+		$data['ATTRIBUTE_VERSION']['code'] = Version::ATTRIBUTE_VERSION;
+		$data['ATTRIBUTE_VERSION']['value'] = Version::getAttributeList();
+	}
+	
 	//升级经验
 	if(array_key_exists('EXP_VERSION', $VersionId)){
 		if(Version::EXP_VERSION > $VersionId['EXP_VERSION']){

@@ -8,9 +8,9 @@ class Equip_Info
 	public static function getEquipListByUserId($userId, $is_used = FALSE){
         if($userId){
         	if(!$is_used){
-            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+            	$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId,), array(), array('is_used desc', 'user_equip_id desc'));
         	}else{
-        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1));
+        		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1), array(), array('is_used desc', 'user_equip_id desc'));
         	}
         }else{
             return FALSE;    
@@ -18,9 +18,16 @@ class Equip_Info
         return $res;
     }
     
+    //获取背包内装备数量
+    public static function getEquipNum($userId){
+    	if(!$userId)return ;
+    	$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+    	return $res;
+    }
+    
     //按照类别获取装备
     public static function getEquipInfoByType($equipType, $userId, $is_used = FALSE){
-    	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId));
+    	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId), array(), array('is_used desc', 'user_equip_id desc'));
     	return $res;
     }
     
@@ -86,14 +93,13 @@ class Equip_Info
     }
 
     //装备价格 add by zhengyifeng 76387051@qq.com  2013.9.13
-    public static function priceEquip($userId, $equipId)
+    public static function priceEquip($equipId)
     {
-    	$sql = "SELECT p.equip_price as price FROM user_equip e, equip_price p 
-    					WHERE e.equip_colour = p.equip_colour AND e.equip_level = p.equip_level AND e.user_equip_id = '$equipId'";
-//    	echo $sql;exit;
-    	$res = MySql::query($sql);
-//    	var_dump($res);
-    	return $res[0]['price'];
+    	$equipInfo = self::getEquipInfoById($equipId);
+    	
+    	$res = $equipInfo['equip_level'] / 10 * 3 * $equipInfo['equip_level'] * (1 + ($equipInfo['equip_colour'] - 3801)/5) + 7;
+
+    	return $res;
     }
     
     //删除(卖出)装备
@@ -108,7 +114,7 @@ class Equip_Info
     	//获取此装备信息,主要是equip_type
 //    	echo 3333;
     	$equipInfo = self::getEquipInfoById($equipId);
-    	var_dump($equipInfo);
+//    	var_dump($equipInfo);
     	//下掉原来同类装备
 		$oldRes = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_id' => $userId, 'equip_type' => $equipInfo['equip_type'], 'is_used' => 1));
     	//把装备安装上去
@@ -116,5 +122,22 @@ class Equip_Info
     	return $res;
     }
     
+    //脱下装备
+    public static function dropEquip($equipId, $userId=FALSE ){
+    	$res = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_equip_id' => $equipId));
+    	return $res;
+    }
+    
+    //判断是否为套装
+    public static function isEmboitement($userId, $race_id){
+    	//武器的颜色和种族
+    	$equipInfo = self::getEquipListByUserId($userId, true);
+    	if(count($equipInfo) < 6)return false;//不到6个自然凑不起来套装
+    	foreach ($equipInfo as $i){//不全是橙色装备或者不是本种族装备
+    		if($i['equip_colour'] != Equip::EQUIP_COLOUR_ORANGE || $i['race_id'] != $race_id)return false;
+    	}
+    	
+    	return true;
+    }
     
 }
