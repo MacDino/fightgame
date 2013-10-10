@@ -116,37 +116,28 @@ class PK_Challenge{
         return $return;
     }
 
-    public static function getUserOneNearFightTarget($userId, $isContinueWin = FALSE, $lng = '', $lat = '') {
+    public static function getUserOneNearFightTarget($userId, $isContinueWin = FALSE) {
         if($userId <= 0) {
             return FALSE;
         }
-        if(!$lng || !$lat) {
-            $userLbs = MySql::selectOne('user_lbs', array('user_id' => $userId));
-            if(is_array($userLbs) && count($userLbs)) {
-                $lng = $userLbs['longitude'];
-                $lat = $userLbs['latitude'];
+        $friends = User_Info::nearUser($userId);
+        if($isContinueWin) {
+            //从cache里拿出已经打过的人的ids
+            $fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
+        }
+        foreach ((array)$friends as $user) {
+            if($user['user_id'] > 0) {
+                if(is_array($fightedTarget) && count($fightedTarget)) {
+                    if(in_array($user['user_id'], $fightedTarget)) {
+                        continue;
+                    }
+                }
+                $friendIds[] = $user['user_id'];
             }
         }
-        if($lat && $lng) {
-            $friends = Friend_Info::getNearbyFriend($userId, $lng, $lat);
-            if($isContinueWin) {
-                //从cache里拿出已经打过的人的ids
-                $fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
-            }
-            foreach ((array)$friends as $user) {
-                if($user['user_id'] > 0) {
-                    if(is_array($fightedTarget) && count($fightedTarget)) {
-                        if(in_array($user['user_id'], $fightedTarget)) {
-                            continue;
-                        }
-                    }
-                    $friendIds[] = $user['user_id'];
-                }
-            }
-            if(is_array($friendIds) && count($friendIds)) {
-                shuffle($friendIds);
-                return $friendIds[0];
-            }
+        if(is_array($friendIds) && count($friendIds)) {
+            shuffle($friendIds);
+            return $friendIds[0];
         }
         return FALSE;
     }

@@ -22,7 +22,7 @@ class User_Info
 			return FALSE;
 		}
 	}
-	
+
 	/**
      * 根据UserId获取用户基本信息
      * @param int $userId	用户ID
@@ -31,11 +31,11 @@ class User_Info
 	public static function getUserInfoByUserId($userId)
 	{
 		if(!is_numeric($userId))return FALSE;
-		
+
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
-	
+
 	/** @desc 升级判断 */
 	public static function isLevel($userId){
 		$userInfo = self::getUserInfoByUserId($userId);
@@ -67,13 +67,13 @@ class User_Info
 		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area_id' => $areaId));
 		return $res;
 	}
-	
+
 	//根据条件搜索用户 后台用
 	public static function searchUser($array){
 		$res = MySql::select(self::TABLE_NAME, $array);
 		return $res;
 	}
-	
+
 	/** @desc 校验重名 */
 	public static function verifyUserName($userName){
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_name' => $userName));
@@ -84,7 +84,7 @@ class User_Info
 			return TRUE;
 		}
 	}
-	
+
 	/** @desc 校验数量 */
 	public static function verifyUserNum($masterId){
 		$res = MySql::selectCount(self::TABLE_NAME, array('master_id' => $masterId));
@@ -95,7 +95,7 @@ class User_Info
 			return TRUE;
 		}
 	}
-	
+
 	/** @desc 删除好友,暂时不做 */
 	public static function delUser($userId){
 		//用户表打状态
@@ -159,7 +159,7 @@ class User_Info
 		$res = MySql::execute($sql);
 		return $res;
 	}
-	
+
 	/** @desc 整体更新 */
 	public static function editUserInfo($array, $userId){
 		$res = MySql::update(self::TABLE_NAME, $array, array('user_id' => $userId));
@@ -308,7 +308,7 @@ class User_Info
 		$res = MySql::query($sql);
 		return $res;
 	}
-	
+
 	//增加声望
 	public static function addReputationNum($userId, $num)
 	{
@@ -395,10 +395,10 @@ class User_Info
 				}
 			}
 		}
-		
+
 		//技能加成
 		$skillAttribute = Skill_Info::getSkillList($userId);
-		
+
 		foreach ($skillAttribute as $a){
 			$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
 //			print_r($skillValue);
@@ -415,7 +415,7 @@ class User_Info
 				}
 			}
 		}
-		
+
 		//根据种族和等级取出基本属性点
 		$userBaseAttribute = User_Attributes::getBaseAttribute($userInfo['race_id'], $userInfo['user_level']);
 
@@ -435,16 +435,16 @@ class User_Info
 		foreach ($valueAttribute as $key => $value){
 			$userAttributeValue[$key] += $value;
 		}
-		
+
 		//体修加成
 		if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
 			$userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] += $userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] * 0.01 * $skillAttribute[ConfigDefine::SKILL_TX]['skill_level'];
-		}	
-		
+		}
+
 		if(Equip_Info::isEmboitement($userId, $userInfo['race_id'])){//套装增益
 			$userAttributeValue = self::emboitementUserAttribute($userAttributeValue);
 		}
-		
+
 		if(User_Property::isuseAttributeEnhance($userId)){
 			$userAttributeValue = self::strengthenUserAttribute($userAttributeValue);
 		}
@@ -458,7 +458,7 @@ class User_Info
      * @return array
      */
 	public static function strengthenUserAttribute($data){
-        
+
 		if(!is_array($data))return FALSE;
 
 		$res = array();
@@ -467,7 +467,7 @@ class User_Info
 		}
 		return $res;
 	}
-	
+
 	/**
      * @desc 套装增益
      * @param array $data	属性数组
@@ -512,12 +512,12 @@ class User_Info
 		}
 		return $res;
 	}
-	
+
 	public static function levelUp($userId, $level = NULL){
 		//调用奖励
-		
+
 	}
-	
+
 	//锻造成功率 isUse 是否使用锻造符
 	public static function forgeOdds($userId, $isUse = FALSE){
 		//技能本身成功率
@@ -526,19 +526,19 @@ class User_Info
 		//幸运加的成功率
 		$lucky = self::getUserInfoFightAttribute($userId, TRUE);
 		$luckyOdds = $lucky[ConfigDefine::USER_ATTRIBUTE_LUCKY];
-		//锻造符加的成功率 
+		//锻造符加的成功率
 		if(!empty($isUse)){
 			$amulet = User::FORGEODDS;
 		}
-		
+
 		return $skillOdds;
 	}
-	
+
 	/** @desc 查找等级在10之内的用户 */
 	public static function nearUser($userId){
 		$sql = "select * from user_info where user_level > user_level-11 and user_level < user_level+11 and user_id != $userId";
 		$res = MySql::query($sql);
-		return $sql;
+		return $res;
 	}
-	
+
 }
