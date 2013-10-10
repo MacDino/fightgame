@@ -534,5 +534,11 @@ class User_Info
 		return $skillOdds;
 	}
 	
+	/** @desc 查找等级在10之内的用户 */
+	public static function nearUser($userId){
+		$sql = "select * from user_info where user_level > user_level-11 and user_level < user_level+11 and user_id != $userId";
+		$res = MySql::query($sql);
+		return $sql;
+	}
 	
 }
