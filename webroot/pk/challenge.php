@@ -88,14 +88,18 @@ try {
     $isTargetUserAlive  = Fight::isTeamAlive($targetUserFightTeam);
 
     $data['fight_procedure'] = $fightResult['fight_procedure'];
-    if($isUserAlive && !$isTargetUserAlive) {
+    if(!$isUserAlive && $isTargetUserAlive || $fightResult['is_too_long'] == 1) {
+        $data['result']             = PK_Challenge::dealResult($userId);
+        $data['result']['win']      = 0;
+        $data['result']['is_dead']  = 1;
+        if($fightResult['is_too_long']) {
+            $data['result']['is_dead'] = 0;
+        }
+        PK_Challenge::whenFail($userId);
+    } else {
         $data['result']['win'] = 1;
         /**@todo 记录声望，是否连胜5场，是的话记录积分，记录连胜场次**/
         PK_Challenge::whenWin($userId);
-    } else {
-        $data['result'] = PK_Challenge::dealResult($userId);
-        $data['result']['win'] = 0;
-        PK_Challenge::whenFail($userId);
     }
     //记录最后一次战斗信息
     PK_Challenge::setLastChallengeInfo($userId, $data, $fightResult['use_time']);

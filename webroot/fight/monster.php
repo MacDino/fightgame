@@ -66,7 +66,7 @@ try {
     if(!$isUserAlive && $isMonsterAlive || $fightResult['is_too_long'] == 1) {
         $data['result']['win']      = 0;
         $data['result']['is_dead']  = 1;
-        if($fightResult['is_too_log'] == 1) {
+        if($fightResult['is_too_long'] == 1) {
             $data['result']['is_dead'] = 0;
         }
         $msg    = '您被打败了';
