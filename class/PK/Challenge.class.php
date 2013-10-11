@@ -37,6 +37,7 @@ class PK_Challenge{
         if($userId <= 0) {
             return FALSE;
         }
+
         $existRes = self::getResByUserId($userId);
         $data = array(
             'user_id' => intval($userId),
@@ -114,6 +115,7 @@ class PK_Challenge{
         $return['ranking_all']      = self::rankingAll($userId);
         $return['ranking_friend']   = self::rankingFriend($userId);
         PK_Conf::setChallengeTimes($userId);
+        self::delAlreadyUserIds($userId);
         return $return;
     }
 
@@ -188,5 +190,16 @@ class PK_Challenge{
         $cacheValue['use_time']    = $cacheTime;
         $cacheKey   = self::PK_FIGHTED_RESULT_KEY.$userId;
         return Cache::set($cacheKey, $cacheValue, $cacheTime);
+    }
+
+    public static function delAlreadyUserIds($userId) {
+        if($userId > 0) {
+            $cacheKey = self::PK_FIGHTED_USER_ID.$userId;
+            $cacheValue = Cache::get($cacheKey);
+            if(is_array($cacheValue) && count($cacheValue)) {
+                return Cache::del($cacheKey);
+            }
+        }
+        return FALSE;
     }
 }

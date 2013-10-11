@@ -25,8 +25,10 @@ if($userInfo['user_level'] < 30) {
 //cache中获得
 $lastResult = PK_Challenge::getLastChallengeInfo($userId);
 if(is_array($lastResult) && count($lastResult)) {
-    $data = $lastResult;
-    exit();
+    if(time() - $lastResult['update_time'] < $lastResult['use_time']) {
+        $data = $lastResult;
+        exit();
+    }
 }
 
 $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
