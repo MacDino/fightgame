@@ -31,11 +31,11 @@ if(is_array($lastResult) && count($lastResult)) {
 
 $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
 
-if(!$isCanFight['is_can']) {
-    $code = 1;
-    $msg  = '没有挑战次数了';
-    exit();
-}
+//if(!$isCanFight['is_can']) {
+//    $code = 1;
+//    $msg  = '没有挑战次数了';
+//    exit();
+//}
 try {
     //连胜30分钟的跳出计算
     $fightStatus = PK_Challenge::getResByUserId($userId);
