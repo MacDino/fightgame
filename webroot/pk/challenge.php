@@ -25,8 +25,12 @@ if($userInfo['user_level'] < 30) {
 //cache中获得
 $lastResult = PK_Challenge::getLastChallengeInfo($userId);
 if(is_array($lastResult) && count($lastResult)) {
-    $data = $lastResult;
-    exit();
+    if(time() - $lastResult['update_time'] < $lastResult['use_time']) {
+        $data = $lastResult;
+        unset($data['use_time']);
+        unset($data['update_time']);
+        exit();
+    }
 }
 
 $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
@@ -88,6 +92,7 @@ try {
     $isTargetUserAlive  = Fight::isTeamAlive($targetUserFightTeam);
 
     $data['fight_procedure'] = $fightResult['fight_procedure'];
+
     if(!$isUserAlive && $isTargetUserAlive || $fightResult['is_too_long'] == 1) {
         $data['result']             = PK_Challenge::dealResult($userId);
         $data['result']['win']      = 0;
@@ -101,6 +106,7 @@ try {
         /**@todo 记录声望，是否连胜5场，是的话记录积分，记录连胜场次**/
         PK_Challenge::whenWin($userId);
     }
+    $data['result']['use_time'] = $fightResult['use_time'];
     //记录最后一次战斗信息
     PK_Challenge::setLastChallengeInfo($userId, $data, $fightResult['use_time']);
     PK_Challenge::updateFightedUserIdInCache($userId, $targetUserId, $fightStatus);
