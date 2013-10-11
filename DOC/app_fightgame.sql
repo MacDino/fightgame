@@ -1082,13 +1082,14 @@ CREATE TABLE `user_happy_month_log` (
 
 DROP TABLE IF EXISTS `user_pk_challenge_res`;
 CREATE TABLE `user_pk_challenge_res` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `win_num` int(11) NOT NULL COMMENT '战胜总场次',
-  `win_continue_num` int(11) NOT NULL COMMENT '连胜场数',
-  `update_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+	`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` int(11) NOT NULL,
+	`fight_num` int(11) NOT NULL,
+	`win_num` int(11) NOT NULL COMMENT '战胜总场次',
+	`win_continue_num` int(11) NOT NULL COMMENT '连胜场数',
+	`update_time` datetime NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=`InnoDB` AUTO_INCREMENT=1 DEFAULT CHARACTER SET utf8;
 -- MySQL dump 10.13  Distrib 5.1.60, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: app_fightgame
