@@ -8,6 +8,7 @@ class PK_Challenge{
 
     const TABLE_NAME = 'user_pk_challenge_res';
     const PK_FIGHTED_USER_ID = 'user_pk_fighted_user_ids_';
+    const PK_FIGHTED_RESULT_KEY = 'user_pk_challenge_';
 
     //记录用户胜利的场次，只在胜利的时候进行保存结果
     public static function whenWin($userId) {
@@ -168,5 +169,24 @@ class PK_Challenge{
             Cache::del($cacheKey);
         }
         return ;
+    }
+
+    public static function getLastChallengeInfo($userId) {
+        if($userId <= 0) {
+            return FALSE;
+        }
+        $cacheKey = self::PK_FIGHTED_RESULT_KEY.$userId;
+        $cacheValue = Cache::get($cacheKey);
+        return $cacheValue;
+    }
+
+    public static function setLastChallengeInfo($userId, $cacheValue, $cacheTime) {
+        if($userId <= 0 || $cacheTime <= 0 || !(is_array($cacheValue) && count($cacheValue))) {
+            return FALSE;
+        }
+        $cacheValue['update_time'] = time();
+        $cacheValue['use_time']    = $cacheTime;
+        $cacheKey   = self::PK_FIGHTED_RESULT_KEY.$userId;
+        return Cache::set($cacheKey, $cacheValue, $cacheTime);
     }
 }

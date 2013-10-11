@@ -22,6 +22,13 @@ if($userInfo['user_level'] < 30) {
     exit();
 }
 
+//cache中获得
+$lastResult = PK_Challenge::getLastChallengeInfo($userId);
+if(is_array($lastResult) && count($lastResult)) {
+    $data = $lastResult;
+    exit();
+}
+
 $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
 
 if(!$isCanFight['is_can']) {
@@ -90,6 +97,8 @@ try {
         $data['result']['win'] = 0;
         PK_Challenge::whenFail($userId);
     }
+    //记录最后一次战斗信息
+    PK_Challenge::setLastChallengeInfo($userId, $data, $fightResult['use_time']);
     PK_Challenge::updateFightedUserIdInCache($userId, $targetUserId, $fightStatus);
 } catch (Exception $exc) {
     $code = $e->getCode();
