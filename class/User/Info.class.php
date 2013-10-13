@@ -540,5 +540,26 @@ class User_Info
 		$res = MySql::query($sql);
 		return $res;
 	}
+	
+	/** @desc 战斗力计算 */
+	public static function powerUser($userId){
+		$power = 0;
+		
+		//人物属性
+		$attribute = self::getUserInfoFightAttribute($userId, true);
+		foreach ($attribute as $i=>$key){
+			if($i == ConfigDefine::RELEASE_PROBABILITY){
+				$power += $key * 1000;
+			}else{
+				$power += $key;
+			}
+		}
+		
+		//技能等级
+		$skillLevel = Skill_Info::totalSkillLevel($userId);
+		$power += $skillLevel;
+
+		return $power;
+	}
 
 }

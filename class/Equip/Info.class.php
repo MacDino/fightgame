@@ -92,7 +92,7 @@ class Equip_Info
         return FALSE;
     }
 
-    //装备价格 add by zhengyifeng 76387051@qq.com  2013.9.13
+    //装备价格
     public static function priceEquip($equipId)
     {
     	$equipInfo = self::getEquipInfoById($equipId);
@@ -138,6 +138,29 @@ class Equip_Info
     	}
     	
     	return true;
+    }
+    
+    //分解装备
+    public static function resolveEquip($equipId){
+    	$equipInfo = self::getEquipInfoById($equipId);
+    	
+    	if($equipInfo['equip_colour'] == Equip::EQUIP_COLOUR_BLUE){
+    		$res = rand(1 , 20);//蓝色5%几率
+    	}elseif ($equipInfo['equip_colour'] == Equip::EQUIP_COLOUR_PURPLE){
+    		$res = rand(1 , 5);//紫色20%几率
+    	}elseif ($equipInfo['equip_colour'] == Equip::EQUIP_COLOUR_ORANGE){
+    		$res = rand(1 , 2);//紫色20%几率
+    	}else{
+    		return false;//蓝色装备以下不能分解
+    	}
+    	
+    	if($res == 1){
+    		Iron_Info::addIron($userId, $level);//增加精铁
+    		self::delEquip($equipId);//删除装备
+    		return true;
+    	}else{
+    		return false;
+    	}
     }
     
 }

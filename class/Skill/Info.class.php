@@ -47,7 +47,7 @@ class Skill_Info {
 				{
 					if(array_key_exists($m, $Attribute))//装备中属性点部分
 					{
-						$Attribute[$m] += $n;
+						$attribute[$m] += $n;
 					}
 				}
 			}
@@ -58,12 +58,12 @@ class Skill_Info {
 				{
 					if(array_key_exists($x, $Attribute))//装备中属性点部分
 					{
-						$Attribute[$x] += $y;
+						$attribute[$x] += $y;
 					}
 				}
 			}
 		}
-		return $Attribute;
+		return $attribute;
     }
     
     /**
@@ -89,6 +89,22 @@ class Skill_Info {
         	);
         }
         return $res;
+    }
+    
+    /** @desc 总技能等级 */
+    public static function totalSkillLevel($userId){
+    	$skillLevel = 0;
+    	$skillInfo = self::getSkillList($userId);
+    	foreach ($skillInfo as $i){
+    		$skillLevel += $i['skill_level'];
+    	}
+    	
+    	$equipSkill = self::equipSkill($userId);
+    	foreach ($equipSkill as $a=>$b){
+    		$skillLevel += $b;
+    	}
+    	
+    	return $skillLevel;
     }
     
     /** @desc 获取用户正在使用技能 1为攻击2为防御*/
