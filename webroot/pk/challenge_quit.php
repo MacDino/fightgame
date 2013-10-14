@@ -12,7 +12,10 @@ if($userId < 0) {
 }
 try {
     //显示战果
-    $data['result'] = PK_Challenge::dealResult($userId);
+    $data['result'] = PK_Challenge::dealResult($userId, TRUE);
+    //强制退出不打了。设置连胜为0，删除已战斗过的用户ids
+    PK_Challenge::setWinContinueNumZero($userId);
+    PK_Challenge::delFightedUserIds($userId);
 } catch (Exception $exc) {
     $code   = $exc->getCode();
     $msg    = $exc->getMessage();
