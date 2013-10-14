@@ -12,6 +12,15 @@ class Props_Info{
 		$res = MySql::select(self::TABLE_NAME);
 		return $res;
 	}
+	public static function getPropsListByCateId($cateId){
+		if($cateId) {
+	    	$where = array(
+	     		'props_cate_id' => $cateId,     
+	    	);
+		}
+		$res = MySql::select(self::TABLE_NAME, $where);
+		return $res;
+	}
 
 	public static function getCateList(){
 		$res = MySql::select("props_cate");

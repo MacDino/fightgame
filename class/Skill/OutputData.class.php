@@ -114,7 +114,7 @@ class Skill_OutputData
     //物攻修-被动技能
     public static function wgxSkill($hurt, $skillLevel)
     {
-        return $hurt = $hurt + $hurt*0.02*0.1*$skillLevel + 5*0.1*$skillLevel; 
+    	return $hurt*pow(1.002, $skillLevel) + 0.5*(pow(1.002, $skillLevel) -1)/(1.002 -1);
     }
     //法攻修-被动技能
     public static function fgxSkill($hurt, $skillLevel)
