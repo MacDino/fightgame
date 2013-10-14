@@ -594,5 +594,7 @@ class User_Info
 
 		return $power;
 	}
+	
+	/** @desc 记录用户坐标 */
 
 }
