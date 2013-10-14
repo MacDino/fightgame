@@ -200,6 +200,6 @@ class ConfigDefine
 		);
 		return $res;
 	}
-//	public static function
+	public static function
 
 }
