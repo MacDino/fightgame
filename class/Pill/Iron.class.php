@@ -1,6 +1,6 @@
 <?php
 //精铁
-class Iron_Info {
+class Pill_Iron {
 	CONST TABLE_NAME = 'iron_info';
 	
 	/** @desc 增加精铁 */

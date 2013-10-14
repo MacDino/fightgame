@@ -1,6 +1,6 @@
 <?php
 //内丹
-class Pill_Info {
+class Pill_Pill {
 	CONST TABLE_NAME = 'pill_info';
 
 	//内丹属性计算
@@ -41,4 +41,5 @@ class Pill_Info {
 		
 		return $res;
 	}
+	
 }

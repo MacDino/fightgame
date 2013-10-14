@@ -12,7 +12,7 @@ if(!$userId || !$level || !$num){
 	die;
 }
 
-$ironNum = Iron_Info::getIronNumByLevel($userId, $level);//精铁数量
+$ironNum = Pill_Iron::getIronNumByLevel($userId, $level);//精铁数量
 if($num > $ironNum){
 	$code = 4;
 	$msg = "您没有这么多精铁!";
@@ -20,8 +20,8 @@ if($num > $ironNum){
 }
 
 try {
-	$price = Iron_Info::ironPrice($level, $num);
-    $iron = Iron_Info::subtractIron($userId, $level, $num);//减少精铁
+	$price = Pill_Iron::ironPrice($level, $num);
+    $iron = Pill_Iron::subtractIron($userId, $level, $num);//减少精铁
     $money = User_Info::addMoney($userId, $price);//增加钱
     $data = $price;
 //    print_r($data);

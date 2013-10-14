@@ -16,6 +16,14 @@ if(!$userId || !is_array($equipId))
     die;
 }
 //echo 222;exit;
+
+$verify = Equip_Info::verifyEquipIsUsed($equipId);
+if($verify > 0){
+	$code = 5;
+    $msg = '有装备正在使用中';
+    die;
+}
+
 try {
     //循环装备ID得到总价值
     $price = 0;

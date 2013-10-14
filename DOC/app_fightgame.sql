@@ -1283,6 +1283,49 @@ CREATE TABLE `props_cate` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+-- ----------------------------
+-- Table structure for `iron_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `iron_info`;
+CREATE TABLE `iron_info` (
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `level` smallint(4) NOT NULL COMMENT '精铁等级',
+  `num` smallint(6) DEFAULT '0' COMMENT '精铁数量',
+  PRIMARY KEY (`user_id`,`level`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `pill_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `pill_info`;
+CREATE TABLE `pill_info` (
+  `pill_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '内丹ID',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `pill_type` smallint(6) DEFAULT NULL COMMENT '类型',
+  `pill_layer` tinyint(4) DEFAULT '1' COMMENT '层',
+  `pill_level` tinyint(4) DEFAULT '1' COMMENT '级',
+  PRIMARY KEY (`pill_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pill_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `stone_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `stone_info`;
+CREATE TABLE `stone_info` (
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `stone_type` smallint(4) NOT NULL DEFAULT '0' COMMENT '阵法类型',
+  `num` smallint(4) DEFAULT '0' COMMENT '阵法石数量',
+  PRIMARY KEY (`user_id`,`stone_type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of stone_info
+-- ----------------------------
+
 --
 -- Dumping data for table `props_cate`
 --

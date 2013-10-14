@@ -1,6 +1,6 @@
 <?php
 //阵法石
-class Stone_Info {
+class Pill_Stone {
 	
 	CONST TABLE_NAME = 'stone_info';
 	
