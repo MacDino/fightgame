@@ -18,7 +18,8 @@ class Pill_Stone {
 	
 	/** @desc 减少阵法石 */
 	public static function subtractStone($userId, $type, $num = 1){
-		$res = MySql::update(self::TABLE_NAME, array('num' => 'num'-$num), array('user_id' => $userId, 'stone_type' => $type));
+		$numNow = self::getStoneNumBytype($userId, $type);
+		$res = MySql::update(self::TABLE_NAME, array('num' => $numNow-$num), array('user_id' => $userId, 'stone_type' => $type));
 		return $res;
 	}
 	
@@ -30,8 +31,8 @@ class Pill_Stone {
 	
 	/** @desc 查询单种阵法石数量 */
 	public static function getStoneNumBytype($userId, $type){
-		$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId, 'stone_type' => $type));
-		return $res;
+		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'stone_type' => $type), array('num'));
+		return $res['num'];
 	} 
 
 	/** @desc 出售价格 */

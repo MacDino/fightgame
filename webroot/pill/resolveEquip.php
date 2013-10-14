@@ -25,7 +25,7 @@ try {
 	foreach ($equipId as $i){
 		$equipInfo = Equip_Info::getEquipInfoById($i);
 		$level = $equipInfo['equip_level'] / 10;
-		$res = Equip_Info::resolveEquip($equipInfo['user_equip_id'], $level);
+		$res = Equip_Info::resolveEquip($userId, $equipInfo['user_equip_id'], $level);
 		if($res){//成功
 			if(!empty($data[$level])){
 				$data[$level] += 1;

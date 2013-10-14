@@ -19,10 +19,26 @@ class Skill_Common {
     //随机获取系数
     public static function ratioValue()
     {
+    	//add by zhengyifeng 10.14
+    	$violentPill = Pill_Pill::usedPill($userId);//暴击内丹
+    	if($violentPill['pill_type'] == Pill::YUHENGNEIDAN){
+    		$isViolent = 1;
+    		$violentInfo = Pill::pillAttribute($violentPill['pill_type'], $violentPill['pill_layer'], $violentPill['pill_level']);
+    	}
+    	
+    	
         $ratio = 0.05;
+        
+        //add by zhengyifeng 10.14
+        if($isViolent == 1){$ratio += $violentInfo['probability'];}//暴击概率
+        
         $ratioValue = 1;
         $ratioKey = PerRand::getRandResultKey(array($ratio));
         if($rationKey)$ratioValue = 2;
+        
+        //add by zhengyifeng 10.14
+        if($isViolent == 1){$ratioValue += $violentInfo['value'];}//暴击伤害
+        
         return $ratioValue; 
     }
     //随机获取用用户力量1%-5% 

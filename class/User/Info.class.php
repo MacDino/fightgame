@@ -440,11 +440,28 @@ class User_Info
 		if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
 			$userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] += $userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] * 0.01 * $skillAttribute[ConfigDefine::SKILL_TX]['skill_level'];
 		}
+		
+		//内丹加成
+		$pillInfo = Pill_Pill::usedPill($userId);
+		if($pillInfo['pill_type'] != YUHENGNEIDAN){
+			$pillValue = Pill::pillAttribute($pillInfo['pill_type'], $pillInfo['pill_layer'], $pillInfo['pill_level']);
+			foreach ($pillValue as $key=>$value){
+				$userAttributeValue[$key] += $value;
+			}
+		}
+		
+		//人宠异性加成
+		$petInfo = Pet::usedPet($userId);
+		if($petInfo['sex'] != $userInfo['sex']){
+			$userAttributeValue = self::isomerismUserAttribute($userAttributeValue);
+		}
 
-		if(Equip_Info::isEmboitement($userId, $userInfo['race_id'])){//套装增益
+		//套装增益
+		if(Equip_Info::isEmboitement($userId, $userInfo['race_id'])){
 			$userAttributeValue = self::emboitementUserAttribute($userAttributeValue);
 		}
 
+		//符咒增益
 		if(User_Property::isuseAttributeEnhance($userId)){
 			$userAttributeValue = self::strengthenUserAttribute($userAttributeValue);
 		}
@@ -452,6 +469,22 @@ class User_Info
 		return $userAttributeValue;
 	}
 
+	/**
+     * @desc 异性加成
+     * @param array $data	属性数组
+     * @return array
+     */
+	public static function isomerismUserAttribute($data){
+
+		if(!is_array($data))return FALSE;
+
+		$res = array();
+		foreach ($data as $key => $value){
+			$res[$key] = $value * (1 + User::ISOMERISM);
+		}
+		return $res;
+	}
+	
 	/**
      * @desc 使用属性增强符咒
      * @param array $data	属性数组

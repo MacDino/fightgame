@@ -6,7 +6,7 @@ $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $stoneType = isset($_REQUEST['stone_type'])?$_REQUEST['stone_type']:'';//精华类型
 $num		= isset($_REQUEST['num'])?$_REQUEST['num']:'1';//数量
 
-if(!$userId || !$stone_type || !$num){
+if(!$userId || !$stoneType || !$num){
 	$code = 1;
 	$msg = "传入数据错误!";
 	die;

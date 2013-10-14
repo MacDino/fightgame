@@ -48,6 +48,8 @@ class User
     CONST ATTEIBUTERESTRAINT= '0.03';
     /** @desc 套装增益 */
     CONST EMBOITEMENT = '0.03';
+    /** @desc 异性加成 */
+    CONST ISOMERISM = '0.03';
     
     /** 属性增强,有效期.24小时*/
     CONST ATTEIBUTEENHANCETIME = 86400;

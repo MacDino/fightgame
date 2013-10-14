@@ -6,6 +6,7 @@ class Pill_Iron {
 	/** @desc 增加精铁 */
 	public static function addIron($userId, $level){
 		$num = self::getIronNumByLevel($userId, $level);
+//		echo $num;
 		if(!empty($num)){
 			$res = MySql::update(self::TABLE_NAME, array('num' => $num+1), array('user_id' => $userId, 'level' => $level));
 		}else{
@@ -17,7 +18,8 @@ class Pill_Iron {
 	
 	/** @desc 减少精铁 */
 	public static function subtractIron($userId, $level, $num = 1){
-		$res = MySql::update(self::TABLE_NAME, array('num' => 'num'-$num), array('user_id' => $userId, 'level' => $level));
+		$numNow = self::getIronNumByLevel($userId, $level);
+		$res = MySql::update(self::TABLE_NAME, array('num' => $numNow-$num), array('user_id' => $userId, 'level' => $level));
 		return $res;
 	}
 	
@@ -29,8 +31,9 @@ class Pill_Iron {
 	
 	/** @desc 查询单种精铁数量 */
 	public static function getIronNumByLevel($userId, $level){
-		$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level));
-		return $res;
+//		echo $level;
+		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level), array('num'));
+		return $res['num'];
 	}
 	
 	/** @desc 出售价格 */

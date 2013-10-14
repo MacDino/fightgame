@@ -141,9 +141,9 @@ class Equip_Info
     }
     
     /** @desc 分解装备 */
-    public static function resolveEquip($equipId, $level){
+    public static function resolveEquip($userId, $equipId, $level){
     	$equipInfo = self::getEquipInfoById($equipId);
-    	
+//    	print_r($equipInfo);
     	if($equipInfo['equip_colour'] == Equip::EQUIP_COLOUR_BLUE){
     		$res = rand(1 , 20);//蓝色5%几率
     	}elseif ($equipInfo['equip_colour'] == Equip::EQUIP_COLOUR_PURPLE){
@@ -186,7 +186,7 @@ class Equip_Info
     
     /** @desc 可分解装备列表(蓝色以上) */
     public static function getBuleEquipList($userId){
-    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE is_used = 0 AND equip_colour > " . Equip::EQUIP_COLOUR_GREEN ;
+    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE is_used = 0 AND user_id = '$userId' AND equip_colour > " . Equip::EQUIP_COLOUR_GREEN ;
 //    	echo $sql;
     	$res = MySql::query($sql);
     	return $res;

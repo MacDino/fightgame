@@ -12,7 +12,7 @@ if(!$userId || !$pillType){
 }
 
 $expend = Pill_Pill::compoundPillExpend(1, 1);//消耗,生成时都是一级
-
+//print_r($expend);
 $userInfo = User_Info::getUserInfoByUserId($userId);
 if($expend['money'] > $userInfo['money']){
 	$code = 2;
@@ -35,8 +35,8 @@ if($expend['stone'] > $stoneNum){
 }
 
 try {
-    Pill_Iron::subtractIron($userId, 1, $ironNum);//减少精铁
-    Pill_Stone::subtractStone($userId, $pillType, $stoneNum);//减少阵法石
+    Pill_Iron::subtractIron($userId, 1, $expend['iron']);//减少精铁
+    Pill_Stone::subtractStone($userId, $pillType, $expend['stone']);//减少阵法石
     User_Info::subtractMoney($userId, $expend['money']);//减少钱
     $data = Pill_Pill::compoundPill($userId, $pillType);//生成内丹
 //    print_r($data);

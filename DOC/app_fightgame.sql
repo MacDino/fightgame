@@ -1304,8 +1304,9 @@ CREATE TABLE `pill_info` (
   `pill_type` smallint(6) DEFAULT NULL COMMENT '类型',
   `pill_layer` tinyint(4) DEFAULT '1' COMMENT '层',
   `pill_level` tinyint(4) DEFAULT '1' COMMENT '级',
+  `is_used` tinyint(4) DEFAULT '0' COMMENT '是否装备 0否1是',
   PRIMARY KEY (`pill_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pill_info
