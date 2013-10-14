@@ -27,7 +27,7 @@ class Cache
             $obj = self::_getCacheObj();
             if($obj)
             {
-                return $obj->set($key, $value, $ttl);
+				return $obj->set($key, $value, MEMCACHE_COMPRESSED ,$ttl);
             }
         }
         return FALSE;
