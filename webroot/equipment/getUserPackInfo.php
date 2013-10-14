@@ -8,8 +8,7 @@ $userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户
 if(!$userId)
 {
     $code = 1;
-    //$msg = '传入参数不正确';
-    $msg = '1';
+    $msg = '传入参数不正确';
     die;
 }
 
@@ -21,10 +20,20 @@ try {
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
     	$res[$i]['price'] = Equip_Info::priceEquip($key['user_equip_id']);
     }
-    $data = $res;
+    
+    //内丹
+    $pill = Pill_Pill::listPill($userId);
+    foreach ($pill as $key=>$value){
+		$pill[$key]['nowAttribute'] = pill::pillAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//当前属性
+		$pill[$key]['nextAttribute'] = pill::nextLevelAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//下一级属性
+	}
+    
+    $data['equip'] = $res;
+    $data['pill']  = $pill;
+//    print_r($data);
     $code = 0;
     $msg = 'ok';
-//    die;
+    die;
 } catch (Exception $e) {
     $code = 1;
     $msg = '99';

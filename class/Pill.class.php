@@ -62,4 +62,32 @@ class Pill{
 		return $res;
 	}
 	
+	/** @desc 下一级加成 */
+	public static function nextLevelAttribute($type, $pill_layer, $pill_level){
+		$level = ($pill_layer - 1) * 10 + $pill_level + 1;//拼出来的等级
+		switch ($type){
+			case self::TIANSHUNEIDAN://天枢,伤害
+				$num = $level * (2 + $level*0.03);
+	            $res = array(ConfigDefine::USER_ATTRIBUTE_HURT => $num);
+	            break; 
+             case self::TIANXUANNEIDAN://天璇,灵力
+				$num = $level * (2 + $level*0.03);
+	            $res = array(ConfigDefine::USER_ATTRIBUTE_PSYCHIC => $num);
+	            break;   
+             case self::TIANJINEIDAN://天玑,命中
+				$num = $level * (5 + $level*0.1);
+	            $res = array(ConfigDefine::USER_ATTRIBUTE_HIT => $num);
+	            break;     
+	         case self::TIANQUANNEIDAN://天权,防御
+				$num = $level * (5 + $level*0.1);
+	            $res = array(ConfigDefine::USER_ATTRIBUTE_DEFENSE => $num);
+	            break;  
+             case self::YUHENGNEIDAN://玉衡,暴击几率和暴击伤害
+				$probability = $level*0.01;
+				$value = $level*0.01;
+	            $res = array('probability' => $probability/100, 'value' => $value/100);
+	            break;  
+		}	
+		return $res;
+	}
 }
