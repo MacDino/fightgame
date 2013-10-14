@@ -3,17 +3,11 @@
 class Pill_Pill {
 	CONST TABLE_NAME = 'pill_info';
 
-	//内丹属性计算
-	
 	//内丹列表
 	public static function listPill($userId){
 		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
-	
-	//内丹出售
-	
-	//内丹价格
 	
 	/** @desc 内丹信息 */
 	public static function getPillInfoById($pillId){
