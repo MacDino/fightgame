@@ -140,8 +140,8 @@ class Equip_Info
     	return true;
     }
     
-    //分解装备
-    public static function resolveEquip($equipId){
+    /** @desc 分解装备 */
+    public static function resolveEquip($equipId, $level){
     	$equipInfo = self::getEquipInfoById($equipId);
     	
     	if($equipInfo['equip_colour'] == Equip::EQUIP_COLOUR_BLUE){
@@ -155,12 +155,41 @@ class Equip_Info
     	}
     	
     	if($res == 1){
-    		Iron_Info::addIron($userId, $level);//增加精铁
-    		self::delEquip($equipId);//删除装备
+    		Pill_Iron::addIron($userId, $level);//增加精铁
+//    		self::delEquip($equipId);//删除装备
     		return true;
+    	}else{
+//    		self::delEquip($equipId);//删除装备
+    		return false;
+    	}
+    }
+    
+    /** @desc 是否正在使用 
+     * 传入*/
+    public static function verifyEquipIsUsed($equipArray){
+    	$equip = '';
+    	if(is_array($equipArray)){
+    		foreach ($equipArray as $i){
+    			$equip .= $i.",";
+    		}
     	}else{
     		return false;
     	}
+    	
+    	$equip = substr($equip,0,-1);
+    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE is_used = 1 AND user_equip_id IN ($equip)";
+//    	echo $sql;exit;
+    	$res = MySql::query($sql);
+//    	var_dump($res);
+    	return count($res);
+    }
+    
+    /** @desc 可分解装备列表(蓝色以上) */
+    public static function getBuleEquipList($userId){
+    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE is_used = 0 AND equip_colour > " . Equip::EQUIP_COLOUR_GREEN ;
+//    	echo $sql;
+    	$res = MySql::query($sql);
+    	return $res;
     }
     
 }

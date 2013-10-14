@@ -12,4 +12,7 @@ class Pill{
 	CONST TIANQUANNEIDAN = 3604;
 	CONST YUHENGNEIDAN = 3605;
 	
+	/** @desc 天枢内丹 */
+	
+	
 }

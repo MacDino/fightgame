@@ -11,7 +11,7 @@ if(!$userId || !$pillType){
 	die;
 }
 
-$expend = Pill_Info::compoundPillExpend(1, 1);//消耗,生成时都是一级
+$expend = Pill_Pill::compoundPillExpend(1, 1);//消耗,生成时都是一级
 
 $userInfo = User_Info::getUserInfoByUserId($userId);
 if($expend['money'] > $userInfo['money']){
@@ -20,14 +20,14 @@ if($expend['money'] > $userInfo['money']){
 	die;
 }
 
-$ironNum = Iron_Info::getIronNumByLevel($userId, 1);//1级精铁
+$ironNum = Pill_Iron::getIronNumByLevel($userId, 1);//1级精铁
 if($expend['iron'] > $ironNum){
 	$code = 3;
 	$msg = "精铁不足!";
 	die;
 }
 
-$stoneNum = Stone_Info::getStoneNumBytype($userId, $pillType);
+$stoneNum = Pill_Stone::getStoneNumBytype($userId, $pillType);
 if($expend['stone'] > $stoneNum){
 	$code = 4;
 	$msg = "精华不足!";
@@ -35,10 +35,10 @@ if($expend['stone'] > $stoneNum){
 }
 
 try {
-    Iron_Info::subtractIron($userId, 1, $ironNum);//减少精铁
-    Stone_Info::subtractStone($userId, $pillType, $stoneNum);//减少阵法石
+    Pill_Iron::subtractIron($userId, 1, $ironNum);//减少精铁
+    Pill_Stone::subtractStone($userId, $pillType, $stoneNum);//减少阵法石
     User_Info::subtractMoney($userId, $expend['money']);//减少钱
-    $data = Pill_Info::compoundPill($userId, $pillType);//生成内丹
+    $data = Pill_Pill::compoundPill($userId, $pillType);//生成内丹
 //    print_r($data);
     $code = 0;
     $msg = 'ok';  
