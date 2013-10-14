@@ -8,6 +8,7 @@ class Cache
     {
         if(DEVELOPER)
         {
+            return FALSE;
             return apc_get($key);
         }else{
             $obj = self::_getCacheObj();
@@ -22,6 +23,7 @@ class Cache
     {
         if(DEVELOPER)
         {
+            return FALSE;
             return apc_add($key, $value, self::$_ttl);
         }else{
             $obj = self::_getCacheObj();
@@ -37,6 +39,7 @@ class Cache
     {
         if(DEVELOPER)
         {
+            return FALSE;
             return apc_delete($key);
         }else{
             $obj = self::_getCacheObj();

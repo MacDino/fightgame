@@ -8,12 +8,8 @@ class Props_Info{
 	const TREASURE_BOX_CATE_ID = 3;	//宝箱分类id
 
 
-	public static function getPropsListByCateId($cateId){
-		if(!$cateId) return false;
-		$where = array(
-			'props_cate_id' => $cateId,	
-		);
-		$res = MySql::select(self::TABLE_NAME, $where);
+	public static function getPropsList(){
+		$res = MySql::select(self::TABLE_NAME);
 		return $res;
 	}
 

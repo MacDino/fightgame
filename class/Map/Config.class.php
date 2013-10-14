@@ -7,8 +7,8 @@ class Map_Config {
 	protected static $table_name = 'map_list';
 
 	// 获取地图列表
-	public static function getMapList() {
-		$map_list   = MySql::select(self::$table_name);
+	public static function getMapList($where) {
+		$map_list   = MySql::select(self::$table_name, $where);
         return $map_list;
 	}
 

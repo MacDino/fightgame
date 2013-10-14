@@ -1082,13 +1082,14 @@ CREATE TABLE `user_happy_month_log` (
 
 DROP TABLE IF EXISTS `user_pk_challenge_res`;
 CREATE TABLE `user_pk_challenge_res` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `win_num` int(11) NOT NULL COMMENT '战胜总场次',
-  `win_continue_num` int(11) NOT NULL COMMENT '连胜场数',
-  `update_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+	`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` int(11) NOT NULL,
+	`fight_num` int(11) NOT NULL,
+	`win_num` int(11) NOT NULL COMMENT '战胜总场次',
+	`win_continue_num` int(11) NOT NULL COMMENT '连胜场数',
+	`update_time` datetime NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=`InnoDB` AUTO_INCREMENT=1 DEFAULT CHARACTER SET utf8;
 -- MySQL dump 10.13  Distrib 5.1.60, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: app_fightgame
@@ -1282,6 +1283,50 @@ CREATE TABLE `props_cate` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+-- ----------------------------
+-- Table structure for `iron_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `iron_info`;
+CREATE TABLE `iron_info` (
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `level` smallint(4) NOT NULL COMMENT '精铁等级',
+  `num` smallint(6) DEFAULT '0' COMMENT '精铁数量',
+  PRIMARY KEY (`user_id`,`level`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `pill_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `pill_info`;
+CREATE TABLE `pill_info` (
+  `pill_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '内丹ID',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `pill_type` smallint(6) DEFAULT NULL COMMENT '类型',
+  `pill_layer` tinyint(4) DEFAULT '1' COMMENT '层',
+  `pill_level` tinyint(4) DEFAULT '1' COMMENT '级',
+  `is_used` tinyint(4) DEFAULT '0' COMMENT '是否装备 0否1是',
+  PRIMARY KEY (`pill_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pill_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `stone_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `stone_info`;
+CREATE TABLE `stone_info` (
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `stone_type` smallint(4) NOT NULL DEFAULT '0' COMMENT '阵法类型',
+  `num` smallint(4) DEFAULT '0' COMMENT '阵法石数量',
+  PRIMARY KEY (`user_id`,`stone_type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of stone_info
+-- ----------------------------
+
 --
 -- Dumping data for table `props_cate`
 --
@@ -1334,7 +1379,7 @@ CREATE TABLE `copies_level` (
   `level_name` varchar(300) NOT NULL,
   `copies_id` int(11) NOT NULL COMMENT '副本id',
   `monster_level` int(2) NOT NULL COMMENT '怪物等级',
-  `monster_level_type` tinyint(3) NOT NULL COMMENT '怪物等级类型  1：小于  2：大于',
+  `monster_level_type` tinyint(3) NOT NULL COMMENT '怪物等级类型  1：小于  2：等于 3：大于',
   `monster_suffix` int(6) DEFAULT NULL COMMENT '怪物后缀',
   `monster_skill` varchar(300) NOT NULL COMMENT '怪物技能',
   PRIMARY KEY (`level_id`)
@@ -1350,3 +1395,18 @@ LOCK TABLES `copies_level` WRITE;
 INSERT INTO `copies_level` VALUES (1,'第一层',1,4,1,3208,'1201,1202,1203,1204,1205,1206'),(2,'第二层',1,3,1,3205,'1204,1205,1206'),(3,'第三层',1,2,1,3204,'1201,1202,1203'),(4,'第四层',1,1,1,3206,'1204,1205,1206,1212,1214'),(5,'第五层',1,0,2,3207,'1201,1202,1203,1212,1214'),(6,'第六层',1,1,3,3203,'1203,1204,1205,1212,1213,1214'),(7,'第七层',1,2,3,3202,'1201,1202,1203');
 /*!40000 ALTER TABLE `copies_level` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `copies_last_result`;
+CREATE TABLE `copies_last_result` (
+  `copies_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `copies_id` int(11) NOT NULL COMMENT '地图的id',
+  `fight_start_time` int(11) NOT NULL COMMENT '战斗接口请求时间',
+  `use_time` int(11) NOT NULL COMMENT '预计战斗耗时时间',
+  `last_fight_result` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '最后一次战斗结果',
+  `create_time` datetime NOT NULL COMMENT '记录创建时间',
+  PRIMARY KEY (`copies_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

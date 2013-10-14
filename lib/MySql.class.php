@@ -84,6 +84,7 @@ class MySql
     		}
     	}
     	$sql = "UPDATE $tableName SET ".substr($setValue, 0, -1).self::_whereCondition($whereArray);
+//    	echo $sql;
     	return self::execute($sql);
     }
     //获取数据
