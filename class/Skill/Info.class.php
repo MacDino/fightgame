@@ -79,15 +79,19 @@ class Skill_Info {
         $res = MySql::select(self::TN_SKILL_INFO, $where, array('skill_id', 'skill_level'));
         $equip = self::equipSkill($userId);
 //        print_r($equip);
-        foreach ($res as $i=>$key){
-        	$res[$i]['skill_level'] += $equip[$key['skill_id']];
-        	unset($equip[$key['skill_id']]);
-        }
-        foreach ($equip as $o=>$key){
-        	$res[] = array(
-	        	'skill_id' => $o, 'skill_level' => $key,
-        	);
-        }
+		if(!empty($res)){
+	        foreach ($res as $i=>$key){
+	        	$res[$i]['skill_level'] += $equip[$key['skill_id']];
+	        	unset($equip[$key['skill_id']]);
+	        }
+		}
+		if(!empty($equip)){
+	        foreach ($equip as $o=>$key){
+	        	$res[] = array(
+		        	'skill_id' => $o, 'skill_level' => $key,
+	        	);
+	        }
+		}
         return $res;
     }
     

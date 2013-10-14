@@ -443,7 +443,7 @@ class User_Info
 		
 		//内丹加成
 		$pillInfo = Pill_Pill::usedPill($userId);
-		if($pillInfo['pill_type'] != YUHENGNEIDAN){
+		if(!empty($pillInfo) && $pillInfo['pill_type'] != YUHENGNEIDAN){
 			$pillValue = Pill::pillAttribute($pillInfo['pill_type'], $pillInfo['pill_layer'], $pillInfo['pill_level']);
 			foreach ($pillValue as $key=>$value){
 				$userAttributeValue[$key] += $value;
