@@ -77,7 +77,6 @@ class Pill{
 	            $res = array('probability' => $probability/100, 'value' => $value/100);
 	            break;  
 		}	
-		echo $res;
 		return $res;
 	}
 }
