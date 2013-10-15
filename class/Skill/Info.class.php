@@ -176,8 +176,6 @@ class Skill_Info {
     	}
     	return $skill;
     }
-    
-    
 
     /**
      * @desc 获取用户某一技能等级

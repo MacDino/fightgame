@@ -583,6 +583,11 @@ class User_Info
 		return $power;
 	}
 	
+	/** @desc 更新最后登录时间 */
+	public static function updateLastLoginTime($userId){
+		$res = MySql::update(self::TABLE_NAME, array('last_login_time' => date('Y-m-d H:i:s')));
+		return $res;
+	}
 	/** @desc 记录用户坐标 */
 
 }

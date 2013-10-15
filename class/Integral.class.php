@@ -1,8 +1,7 @@
 <?php
 class Intergral{
 	
-	CONST INTEGRAL_INFO = 'user_info';//积分信息表
-	CONST INTEGRAL_LIST = 'integral_info';//积分流水表
+	CONST TABLE_NAME = 'integral_info';//积分流水表
 	/** 战斗获得积分 */
 	CONST FIGHT_INTEGRAL = 2;
 	/** 抽奖使用积分 */
@@ -30,20 +29,25 @@ class Intergral{
 	
 	/** @desc 符咒 */
 	public static function prize4($userId){
-		$array = array();
+		$array = array(6301, 6302, 6303, 6306, 6308, 6309);
 		$type = array_rand($array);
 		$res = User_Property::addAmulet($userId, $type, 1);
 		return $type;
 	}
 	
-	/** @desc 上限 */
+	/** @desc 暂空 */
 	public static function prize5($userId){
-		
+		return 1;		
 	}
 	
 	/** @desc 上古遗迹 */
 	public static function prize6($userId){
-		
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		$level = intval($userInfo['user_level']/10);
+		$colour = User_Property::randGeneralEquipColor();
+		$equipId = Equip_Create::createEquip($colour, $userId, $level);
+		$res = Equip_Info::getEquipInfoById($equipId);
+		return $res;
 	}
 	
 	/** @desc 金币 */
@@ -63,7 +67,7 @@ class Intergral{
 	/** @desc获取积分流水表 */
 	public static function listIntegralInfoById($userId){
 		if(!$userId)return ;
-		$res = MySql::select(self::INTEGRAL_LIST, array('user_id' => $userId));
+		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
 		return $res;
 	}
 	
@@ -79,7 +83,7 @@ class Intergral{
 		$integral = self::getIntegralInfobyId($userId);
 		if($type == 1){$after = $integral + $num;}
 		if($type == 2){$after = $integral - $num;}
-		$res = MySql::insert(self::INTEGRAL_LIST, array('user_id' => $userId, 'type' => $type, 'num' => $num, 'action' => $action, 'before' => $integral, 'after' => $after, 'time' => time()));
+		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'type' => $type, 'num' => $num, 'action' => $action, 'before' => $integral, 'after' => $after, 'time' => time()));
 		return $res;
 	}
 	
@@ -89,7 +93,7 @@ class Intergral{
 		$num = 0;
 		$beginTime = strtotime(date("Y-m-d 00:00:00"));
 		$endTime = strtotime(data("Y-m-d 23:59:59"));
-		$res = "SELECT num FROM " . self::INTEGRAL_LIST . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$res = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
 		if(is_array($res)){
 			foreach ($res as $i){
 				$num += $i['num'];
@@ -106,14 +110,14 @@ class Intergral{
 		$endTime = strtotime(data("Y-m-d 23:59:59"));
 		
 		//获得积分
-		$get = "SELECT num FROM " . self::INTEGRAL_LIST . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$get = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
 		if(is_array($get)){
 			foreach ($get as $i){
 				$num += $i['num'];
 			}
 		}
 		//使用积分
-		$use = "SELECT num FROM " . self::INTEGRAL_LIST . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$use = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
 		if(is_array($use)){
 			foreach ($use as $i){
 				$num -= $i['num'];
@@ -123,36 +127,15 @@ class Intergral{
 		return $num;
 	}
 	
-	/** 弃用 获取用户总积分 */
-	public static function getIntegralInfobyId($userId){
-		if(!$userId)return ;
-		$res = MySql::selectOne(self::INTEGRAL_INFO, array('user_id' => $userId), array('integral'));
-		return $res['integral'];
-	}
-	
-	/** 弃用 增加积分 */
-	public static function addIntegralInfo($userId, $num){
-		if(!$userId || !$num)return ;
-		$sql = "UPDATE " . self::INTEGRAL_INFO . "SET integral = integral + " . $num . " WHERE user_id = ". $userId;
-		return MySql::query($sql);
-	}
-	
-	/** 弃用 减少积分 */
-	public static function reduceIntegralInfo($userId, $num){
-		if(!$userId || !$num)return ;
-		$sql = "UPDATE " . self::INTEGRAL_INFO . "SET integral = integral - " . $num . " WHERE user_id = ". $userId;
-		return MySql::query($sql);
-	}
-	
 	//战斗获取积分
 	public static function fightIntegral($userId, $num = self::FIGHT_INTEGRAL){
-		$res = self::addIntegralAction($userId, 1, $num, 1);
+		$res = self::addIntegralAction($userId, 1, $num, '战斗获得');
 		return $res;
 	}
 	
 	/** 抽奖使用积分 */
 	public static function extractionIntegral($userId){
-		$res = self::addIntegralAction($userId, 2, self::EXTRACTION_INTEGRAL, 2);
+		$res = self::addIntegralAction($userId, 2, self::EXTRACTION_INTEGRAL, '抽奖消耗');
 		return $res;
 	}
 	
@@ -172,6 +155,7 @@ class Intergral{
 		
 		if($res){
 			self::extractionIntegral($userId);
+			return $res;
 		}else{
 			false;
 		}
