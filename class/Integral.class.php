@@ -3,11 +3,64 @@ class Intergral{
 	
 	CONST INTEGRAL_INFO = 'user_info';//积分信息表
 	CONST INTEGRAL_LIST = 'integral_info';//积分流水表
+	/** 战斗获得积分 */
+	CONST FIGHT_INTEGRAL = 2;
+	/** 抽奖使用积分 */
+	CONST EXTRACTION_INTEGRAL = 25;
 	
-	CONST FIGHT_INTEGRAL = 2;//战斗积分
-	CONST EXTRACTION_INTEGRAL = 25;//抽奖积分
+	/** @desc 技能点 */
+	public static function prize1($userId){
+		$res = User_Info::addIngot($userId, 1);
+		return '技能点';
+	}
 	
-	//获取积分流水表
+	/** @desc 内丹精华 */
+	public static function prize2($userId){
+		$type = array_rand(ConfigDefine::pillList());
+		$res = Pill_Stone::addStone($userId, $type);
+		return $type.'精华';
+	}
+	
+	/** @desc 精铁 */
+	public static function prize3($userId){
+		$level = rand(1,10);
+		$res = Pill_Iron::addIron($userId, $level);
+		return $level."级精铁";
+	}
+	
+	/** @desc 符咒 */
+	public static function prize4($userId){
+		$array = array();
+		$type = array_rand($array);
+		$res = User_Property::addAmulet($userId, $type, 1);
+		return $type;
+	}
+	
+	/** @desc 上限 */
+	public static function prize5($userId){
+		
+	}
+	
+	/** @desc 上古遗迹 */
+	public static function prize6($userId){
+		
+	}
+	
+	/** @desc 金币 */
+	public static function prize7($userId){
+		$num = rand(10000,1000000);
+		$res = User_Info::addMoney($userId, $num);
+		return '金币'.$num."个";
+	}
+	
+	/** @desc 元宝 */
+	public static function prize8($userId){
+		$num = rand(1,100);
+		$res = User_Info::addIngot($userId, $num);
+		return '元宝'.$num."个";
+	}
+	
+	/** @desc获取积分流水表 */
 	public static function listIntegralInfoById($userId){
 		if(!$userId)return ;
 		$res = MySql::select(self::INTEGRAL_LIST, array('user_id' => $userId));
@@ -92,16 +145,35 @@ class Intergral{
 	}
 	
 	//战斗获取积分
-	public static function fightIntegral($userId){
+	public static function fightIntegral($userId, $num){
 		$res = self::addIntegralAction($userId, 1, self::FIGHT_INTEGRAL, 1);
 		return $res;
 	}
 	
-	//抽奖使用积分
+	/** 抽奖使用积分 */
 	public static function extractionIntegral($userId){
 		$res = self::addIntegralAction($userId, 2, self::EXTRACTION_INTEGRAL, 2);
 		return $res;
 	}
 	
-	/** @生成积分奖励 */
+	/** @desc 生成积分奖励 */
+	
+	/** @desc 积分抽奖 */
+	public static function intergralLucky($userId){
+		//校验
+		$num = self::getTodayIntegral($userId);
+		if($num < self::EXTRACTION_INTEGRAL ){
+			return false;
+		}
+		
+		$rand = rand(1,8);
+		$function = 'prize'.$rand;
+		$res = self::$function;
+		
+		if($res){
+			self::extractionIntegral($userId);
+		}else{
+			false;
+		}
+	}
 }

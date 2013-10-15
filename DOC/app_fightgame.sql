@@ -1070,6 +1070,24 @@ CREATE TABLE `user_reward` (
         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+--
+-- 数据库: `app_fightgame`
+--
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user_props`
+--
+DROP TABLE IF EXISTS `user_props`;
+CREATE TABLE IF NOT EXISTS `user_props` (
+  `user_id` int(11) NOT NULL,
+  `property_id` tinyint(1) NOT NULL COMMENT '道具ID',
+  `property_num` int(3) DEFAULT '0' COMMENT '道具数量',
+  `last_time` int(11) DEFAULT NULL COMMENT '最后购买时间',
+  PRIMARY KEY (`user_id`,`property_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `user_happy_month_log`;
 CREATE TABLE `user_happy_month_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,

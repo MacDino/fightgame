@@ -200,6 +200,14 @@ class ConfigDefine
 		);
 		return $res;
 	}
-//	public static function
+	public static function pillList(){
+		$res = array(
+			Pill::TIANSHUNEIDAN => 3601,
+			Pill::TIANXUANNEIDAN => 3602,
+			Pill::TIANJINEIDAN => 3603,
+			Pill::TIANQUANNEIDAN => 3604,
+			Pill::YUHENGNEIDAN => 3605,
+		);
+	}
 
 }
