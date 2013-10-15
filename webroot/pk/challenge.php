@@ -94,7 +94,7 @@ try {
     $isTargetUserAlive  = Fight::isTeamAlive($targetUserFightTeam);
 
     $data['fight_procedure'] = $fightResult['fight_procedure'];
-    
+
     if(!$isUserAlive && $isTargetUserAlive || $fightResult['is_too_long'] == 1) {
         $data['result']             = PK_Challenge::dealResult($userId, FALSE);
         $data['result']['win']      = 0;

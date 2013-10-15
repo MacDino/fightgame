@@ -181,7 +181,7 @@ class PK_Challenge{
         $cacheKey = self::PK_FIGHTED_USER_ID.$userId;
         $cacheValue = Cache::get($cacheKey);
         if(is_array($cacheValue) && count($cacheValue)) {
-            Cache::del($cacheKey);
+            Cache::set($cacheKey, '', 1);
         }
         return ;
     }
