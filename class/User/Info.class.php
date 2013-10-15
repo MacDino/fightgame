@@ -96,14 +96,6 @@ class User_Info
 		}
 	}
 
-	/** @desc 删除好友,暂时不做 */
-	public static function delUser($userId){
-		//用户表打状态
-		//好友表
-		//人宠表
-		//咒符表
-	}
-
 	/**
      * 创建用户基础信息
      * @param int 	$userId	用户ID
@@ -137,7 +129,7 @@ class User_Info
 	}
 
 	/**
-     * 用户信息单项更新
+     * 弃用 用户信息单项更新
      * 可支持买包裹上限,买人宠上限,买好友上限,以及更新元宝数,更新声望,更新经验,更新金钱
      * @param int		 $userId	用户ID
      * @param string	 $key		变化的项
@@ -160,7 +152,7 @@ class User_Info
 		return $res;
 	}
 
-	/** @desc 整体更新 */
+	/** @desc 弃用 整体更新 */
 	public static function editUserInfo($array, $userId){
 		$res = MySql::update(self::TABLE_NAME, $array, array('user_id' => $userId));
 		return $res;
@@ -544,11 +536,6 @@ class User_Info
 			$res[$key] = $value * (1 + User::ATTEIBUTEENHANCE);
 		}
 		return $res;
-	}
-
-	public static function levelUp($userId, $level = NULL){
-		//调用奖励
-
 	}
 
 	/** 锻造成功率 isUse 是否使用锻造符 */
