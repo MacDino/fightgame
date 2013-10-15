@@ -4,7 +4,7 @@ class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
 
-	/** @desc 是否存在这个用户,可同时检测多个*/
+	/** @desc 是否存在这个用户,可同时检测多个 */
 	public static function isExistUser($arrayUserId){
 		if(is_array($arrayUserId)){
 			$num = 0;
@@ -551,20 +551,21 @@ class User_Info
 
 	}
 
-	//锻造成功率 isUse 是否使用锻造符
+	/** 锻造成功率 isUse 是否使用锻造符 */
 	public static function forgeOdds($userId, $isUse = FALSE){
+		$res = 0;
 		//技能本身成功率
 		$skillLevel = Skill_Info::getSkillInfo($userId, 2);
-		$skillOdds = Skill::getQuickAttributeForEquip($skillLevel);
+		$res += Skill::getQuickAttributeForEquip($skillLevel);
 		//幸运加的成功率
 		$lucky = self::getUserInfoFightAttribute($userId, TRUE);
-		$luckyOdds = $lucky[ConfigDefine::USER_ATTRIBUTE_LUCKY];
+		$res += $lucky[ConfigDefine::USER_ATTRIBUTE_LUCKY];
 		//锻造符加的成功率
 		if(!empty($isUse)){
-			$amulet = User::FORGEODDS;
+			$res += User::FORGEODDS;
 		}
 
-		return $skillOdds;
+		return $res;
 	}
 
 	/** @desc 查找等级在10之内的用户 */
