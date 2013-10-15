@@ -163,9 +163,6 @@ class User_Property{
 		if(!$userId || !$type)return FALSE;
 		
 		$num = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'property_id' => $type), array('property_num'));
-		if(!$num){
-			throw new Exception("找不到此用户的道具数据", 10052);
-		}
 		return $num['property_num'];
 	}
 
