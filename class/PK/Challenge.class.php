@@ -115,10 +115,10 @@ class PK_Challenge{
         $return['win_count']        = $challengeInfo['win_num'];
         $return['win_continue_num'] = $challengeInfo['win_continue_num'];
         if(!$isWin) {
-            $return['point']            = $challengeInfo['win_continue_num'] * 1; //积分
+            $return['integral']            = $challengeInfo['win_continue_num'] * 1; //积分
             $return['popularity']       = $challengeInfo['win_continue_num'] * 2;
         }else {
-            $return['point']            = $challengeInfo['win_continue_num'] * 2; //积分
+            $return['integral']            = $challengeInfo['win_continue_num'] * 2; //积分
             $return['popularity']       = $challengeInfo['win_continue_num'] * 4;
         }
         //@todo 记录积分和声望入mysql

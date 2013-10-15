@@ -4,7 +4,7 @@ class User_Info
 {
 	CONST TABLE_NAME = 'user_info';
 
-	/** @desc 是否存在这个用户,可同时检测多个*/
+	/** @desc 是否存在这个用户,可同时检测多个 */
 	public static function isExistUser($arrayUserId){
 		if(is_array($arrayUserId)){
 			$num = 0;
@@ -96,14 +96,6 @@ class User_Info
 		}
 	}
 
-	/** @desc 删除好友,暂时不做 */
-	public static function delUser($userId){
-		//用户表打状态
-		//好友表
-		//人宠表
-		//咒符表
-	}
-
 	/**
      * 创建用户基础信息
      * @param int 	$userId	用户ID
@@ -137,7 +129,7 @@ class User_Info
 	}
 
 	/**
-     * 用户信息单项更新
+     * 弃用 用户信息单项更新
      * 可支持买包裹上限,买人宠上限,买好友上限,以及更新元宝数,更新声望,更新经验,更新金钱
      * @param int		 $userId	用户ID
      * @param string	 $key		变化的项
@@ -160,7 +152,7 @@ class User_Info
 		return $res;
 	}
 
-	/** @desc 整体更新 */
+	/** @desc 弃用 整体更新 */
 	public static function editUserInfo($array, $userId){
 		$res = MySql::update(self::TABLE_NAME, $array, array('user_id' => $userId));
 		return $res;
@@ -443,7 +435,7 @@ class User_Info
 		
 		//内丹加成
 		$pillInfo = Pill_Pill::usedPill($userId);
-		if($pillInfo['pill_type'] != YUHENGNEIDAN){
+		if(!empty($pillInfo) && $pillInfo['pill_type'] != YUHENGNEIDAN){
 			$pillValue = Pill::pillAttribute($pillInfo['pill_type'], $pillInfo['pill_layer'], $pillInfo['pill_level']);
 			foreach ($pillValue as $key=>$value){
 				$userAttributeValue[$key] += $value;
@@ -546,25 +538,21 @@ class User_Info
 		return $res;
 	}
 
-	public static function levelUp($userId, $level = NULL){
-		//调用奖励
-
-	}
-
-	//锻造成功率 isUse 是否使用锻造符
+	/** 锻造成功率 isUse 是否使用锻造符 */
 	public static function forgeOdds($userId, $isUse = FALSE){
+		$res = 0;
 		//技能本身成功率
 		$skillLevel = Skill_Info::getSkillInfo($userId, 2);
-		$skillOdds = Skill::getQuickAttributeForEquip($skillLevel);
+		$res += Skill::getQuickAttributeForEquip($skillLevel);
 		//幸运加的成功率
 		$lucky = self::getUserInfoFightAttribute($userId, TRUE);
-		$luckyOdds = $lucky[ConfigDefine::USER_ATTRIBUTE_LUCKY];
+		$res += $lucky[ConfigDefine::USER_ATTRIBUTE_LUCKY];
 		//锻造符加的成功率
 		if(!empty($isUse)){
-			$amulet = User::FORGEODDS;
+			$res += User::FORGEODDS;
 		}
 
-		return $skillOdds;
+		return $res;
 	}
 
 	/** @desc 查找等级在10之内的用户 */

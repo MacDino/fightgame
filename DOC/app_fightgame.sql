@@ -906,7 +906,6 @@ CREATE TABLE `user_info` (
   `reserve` int(11) NOT NULL DEFAULT '0' COMMENT '储备金',
   `ingot` int(11) NOT NULL DEFAULT '0' COMMENT '元宝数量',
   `skil_point` int(11) NOT NULL DEFAULT '0' COMMENT '技能点',
-  `points` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
   `pack_num` int(11) NOT NULL DEFAULT '0' COMMENT '背包数量',
   `pk_num` int(11) NOT NULL DEFAULT '0' COMMENT 'PK次数',
   `friend_num` int(11) NOT NULL DEFAULT '0' COMMENT '好友数量',

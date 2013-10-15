@@ -107,7 +107,7 @@ try {
         $data['result']['win'] = 1;
         PK_Challenge::whenWin($userId);
         $data['result']['win_continue_num'] = $fightStatus['win_continue_num'] + 1;
-        $data['result']['point']            = ($fightStatus['win_continue_num']+1) * 2; //积分
+        $data['result']['integral']            = ($fightStatus['win_continue_num']+1) * 2; //积分
         $data['result']['popularity']       = ($fightStatus['win_continue_num']+1) * 4;
     }
     $data['result']['use_time'] = $fightResult['use_time'];

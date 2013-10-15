@@ -2,7 +2,8 @@
 //对应前台 "角色-人宠"
 //人宠列表  
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
-
+$a = array('3067');
+echo json_encode($a);
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
 $userInfo = User_Info::isExistUser(array($userId));
