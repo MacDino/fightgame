@@ -4,7 +4,7 @@ class Equip_Info
 {	
     CONST TABLE_NAME = 'user_equip';
 	
-	//获取用户的装备信息
+	/** @desc 获取用户的装备信息 */
 	public static function getEquipListByUserId($userId, $is_used = FALSE){
         if($userId){
         	if(!$is_used){
@@ -18,21 +18,21 @@ class Equip_Info
         return $res;
     }
     
-    //获取背包内装备数量
+    /** @desc 获取背包内装备数量 */
     public static function getEquipNum($userId){
     	if(!$userId)return ;
     	$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
     	return $res;
     }
     
-    //按照类别获取装备
+    /** @desc 按照类别获取装备 */
     public static function getEquipInfoByType($equipType, $userId, $is_used = FALSE){
     	$res = MySql::select(self::TABLE_NAME, array('equip_type' => $equipType, 'user_id' => $userId), array(), array('is_used desc', 'user_equip_id desc'));
     	return $res;
     }
     
 
-    //根据装备id返回信息
+    /** @desc 根据装备id返回信息 */
     public static function getEquipInfoById($equipId){
         if($equipId){
             $res = MySql::selectOne(self::TABLE_NAME, array('user_equip_id' => $equipId));
@@ -42,7 +42,7 @@ class Equip_Info
         return $res;
     }
 
-    //装备打造
+    /** @desc 装备打造 */
     public static function forge($equipId){
         $res = FALSE;
         $info = self::getEquipInfoById($equipId);
@@ -76,7 +76,7 @@ class Equip_Info
         return $res;
     }
     
-    //装备升级
+    /** @desc 装备升级 */
     public static function upgrade($equipId){
         //装备成长咒符
         $info = self::getEquipInfoById($equipId);
@@ -92,7 +92,7 @@ class Equip_Info
         return FALSE;
     }
 
-    //装备价格
+    /** @desc 装备价格 */
     public static function priceEquip($equipId)
     {
     	$equipInfo = self::getEquipInfoById($equipId);
@@ -101,20 +101,18 @@ class Equip_Info
 
     	return $res;
     }
-    
-    //删除(卖出)装备
+     
+    /** @desc 删除(卖出)装备 */
     public static function delEquip($equipId)
     {
     	$res = MySql::delete(self::TABLE_NAME, array('user_equip_id' => $equipId));
     	return $res;
     }
     
-    //使用装备
+    /** @desc 使用装备 */
     public static function useEquip($userId, $equipId){
     	//获取此装备信息,主要是equip_type
-//    	echo 3333;
     	$equipInfo = self::getEquipInfoById($equipId);
-//    	var_dump($equipInfo);
     	//下掉原来同类装备
 		$oldRes = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_id' => $userId, 'equip_type' => $equipInfo['equip_type'], 'is_used' => 1));
     	//把装备安装上去
@@ -122,13 +120,13 @@ class Equip_Info
     	return $res;
     }
     
-    //脱下装备
+    /** @desc 脱下装备 */
     public static function dropEquip($equipId, $userId=FALSE ){
     	$res = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('user_equip_id' => $equipId));
     	return $res;
     }
     
-    //判断是否为套装
+    /** @desc 判断是否为套装 */
     public static function isEmboitement($userId, $race_id){
     	//武器的颜色和种族
     	$equipInfo = self::getEquipListByUserId($userId, true);
@@ -164,8 +162,7 @@ class Equip_Info
     	}
     }
     
-    /** @desc 是否正在使用 
-     * 传入*/
+    /** @desc 是否正在使用 */
     public static function verifyEquipIsUsed($equipArray){
     	$equip = '';
     	if(is_array($equipArray)){

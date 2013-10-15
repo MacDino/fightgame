@@ -15,7 +15,7 @@ class Skill_Info {
     	return $res;
     }
     
-    /** @desc */
+    /** @desc 装备附加技能等级列表 */
     public static function equipSkill($userId){
     	$Attribute = array(
 			ConfigDefine::SKILL_ZJ      				=> 0,//重击
@@ -66,9 +66,7 @@ class Skill_Info {
 		return $attribute;
     }
     
-    /**
-     * @desc 获取角色技能等级列表
-     */
+    /** @desc 获取角色技能等级列表 加入了装备附加技能 */
     public static function getSkillList($userId, $is_use=false){
         $where      = array(
             'user_id' => $userId,
@@ -77,14 +75,17 @@ class Skill_Info {
         	$where['is_use']  = 1;
         }
         $res = MySql::select(self::TN_SKILL_INFO, $where, array('skill_id', 'skill_level'));
+        
         $equip = self::equipSkill($userId);
 //        print_r($equip);
+		//跟自身技能重合的装备技能
 		if(!empty($res)){
 	        foreach ($res as $i=>$key){
 	        	$res[$i]['skill_level'] += $equip[$key['skill_id']];
 	        	unset($equip[$key['skill_id']]);
 	        }
 		}
+		//自身没学的装备技能
 		if(!empty($equip)){
 	        foreach ($equip as $o=>$key){
 	        	$res[] = array(
@@ -95,7 +96,7 @@ class Skill_Info {
         return $res;
     }
     
-    /** @desc 总技能等级 */
+    /** @desc 总技能等级 用于战斗力计算*/
     public static function totalSkillLevel($userId){
     	$skillLevel = 0;
     	$skillInfo = self::getSkillList($userId);
@@ -234,6 +235,7 @@ class Skill_Info {
         );
         return MySql::selectOne(self::TN_SKILL_ALLOWED, $where);
     }
+    
     /**
      * @desc 获取当前等级技能点数
      * return int
@@ -245,9 +247,8 @@ class Skill_Info {
         $point = MySql::selectOne(self::TN_SKILL_ALLOWED, $where);
         return $point['point_num'] ? $point['point_num'] : 0;
     }
-    /**
-     * @desc 获取学习下一级技能所需要的铜钱
-     */
+    
+    /** @desc 获取学习下一级技能所需要的铜钱 */
     public static function getSkillMoney($level=0){
         $spend      = MySql::selectOne(self::TN_SKILL_SPEND, array('skill_level' => $level+1));
         return $spend['money'];
@@ -434,6 +435,7 @@ class Skill_Info {
 		return $skill;
 	}
 	
+	/** @desc 技能权重换算成比例 */
 	public static function getReleaseProbability($userId, $type){
 		$skillInfo   = self::getUserUsedSkill($userId, $type);//已使用技能信息
 		$count = count($skillInfo);//技能总数
