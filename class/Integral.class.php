@@ -145,8 +145,8 @@ class Intergral{
 	}
 	
 	//战斗获取积分
-	public static function fightIntegral($userId, $num){
-		$res = self::addIntegralAction($userId, 1, self::FIGHT_INTEGRAL, 1);
+	public static function fightIntegral($userId, $num = self::FIGHT_INTEGRAL){
+		$res = self::addIntegralAction($userId, 1, $num, 1);
 		return $res;
 	}
 	
@@ -161,8 +161,8 @@ class Intergral{
 	/** @desc 积分抽奖 */
 	public static function intergralLucky($userId){
 		//校验
-		$num = self::getTodayIntegral($userId);
-		if($num < self::EXTRACTION_INTEGRAL ){
+		$num = self::getTodayResidueIntegral($userId);
+		if($num < self::EXTRACTION_INTEGRAL){
 			return false;
 		}
 		
