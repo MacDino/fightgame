@@ -121,8 +121,13 @@ class PK_Challenge{
             $return['integral']            = $challengeInfo['win_continue_num'] * 2; //积分
             $return['popularity']       = $challengeInfo['win_continue_num'] * 4;
         }
-        //@todo 记录积分和声望入mysql
-
+        //记录积分和声望入mysql
+        if($return['integral'] > 0) {
+            Intergral::fightIntegral($userId, $return['integral']);
+        }
+        if($return['popularity'] > 0) {
+            User_Info::addReputationNum($userId, $return['popularity']);
+        }
         $return['ranking_all']      = self::rankingAll($userId);
         $return['ranking_friend']   = self::rankingFriend($userId);
         //增加一次挑战次数
@@ -139,7 +144,7 @@ class PK_Challenge{
         $friends = User_Info::nearUser($userId);
         if($isContinueWin) {
             //从cache里拿出已经打过的人的ids
-            $fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
+            //$fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
         }
         foreach ((array)$friends as $user) {
             if($user['user_id'] > 0) {
