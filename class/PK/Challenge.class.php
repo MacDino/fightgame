@@ -10,9 +10,10 @@ class PK_Challenge{
     const PK_FIGHTED_USER_ID = 'user_pk_fighted_user_ids_';
     const PK_FIGHTED_RESULT_KEY = 'user_pk_challenge_';
     const PK_MAX_TIMES = 20;
+    const PK_GET_INTEGRAL = 2;
+    const PK_GET_POPULARITY = 4;
 
-
-        //记录用户胜利的场次，只在胜利的时候进行保存结果
+    //记录用户胜利的场次，只在胜利的时候进行保存结果
     public static function whenWin($userId) {
         if($userId <= 0) {
             return FALSE;
@@ -115,11 +116,11 @@ class PK_Challenge{
         $return['win_count']        = $challengeInfo['win_num'];
         $return['win_continue_num'] = $challengeInfo['win_continue_num'];
         if(!$isWin) {
-            $return['integral']            = $challengeInfo['win_continue_num'] * 1; //积分
-            $return['popularity']       = $challengeInfo['win_continue_num'] * 2;
-        }else {
-            $return['integral']            = $challengeInfo['win_continue_num'] * 2; //积分
-            $return['popularity']       = $challengeInfo['win_continue_num'] * 4;
+            $return['integral']            = $challengeInfo['win_continue_num'] * (self::PK_GET_INTEGRAL/2); //积分
+            $return['popularity']       = $challengeInfo['win_continue_num'] * (self::PK_GET_POPULARITY/2);
+        } else {
+            $return['integral']            = $challengeInfo['win_continue_num'] * self::PK_GET_INTEGRAL; //积分
+            $return['popularity']       = $challengeInfo['win_continue_num'] * self::PK_GET_POPULARITY;
         }
         //记录积分和声望入mysql
         if($return['integral'] > 0) {
