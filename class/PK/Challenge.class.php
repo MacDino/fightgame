@@ -10,9 +10,10 @@ class PK_Challenge{
     const PK_FIGHTED_USER_ID = 'user_pk_fighted_user_ids_';
     const PK_FIGHTED_RESULT_KEY = 'user_pk_challenge_';
     const PK_MAX_TIMES = 20;
+    const PK_GET_INTEGRAL = 2;
+    const PK_GET_POPULARITY = 4;
 
-
-        //记录用户胜利的场次，只在胜利的时候进行保存结果
+    //记录用户胜利的场次，只在胜利的时候进行保存结果
     public static function whenWin($userId) {
         if($userId <= 0) {
             return FALSE;
@@ -115,14 +116,19 @@ class PK_Challenge{
         $return['win_count']        = $challengeInfo['win_num'];
         $return['win_continue_num'] = $challengeInfo['win_continue_num'];
         if(!$isWin) {
-            $return['integral']            = $challengeInfo['win_continue_num'] * 1; //积分
-            $return['popularity']       = $challengeInfo['win_continue_num'] * 2;
-        }else {
-            $return['integral']            = $challengeInfo['win_continue_num'] * 2; //积分
-            $return['popularity']       = $challengeInfo['win_continue_num'] * 4;
+            $return['integral']            = $challengeInfo['win_continue_num'] * (self::PK_GET_INTEGRAL/2); //积分
+            $return['popularity']       = $challengeInfo['win_continue_num'] * (self::PK_GET_POPULARITY/2);
+        } else {
+            $return['integral']            = $challengeInfo['win_continue_num'] * self::PK_GET_INTEGRAL; //积分
+            $return['popularity']       = $challengeInfo['win_continue_num'] * self::PK_GET_POPULARITY;
         }
-        //@todo 记录积分和声望入mysql
-
+        //记录积分和声望入mysql
+        if($return['integral'] > 0) {
+            Intergral::fightIntegral($userId, $return['integral']);
+        }
+        if($return['popularity'] > 0) {
+            User_Info::addReputationNum($userId, $return['popularity']);
+        }
         $return['ranking_all']      = self::rankingAll($userId);
         $return['ranking_friend']   = self::rankingFriend($userId);
         //增加一次挑战次数
@@ -139,7 +145,7 @@ class PK_Challenge{
         $friends = User_Info::nearUser($userId);
         if($isContinueWin) {
             //从cache里拿出已经打过的人的ids
-            $fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
+            //$fightedTarget = Cache::get(self::PK_FIGHTED_USER_ID.$userId);
         }
         foreach ((array)$friends as $user) {
             if($user['user_id'] > 0) {
@@ -181,7 +187,7 @@ class PK_Challenge{
         $cacheKey = self::PK_FIGHTED_USER_ID.$userId;
         $cacheValue = Cache::get($cacheKey);
         if(is_array($cacheValue) && count($cacheValue)) {
-            Cache::del($cacheKey);
+            Cache::set($cacheKey, '', 1);
         }
         return ;
     }

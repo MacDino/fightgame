@@ -41,7 +41,6 @@ $isCanFight = PK_Conf::isCanFight($userId, PK_Conf::PK_MODEL_CHALLENGE);
 //    exit();
 //}
 try {
-    //连胜30分钟的跳出计算
     $fightStatus = PK_Challenge::getResByUserId($userId);
     if(is_array($fightStatus) && count($fightStatus) && $fightStatus['win_continue_num'] > 0) {
         //连胜超过N了
@@ -94,7 +93,7 @@ try {
     $isTargetUserAlive  = Fight::isTeamAlive($targetUserFightTeam);
 
     $data['fight_procedure'] = $fightResult['fight_procedure'];
-    
+
     if(!$isUserAlive && $isTargetUserAlive || $fightResult['is_too_long'] == 1) {
         $data['result']             = PK_Challenge::dealResult($userId, FALSE);
         $data['result']['win']      = 0;
@@ -107,8 +106,8 @@ try {
         $data['result']['win'] = 1;
         PK_Challenge::whenWin($userId);
         $data['result']['win_continue_num'] = $fightStatus['win_continue_num'] + 1;
-        $data['result']['integral']            = ($fightStatus['win_continue_num']+1) * 2; //积分
-        $data['result']['popularity']       = ($fightStatus['win_continue_num']+1) * 4;
+        $data['result']['integral']         = ($fightStatus['win_continue_num']+1) * PK_Challenge::PK_GET_INTEGRAL; //积分
+        $data['result']['popularity']       = ($fightStatus['win_continue_num']+1) * PK_Challenge::PK_GET_POPULARITY;
     }
     $data['result']['use_time'] = $fightResult['use_time'];
     //记录最后一次战斗信息
