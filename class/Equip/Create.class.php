@@ -45,7 +45,7 @@ class Equip_Create
 
     private static function _insertDataToValue($data)
     {
-        $res = MySql::insert(self::TABLE_USER_EQUIP, $data);
+        $res = MySql::insert(self::TABLE_USER_EQUIP, $data, TRUE);
         return $res;
     }
 

@@ -71,9 +71,9 @@ class User_Property{
 		 * 宝箱类为即买即用
 		 */
 		if(Props_Config::isBoxProps($propsId) == Props_Config::KEY_GENERAL_BOX){
-			self::useGeneralTreasureBox($userId, $propsId);
+			return self::useGeneralTreasureBox($userId, $propsId);
 		} elseif (Props_Config::isBoxProps($propsId) == Props_Config::KEY_CHOICE_BOX){
-			self::useChoiceTreasureBox($userId, $propsId);	
+			return self::useChoiceTreasureBox($userId, $propsId);	
 		}
 		if($res && $decreingot) {
 			return TRUE;	
@@ -558,7 +558,7 @@ class User_Property{
 		 * 处理抽取获得
 		 */
 		if($res_num){
-			return self::extractEquip( $userId, $propsId, self::BOX_GENERAL) ? TRUE : FALSE;	
+			return self::extractEquip( $userId, $propsId, self::BOX_GENERAL);	
 		}
 		return FALSE;
 	}
@@ -583,7 +583,7 @@ class User_Property{
 		 * 处理抽取获得
 		 */
 		if($res_num){
-			return self::extractEquip($userId, $propsId, self::BOX_CHOICE) ? TRUE : FALSE;	
+			return self::extractEquip($userId, $propsId, self::BOX_CHOICE);	
 		}
 		return FALSE;	
 	}
@@ -624,7 +624,7 @@ class User_Property{
 				} else {
 					$color = self::randChoiceEquipColor();	
 				}
-				$res = Equip_Create::createEquip($color, $userId, $level, 0, $equipQuality);
+				$res[] = Equip_Create::createEquip($color, $userId, $level, 0, $equipQuality);
 			}
 		}	
 		return $res;
