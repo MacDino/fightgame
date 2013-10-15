@@ -99,7 +99,7 @@ class Intergral{
 	}
 	
 	/** @desc 查询今日剩余积分*/
-	public static function getTodayIntegral($userId){
+	public static function getTodayResidueIntegral($userId){
 		if(!$userId)return ;
 		$num = 0;//积分
 		$beginTime = strtotime(date("Y-m-d 00:00:00"));
