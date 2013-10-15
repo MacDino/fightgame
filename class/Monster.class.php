@@ -220,9 +220,29 @@ class Monster
      * 多余属性随机分配
      */
 	private static function _randAttribute($surplusAttribute, $userAttributeList) {
-		for($i=1;$i<=$surplusAttribute;$i++) {
-			$key = array_rand($userAttributeList, 1);
-			++$userAttributeList[$key];
+		$i = 0;
+		$arrtibuteNum = count($userAttributeList);
+		
+		while ($surplusAttribute > 0)
+		{
+			$i++;
+			if($i == $arrtibuteNum)
+			{
+				$randValue = $surplusAttribute;
+				$surplusAttribute = 0;
+			}else{
+				$randValue = rand(0, $surplusAttribute);
+				$surplusAttribute -= $randValue;
+			}
+			$randAttributes[] = $randValue;
+			
+		}
+		$randUserAttributeList = $userAttributeList;
+		foreach ($randAttributes as $randAttribute)
+		{
+			$key = array_rand($randUserAttributeList, 1);
+			$userAttributeList[$key] += $randAttribute;
+			unset($randUserAttributeList[$key]);
 		}
 		return $userAttributeList;
 	}
