@@ -93,7 +93,8 @@ class Intergral{
 		$num = 0;
 		$beginTime = strtotime(date("Y-m-d 00:00:00"));
 		$endTime = strtotime(data("Y-m-d 23:59:59"));
-		$res = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$sql = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$res = MySql::query($sql);
 		if(is_array($res)){
 			foreach ($res as $i){
 				$num += $i['num'];
@@ -111,6 +112,7 @@ class Intergral{
 		
 		//获得积分
 		$get = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$get = MySql::query($get);
 		if(is_array($get)){
 			foreach ($get as $i){
 				$num += $i['num'];
@@ -118,6 +120,7 @@ class Intergral{
 		}
 		//使用积分
 		$use = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$use = MySql::query($use);
 		if(is_array($use)){
 			foreach ($use as $i){
 				$num -= $i['num'];
@@ -130,6 +133,7 @@ class Intergral{
 	//战斗获取积分
 	public static function fightIntegral($userId, $num = self::FIGHT_INTEGRAL){
 		$res = self::addIntegralAction($userId, 1, $num, '战斗获得');
+		Reward::integral($userId);//调用积分奖励,判断是否激活新奖励
 		return $res;
 	}
 	

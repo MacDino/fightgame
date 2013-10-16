@@ -19,7 +19,9 @@ class Reward{
     
     /** @desc 奖励列表 */
     public static function getList($userId){
-        $res = MySql::select(self::TABLE_NAME, array('user_id' => $userId, 'status' => 1));
+    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE user_id = '$userId' AND status = 0 AND (create_time = '" . date('Y-m-d') . "' OR `condition` <> 0)";
+    	//echo $sql;
+    	$res = MySql::query($sql);
         return $res;
     }
     
@@ -95,6 +97,8 @@ class Reward{
     	$now = self::getRewardInfoByType(self::FIRSTCHARGE);
     	if(empty($now)){
     		return self::_insert($data); 
+    	}else{
+    		return false;
     	}
     }
 
@@ -167,7 +171,7 @@ class Reward{
         return MySql::insert(self::TABLE_NAME, $data);
     }
 
-    /** @desc 领取奖励 */
+    /** @desc 结束奖励 */
     private static function _finish($rewardId)
     {   
         $sql = "UPDATE user_reward SET `status` = 1 WHERE reward_id = '$rewardId'";
@@ -217,7 +221,7 @@ class Reward{
     		}
     	}
     	
-    	if(!empty($type)){//调用接口
+    	if(!empty($type)){//调用接口,累积奖励的那种,以后还要加上充值奖励和成就/爵位这类的累积奖励
 			switch ($type){
 				case self::UPGRADE://等级奖励
 					self::upgrade($userId);

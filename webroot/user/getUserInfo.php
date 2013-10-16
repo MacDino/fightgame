@@ -20,8 +20,8 @@ if(!$userInfo){
 
 try {    
 	User_Info::updateLastLoginTime();//更新最后登录时间
-	Reward::login($userId);
-	Reward::monthCard($userId);
+	Reward::login($userId);//判断登陆奖励
+	Reward::monthCard($userId);//判断月卡奖励
     //人物基本属性,数据库读取
 	$data = User_Info::getUserInfoByUserId($userId);
 	
