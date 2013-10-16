@@ -2,7 +2,7 @@
 //可分解装备列表(蓝色以上)
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
+$userId     	= isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
 if(!$userId)
 {

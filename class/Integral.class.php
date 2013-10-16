@@ -75,7 +75,7 @@ class Integral{
 		return $num;
 	}
 	
-	//战斗获取积分
+	/** 战斗获取积分 */
 	public static function fightIntegral($userId, $num = self::FIGHT_INTEGRAL){
 		$res = self::addIntegralAction($userId, 1, $num, '战斗获得');
 		Reward::integral($userId);//调用积分奖励,判断是否激活新奖励
@@ -92,13 +92,13 @@ class Integral{
 	public static function integralLucky($userId){
 		//校验
 		$num = self::getTodayResidueIntegral($userId);
-		/*if($num < self::EXTRACTION_INTEGRAL){
+		if($num < self::EXTRACTION_INTEGRAL){
 			return false;
-		}*/
+		}
 		
 		$array = array('money', 'ingot');
 		$function = $array[array_rand($array)];
-		$res = call_user_func(array('rewardType', $function), $userId, 100);
+		$res = call_user_func(array('rewardType', $function), $userId);
 		
 		if($res){
 			self::extractionIntegral($userId);

@@ -3,7 +3,7 @@
 //返回的格式应该是 array(装备名, 等级, 是否装备, json格式的基本属性, json格式的附加属性, json格式的强化属性);
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
+$userId     	= isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $equipId		= isset($_REQUEST['equip_id'])?$_REQUEST['equip_id']:'';//装备ID,数组
 //echo 111;var_dump(json_decode($equipId, true));exit;
 $equipId = json_decode($equipId, true);

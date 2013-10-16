@@ -2,7 +2,7 @@
 //内丹列表
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
+$userId     	= isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 //echo $userId;
 if(!$userId)
 {

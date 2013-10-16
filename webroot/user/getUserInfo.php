@@ -2,7 +2,7 @@
 //获取用户信息，包括用户基本信息，用户基本属性，用户成长属性
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId = isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
+$userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
 if(!$userId)
 {

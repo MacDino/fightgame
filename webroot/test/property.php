@@ -3,7 +3,7 @@
 //返回的格式应该是 array('道具ID' => '道具数量');
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
+$userId     	= isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
 if(!$userId)
 {

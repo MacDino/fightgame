@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $masterId     = isset($_REQUEST['master_id'])?$_REQUEST['master_id']:'';//账户ID
-$raceId     = isset($_REQUEST['race_id'])?(int)$_REQUEST['race_id']:'1';//种族ID
+$raceId     = isset($_REQUEST['race_id'])?$_REQUEST['race_id']:'1';//种族ID
 $userName   = isset($_REQUEST['user_name'])?$_REQUEST['user_name']:'';//用户昵称
 $areaId   = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:'1';//分区
 $sex   = isset($_REQUEST['sex'])?$_REQUEST['sex']:'0';//性别

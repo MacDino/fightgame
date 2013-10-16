@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
-$userId = isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'27';//用户ID
+$userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 if(!$userId)
 {
     echo '无法获得当前用户信息';

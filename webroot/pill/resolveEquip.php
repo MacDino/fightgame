@@ -2,7 +2,7 @@
 //分解装备
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId     	= isset($_REQUEST['user_id'])?(int)$_REQUEST['user_id']:'';//用户ID
+$userId     	= isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $equipId		= isset($_REQUEST['equip_id'])?$_REQUEST['equip_id']:'';//装备ID,数组
 
 $equipId = json_decode($equipId, true);
