@@ -110,7 +110,7 @@ class Reward{
         $data['name'] = '升级奖励';
         $data['content'] = array(
         	'money'	   => 10000,
-        	'baoxiang' => 1,
+        	'box' 	   => 1,
         );
         $data['type'] = self::UPGRADE;
         if(!empty($now) && $now['status'] == 1){

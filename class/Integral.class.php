@@ -98,10 +98,7 @@ class Integral{
 		
 		$array = array('money', 'ingot');
 		$function = $array[array_rand($array)];
-		echo $function;
-		$res = call_user_func_array('rewardType', $function);
-		echo 111;
-		print_r($res);
+		$res = call_user_func(array('rewardType', $function), $userId, 100);
 		
 		if($res){
 			self::extractionIntegral($userId);
