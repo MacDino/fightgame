@@ -134,7 +134,7 @@ class PK_Challenge{
         //增加一次挑战次数
         PK_Conf::setChallengeTimes($userId);
         //去除已挑战的人物ids
-        self::delAlreadyUserIds($userId);
+        self::delFightedUserIds($userId);
         return $return;
     }
 
