@@ -1427,3 +1427,16 @@ CREATE TABLE `copies_last_result` (
   PRIMARY KEY (`copies_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE  `app_fightgame`.`user_props_log` (
+	`log_id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`user_id` INT( 11 ) NOT NULL ,
+	`props_id` INT( 11 ) NOT NULL ,
+	`type` TINYINT( 3 ) NOT NULL COMMENT  '1:购买   2：使用',
+	`num` INT( 11 ) NOT NULL ,
+	`ctime` INT NOT NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE  `user_props_log` CHANGE  `ctime`  `ctime` DATETIME NOT NULL
