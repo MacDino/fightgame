@@ -31,36 +31,8 @@ $forge	   = Props_Info::getPropsListByCateId(2);
 $html = "<table>";
 
 foreach ($auxiliary as $v) {
-	switch($v['props_id']){
-		case 1:
-			$href = "../props/buyUserProps.php";
-			$num = User_Property::getPropertyNum($userId, $v['props_id']);
-			break;
-		case 2:
-			$href = "../props/buyPkNum.php";
-			$num  = $userInfo['pk_num'];
-			break;
-		case 3:
-			$href = "../props/buyUserProps.php";
-			$num = User_Property::getPropertyNum($userId, $v['props_id']);
-			break;
-		case 4:
-			$href = "../props/buyPetNum.php";
-			$num  = $userInfo['pet_num'];
-			break;
-		case 5:
-			$href = "../props/buyPackNum.php";
-			$num  = $userInfo['pack_num'];
-			break;
-		case 6:
-			$href = "../props/buyUserProps.php";
-			$num = User_Property::getPropertyNum($userId, $v['props_id']);
-			break;
-		case 7:
-			$href = "../props/buyFrinedNum.php";
-			$num  = $userInfo['friend_num'];
-			break;
-	}
+	$href = "../props/buyUserProps.php";
+	$num = User_Property::getPropertyNum($userId, $v['props_id']);
 	$html.= '<tr><td>道具名称:</td><td>'.$v["props_name"].'</td><td>道具数量:'.$num.'</td>';
 	$html.= '<td><a href="'.$href.'?user_id='.$userId.'&props_id='.$v["props_id"].'">购买道具</a></td>';
 	$html.= '<td><a href="../props/useProperty.php?user_id='.$userId.'&props_id='.$v["props_id"].'">使用道具</a></td>';

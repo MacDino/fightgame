@@ -27,7 +27,7 @@ class Shop_IAPPurchaseLog{
 	}
 
 	public static function update($log_id, $data){
-		$res = MySql::update(self::TABLE_NAME, $data, array('user_id' => $log_id));
+		$res = MySql::update(self::TABLE_NAME, $data, array('log_id' => $log_id));
 		return $res;
 	}
 
@@ -46,6 +46,33 @@ class Shop_IAPPurchaseLog{
 		$res = MySql::select(self::TABLE_NAME, $where, NULL, $sort);
 		return $res;
 	} 
+	
+	public static function count ($where){
+		$res = MySql::selectCount(self::TABLE_NAME, $where);	
+		return $res;
+	}
+
+	public static function getCountByUserIdAndProductId($user_id, $product_id){
+		$where = array(
+			'user_id' 	=> $user_id,
+			'product_id'=> $product_id,
+			'verify_status' => self::VERIFY_SUCCESS_STATUS,	
+		);	
+		$count = self::count($where);
+		return $count;	
+	}
+
+	/*
+	 * 是否是首次购买
+	 */
+	public static function isFirst($user_id, $product_id){
+		$count = self::getCountByUserIdAndProductId($user_id, $product_id);	
+		if ($count > 1) {
+			return FALSE;	
+		}
+		return TRUE;
+	}
+
 
 	/*
 	 * 获取最后一次购买记录
