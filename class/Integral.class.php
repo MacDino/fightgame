@@ -146,7 +146,7 @@ class Integral{
 	/** @desc 生成积分奖励 */
 	
 	/** @desc 积分抽奖 */
-	public static function intergralLucky($userId){
+	public static function integralLucky($userId){
 		//校验
 		$num = self::getTodayResidueIntegral($userId);
 		if($num < self::EXTRACTION_INTEGRAL){
