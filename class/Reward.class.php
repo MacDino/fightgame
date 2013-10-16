@@ -217,8 +217,15 @@ class Reward{
     					User_Property::addAmulet($userId, 3606, $value);
     				case 'baoxiang'://宝箱
     					$res = Intergral::intergralLucky($userId);
+    				unset($content[$key]);
     			}
     		}
+    	}
+    	
+    	if(!empty($content)){
+    		self::__update(array('content' => $content), $rewardId);
+    	}else{
+    		self::_finish($rewardId);
     	}
     	
     	if(!empty($type)){//调用接口,累积奖励的那种,以后还要加上充值奖励和成就/爵位这类的累积奖励

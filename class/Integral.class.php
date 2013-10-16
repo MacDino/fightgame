@@ -1,5 +1,5 @@
 <?php
-class Intergral{
+class Integral{
 	
 	CONST TABLE_NAME = 'integral_info';//积分流水表
 	/** 战斗获得积分 */
@@ -92,7 +92,7 @@ class Intergral{
 		if(!$userId)return ;
 		$num = 0;
 		$beginTime = strtotime(date("Y-m-d 00:00:00"));
-		$endTime = strtotime(data("Y-m-d 23:59:59"));
+		$endTime = strtotime(date("Y-m-d 23:59:59"));
 		$sql = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
 		$res = MySql::query($sql);
 		if(is_array($res)){
