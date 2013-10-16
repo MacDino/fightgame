@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $rewardId = isset($_REQUEST['reward_id'])?$_REQUEST['reward_id']:'';//奖励ID
-$content = isset($_REQUEST['content'])?$_REQUEST['content']:'';//content_key
+$contentId = isset($_REQUEST['content_id'])?$_REQUEST['content_id']:'';//content_key
 
 if(!$rewardId)
 {
@@ -15,7 +15,7 @@ if(!$rewardId)
 
 
 try {
-	$data = Reward::getReward($rewardId, $content);
+	$data = Reward::getReward($rewardId, $contentId);
     $code = 0;
     $msg = 'ok';
     die;
