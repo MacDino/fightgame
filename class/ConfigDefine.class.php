@@ -73,9 +73,10 @@ class ConfigDefine
     CONST USER_BASE_ATTRIBUTE           = 'user_base_attribute';//用户基本属性
     CONST USER_GROWUP_ATTRIBUTE         = 'user_growup_attribute';//用户成长属性
 
+    /** 属性 */
 	public static function AttributeList()
 	{
-		$configDefineNameList = array(
+		$res = array(
 			self::USER_ATTRIBUTE_POWER        	=> '力量',
             self::USER_ATTRIBUTE_MAGIC_POWER  	=> '魔力',
             self::USER_ATTRIBUTE_PHYSIQUE     	=> '体质',
@@ -93,10 +94,10 @@ class ConfigDefine
 
             self::RELEASE_PROBABILITY		  	=> '释放概率',
 		);
-		return $configDefineNameList;
+		return $res;
 	}
 
-	//技能静态资源
+	/** 技能 */
 	public static function skillList(){
 		$res = array(
 			self::SKILL_ZJ      				=> '重击',
@@ -119,7 +120,7 @@ class ConfigDefine
 		return 	$res;
 	}
 
-	//战斗描述
+	/** 战斗 */
 	public static function actionList(){
 		$res = array(
 			self:: PET                          => '人宠',
@@ -151,8 +152,7 @@ class ConfigDefine
 		return $res;
 	}
 
-	//前后缀描述
-	//战斗描述
+	/** 前后缀 */
 	public static function titleList(){
 		$res = array(
 			Monster::MONSTER_PREFIX_PUNY     => '弱小的',
@@ -173,6 +173,7 @@ class ConfigDefine
 		return $res;
 	}
 	
+	/** 装备 */
 	public static function equipList(){
 		$res = array(
 			Equip::EQUIP_COLOUR_GRAY 	=> '灰色',
@@ -200,6 +201,8 @@ class ConfigDefine
 		);
 		return $res;
 	}
+	
+	/** 内丹 */
 	public static function pillList(){
 		$res = array(
 			Pill::TIANSHUNEIDAN => 3601,
@@ -208,6 +211,23 @@ class ConfigDefine
 			Pill::TIANQUANNEIDAN => 3604,
 			Pill::YUHENGNEIDAN => 3605,
 		);
+		return $res;
+	}
+	
+	/** 道具 */
+	public static function poopsList(){
+		$res = array(
+			Pill::TIANSHUNEIDAN => 6301,
+			Pill::TIANXUANNEIDAN => 6302,
+			Pill::TIANJINEIDAN => 6303,
+			Pill::TIANQUANNEIDAN => 6304,
+			Pill::YUHENGNEIDAN => 6305,
+			Pill::TIANSHUNEIDAN => 6306,
+			Pill::TIANXUANNEIDAN => 6307,
+			Pill::TIANJINEIDAN => 6308,
+			Pill::TIANQUANNEIDAN => 6309,
+		);
+		return $res;
 	}
 
 }

@@ -5,12 +5,12 @@ class Pill_Stone {
 	CONST TABLE_NAME = 'stone_info';
 	
 	/** @desc 增加阵法石 */
-	public static function addStone($userId, $type){
-		$num = self::getStoneNumBytype($userId, $type);
-		if(!empty($num)){
-			$res = MySql::update(self::TABLE_NAME, array('num' => $num+1), array('user_id' => $userId, 'stone_type' => $type));
+	public static function addStone($userId, $type, $num=1){
+		$nownum = self::getStoneNumBytype($userId, $type);
+		if(!empty($nownum)){
+			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'stone_type' => $type));
 		}else{
-			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'stone_type' => $type, 'num' => 1));
+			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'stone_type' => $type, 'num' => $num));
 		}
 		
 		return $res;

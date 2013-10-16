@@ -7,62 +7,7 @@ class Integral{
 	/** 抽奖使用积分 */
 	CONST EXTRACTION_INTEGRAL = 25;
 	
-	/** @desc 技能点 */
-	public static function prize1($userId){
-		$res = User_Info::addIngot($userId, 1);
-		return '技能点';
-	}
 	
-	/** @desc 内丹精华 */
-	public static function prize2($userId){
-		$type = array_rand(ConfigDefine::pillList());
-		$res = Pill_Stone::addStone($userId, $type);
-		return $type.'精华';
-	}
-	
-	/** @desc 精铁 */
-	public static function prize3($userId){
-		$level = rand(1,10);
-		$res = Pill_Iron::addIron($userId, $level);
-		return $level."级精铁";
-	}
-	
-	/** @desc 符咒 */
-	public static function prize4($userId){
-		$array = array(6301, 6302, 6303, 6306, 6308, 6309);
-		$type = array_rand($array);
-		$res = User_Property::addAmulet($userId, $type, 1);
-		return $type;
-	}
-	
-	/** @desc 暂空 */
-	public static function prize5($userId){
-		return 1;		
-	}
-	
-	/** @desc 上古遗迹 */
-	public static function prize6($userId){
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		$level = intval($userInfo['user_level']/10);
-		$colour = User_Property::randGeneralEquipColor();
-		$equipId = Equip_Create::createEquip($colour, $userId, $level);
-		$res = Equip_Info::getEquipInfoById($equipId);
-		return $res;
-	}
-	
-	/** @desc 金币 */
-	public static function prize7($userId){
-		$num = rand(10000,1000000);
-		$res = User_Info::addMoney($userId, $num);
-		return '金币'.$num."个";
-	}
-	
-	/** @desc 元宝 */
-	public static function prize8($userId){
-		$num = rand(1,100);
-		$res = User_Info::addIngot($userId, $num);
-		return '元宝'.$num."个";
-	}
 	
 	/** @desc获取积分流水表 */
 	public static function listIntegralInfoById($userId){
@@ -108,7 +53,7 @@ class Integral{
 		if(!$userId)return ;
 		$num = 0;//积分
 		$beginTime = strtotime(date("Y-m-d 00:00:00"));
-		$endTime = strtotime(data("Y-m-d 23:59:59"));
+		$endTime = strtotime(date("Y-m-d 23:59:59"));
 		
 		//获得积分
 		$get = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
@@ -143,8 +88,6 @@ class Integral{
 		return $res;
 	}
 	
-	/** @desc 生成积分奖励 */
-	
 	/** @desc 积分抽奖 */
 	public static function integralLucky($userId){
 		//校验
@@ -155,7 +98,7 @@ class Integral{
 		
 		$rand = rand(1,8);
 		$function = 'prize'.$rand;
-		$res = self::$function;
+		$res = Rewardtype::$function;
 		
 		if($res){
 			self::extractionIntegral($userId);
