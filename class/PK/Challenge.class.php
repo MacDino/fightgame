@@ -124,7 +124,7 @@ class PK_Challenge{
         }
         //记录积分和声望入mysql
         if($return['integral'] > 0) {
-            Intergral::fightIntegral($userId, $return['integral']);
+            Integral::fightIntegral($userId, $return['integral']);
         }
         if($return['popularity'] > 0) {
             User_Info::addReputationNum($userId, $return['popularity']);
@@ -134,7 +134,7 @@ class PK_Challenge{
         //增加一次挑战次数
         PK_Conf::setChallengeTimes($userId);
         //去除已挑战的人物ids
-        self::delAlreadyUserIds($userId);
+        self::delFightedUserIds($userId);
         return $return;
     }
 

@@ -16,35 +16,35 @@ try{
 	switch ($propsId){
 		//双倍咒符
 		case User_Property::DOUBLE_HARVEST:
-			$data = User_Property::useDoubleHarvest($userId);
+			$data = User_Property::useDoubleHarvest($userId, $propsId);
 			break;
 		//PK咒符
 		case User_Property::PK:
-			$data = User_Property::usePkNum($userId);
+			$data = User_Property::usePkNum($userId, $propsId);
 			break;
 		//属性增强
 		case User_Property::ATTRIBUTE_ENHANCE:
-			$data = User_Property::useAttributeEnhance($userId);
+			$data = User_Property::useAttributeEnhance($userId, $propsId);
 			break;
 		//人宠
 		case User_Property::PET:
-			$data = User_Property::usePetNum($userId);
+			$data = User_Property::usePetNum($userId, $propsId);
 			break;
 		//背包
 		case User_Property::PACKAGE:
-			$data = User_Property::usePackNum($userId);
+			$data = User_Property::usePackNum($userId, $propsId);
 			break;
 		//自动挂机
 		case User_Property::AUTO_FIGHT:
-			$data = User_Property::useAutoFight($userId);
+			$data = User_Property::useAutoFight($userId, $propsId);
 			break;
 		//好友上限
 		case User_Property::FRIEND:
-			$data = User_Property::useFriendNum($userId);
+			$data = User_Property::useFriendNum($userId, $propsId);
 			break;
 		//装备锻造
 		case User_Property::EQUIP_FORGE:
-			$data = User_Property::useEquipForge($userId);
+			$data = User_Property::useEquipForge($userId, $propsId);
 			break;
 		//装备成长
 		case User_Property::EQUIP_GROW:

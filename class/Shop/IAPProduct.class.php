@@ -49,7 +49,7 @@ class Shop_IAPProduct{
 	 * 购买凭证验证借口
 	 */
 	public static function verifyReceipt($data){
-		$data = json_decode($data);	
+		$data = json_decode($data, TRUE);	
 		if($data && is_array($data)){
 			$user_id = $data['user_id'];	
 			$product_id = $data['product_id'];	
@@ -58,17 +58,22 @@ class Shop_IAPProduct{
 			/*
 			 * 先入库记录，再验证
 			 */	
-			$res = Shop_IAPPurchaseLog::insert(array($user_id, $product_id, $receipt));
+			$logWhere = array(
+				'user_id' 			=> $user_id,
+				'product_id'		=> $product_id,
+				'purchase_receipt'	=> $receipt,
+			);
+			$purchaseLogId = Shop_IAPPurchaseLog::insert($logWhere);
 			try{
 				/*
 				 * 向apple发起验证
 				 */
-				$verifyRes = self::sendReceiptToApple($receipt);	
+				$verifyRes = self::sendReceiptToApple($receipt, $user_id);	
 				/*
 				 * 验证成功时,更新购买记录表状态
 				 */
 				if(!empty($verifyRes) && is_array($verifyRes)){
-					Shop_IAPPurchaseLog::updateVerifyStatus($res);		
+					Shop_IAPPurchaseLog::updateVerifyStatus($purchaseLogId);		
 					/*
 					 * 更新用户元宝:套餐本身元宝+赠送元宝
 					 */
@@ -78,14 +83,21 @@ class Shop_IAPProduct{
 					//赠送元宝
 					if($present_type == self::PRESENT_TYPE_INGOT){
 						$ingot += $product['present_num']; 
-						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
+						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 1);
 					} else if ($present_type == self::PRESENT_TYPE_MONTH_PAY){
 					//赠送欢乐月	
 					/*
 					 * 欢乐月直接将元宝数入账
 					 * 欢乐月赠送套餐需要手动领取,so这里不处理套餐赠送的逻辑 ,由另外的接口完成
 					 */
-						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 2);
+						User_Info::updateSingleInfo($user_id, 'ingot', $ingot, 1);
+					}
+
+					/*
+					 * 首充奖励
+					 */
+					if (Shop_IAPPurchaseLog::isFirst($user_id, $product_id)){
+						Reward::firstCharge($user_id, $ingot);	
 					}
 					return $verifyRes;
 				}
@@ -100,7 +112,7 @@ class Shop_IAPProduct{
 	/*
 	 * 向apple发起凭证数据
 	 */
-	public function sendReceiptToApple($receipt){
+	public function sendReceiptToApple($receipt, $user_id){
 		if (IAP_IS_SANDBOX) {     
 			$endpoint = self::SANDBOX_VERIFY_URL;    
 		}  else {     
@@ -136,6 +148,8 @@ class Shop_IAPProduct{
 		if (!isset($data->status) || $data->status != 0) {     
 			throw new Exception('Invalid receipt', 100022);     
 		}     
+		$userInfo = User_Info::getUserInfoByUserId($user_id);	
+		$ingot = $userInfo['ingot'];
 
 		//返回产品的信息              
 		return array(     
@@ -145,7 +159,8 @@ class Shop_IAPProduct{
 			'purchase_date'  =>  $data->receipt->purchase_date,     
 			'app_item_id'    =>  $data->receipt->app_item_id,     
 			'bid'            =>  $data->receipt->bid,     
-			'bvrs'           =>  $data->receipt->bvrs     
+			'bvrs'           =>  $data->receipt->bvrs,
+			'ingot'			 =>  $ingot,
 		);     
 	}     
 

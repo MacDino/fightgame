@@ -39,8 +39,7 @@ class User_Property{
 	
 	
 	/**
-	 * 购买符咒   适用于属性增强、双倍、挂机、装备打造等静态价格的咒符
-	 * 动态价格咒符和pk咒符、背包上限需要各自调用自己的接口
+	 * 购买符咒
 	 */
 	public static function buyUserProps($userId, $propsId, $num){
 		if(!$userId || !$propsId)return FALSE;
@@ -60,13 +59,22 @@ class User_Property{
 		if($userInfo['ingot'] < $price) {
 			throw new Exception('您的元宝数不足,无法购买',1);	
 		}
-		$res = self::addAmulet($userId, $propsId, $num);
+		$res = self::buyAction($userId, $propsId, $num);
 		/*
 		 * 扣除元宝
 		 */
 		if($res){
 			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '2');
 		} 
+		if($res && $decreingot) {
+			$logWhere = array(
+				'props_id' => $propsId,		
+				'user_id'  => $userId,
+				'num'	   => $num,
+				'type'	   => Props_Log::ACTION_TYPE_BUY, 
+			);
+			Props_Log::insert($logWhere);
+		}
 		/*
 		 * 宝箱类为即买即用
 		 */
@@ -74,8 +82,7 @@ class User_Property{
 			return self::useGeneralTreasureBox($userId, $propsId);
 		} elseif (Props_Config::isBoxProps($propsId) == Props_Config::KEY_CHOICE_BOX){
 			return self::useChoiceTreasureBox($userId, $propsId);	
-		}
-		if($res && $decreingot) {
+		} else {
 			return TRUE;	
 		}
 		return FALSE;
@@ -102,9 +109,16 @@ class User_Property{
 		/*
 		 * 扣除元宝
 		 */
-		$res = self::addAmulet($userId, self::EQUIP_GROW, $num);
+		$res = self::buyAction($userId, self::EQUIP_GROW, $num);
 		if($res){
 			$decreingot = User_Info::updateSingleInfo($userId, 'ingot', $price, '-');
+			$logWhere = array(
+				'props_id' => $propsId,		
+				'user_id'  => $userId,
+				'num'	   => $num,
+				'type'	   => Props_Log::ACTION_TYPE_BUY, 
+			);
+			Props_Log::insert($data);
 			return $decreingot;
 		} 
 		return false;
@@ -128,31 +142,71 @@ class User_Property{
 	/*
 	 * 增加为用户增加道具
 	 */
-	public static function addAmulet($userId, $propsId, $num)
+	public static function create($userId, $propsId, $num)
 	{
 		if(!$userId || !$propsId)	return FALSE;
-		$userInfo = User_Info::getUserInfoByUserId($userId);
+		$sets = array (
+			'user_id'		=> $userId,
+			'property_id'	=> $propsId,
+			'property_num'  => $num,
+		);
+		return MySql::insert(self::TABLE_NAME, $sets);
+	}
+	
+	/*
+	 * 更新用户道具数量  增加
+	 */
+	public static function updateNumIncreaseAction($userId, $propsId, $num)
+	{
+		if(!$userId || !$propsId)	return FALSE;
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` + " . $num . " WHERE user_id = $userId AND property_id = $propsId";
 		return MySql::execute($sql);
 	}
-	
-	/**
-	 * @param int $userId	用户ID
-	 * @param int $type		符咒类别
-	 * @return 使用符咒
+	/*
+	 * 更新用户道具数量  减少
 	 */
-	private static function UseAmulet($userId, $type)
+	public static function updateNumDecreaseAction($userId, $propsId)
 	{
-		if(!$userId || !$type)return FALSE;
-		
-		$num = self::getPropertyNum($userId, $type);
+		if(!$userId || !$propsId)	return FALSE;
+		$num = self::getPropertyNum($userId, $propsId);
 		if($num <= 0)return FALSE;
-		
-		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - 1 WHERE user_id = $userId AND property_id = $type";
-//		echo $sql;exit;
+
+		$userProps = self::getUserPropsInfoByUnionKey($userId, $propsId);
+		if (!$userProps) {
+			throw new Exception ('未找到您当前的道具记录', 100310);
+		}
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - 1 WHERE user_id = $userId AND property_id = $propsId";
 		return MySql::execute($sql);
 	}
-	
+
+	/*
+	 * 购买数据库操作 
+	 */
+	public static function buyAction($userId, $propsId, $num) {
+		$userProp = self::getUserPropsInfoByUnionKey($userId, $propsId);
+		if ($userProp && is_array($userProp)) {
+			$res = self::updateNumIncreaseAction($userId, $propsId, $num);	
+		} else {
+			$res = self::create($userId, $propsId, $num);	
+		}
+		return $res;
+	}
+
+
+	/*
+	 * 根据联合主键取得道具信息
+	 */
+	public static function getUserPropsInfoByUnionKey ( $userId, $propsId ) {
+		if(!$userId || !$propsId)	return FALSE;
+		$where = array (
+			'user_id' 		=> $userId,
+			'property_id'	=> $propsId,
+		);
+		$res = MySql::selectOne(self::TABLE_NAME, $where);
+		return $res;	
+	}
+
+
 	/**
 	 * @param int $userId	用户ID
 	 * @param int $type		符咒类别
@@ -216,159 +270,127 @@ class User_Property{
 		return $propertyInfo;
 	}
 	
-	/**
-	 * 购买背包上限
-	 * @param int $userId
-	 * @return 购买背包上限
+	/*
+	 * 使用背包
 	 */
-	public static function buyPackNum($userId)
-	{
-		if(!$userId)return FALSE;
-		
+	public static function usePackNum($userId, $propsId) {
+		if(!$userId || !$propsId) return FALSE;
+
+		$num = self::getPropertyNum($userId, $propsId);
+		if($num <= 0) {
+			throw new Exception ('背包数量不足', 10011);
+		}
+
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if($userInfo['pack_num'] >= User::DEFAULT_PACK_MAX){
 			throw new Exception ('已经达到上限', 1);
 		}
-		
-		//验证是否有足够元宝购买
-		if($userInfo['ingot'] < User::PACK_PRICE){
-			throw new Exception('元宝数不足，不能购买', 1);
+
+		$res = self::updateNumDecreaseAction($userId, $propsId);
+		if ($res) {
+			$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 1, '1');
 		}
-		
-		$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 5, '1');//增加包裹数
-		if ($res_num){
-			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PACK_PRICE, '2');//减少相应元宝 
-			return $res_ingot;
-		}
-		return FALSE;	
-	}
-	/*
-	 * 使用背包
-	 */
-	public static function usePackNum($userId) {
-		if(!$userId)return FALSE;
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pet_num'] <= 0) {
-			throw new Exception ('背包数量不足', 10011);
-		}
-		$res_num = User_Info::updateSingleInfo($userId, 'pack_num', 1, '2');
-		return $res_num;	
+		$logWhere = array(
+			'props_id' => $propsId,		
+			'user_id'  => $userId,
+			'num'	   => 1,
+			'type'	   => Props_Log::ACTION_TYPE_USE, 
+		);
+		Props_Log::insert($logWhere);
+		return $res;	
 	}
 	
-	/**
-	 * 购买好友上限
-	 * @param int $userId
-	 * @return 购买好友上限
-	 */
-	public static function buyFriendNum($userId)
-	{
-		if(!$userId)return FALSE;
-		
-		//验证是否已到最大购买数
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['friend_num'] >= User::DEFAULT_FRIEND_MAX){
-			throw new Exception ('已经达到上限', 1);
-		}
-		//验证是否有足够元宝购买
-		if($userInfo['ingot'] < User::FRIEND_PRICE){
-			throw new Exception('元宝数不足，不能购买', 1);
-		}
-		$res_num = User_Info::updateSingleInfo($userId, 'friend_num', 1, '1');//增加包裹数
-		if ($res_num){
-			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::FRIEND_PRICE, '2');//减少相应元宝 
-			return $res_ingot;
-		}
-		return FALSE;	
-	}
 	/*
 	 * 使用好友上限
 	 */
-	public static function useFriendNum($userId) {
-		if(!$userId)return FALSE;
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['friend_num'] <= 0) {
-			throw new Exception ('好友上限技能数量不足', 10011);
+	public static function useFriendNum($userId, $propsId) {
+		if(!$userId || !$propsId) return FALSE;
+
+		$num = self::getPropertyNum($userId, $propsId);
+		if($num <= 0) {
+			throw new Exception ('好友上限数量不足', 10011);
 		}
-		$res_num = User_Info::updateSingleInfo($userId, 'friend_num', 1, '2');
-		return $res_num;	
-	}
-	
-	/**
-	 * 购买人宠上限
-	 * @param int $userId
-	 * @return 购买人宠上限
-	 */
-	public static function buyPetNum($userId)
-	{
-		if(!$userId)return FALSE;
-		
+
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pet_num'] >= User::DEFAULT_PET_MAX) {
-			throw new Exception ('已经达到上限', 1);
+		if($userInfo['friend_num'] >= User::DEFAULT_FRIEND_MAX){
+			throw new Exception ('已经达到上限', 10050);
 		}
-		//验证是否有足够元宝购买
-		if($userInfo['ingot'] < User::PET_PRICE) {
-			throw new Exception('元宝数不足，不能购买', 1);
+
+		$res = self::updateNumDecreaseAction($userId, $propsId);
+		if ($res) {
+			$res_num = User_Info::updateSingleInfo($userId, 'friend_num', 1, '1');
 		}
-		
-		$res_num = User_Info::updateSingleInfo($userId, 'pet_num', 1, '1');//增加包裹数
-		if($res_num) {
-			$res_ingot = User_Info::updateSingleInfo($userId, 'ingot', User::PET_PRICE, '2');//减少相应元宝 
-			return $res_ingot;
-		}
-		return FALSE;
+		$logWhere = array(
+			'props_id' => $propsId,		
+			'user_id'  => $userId,
+			'num'	   => 1,
+			'type'	   => Props_Log::ACTION_TYPE_USE, 
+		);
+		Props_Log::insert($logWhere);
+		return $res;	
 	}
+	
 	/*
 	 * 使用人宠
 	 */
-	public static function usePetNum($userId) {
-		if(!$userId)return FALSE;
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pet_num'] <= 0) {
-			throw new Exception ('人宠咒符数量不足', 10011);
+	public static function usePetNum($userId, $propsId) {
+		if(!$userId || !$propsId) return FALSE;
+
+		$num = self::getPropertyNum($userId, $propsId);
+		if($num <= 0) {
+			throw new Exception ('人宠上限数量不足', 10011);
 		}
-		$res_num = User_Info::updateSingleInfo($userId, 'pet_num', 1, '2');
-		return $res_num;	
+
+		//验证是否已到最大购买数
+		$userInfo = User_Info::getUserInfoByUserId($userId);
+		if($userInfo['pet_num'] >= User::DEFAULT_PET_MAX){
+			throw new Exception ('已经达到上限', 10050);
+		}
+
+		$res = self::updateNumDecreaseAction($userId, $propsId);
+		if ($res) {
+			$res_num = User_Info::updateSingleInfo($userId, 'pet_num', 1, '1');
+		}
+		$logWhere = array(
+			'props_id' => $propsId,		
+			'user_id'  => $userId,
+			'num'	   => 1,
+			'type'	   => Props_Log::ACTION_TYPE_USE, 
+		);
+		Props_Log::insert($logWhere);
+		return $res;	
 	}
 	
-	/**
-	 * 购买PK次数
-	 * @param int	$userId		用户ID
-	 * @param int	$num		购买次数,默认为1
-	 * @return 购买PK次数
-	 */
-	public static function buyPkNum($userId, $num = FALSE)
-	{
-		if(!$userId)return FALSE;
-		
-		$num = $num > 0 ? $num : "1";
-		
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pk_num'] >= User::PK_BUY_NUM) {
-			throw new Exception ('已经达到上限', 10010);
-		}
-		
-		$res_num = User_Info::updateSingleInfo($userId, 'pk_num', $num, '1');
-		if($res_num){
-			$res_ingot = User_Info::updateSingleInfo($userid, 'ingot', User::PK_PRICE * $num, '2');
-			return TRUE;
-		}
-		return FALSE;
-	}
-
 	/*
 	 * 使用pk咒符
 	 */
-	public static function usePkNum($userId) {
-		if(!$userId)return FALSE;
-		$userInfo = User_Info::getUserInfoByUserId($userId);
-		if($userInfo['pk_num'] <= 0) {
+	public static function usePkNum($userId, $propsId) {
+		if(!$userId || !$propsId) return FALSE;
+
+		$num = self::getPropertyNum($userId, $propsId);
+		if($num <= 0) {
 			throw new Exception ('pk咒符数量不足', 10011);
 		}
-		$res_num = User_Info::updateSingleInfo($userId, 'pk_num', 1, '2');
-		return $res_num;	
+
+		$todayNum = Props_Log::getTodayUseNum($userId, $propsId);
+		if($todayNum >= User::PK_BUY_NUM){
+			throw new Exception ('已经达到每天上限', 10050);
+		}
+
+		$res = self::updateNumDecreaseAction($userId, $propsId);
+		if ($res) {
+			$res_num = User_Info::updateSingleInfo($userId, 'pk_num', 1, '1');
+		}
+		$logWhere = array(
+			'props_id' => $propsId,		
+			'user_id'  => $userId,
+			'num'	   => 1,
+			'type'	   => Props_Log::ACTION_TYPE_USE, 
+		);
+		Props_Log::insert($logWhere);
+		return $res;	
 	}
 		
 	/** 
@@ -386,7 +408,7 @@ class User_Property{
 		if(empty($isHave))return FALSE;
 		
 		$res = MySql::insert('attribute_enhance', array('user_id' => $userId, 'add_time' => time()));
-		$res_num = self::UseAmulet($userId, self::ATTRIBUTE_ENHANCE);
+		$res_num = self::updateNumDecreaseAction($userId, self::ATTRIBUTE_ENHANCE);
 		
 		if(!$res && !$res_num)return FALSE;
 		return $res;
@@ -428,7 +450,7 @@ class User_Property{
 		if(empty($isHave))return FALSE;
 		
 		$res = MySql::insert('double_harvest', array('user_id' => $userId, 'add_time' => time()));
-		$res_num = self::UseAmulet($userId, self::DOUBLE_HARVEST);
+		$res_num = self::updateNumDecreaseAction($userId, self::DOUBLE_HARVEST);
 		return $res;
 	}
 	/** 检测是否在使用挂机符咒
@@ -472,7 +494,7 @@ class User_Property{
 		}
 
 		$res = MySql::insert('auto_fight', array('user_id' => $userId, 'add_time' => time()));
-		$res_num = self::UseAmulet($userId, self::AUTO_FIGHT);
+		$res_num = self::updateNumDecreaseAction($userId, self::AUTO_FIGHT);
 		return $res;
 	}
 	/** 检测是否在使用挂机符咒
@@ -508,7 +530,16 @@ class User_Property{
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 10001);	
 		}
-		$res = self::UseAmulet($userId, self::EQUIP_FORGE);
+		$res = self::updateNumDecreaseAction($userId, self::EQUIP_FORGE);
+		if($res) {
+			$logWhere = array(
+				'props_id' => $propsId,		
+				'user_id'  => $userId,
+				'num'	   => 1,
+				'type'	   => Props_Log::ACTION_TYPE_USE, 
+			);
+			Props_Log::insert($logWhere);
+		}
 		return $res;
 	}
 	
@@ -534,7 +565,16 @@ class User_Property{
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 1);	
 		}
-		$res = self::UseAmulet($userId, self::Equip_GROW);
+		$res = self::updateNumDecreaseAction($userId, self::Equip_GROW);
+		if ($res){
+			$logWhere = array(
+				'props_id' => $propsId,		
+				'user_id'  => $userId,
+				'num'	   => 1,
+				'type'	   => Props_Log::ACTION_TYPE_USE, 
+			);
+			Props_Log::insert($logWhere);
+		}
 		return $res;
 	}
 		
@@ -553,11 +593,18 @@ class User_Property{
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 1);	
 		}
-		$res_num = self::UseAmulet($userId, $propsId);
+		$res_num = self::updateNumDecreaseAction($userId, $propsId);
 		/*
 		 * 处理抽取获得
 		 */
 		if($res_num){
+			$logWhere = array(
+				'props_id' => $propsId,		
+				'user_id'  => $userId,
+				'num'	   => 1,
+				'type'	   => Props_Log::ACTION_TYPE_USE, 
+			);
+			Props_Log::insert($logWhere);
 			return self::extractEquip( $userId, $propsId, self::BOX_GENERAL);	
 		}
 		return FALSE;
@@ -578,11 +625,18 @@ class User_Property{
 		if(!$isHave || empty($isHave)){
 			throw new Exception('该道具数量不足，您无法使用', 1);	
 		}
-		$res_num = self::UseAmulet($userId, $propsId);
+		$res_num = self::updateNumDecreaseAction($userId, $propsId);
 		/*
 		 * 处理抽取获得
 		 */
 		if($res_num){
+			$logWhere = array(
+				'props_id' => $propsId,		
+				'user_id'  => $userId,
+				'num'	   => 1,
+				'type'	   => Props_Log::ACTION_TYPE_USE, 
+			);
+			Props_Log::insert($logWhere);
 			return self::extractEquip($userId, $propsId, self::BOX_CHOICE);	
 		}
 		return FALSE;	
