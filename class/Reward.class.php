@@ -129,7 +129,7 @@ class Reward{
     //积分奖励
     public static function integral($userId){
     	$now = self::getRewardInfoByType(self::INTEGRAL);
-    	$integral = Intergral::getTodayIntegral($userId);
+    	$integral = Integral::getTodayIntegral($userId);
     	
     	$data['user_id'] = $userId;
         $data['name'] = '积分奖励';
@@ -216,14 +216,14 @@ class Reward{
     				case 3606://挂机符咒
     					User_Property::addAmulet($userId, 3606, $value);
     				case 'baoxiang'://宝箱
-    					$res = Intergral::intergralLucky($userId);
+    					$res = Integral::integralLucky($userId);
     				unset($content[$key]);
     			}
     		}
     	}
     	
     	if(!empty($content)){
-    		self::__update(array('content' => $content), $rewardId);
+    		self::_update(array('content' => $content), $rewardId);
     	}else{
     		self::_finish($rewardId);
     	}
