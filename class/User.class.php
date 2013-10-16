@@ -52,7 +52,7 @@ class User
     CONST ISOMERISM = '0.03';
     
     /** 属性增强,有效期.24小时*/
-    CONST ATTEIBUTEENHANCETIME = 86400;
+    CONST ATTEIBUTEENHANCETIME = 7200;
     /** 双倍收益,有效期2小时*/
     CONST DOUBLEHARVESTTIME = 7200;
     /** 挂机,有效期2小时*/
