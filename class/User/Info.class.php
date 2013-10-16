@@ -45,6 +45,7 @@ class User_Info
 //		echo $level[0]['level']."====".$userInfo['user_level'];
 		if($level[0]['level'] > $userInfo['user_level']){
 			self::addLevelNum($userId, $level[0]['level']);
+			Reward::upgrade($userId);//调用等级奖励,判断是否激活新奖励
 			//增加技能点
 			for($i=$userInfo['user_level']+1; $i<=$level[0]['level']; $i++){
 				$addSkill = Skill_Info::addSkillNum($i);

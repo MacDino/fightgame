@@ -4,13 +4,13 @@ class Pill_Iron {
 	CONST TABLE_NAME = 'iron_info';
 	
 	/** @desc 增加精铁 */
-	public static function addIron($userId, $level){
-		$num = self::getIronNumByLevel($userId, $level);
+	public static function addIron($userId, $level, $num=1){
+		$nownum = self::getIronNumByLevel($userId, $level);
 //		echo $num;
 		if(!empty($num)){
-			$res = MySql::update(self::TABLE_NAME, array('num' => $num+1), array('user_id' => $userId, 'level' => $level));
+			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'level' => $level));
 		}else{
-			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level, 'num' => 1));
+			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level, 'num' => $num));
 		}
 		
 		return $res;
