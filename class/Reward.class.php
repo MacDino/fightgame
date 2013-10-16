@@ -162,15 +162,15 @@ class Reward{
         	}
     		if($now['status'] == 1 && $now['create_time'] == date('Y-m-d')){//如果记录是今天的并且已领完,判断是否可以生成下一次
 	    		if($now['condition'] == 25 && $integral >= 50){
-	    			$data['content'] = json_encode(array(
-			        	'exp'	   => 100,
-			        ));
 	    			$data['condition'] = 50;
-	    		}elseif($now['condition'] == 50 && $integral >= 100){
 	    			$data['content'] = json_encode(array(
-			        	'money'	   => 100/3,
+			        	'exp'	   => 5000*pow(2, intval(($data['condition']/10)-3)),
 			        ));
+	    		}elseif($now['condition'] == 50 && $integral >= 100){
 	    			$data['condition'] = 100;
+	    			$data['content'] = json_encode(array(
+			        	'money'	   => 5000*pow(2, intval(($data['condition']/10)-3))/2,
+			        ));
 	    		}elseif($now['condition'] == 100 && $integral >= 150){
 	    			$data['content'] = json_encode(array(
 			        	'box'	   => 1,
@@ -187,14 +187,12 @@ class Reward{
 	/** @desc 新增奖励 */
     private static function _insert($data){
         $data['create_time'] = date('Y-m-d');
-//        print_r($data);
         return MySql::insert(self::TABLE_NAME, $data);
     }
     
     /** @desc 更新奖励内容 */
     private static function _update($data, $rewardId){
     	$data['create_time'] = date('Y-m-d');
-//        print_r($data);
         return MySql::update(self::TABLE_NAME, $data, array('reward_id' => $rewardId));
     }
     
@@ -220,19 +218,21 @@ class Reward{
 				User_Info::addExperience($userId, $value);
 				break;
 			case 3601://双倍符咒
-				User_Property::addAmulet($userId, 3601, $value);
+				User_Property::updateNumIncreaseAction($userId, 3601, $value);
 				break;
 			case 3602://PK符咒
-				User_Property::addAmulet($userId, 3602, $value);
+				User_Property::updateNumIncreaseAction($userId, 3602, $value);
 				break;
 			case 3603://属性增强符咒
-				User_Property::addAmulet($userId, 3603, $value);
+				User_Property::updateNumIncreaseAction($userId, 3603, $value);
 				break;
 			case 3606://挂机符咒
-				User_Property::addAmulet($userId, 3606, $value);
+				User_Property::updateNumIncreaseAction($userId, 3606, $value);
 				break;
 			case 'box'://宝箱
-				$res = Integral::integralLucky($userId);
+				$array = array('money', 'ingot', 'props', 'box');
+				$function = $array[array_rand($array)];
+				$res = call_user_func(array('rewardType', $function), $userId);
 				break;
 		}
 		unset($content[$contentId]);//删掉已领取的奖励

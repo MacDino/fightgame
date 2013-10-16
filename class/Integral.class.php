@@ -90,13 +90,7 @@ class Integral{
 	
 	/** @desc 积分抽奖 */
 	public static function integralLucky($userId){
-		//校验
-		$num = self::getTodayResidueIntegral($userId);
-		if($num < self::EXTRACTION_INTEGRAL){
-			return false;
-		}
-		
-		$array = array('money', 'ingot');
+		$array = array('money', 'ingot', 'exp', 'skillPoint', 'pillStone', 'pillIron', 'props', 'box');
 		$function = $array[array_rand($array)];
 		$res = call_user_func(array('rewardType', $function), $userId);
 		

@@ -1,7 +1,7 @@
 <?php
 //积分抽奖
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
-
+//echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 $userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 
 if(!$userId)
@@ -11,17 +11,15 @@ if(!$userId)
     die;
 }
 
-$integral = Integral::getTodayResidueIntegral($userId);
+/*$integral = Integral::getTodayResidueIntegral($userId);
 if($integral < Integral::EXTRACTION_INTEGRAL){
 	$code = 23;
 	$msg = '积分不够';
     die;
-}
+}*/
 
 try {
-	echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 	$data = Integral::integralLucky($userId);
-	print_r($data);
     $code = 0;
     $msg = 'ok';
     die;
