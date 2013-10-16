@@ -94,25 +94,18 @@ if(empty($VersionId)){$VersionId = array();}
 		$data['EXP_VERSION']['code'] = Version::EXP_VERSION;
 		$data['EXP_VERSION']['value'] = Version::getLevelExpList();
 	}
-/*}else{
-	$data['MAP_VERSION']['code'] = Version::MAP_VERSION;
-	$data['MAP_VERSION']['value'] = Version::getMapList();
 	
-	$data['MONSTER_VERSION']['code'] = Version::MONSTER_VERSION;
-	$data['MONSTER_VERSION']['value'] = Version::getMonsterList();
-	
-	$data['ACTION_VERSION']['code'] = Version::ACTION_VERSION;
-	$data['ACTION_VERSION']['value'] = Version::getActionList();
-	
-	$data['SKILL_VERSION']['code'] = Version::SKILL_VERSION;
-	$data['SKILL_VERSION']['value'] = Version::getSkillList();
-	
-	$data['EXP_VERSION']['code'] = Version::EXP_VERSION;
-	$data['EXP_VERSION']['value'] = Version::getLevelExpList();
-	
-	$data['TITLE_VERSION']['code'] = Version::TITLE_VERSION;
-	$data['TITLE_VERSION']['value'] = Version::getTitleList();
-}*/
+	//升级经验
+	if(array_key_exists('PROPS_VERSION', $VersionId)){
+		if(Version::PROPS_VERSION > $VersionId['EXP_VERSION']){
+			$data['PROPS_VERSION']['code'] = Version::PROPS_VERSION;
+			$data['PROPS_VERSION']['value'] = Version::getPropsList();
+		}
+	}else{
+		$data['PROPS_VERSION']['code'] = Version::PROPS_VERSION;
+		$data['PROPS_VERSION']['value'] = Version::getPropsList();
+	}
+
 //print_r($data);
 $code = 0;
 $msg = 'ok';

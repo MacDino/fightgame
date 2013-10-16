@@ -64,7 +64,7 @@ class Integral{
 			}
 		}
 		//使用积分
-		$use = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$use = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 2";
 		$use = MySql::query($use);
 		if(is_array($use)){
 			foreach ($use as $i){
@@ -92,13 +92,16 @@ class Integral{
 	public static function integralLucky($userId){
 		//校验
 		$num = self::getTodayResidueIntegral($userId);
-		if($num < self::EXTRACTION_INTEGRAL){
+		/*if($num < self::EXTRACTION_INTEGRAL){
 			return false;
-		}
+		}*/
 		
-		$rand = rand(1,8);
-		$function = 'prize'.$rand;
-		$res = Rewardtype::$function;
+		$array = array('money', 'ingot');
+		$function = $array[array_rand($array)];
+		echo $function;
+		$res = call_user_func_array('rewardType', $function);
+		echo 111;
+		print_r($res);
 		
 		if($res){
 			self::extractionIntegral($userId);

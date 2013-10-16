@@ -213,21 +213,5 @@ class ConfigDefine
 		);
 		return $res;
 	}
-	
-	/** 道具 */
-	public static function poopsList(){
-		$res = array(
-			Pill::TIANSHUNEIDAN => 6301,
-			Pill::TIANXUANNEIDAN => 6302,
-			Pill::TIANJINEIDAN => 6303,
-			Pill::TIANQUANNEIDAN => 6304,
-			Pill::YUHENGNEIDAN => 6305,
-			Pill::TIANSHUNEIDAN => 6306,
-			Pill::TIANXUANNEIDAN => 6307,
-			Pill::TIANJINEIDAN => 6308,
-			Pill::TIANQUANNEIDAN => 6309,
-		);
-		return $res;
-	}
 
 }
