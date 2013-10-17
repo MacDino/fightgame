@@ -9,7 +9,7 @@ class PK_Challenge{
     const TABLE_NAME = 'user_pk_challenge_res';
     const PK_FIGHTED_USER_ID = 'user_pk_fighted_user_ids_';
     const PK_FIGHTED_RESULT_KEY = 'user_pk_challenge_';
-    const PK_MAX_TIMES = 20;
+    const PK_MAX_TIMES = 2;
     const PK_GET_INTEGRAL = 2;
     const PK_GET_POPULARITY = 4;
 

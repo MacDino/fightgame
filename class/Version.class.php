@@ -14,7 +14,7 @@ class Version
 	CONST EQUIP_VERSION = 1.03;
 	CONST EXP_VERSION = 1.01;
 	CONST ATTRIBUTE_VERSION = 1.04;
-	CONST PROPS_VERSION = 1.00;
+	CONST PROPS_VERSION = 1.03;
 
     public static function getStaticResourceVersion(){
         return self::VERSION;
@@ -98,13 +98,17 @@ class Version
 		return $result;
 	}
 	
-	//装备列表
+	//道具列表
 	public static function getPropsList()
 	{
 		$res = MySql::select('props', array(), array('static_code', 'props_name'));
 		foreach($res as $key=>$value)
 		{
 			$result[] = array('id'=> $value['static_code'], 'name'=>$value['props_name']);
+		}
+		$pill = ConfigDefine::pillList();
+		foreach ($pill as $key=>$value){
+			$result[] = array('id'=> $key, 'name'=>$value);
 		}
 		return $result;
 	}

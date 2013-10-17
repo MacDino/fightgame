@@ -20,9 +20,17 @@ if(!$userInfo){
 }
 
 try {
-    $data['iron'] = Pill_Iron::getIronInfo($userId);//精铁
-    $data['stone']= Pill_Stone::getStoneInfo($userId);//精华
+    $iron = Pill_Iron::getIronInfo($userId);//精铁
+    foreach ($iron as $key=>$a){
+    	$iron[$key]['price'] = Pill_Iron::ironPrice($a['level']);
+    }
+    $stone= Pill_Stone::getStoneInfo($userId);//精华
+    foreach ($stone as $key=>$a){
+    	$stone[$key]['price'] = Pill_Stone::stonePrice($a['stone_type']);
+    }
 
+    $data['iron'] = $iron;
+    $data['stone'] = $stone;
     $code = 0;
     $msg = 'ok';
     die;

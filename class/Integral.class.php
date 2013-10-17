@@ -25,7 +25,7 @@ class Integral{
 	 */
 	private static function addIntegralAction($userId, $type, $num, $action){
 		if(!$userId || !$type || !$num || !$action)return ;
-		$integral = self::getTodayResidueIntegral($userId);
+		$integral = self::getResidueIntegral($userId);
 		if($type == 1){$after = $integral + $num;}
 		if($type == 2){$after = $integral - $num;}
 		$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'type' => $type, 'num' => $num, 'action' => $action, 'before' => $integral, 'after' => $after, 'time' => time()));

@@ -16,7 +16,6 @@ if(!$rewardId)
 
 try {
 	$data = Reward::getReward($rewardId, $contentId);
-	
     $code = 0;
     $msg = 'ok';
     die;

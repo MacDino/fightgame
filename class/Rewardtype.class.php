@@ -10,7 +10,8 @@ class Rewardtype{
 	/** @desc 内丹精华 */
 	public static function pillStone($userId, $num=1, $type=NULL){
 		if(empty($type)){
-			$type = array_rand(ConfigDefine::pillList());
+			$array = array_rand(ConfigDefine::pillList());
+			$type = $array[array_rand($array)];
 		}
 		$res = Pill_Stone::addStone($userId, $type, $num);
 		return $type.'精华'.$num;

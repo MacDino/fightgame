@@ -205,11 +205,11 @@ class ConfigDefine
 	/** 内丹 */
 	public static function pillList(){
 		$res = array(
-			Pill::TIANSHUNEIDAN => 3601,
-			Pill::TIANXUANNEIDAN => 3602,
-			Pill::TIANJINEIDAN => 3603,
-			Pill::TIANQUANNEIDAN => 3604,
-			Pill::YUHENGNEIDAN => 3605,
+			Pill::TIANSHUNEIDAN => '天枢',
+			Pill::TIANXUANNEIDAN => '天璇',
+			Pill::TIANJINEIDAN => '天玑',
+			Pill::TIANQUANNEIDAN => '天权',
+			Pill::YUHENGNEIDAN => '玉衡',
 		);
 		return $res;
 	}

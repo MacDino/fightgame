@@ -207,12 +207,12 @@ class Reward{
     	
     	if(is_numeric($contentId)){
     		if(substr($contentId,0,2) == 63){//道具
-    			$res = call_user_func(array('rewardType', 'pillStone'), $userId ,$content[$contentId], $contentId);
+    			$res = call_user_func(array('Rewardtype', 'pillStone'), $userId ,$content[$contentId], $contentId);
     		}elseif (substr($contentId,0,2) == 36){//内丹
-    			$res = call_user_func(array('rewardType', 'props'), $userId ,$content[$contentId], $contentId);
+    			$res = call_user_func(array('Rewardtype', 'props'), $userId ,$content[$contentId], $contentId);
     		}
     	}else{
-    		$res = call_user_func(array('rewardType', $contentId), $userId ,$content[$contentId]);
+    		$res = call_user_func(array('Rewardtype', $contentId), $userId ,$content[$contentId]);
     	}
     	
 		unset($content[$contentId]);//删掉已领取的奖励
