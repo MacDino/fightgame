@@ -25,7 +25,8 @@ class Pill_Iron {
 	
 	/** @desc 查询精铁 */
 	public static function getIronInfo($userId){
-		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+		$sql = "select * from " . self::TABLE_NAME . " where user_id = '$userId' and num <> 0";
+		$res = MySql::query($sql);
 		return $res;
 	}
 	
@@ -33,7 +34,11 @@ class Pill_Iron {
 	public static function getIronNumByLevel($userId, $level){
 //		echo $level;
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level), array('num'));
-		return $res['num'];
+		if(!empty($res['num'])){
+			return $res['num'];
+		}else{
+			return 0;
+		}
 	}
 	
 	/** @desc 出售价格 */

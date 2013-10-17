@@ -1,5 +1,5 @@
 <?php
-//获取装备信息
+//装备操作 zyf
 class Equip_Info
 {	
     CONST TABLE_NAME = 'user_equip';

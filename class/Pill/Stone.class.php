@@ -25,7 +25,8 @@ class Pill_Stone {
 	
 	/** @desc 查询阵法石 */
 	public static function getStoneInfo($userId){
-		$res = MySql::select(self::TABLE_NAME, array('user_id' => $userId));
+		$sql = "select * from " . self::TABLE_NAME . " where user_id = '$userId' and num <> 0";
+		$res = MySql::query($sql);
 		return $res;
 	}
 	
