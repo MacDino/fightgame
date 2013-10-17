@@ -94,6 +94,9 @@ try {
 
     $data['fight_procedure'] = $fightResult['fight_procedure'];
 
+    //获取之前好友超过此人的用户id和胜利场数
+    $userRankingFriendsBefore = PK_Challenge::getFriendsWinNum($userId);
+
     if(!$isUserAlive && $isTargetUserAlive || $fightResult['is_too_long'] == 1) {
         $data['result']             = PK_Challenge::dealResult($userId, FALSE);
         $data['result']['win']      = 0;
@@ -108,6 +111,12 @@ try {
         $data['result']['win_continue_num'] = $fightStatus['win_continue_num'] + 1;
         $data['result']['integral']         = ($fightStatus['win_continue_num']+1) * PK_Challenge::PK_GET_INTEGRAL; //积分
         $data['result']['popularity']       = ($fightStatus['win_continue_num']+1) * PK_Challenge::PK_GET_POPULARITY;
+        if(is_array($userRankingFriendsBefore) && count($userRankingFriendsBefore)) {
+            if($fightStatus['win_num'] + 1 > $userRankingFriendsBefore['win_num']) {
+                $friendInfo = User_Info::getUserInfoByUserId($userRankingFriendsBefore['user_id']);
+                $data['result']['exceed_friends'] = $friendInfo['user_name'];
+            }
+        }
     }
     $data['result']['use_time'] = $fightResult['use_time'];
     //记录最后一次战斗信息
