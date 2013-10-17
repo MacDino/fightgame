@@ -3,6 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
+$stone     = isset($_REQUEST['stone'])?$_REQUEST['stone']:'';//精华列表
 
 //echo $userId;exit;
 if(!$userId)
@@ -20,17 +21,20 @@ if(!$userInfo){
 }
 
 try {
-    $iron = Pill_Iron::getIronInfo($userId);//精铁
-    foreach ($iron as $key=>$a){
-    	$iron[$key]['price'] = Pill_Iron::ironPrice($a['level']);
-    }
-    $stone= Pill_Stone::getStoneInfo($userId);//精华
+	if(!$stone){
+		$iron = Pill_Iron::getIronInfo($userId);//精铁
+	    foreach ($iron as $key=>$a){
+	    	$iron[$key]['price'] = Pill_Iron::ironPrice($a['level']);
+	    }
+	    $data['iron'] = $iron;
+	}
+    
+    $stone = Pill_Stone::getStoneInfo($userId);//精华
     foreach ($stone as $key=>$a){
     	$stone[$key]['price'] = Pill_Stone::stonePrice($a['stone_type']);
     }
-
-    $data['iron'] = $iron;
-    $data['stone'] = $stone;
+	$data['stone'] = $stone;
+	
     $code = 0;
     $msg = 'ok';
     die;
