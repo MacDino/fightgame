@@ -39,26 +39,26 @@ function __construct() {
 	}
 
 //=========================get_lng_and_lat======================================//
-    public function getlng($lng = 0, $lat = 0){
+    public function getlng($lng = 0, $lat = 0, $distance){
 //    	echo $lat;exit;
         $lat_r = EARTH_RADIUS * cos($lat);
         if($lat_r == 0){
             return 0;
         }
-        $angle = (180.0/M_PI) * DISTANCE/$lat_r;
+        $angle = (180.0/M_PI) * $distance/$lat_r;
         return abs($angle);
     }
 
-    public function getlat($lng = 0, $lat = 0){
-        $angle = (180.0/M_PI) * DISTANCE/EARTH_RADIUS;
+    public function getlat($lng = 0, $lat = 0, $distance){
+        $angle = (180.0/M_PI) * $distance/EARTH_RADIUS;
         return abs($angle);
     }
 
-    public static function delta_lng_lat($lng, $lat){
+    public static function delta_lng_lat($lng, $lat, $distance){
 
 //    	echo "lng=====$lng&lat====$lat";exit;
-        $lngx = self::getlng($lng, $lat);
-        $latx = self::getlat($lng, $lat);
+        $lngx = self::getlng($lng, $lat, $distance);
+        $latx = self::getlat($lng, $lat, $distance);
 
         $min_lng = $lng - $lngx;
         $max_lng = $lng + $lngx;

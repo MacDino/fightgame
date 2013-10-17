@@ -14,7 +14,7 @@ if(!$userId)
 try {
 //	Integral::fightIntegral(27 ,40);
 	$data['total'] = Integral::getTodayIntegral($userId);
-	$data['now'] = Integral::getTodayResidueIntegral($userId);
+	$data['now'] = Integral::getResidueIntegral($userId);
     $code = 0;
     $msg = 'ok';
     die;

@@ -589,6 +589,7 @@ class User_Info
 		$res = MySql::update(self::TABLE_NAME, array('last_login_time' => date('Y-m-d H:i:s')));
 		return $res;
 	}
-	/** @desc 记录用户坐标 */
+	
+	
 
 }

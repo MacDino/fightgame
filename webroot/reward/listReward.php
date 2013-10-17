@@ -12,7 +12,11 @@ if(!$userId)
 }
 
 try {
-	$data = Reward::getList($userId);
+	$res = Reward::getList($userId);
+	foreach ($res as $i=>$key){
+    	$res[$i]['content'] = json_decode($key['content'], true);
+    }
+    $data = $res;
     $code = 0;
     $msg = 'ok';
     die;

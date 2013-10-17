@@ -11,12 +11,12 @@ if(!$userId)
     die;
 }
 
-/*$integral = Integral::getTodayResidueIntegral($userId);
+$integral = Integral::getTodayResidueIntegral($userId);
 if($integral < Integral::EXTRACTION_INTEGRAL){
 	$code = 23;
 	$msg = '积分不够';
     die;
-}*/
+}
 
 try {
 	$data = Integral::integralLucky($userId);

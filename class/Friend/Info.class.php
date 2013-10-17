@@ -171,31 +171,5 @@ class Friend_Info
         }
 	}
 
-	/**
-	 * @desc 根据自身经纬度获取附近用户
-	 *
-	 * @param int $userId
-	 * @param int $lng
-	 * @param int $lat
-	 */
-	public static function getNearbyFriend($userId, $lng, $lat)
-	{
-		//简单检测
-		if(!$userId || !$lng || !$lat)	return FALSE;
-
-		$_array = LBS::delta_lng_lat($lng, $lat);
-
-		$min_lng = $_array[0];
-		$max_lng = $_array[1];
-		$min_lat = $_array[2];
-		$max_lat = $_array[3];
-
-		$sql = "SELECT i.user_id as user_id, i.user_name as user_name, i.race_id as race_id, i.user_level as user_level
-            FROM user_info i ,user_lbs l WHERE longitude<=$max_lng AND longitude>=$min_lng AND latitude<=$max_lat AND latitude>=$min_lat
-            AND i.user_id!=$userId and i.user_id = l.user_id";
-		$res = MySql::query($sql);
-		if(is_array($res)){
-			return $res;
-		}
-	}
+	
 }

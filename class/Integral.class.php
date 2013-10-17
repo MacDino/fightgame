@@ -49,14 +49,15 @@ class Integral{
 	}
 	
 	/** @desc 查询今日剩余积分*/
-	public static function getTodayResidueIntegral($userId){
+	public static function getResidueIntegral($userId){
 		if(!$userId)return ;
 		$num = 0;//积分
-		$beginTime = strtotime(date("Y-m-d 00:00:00"));
-		$endTime = strtotime(date("Y-m-d 23:59:59"));
+		/*$beginTime = strtotime(date("Y-m-d 00:00:00"));
+		$endTime = strtotime(date("Y-m-d 23:59:59"));*/
 		
 		//获得积分
-		$get = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 1";
+		$get = "SELECT num FROM " . self::TABLE_NAME . " WHERE user_id = '$userId' AND type = 1";
+//		time >= '$beginTime' AND time <= '$endTime' AND
 		$get = MySql::query($get);
 		if(is_array($get)){
 			foreach ($get as $i){
@@ -64,7 +65,7 @@ class Integral{
 			}
 		}
 		//使用积分
-		$use = "SELECT num FROM " . self::TABLE_NAME . " WHERE time >= '$beginTime' AND time <= '$endTime' AND user_id = '$userId' AND type = 2";
+		$use = "SELECT num FROM " . self::TABLE_NAME . " WHERE user_id = '$userId' AND type = 2";
 		$use = MySql::query($use);
 		if(is_array($use)){
 			foreach ($use as $i){

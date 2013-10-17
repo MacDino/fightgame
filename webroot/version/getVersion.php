@@ -95,7 +95,7 @@ if(empty($VersionId)){$VersionId = array();}
 		$data['EXP_VERSION']['value'] = Version::getLevelExpList();
 	}
 	
-	//升级经验
+	//道具
 	if(array_key_exists('PROPS_VERSION', $VersionId)){
 		if(Version::PROPS_VERSION > $VersionId['EXP_VERSION']){
 			$data['PROPS_VERSION']['code'] = Version::PROPS_VERSION;

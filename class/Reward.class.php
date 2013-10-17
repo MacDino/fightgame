@@ -199,42 +199,22 @@ class Reward{
     /** @desc 领取奖励 */
     public static function getReward($rewardId, $contentId){
     	
-    	$res = true;
-    	
     	$rewardInfo = self::getRewardInfoById($rewardId);
     	$content = json_decode($rewardInfo['content'], true);
     	
     	$type = $rewardInfo['type'];
     	$userId = $rewardInfo['user_id'];
     	
-		switch ($contentId){
-			case 'money'://金币
-				User_Info::addMoney($userId, $value);
-				break;
-			case 'ingot'://元宝
-				User_Info::addIngot($userId, $value);
-				break;
-			case 'exp'://经验
-				User_Info::addExperience($userId, $value);
-				break;
-			case 3601://双倍符咒
-				User_Property::updateNumIncreaseAction($userId, 3601, $value);
-				break;
-			case 3602://PK符咒
-				User_Property::updateNumIncreaseAction($userId, 3602, $value);
-				break;
-			case 3603://属性增强符咒
-				User_Property::updateNumIncreaseAction($userId, 3603, $value);
-				break;
-			case 3606://挂机符咒
-				User_Property::updateNumIncreaseAction($userId, 3606, $value);
-				break;
-			case 'box'://宝箱
-				$array = array('money', 'ingot', 'props', 'box');
-				$function = $array[array_rand($array)];
-				$res = call_user_func(array('rewardType', $function), $userId);
-				break;
-		}
+    	if(is_numeric($contentId)){
+    		if(substr($contentId,0,2) == 63){//道具
+    			$res = call_user_func(array('rewardType', 'pillStone'), $userId ,$content[$contentId], $contentId);
+    		}elseif (substr($contentId,0,2) == 36){//内丹
+    			$res = call_user_func(array('rewardType', 'props'), $userId ,$content[$contentId], $contentId);
+    		}
+    	}else{
+    		$res = call_user_func(array('rewardType', $contentId), $userId ,$content[$contentId]);
+    	}
+    	
 		unset($content[$contentId]);//删掉已领取的奖励
     	
     	if(!empty($content)){
