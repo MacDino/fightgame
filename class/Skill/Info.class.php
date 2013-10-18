@@ -36,7 +36,7 @@ class Skill_Info {
 		    ConfigDefine::SKILL_PT						=> 0,//普通攻击
 		);
 		
-		print_r($attribute);
+//		print_r($attribute);
 		
 		//装备加成
 		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);//根据ID取出所有装备,假设为getEquipInfoByUserId

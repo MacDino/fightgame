@@ -21,6 +21,7 @@ class PerRand
 
 	public static function getRandResultKey($data)
 	{
+		
 		if ( ! is_array($data))
 		{
 			return false;
@@ -45,6 +46,7 @@ class PerRand
 		unset($value);
 
 		$rand = mt_rand(0, $times - 1);
+		
 		foreach ($data as $key => $value)
 		{
 			if ($rand < $value)
