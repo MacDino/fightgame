@@ -19,7 +19,7 @@ if(!$userInfo){
 }
 
 try {    
-	User_Info::updateLastLoginTime();//更新最后登录时间
+	User_Info::updateLastLoginTime($userId);//更新最后登录时间
 	Reward::login($userId);//判断登陆奖励
 	Reward::monthCard($userId);//判断月卡奖励
     //人物基本属性,数据库读取
@@ -33,10 +33,9 @@ try {
     }
     
     //人宠信息
-    $pet = Pet::usedPet($userId);
-	if(!empty($pet)){
-		$petInfo = User_Info::getUserInfoByUserId($pet['pet_id']);
-		$petAttribute = User_Info::getUserInfoFightAttribute($pet['pet_id'], TRUE);
+    $petInfo = Pet::usedPet($userId);
+	if(!empty($petInfo)){
+		$petAttribute = User_Info::getUserInfoFightAttribute($petInfo['user_id'], TRUE);
 		$data['pet']['name'] = $petInfo['user_name'];
 //		$data['pet']['id']   = $petInfo['user_id'];
 		$data['pet']['level']   = $petInfo['user_level'];

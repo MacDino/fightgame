@@ -19,7 +19,8 @@ if(!function_exists('autoload_sae'))
         }   
     }                                                                                
 }
-                                                                              
+
+ini_set('date.timezone','Asia/Shanghai');  
 MI::registerAutoload('autoload_sae');
 MI::registerAutoload(array('MI', 'loadClass'));
 
