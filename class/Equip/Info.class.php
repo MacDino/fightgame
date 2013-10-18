@@ -48,17 +48,10 @@ class Equip_Info
         $info = self::getEquipInfoById($equipId);
 
         if($info){
-            //使用锻造成功咒符
-            $use = 1;
-
-            if($use){
-                $opt = 0.1;    
-            }else{
-                $opt = 0;    
-            }
-
-            $hit = PerRand::getRandResultKey(Skill::getQuickAttributeForEquip($info['forge_level'], $opt));
-            echo $hit;
+        	
+			$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level']);
+            $hit = PerRand::getRandResultKey();
+            
             if($hit == 'success'){ //装备锻造等级升一级
                 $attributeList = json_decode($info['attribute_base_list'], TRUE);
                 $forgeAttributeList = Equip_Config::forgeAttributeList();
@@ -166,10 +159,10 @@ class Equip_Info
     	
     	if($res == 1){
     		Pill_Iron::addIron($userId, $level);//增加精铁
-//    		self::delEquip($equipId);//删除装备
+    		self::delEquip($equipId);//删除装备
     		return true;
     	}else{
-//    		self::delEquip($equipId);//删除装备
+    		self::delEquip($equipId);//删除装备
     		return false;
     	}
     }
