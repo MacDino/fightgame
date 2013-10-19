@@ -16,6 +16,7 @@ if(is_array($userInfo) && count($userInfo)) {
     $userChallengeInfo = PK_Challenge::getResByUserId($userId);
     $failChallengeNum  = ($userChallengeInfo['fight_num'] - $userChallengeInfo['win_num']) ;
     $userTodayInterity = Integral::getTodayIntegral($userId);//今日积分
+    $userInterity       = Integral::getResidueIntegral($userId);
     $userPopularity = $userInfo['reputation'] > 0 ? $userInfo['reputation'] : 0;//声望
     //全国排名
     $userRankingAll = PK_Challenge::rankingAll($userId);
@@ -27,6 +28,7 @@ if(is_array($userInfo) && count($userInfo)) {
         'win_num' => $userChallengeInfo['win_num'],
         'fail_num' => $failChallengeNum > 0 ? $failChallengeNum : 0,
         'integral' => $userTodayInterity,
+        'integral_all' => $userInterity,
         'popularity' => $userPopularity,
         'ranking_all' => $userRankingAll,
         'challenge_times' => 5 - $challengeTimes > 0 ? 5 - $challengeTimes : 0,
