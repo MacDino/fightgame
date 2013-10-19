@@ -24,7 +24,8 @@ if(!$userInfo){
 //查看是否还有位置添加好友
 $friendNum = Friend_Info::getFriendNum($userId);
 //echo $userInfo['friend_num'];
-if($friendNum == $userInfo['friend_num']){
+$user = User_Info::getUserInfoByUserId($userId);
+if($friendNum == $user['friend_num']){
 	$code = 144;
     //$msg = '好友已达上限!';
     $msg = '5';

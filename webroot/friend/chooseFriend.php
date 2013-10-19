@@ -3,6 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
+$friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 //echo "lng=====$lng&lat====$lat";exit;
 
 //数据进行校验,非空,数据内
@@ -22,7 +23,11 @@ if(!$userInfo){
 
 try {
     //显示好友
-    $res = User_LBS::getNearbyFriend($userId, 1000000);
+    if(!empty($friendId)){
+    	$res[] = User_Info::getUserInfoByUserId($friendId);
+    }else{
+    	$res = User_LBS::getNearbyFriend($userId, 100000000);
+    }
     $data = User_LBS::getNearUser($res, $userId);
     
 //    print_r($data);
