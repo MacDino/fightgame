@@ -241,10 +241,11 @@ class Skill
     /**
      * @desc 锻造技能对装备的影响
      */
-    public static function getQuickAttributeForEquip($level, $opt = 0){
+    public static function getQuickAttributeForEquip($level){
         $data               = array();
         $data['success']    = 0.5 + 0.002 * $level + $opt;
         $data['no_less_dz'] = 0.01 * ceil($level / 2);
+//        print_r($data);
         return $data;
     }
     /**

@@ -67,7 +67,9 @@ class Pet{
 	//正在使用的人宠
 	public static function usedPet($userId){
 		self::atuoDelPet($userId);
-		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'is_use' => 1));
+		$pet = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'is_use' => 1));
+//		print_r($pet);
+		$res = MySql::selectOne('user_info', array('user_id' => $pet['pet_id']));
 		return $res;
 	}
 	

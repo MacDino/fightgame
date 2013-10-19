@@ -17,7 +17,7 @@ class Skill_Info {
     
     /** @desc 装备附加技能等级列表 */
     public static function equipSkill($userId){
-    	$Attribute = array(
+    	$attribute = array(
 			ConfigDefine::SKILL_ZJ      				=> 0,//重击
 			ConfigDefine::SKILL_LJ      				=> 0,//连击
 		    ConfigDefine::SKILL_LXYZ    				=> 0,//灵犀一指
@@ -36,6 +36,8 @@ class Skill_Info {
 		    ConfigDefine::SKILL_PT						=> 0,//普通攻击
 		);
 		
+//		print_r($attribute);
+		
 		//装备加成
 		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);//根据ID取出所有装备,假设为getEquipInfoByUserId
 		foreach ($equipInfo as $p)
@@ -45,7 +47,7 @@ class Skill_Info {
 			if(is_array($equipBaseAttribute)){
 				foreach ($equipBaseAttribute as $m=>$n)
 				{
-					if(array_key_exists($m, $Attribute))//装备中属性点部分
+					if(array_key_exists($m, $attribute))//装备中属性点部分
 					{
 						$attribute[$m] += $n;
 					}
@@ -56,7 +58,7 @@ class Skill_Info {
 			if(is_array($equipExpandAttribute)){
 				foreach ($equipExpandAttribute as $x=>$y)
 				{
-					if(array_key_exists($x, $Attribute))//装备中属性点部分
+					if(array_key_exists($x, $attribute))//装备中属性点部分
 					{
 						$attribute[$x] += $y;
 					}

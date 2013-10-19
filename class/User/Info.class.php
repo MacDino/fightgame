@@ -357,33 +357,35 @@ class User_Info
 
 		//装备加成
 		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);//根据ID取出所有装备,假设为getEquipInfoByUserId
-		foreach ($equipInfo as $p)
-		{//把装备中的属性点放在一起,属性值放在一起
-			//基础属性
-			$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
-			if(is_array($equipBaseAttribute)){
-				foreach ($equipBaseAttribute as $m=>$n)
-				{
-					if(array_key_exists($m, $baseAttribute))//装备中属性点部分
+		if(!empty($equipInfo)){
+			foreach ($equipInfo as $p)
+			{//把装备中的属性点放在一起,属性值放在一起
+				//基础属性
+				$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
+				if(is_array($equipBaseAttribute)){
+					foreach ($equipBaseAttribute as $m=>$n)
 					{
-						$baseAttribute[$m] += $n;
-					}elseif(array_key_exists($m, $valueAttribute)){//装备中属性值部分
-						$valueAttribute[$m] += $n;
-					}else{
+						if(array_key_exists($m, $baseAttribute))//装备中属性点部分
+						{
+							$baseAttribute[$m] += $n;
+						}elseif(array_key_exists($m, $valueAttribute)){//装备中属性值部分
+							$valueAttribute[$m] += $n;
+						}else{
+						}
 					}
 				}
-			}
-			//扩展属性
-			$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
-			if(is_array($equipExpandAttribute)){
-				foreach ($equipExpandAttribute as $x=>$y)
-				{
-					if(array_key_exists($x, $baseAttribute))//装备中属性点部分
+				//扩展属性
+				$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
+				if(is_array($equipExpandAttribute)){
+					foreach ($equipExpandAttribute as $x=>$y)
 					{
-						$baseAttribute[$x] += $y;
-					}elseif(array_key_exists($x, $valueAttribute)){//装备中属性值部分
-						$valueAttribute[$x] += $y;
-					}else{
+						if(array_key_exists($x, $baseAttribute))//装备中属性点部分
+						{
+							$baseAttribute[$x] += $y;
+						}elseif(array_key_exists($x, $valueAttribute)){//装备中属性值部分
+							$valueAttribute[$x] += $y;
+						}else{
+						}
 					}
 				}
 			}
@@ -391,19 +393,20 @@ class User_Info
 
 		//技能加成
 		$skillAttribute = Skill_Info::getSkillList($userId);
-
-		foreach ($skillAttribute as $a){
-			$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
-//			print_r($skillValue);
-			if(is_array($skillValue)){
-				foreach ($skillValue as $x=>$y)
-				{
-					if(array_key_exists($x, $baseAttribute))//技能加成中属性点部分
+		if(!empty($skillAttribute)){
+			foreach ($skillAttribute as $a){
+				$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
+	//			print_r($skillValue);
+				if(is_array($skillValue)){
+					foreach ($skillValue as $x=>$y)
 					{
-						$baseAttribute[$x] += $y;
-					}elseif(array_key_exists($x, $valueAttribute)){//技能加成中属性值部分
-						$valueAttribute[$x] += $y;
-					}else{
+						if(array_key_exists($x, $baseAttribute))//技能加成中属性点部分
+						{
+							$baseAttribute[$x] += $y;
+						}elseif(array_key_exists($x, $valueAttribute)){//技能加成中属性值部分
+							$valueAttribute[$x] += $y;
+						}else{
+						}
 					}
 				}
 			}
@@ -586,7 +589,8 @@ class User_Info
 	
 	/** @desc 更新最后登录时间 */
 	public static function updateLastLoginTime($userId){
-		$res = MySql::update(self::TABLE_NAME, array('last_login_time' => date('Y-m-d H:i:s')));
+//		echo $userId;
+		$res = MySql::update(self::TABLE_NAME, array('last_login_time' => date('Y-m-d H:i:s')), array('user_id' => $userId));
 		return $res;
 	}
 	

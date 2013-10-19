@@ -110,6 +110,24 @@ class PK_Challenge{
         return $count[0]['count'] > 0 ? $count[0]['count'] + 1 : 1;
     }
 
+    //计算出此用户高低2次的好友用户
+    public static function getFriendsWinNum($userId) {
+
+        $res = self::getResByUserId($userId);
+        //
+        $friendInfos = Friend_Info::getFriendInfo($userId);
+        foreach ((array)$friendInfos as $friend) {
+            $friendIds[] = $friend['friend_id'];
+        }
+        $winNum = $res['win_num'] > 0 ? $res['win_num'] : 0;
+        $winNumMax = $winNum + 1;
+        if(is_array($friendIds) && count($friendIds)) {
+            $friendIdsString = implode(',', $friendIds);
+            $sql = 'select user_id,win_num from '.self::TABLE_NAME.' where win_num <= '.$winNumMax.' and win_num >= '.$winNum.' and user_id in ('.$friendIdsString.') order by win_num asc';
+            $result = MySql::query($sql);
+        }
+        return $result[0];
+    }
 
     public static function dealResult($userId, $isWin = TRUE) {
         $challengeInfo              = self::getResByUserId($userId);
