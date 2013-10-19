@@ -13,7 +13,7 @@ class Pet{
 		//正在使用的人宠
 		$old = self::usedPet($userId);
 		if(!empty($old)){
-			MySql::update(self::TABLE_NAME, array('is_use' => 0), array('user_id' => $userId, 'pet_id' => $old['pet_id']));
+			MySql::update(self::TABLE_NAME, array('is_use' => 0), array('user_id' => $userId, 'pet_id' => $old['user_id']));
 		}
 		$res = MySql::update(self::TABLE_NAME, array('is_use' => 1), array('user_id' => $userId, 'pet_id' => $petId));
 		return $res;

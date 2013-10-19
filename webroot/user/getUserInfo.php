@@ -47,7 +47,7 @@ try {
 	
 	//地图信息
 	$userLastResult     = Fight_Result::getResult($userId);
-//	$data['map_id'] = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
+	$data['map_id'] = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 	$data['colors'] = Fight_Setting::getSettingByUserId($userId);
 //	print_r($data);
     $code = 0;

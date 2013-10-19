@@ -20,25 +20,27 @@ if($verify > 0){
     $msg = '有装备正在使用中';
     die;
 }
-
+//print_r($equipId);
 try {
 	foreach ($equipId as $i){
 		$equipInfo = Equip_Info::getEquipInfoById($i);
-		if($equipInfo['equip_level'] == 0){
+		/*if($equipInfo['equip_level'] == 0){
 			$code = 6;
 		    $msg = '0级装备不能分解';
 		    die;
-		}
+		}*/
 		$level = $equipInfo['equip_level'] / 10;
-		$res = Equip_Info::resolveEquip($userId, $equipInfo['user_equip_id'], $level);
+//		echo  $i ;
+		$res = Equip_Info::resolveEquip($userId, $i, $level);
+//		print_r($res);
 		if($res){//成功
-			if(!empty($data[$level])){
-				$data[$level] += 1;
-			}else{
-				$data[$level] = 1;
+			if(!empty($res)){
+				$data['level'] = $level;
+				$data['num'] = 1;
 			}
 		}
 	}
+//	print_r($data);
     $code = 0;
     $msg = 'ok';  
     die;

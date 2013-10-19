@@ -30,8 +30,9 @@ class User_LBS
 		$userLbs = self::getLBSByUserId($userId);
 //		print_r($userLbs);
 		$lng = $userLbs['longitude'];
+		$lng = 116.417300;//假数据
 		$lat = $userLbs['latitude'];
-		
+		$lat = 39.941400;//假数据
 		//简单检测
 		if(!$userId || !$lng || !$lat)	return FALSE;
 
@@ -44,6 +45,7 @@ class User_LBS
 		$sql = "SELECT i.user_id as user_id, i.user_name as user_name, i.race_id as race_id, i.user_level as user_level, l.longitude as longitude, l.latitude as latitude
             FROM user_info i ,user_lbs l WHERE longitude<=$max_lng AND longitude>=$min_lng AND latitude<=$max_lat AND latitude>=$min_lat
             AND i.user_id!=$userId and i.user_id = l.user_id";
+//		echo $sql;
 		$res = MySql::query($sql);
 		return $res;
 	}

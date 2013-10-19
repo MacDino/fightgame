@@ -109,14 +109,17 @@ class Reward{
         
         $data['status'] = 0;
         
-        if(!empty($now) && $now['status'] == 1){
-        	if($userInfo['user_level'] > $now['condition']){
-        		$data['condition'] = $now['condition'] + 1;//生成下等级奖励
-        		$data['content'] = json_encode(array(
-		        	'money'	   => ($userInfo['user_level']-1)*500 + 10000,
-		        	'box' 	   => 1,
-		        ));
-        		return self::_update($data, $now['reward_id']);
+        if(!empty($now)){
+        	if($now['status'] == 1){
+	        	if($userInfo['user_level'] > $now['condition']){
+	        		$data['condition'] = $now['condition'] + 1;//生成下等级奖励
+	        		$data['content'] = json_encode(array(
+			        	'money'	   => ($userInfo['user_level']-1)*500 + 10000,
+			        	'box' 	   => 1,
+			        	'3601'	   => 2,
+			        ));
+	        		return self::_update($data, $now['reward_id']);
+	        	}
         	}
         }else{
         	$data['user_id'] = $userId;
@@ -124,6 +127,7 @@ class Reward{
         	$data['content'] = json_encode(array(
 	        	'money'	   => 10000,
 	        	'box' 	   => 1,
+	        	'3601'	   => 2,
 	        ));
         	$data['condition'] = 1;
         	$data['type'] = self::UPGRADE;

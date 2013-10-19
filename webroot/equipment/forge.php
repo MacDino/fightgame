@@ -11,7 +11,7 @@ if(!$equipId)
     die;
 }
 
-$info = self::getEquipInfoById($equipId);
+$info = Equip_Info::getEquipInfoById($equipId);
 if(!empty($info)){
 	if($info['forge_level'] >= 15){//最大次数
 	    $code = 6;
@@ -21,7 +21,11 @@ if(!empty($info)){
 }
 
 try {
-    $data = Equip_Info::forge($equipId);
+    $res = Equip_Info::forge($equipId);
+    $data['status'] = $res;
+	$data['info'] = Equip_Info::getEquipInfoById($equipId);
+	$data['info']['attribute_list'] = json_decode($data['info']['attribute_list'], true);
+	$data['info']['attribute_base_list'] = json_decode($data['info']['attribute_base_list'], true);
     $code = 0;
     $msg = 'ok';
     die;

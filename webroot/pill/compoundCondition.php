@@ -20,9 +20,11 @@ if(1 > $stoneNum){
 
 try {
 	$userInfo = User_Info::getUserInfoByUserId($userId);
-    $data['need'] = Pill_Pill::compoundPillExpend(1, 1);//消耗,生成时都是一级
+    $data['need'] = Pill_Pill::compoundPillExpend(1, 1, $pillType);//消耗,生成时都是一级
     $data['now']  = array(
+    	'level' => 1,
     	'iron' => Pill_Iron::getIronNumByLevel($userId, 1),
+    	'type' => $pillType,
     	'stone' => Pill_Stone::getStoneNumBytype($userId, $pillType),
     	'money' => $userInfo['money'],
 	);

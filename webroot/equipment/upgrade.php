@@ -24,7 +24,10 @@ if(!empty($info)){
 
 
 try {
-    $data = Equip_Info::upgrade($equipId);
+    $res = Equip_Info::upgrade($equipId);
+    if($res){
+    	$data = Equip_Info::getEquipInfoById($equipId);
+    }
     $code = 0;
     $msg = 'ok';
     die;

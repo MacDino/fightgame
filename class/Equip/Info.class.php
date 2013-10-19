@@ -46,11 +46,11 @@ class Equip_Info
     public static function forge($equipId){
         $res = FALSE;
         $info = self::getEquipInfoById($equipId);
-
+//print_r($info);
         if($info){
         	
 			$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level']);
-            $hit = PerRand::getRandResultKey();
+            $hit = PerRand::getRandResultKey($sussessOdds);
             
             if($hit == 'success'){ //装备锻造等级升一级
                 $attributeList = json_decode($info['attribute_base_list'], TRUE);
@@ -156,13 +156,13 @@ class Equip_Info
     	}else{
     		return false;//蓝色装备以下不能分解
     	}
-    	
+//    	echo $res;
     	if($res == 1){
     		Pill_Iron::addIron($userId, $level);//增加精铁
-    		self::delEquip($equipId);//删除装备
+//    		self::delEquip($equipId);//删除装备
     		return true;
     	}else{
-    		self::delEquip($equipId);//删除装备
+//    		self::delEquip($equipId);//删除装备
     		return false;
     	}
     }
@@ -188,7 +188,7 @@ class Equip_Info
     
     /** @desc 可分解装备列表(蓝色以上) */
     public static function getBuleEquipList($userId){
-    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE is_used = 0 AND user_id = '$userId' AND equip_colour > " . Equip::EQUIP_COLOUR_GREEN ;
+    	$sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE is_used = 0 AND user_id = '$userId' AND equip_level <> 0 AND equip_colour > " . Equip::EQUIP_COLOUR_GREEN ;
 //    	echo $sql;
     	$res = MySql::query($sql);
     	return $res;

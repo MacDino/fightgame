@@ -7,7 +7,7 @@ class Pill_Iron {
 	public static function addIron($userId, $level, $num=1){
 		$nownum = self::getIronNumByLevel($userId, $level);
 //		echo $num;
-		if(!empty($num)){
+		if(!empty($nownum)){
 			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'level' => $level));
 		}else{
 			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level, 'num' => $num));

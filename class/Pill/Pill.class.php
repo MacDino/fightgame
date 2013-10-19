@@ -28,9 +28,11 @@ class Pill_Pill {
 	}
 	
 	/** @desc 合成内丹消耗 */
-	public static function compoundPillExpend($layer, $level){
+	public static function compoundPillExpend($layer, $level, $pillType){
 //		echo "layer==$layer, level==$level";
+		$res['level'] = $layer;
 		$res['iron'] = (($layer-1)*10 + $level) * 2 - 1;
+		$res['type'] = $pillType;
 		$res['stone']= ($layer-1)*10 + $level;
 		$res['money']= (($layer-1)*10 + $level) * 888 - 37;
 		
@@ -40,6 +42,15 @@ class Pill_Pill {
 	/** @desc 已装备内丹 */
 	public static function usedPill($userId){
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'is_used' => 1));
+		return $res;
+	}
+	
+	/** @desc 使用内丹 */
+	public static function usePill($userId, $pillId){
+		//把正在使用的置为未使用
+		$old = MySql::update(self::TABLE_NAME, array('is_used' => 0), array('is_used' => 1, 'user_id' => $userId));
+		//把新的弄成使用
+		$res = MySql::update(self::TABLE_NAME, array('is_used' => 1), array('pill_id' => $pillId));
 		return $res;
 	}
 	

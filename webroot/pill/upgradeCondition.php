@@ -21,7 +21,7 @@ if($pillInfo['pill_layer'] == 10 && $pillInfo['pill_level'] == 10){
 	$code = 7;
 	$msg = "已经满级";
 }
-
+//echo $pillInfo['pill_level'];
 if($pillInfo['pill_level'] == 10){//
 	$pillInfo['pill_layer'] += 1;
 	$pillInfo['pill_level'] = 1;
@@ -31,9 +31,13 @@ if($pillInfo['pill_level'] == 10){//
 //print_r ($pillInfo);
 try {
 	$userInfo = User_Info::getUserInfoByUserId($userId);
-    $data['need'] = Pill_Pill::compoundPillExpend($pillInfo['pill_layer'], $pillInfo['pill_level']);
+    $data['need'] = Pill_Pill::compoundPillExpend($pillInfo['pill_layer'], $pillInfo['pill_level'], $pillInfo['pill_type']);
+//    echo $pillInfo['pill_level'];
+//    echo Pill_Iron::getIronNumByLevel($userId, $pillInfo['pill_level']);
     $data['now']  = array(
-    	'iron'  => Pill_Iron::getIronNumByLevel($userId, $pillInfo['pill_level']),
+    	'level' => $pillInfo['pill_layer'],
+    	'iron'  => Pill_Iron::getIronNumByLevel($userId, $pillInfo['pill_layer']),
+    	'type'  => $pillInfo['pill_type'],
     	'stone' => Pill_Stone::getStoneNumBytype($userId, $pillInfo['pill_type']),
     	'money' => $userInfo['money'],
     );

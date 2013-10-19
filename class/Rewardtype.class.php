@@ -47,6 +47,8 @@ class Rewardtype{
 			$colour = User_Property::randGeneralEquipColor();
 			$equipId = Equip_Create::createEquip($colour, $userId, $level);
 			$res[$i] = Equip_Info::getEquipInfoById($equipId);
+			$res[$i]['attribute_list'] = json_decode($res[$i]['attribute_list'], true);
+			$res[$i]['attribute_base_list'] = json_decode($res[$i]['attribute_base_list'], true);
 		}
 		return $res;
 	}
@@ -57,7 +59,7 @@ class Rewardtype{
 			$num = rand(10000,1000000);
 		}
 		$res = User_Info::addMoney($userId, $num);
-		return '金币|N:'.$num;
+		return '铜钱|N:'.$num;
 	}
 	
 	/** @desc 元宝 */

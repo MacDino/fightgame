@@ -9,7 +9,7 @@ class User_Bind
     public static function getBindUserId($bindType, $bindValue, $createNew = FALSE)
     {
         try{
-           self::_allowBindType($bindType);
+           //self::_allowBindType($bindType);
            self::_checkValue($bindType, $bindValue);
            $masterId = self::_getBindUerInfo($bindType, $bindValue);
            if(!$masterId && $createNew)
