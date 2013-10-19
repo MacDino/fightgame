@@ -12,6 +12,13 @@ if(!$rewardId)
     die;
 }
 
+$rewardInfo = Reward::getRewardInfoById($rewardId);
+$content = json_decode($rewardInfo['content'], true);
+if(!key_exists($contentId, $content)){
+	$code = 3;
+    $msg = '已经领取过了';
+    die;
+}
 
 
 try {

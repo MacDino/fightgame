@@ -154,10 +154,10 @@ class Equip_Info
     	
     	if($res == 1){
     		Pill_Iron::addIron($userId, $level);//增加精铁
-//    		self::delEquip($equipId);//删除装备
+    		self::delEquip($equipId);//删除装备
     		return true;
     	}else{
-//    		self::delEquip($equipId);//删除装备
+    		self::delEquip($equipId);//删除装备
     		return false;
     	}
     }

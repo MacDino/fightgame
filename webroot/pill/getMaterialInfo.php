@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
-$stone     = isset($_REQUEST['stone'])?$_REQUEST['stone']:'';//精华列表
+$type     = isset($_REQUEST['type'])?$_REQUEST['type']:'';//精华列表
 
 //echo $userId;exit;
 if(!$userId)
@@ -21,19 +21,39 @@ if(!$userInfo){
 }
 
 try {
-	if(!$stone){
+	if($type == 'stone'){
+		$stone = Pill_Stone::getStoneInfo($userId);//精华
+	    foreach ($stone as $key=>$a){
+	    	$stone[$key]['price'] = Pill_Stone::stonePrice($a['stone_type']);
+	    }
+		$data['stone'] = $stone;
+	}elseif($type == 'pill'){
+		$pill = Pill_Pill::listPill($userId);
+	    foreach ($pill as $key=>$value){
+			$pill[$key]['nowAttribute'] = Pill::pillAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//当前属性
+			$pill[$key]['nextAttribute'] = Pill::nextLevelAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//下一级属性
+		}
+		$data['pill'] = $pill;
+	}else{
 		$iron = Pill_Iron::getIronInfo($userId);//精铁
 	    foreach ($iron as $key=>$a){
 	    	$iron[$key]['price'] = Pill_Iron::ironPrice($a['level']);
 	    }
 	    $data['iron'] = $iron;
+	    
+	    $stone = Pill_Stone::getStoneInfo($userId);//精华
+	    foreach ($stone as $key=>$a){
+	    	$stone[$key]['price'] = Pill_Stone::stonePrice($a['stone_type']);
+	    }
+		$data['stone'] = $stone;
+		
+		$pill = Pill_Pill::listPill($userId);
+	    foreach ($pill as $key=>$value){
+			$pill[$key]['nowAttribute'] = Pill::pillAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//当前属性
+			$pill[$key]['nextAttribute'] = Pill::nextLevelAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//下一级属性
+		}
+		$data['pill'] = $pill;
 	}
-    
-    $stone = Pill_Stone::getStoneInfo($userId);//精华
-    foreach ($stone as $key=>$a){
-    	$stone[$key]['price'] = Pill_Stone::stonePrice($a['stone_type']);
-    }
-	$data['stone'] = $stone;
 	
     $code = 0;
     $msg = 'ok';

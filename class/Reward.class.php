@@ -207,9 +207,9 @@ class Reward{
     	
     	if(is_numeric($contentId)){
     		if(substr($contentId,0,2) == 63){//道具
-    			$res = call_user_func(array('Rewardtype', 'pillStone'), $userId ,$content[$contentId], $contentId);
-    		}elseif (substr($contentId,0,2) == 36){//内丹
     			$res = call_user_func(array('Rewardtype', 'props'), $userId ,$content[$contentId], $contentId);
+    		}elseif (substr($contentId,0,2) == 36){//内丹
+    			$res = call_user_func(array('Rewardtype', 'pillStone'), $userId ,$content[$contentId], $contentId);
     		}
     	}else{
     		$res = call_user_func(array('Rewardtype', $contentId), $userId ,$content[$contentId]);

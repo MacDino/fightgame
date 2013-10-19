@@ -11,7 +11,7 @@ if(!$userId)
     die;
 }
 
-$integral = Integral::getTodayResidueIntegral($userId);
+$integral = Integral::getResidueIntegral($userId);
 if($integral < Integral::EXTRACTION_INTEGRAL){
 	$code = 23;
 	$msg = '积分不够';
@@ -20,6 +20,7 @@ if($integral < Integral::EXTRACTION_INTEGRAL){
 
 try {
 	$data = Integral::integralLucky($userId);
+//	print_r($data);
     $code = 0;
     $msg = 'ok';
     die;

@@ -21,15 +21,7 @@ try {
     	$res[$i]['price'] = Equip_Info::priceEquip($key['user_equip_id']);
     }
     
-    //内丹
-    $pill = Pill_Pill::listPill($userId);
-    foreach ($pill as $key=>$value){
-		$pill[$key]['nowAttribute'] = pill::pillAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//当前属性
-		$pill[$key]['nextAttribute'] = pill::nextLevelAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//下一级属性
-	}
-    
-    $data['equip'] = $res;
-    $data['pill']  = $pill;
+    $data = $res;
 //    print_r($data);
     $code = 0;
     $msg = 'ok';

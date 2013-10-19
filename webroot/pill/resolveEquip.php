@@ -24,6 +24,11 @@ if($verify > 0){
 try {
 	foreach ($equipId as $i){
 		$equipInfo = Equip_Info::getEquipInfoById($i);
+		if($equipInfo['equip_level'] == 0){
+			$code = 6;
+		    $msg = '0级装备不能分解';
+		    die;
+		}
 		$level = $equipInfo['equip_level'] / 10;
 		$res = Equip_Info::resolveEquip($userId, $equipInfo['user_equip_id'], $level);
 		if($res){//成功

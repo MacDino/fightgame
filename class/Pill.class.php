@@ -57,7 +57,7 @@ class Pill{
 			case self::TIANSHUNEIDAN://天枢,伤害
 				$num = $level * (2 + $level*0.03);
 	            $res = array(ConfigDefine::USER_ATTRIBUTE_HURT => $num);
-	            print_r($res);
+//	            print_r($res);
 	            break; 
              case self::TIANXUANNEIDAN://天璇,灵力
 				$num = $level * (2 + $level*0.03);
