@@ -208,7 +208,7 @@ class Fightable {
             //防御技能使用了反击
             if($defenseSkillIds[$key] == ConfigDefine::SKILL_FJ) {
                 $fjAttackData = $target->makeSkillData(ConfigDefine::SKILL_PT, 0, 'physic');
-                $fjTargetData = $this->doDefense('physic');
+                $fjTargetData = $this->doDefense('physic', 1);
                 $fjHarmInfo   = Skill::userSkillTest($fjAttackData, $fjTargetData);
                 $fjHarm = $fjHarmInfo['is_double'] ? $fjHarmInfo['hurt']/2 : $fjHarmInfo['huit'];
                 $this->current_blood = $this->current_blood - $fjHarm;
