@@ -41,6 +41,10 @@ class Equip_Info
         }
         return $res;
     }
+    
+    public static function forgePrice($level){
+    	return 40000 * pow(2, ($level));
+    }
 
     /** @desc 装备打造 */
     public static function forge($equipId){

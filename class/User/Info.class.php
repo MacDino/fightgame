@@ -170,6 +170,16 @@ class User_Info
 		return $res;
 	}
 
+	/** 增加绑定金币 */
+	public static function addBindMoney($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `bind_money` = `bind_money` + '$num' WHERE user_id = '$userId'";
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
 	//减少金币
 	public static function subtractMoney($userId, $num)
 	{
@@ -178,6 +188,30 @@ class User_Info
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `money` = `money` - '$num' WHERE user_id = '$userId'";
 		$res = MySql::query($sql);
 		return $res;
+	}
+	
+	/** 减少绑定金币 */
+	public static function subtractBindMoney($userId, $num)
+	{
+		if(!$userId || !$num)return FALSE;
+		
+		$userInfo = self::getUserInfoByUserId($userId);
+		$moneyNum = $num - $userInfo['bind_money'];
+		if($moneyNum > 0){//说明不够用
+			MySql::update(self::TABLE_NAME, array('bind_money' => 0), array('user_id' => $userId));
+			$sql = "UPDATE " . self::TABLE_NAME . " SET `money` = `money` - '$moneyNum' WHERE user_id = '$userId'";
+		}else{
+			$sql = "UPDATE " . self::TABLE_NAME . " SET `bind_money` = `bind_money` - '$num' WHERE user_id = '$userId'";
+		}
+		
+		$res = MySql::query($sql);
+		return $res;
+	}
+	
+	/** 现有金钱,包括绑定和普通 */
+	public static function getUserMoney($userId){
+		$userInfo = self::getUserInfoByUserId($userId);
+		return $userInfo['bind_money'] + $userInfo['money'];
 	}
 
 	//增加元宝

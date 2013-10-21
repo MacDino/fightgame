@@ -58,7 +58,7 @@ class Rewardtype{
 		if(empty($num)){
 			$num = rand(10000,1000000);
 		}
-		$res = User_Info::addMoney($userId, $num);
+		$res = User_Info::addBindMoney($userId, $num);
 		return '铜钱|N:'.$num;
 	}
 	
