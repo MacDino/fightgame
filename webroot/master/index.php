@@ -1,11 +1,22 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
+$act 			= isset($_REQUEST['act'])?$_REQUEST['act']:'';//动作
 $userName 			= isset($_REQUEST['user_name'])?$_REQUEST['user_name']:'';//用户名
 
-$where = array();
-if(!empty($userName)){$where['user_name'] = $userName;}
-$result = User_Info::searchUser($where);
+if($act == 'del'){
+	$userId 			= isset($_GET['user_id'])?$_GET['user_id']:'';//用户名
+	$res = User_Info::delUser($userId);
+	if($res){
+		echo "<script>location.href='index.php';</script>";exit;
+	}
+}else{
+	$where = array();
+	if(!empty($userName)){$where['user_name'] = $userName;}
+	$result = User_Info::searchUser($where);
+}
+
+
 
 //print_r($result);
 ?>
@@ -29,7 +40,7 @@ $result = User_Info::searchUser($where);
 		?></td><td>性别:<?php
 		if($i['sex'] == 1){echo "女";}else{echo "男";}
 		?></td><td>等级:<?=$i['user_level']?></td>
-		<td>经验:<?=$i['experience']?></td><td>金钱:<?=$i['money']?></td><td>元宝:<?=$i['ingot']?></td><td><a href="login.php?user_id=<?=$i['user_id']?>">进入</a></td>
+		<td>经验:<?=$i['experience']?></td><td>金钱:<?=$i['money']?></td><td>元宝:<?=$i['ingot']?></td><td><a href="login.php?user_id=<?=$i['user_id']?>">进入</a>||<a href="?act=del&user_id=<?=$i['user_id']?>">删除</a></td>
 	</tr>
 <? }}?>
 </table>

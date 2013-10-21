@@ -36,7 +36,7 @@ if($friendNum == $user['friend_num']){
 $isFriend = Friend_Info::getUserFrined($friendId, $userId);
 if(!empty($isFriend))
 {
-	$code = 1;
+	$code = 8;
     //$msg = '已经是好友!';
     $msg = '4';
     die;

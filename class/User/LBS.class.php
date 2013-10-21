@@ -8,7 +8,7 @@ class User_LBS
 	public static function recordLBS($userId, $longitude, $latitude){
 		 $last_login_time = time();
 		 $sql = "REPLACE INTO " . self::TABLE_NAME . " (user_id, longitude, latitude, last_login_time) VALUES('$userId', '$longitude', '$latitude', '$last_login_time')";
-		 echo $sql;
+//		 echo $sql;
 		 $res = MySql::query($sql);
 		 return $res;
 	}

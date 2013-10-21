@@ -19,7 +19,6 @@ try {
 		$res[$key]['nowAttribute'] = Pill::pillAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//当前属性
 		$res[$key]['nextAttribute'] = Pill::nextLevelAttribute($value['pill_type'], $value['pill_layer'], $value['pill_level']);//下一级属性
 	}
-	print_r($res);
 	$data = $res;
     $code = 0;
     $msg = 'ok';  

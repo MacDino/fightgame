@@ -18,6 +18,10 @@ if(!empty($info)){
 	    $msg = '已经达到最大锻造次数';
 	    die;    		
 	}
+}else{
+	$code = 2;
+    $msg = '没有这个装备';
+    die;
 }
 
 try {

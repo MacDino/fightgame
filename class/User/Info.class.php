@@ -10,7 +10,7 @@ class User_Info
 			$num = 0;
 			foreach ($arrayUserId as $userId){
 				if(!is_numeric($userId))return FALSE;
-				$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+				$res = MySql::selectCount(self::TABLE_NAME, array('user_id' => $userId, 'del_status' => 0));
 				if(empty($res)){
 					return FALSE;
 				}else{
@@ -32,7 +32,7 @@ class User_Info
 	{
 		if(!is_numeric($userId))return FALSE;
 
-		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId));
+		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'del_status' => 0));
 		return $res;
 	}
 
@@ -65,12 +65,13 @@ class User_Info
 	public static function listUser($masterId, $areaId){
 //		echo "$masterId, $areaId";
 		if(empty($masterId) || !$areaId)return FALSE;
-		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area_id' => $areaId));
+		$res = MySql::select(self::TABLE_NAME, array('master_id' => $masterId, 'area_id' => $areaId, 'del_status' => 0));
 		return $res;
 	}
 
 	//根据条件搜索用户 后台用
 	public static function searchUser($array){
+		$array['del_status'] = 0;
 		$res = MySql::select(self::TABLE_NAME, $array);
 		return $res;
 	}
@@ -88,7 +89,7 @@ class User_Info
 
 	/** @desc 校验数量 */
 	public static function verifyUserNum($masterId){
-		$res = MySql::selectCount(self::TABLE_NAME, array('master_id' => $masterId));
+		$res = MySql::selectCount(self::TABLE_NAME, array('master_id' => $masterId, 'del_status' => 0));
 //		echo $res;
 		if($res >= 3){
 			return FALSE;
@@ -405,7 +406,6 @@ class User_Info
 							$baseAttribute[$x] += $y;
 						}elseif(array_key_exists($x, $valueAttribute)){//技能加成中属性值部分
 							$valueAttribute[$x] += $y;
-						}else{
 						}
 					}
 				}
@@ -561,7 +561,7 @@ class User_Info
 
 	/** @desc 查找等级在10之内的用户 */
 	public static function nearUser($userId){
-		$sql = "select * from user_info where user_level > user_level-11 and user_level < user_level+11 and user_id != $userId";
+		$sql = "select * from user_info where user_level > user_level-11 and user_level < user_level+11 and del_status = 0 and user_id != $userId";
 		$res = MySql::query($sql);
 		return $res;
 	}
@@ -594,6 +594,10 @@ class User_Info
 		return $res;
 	}
 	
+	/** @desc 删除角色 */
+	public static function delUser($userId){
+		$res = MySql::update(self::TABLE_NAME, array('del_status' => 1), array('user_id' => $userId));
+		return $res;
+	}
 	
-
 }
