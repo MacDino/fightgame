@@ -9,7 +9,7 @@ class Cache
         if(DEVELOPER)
         {
             return FALSE;
-            return apc_get($key);
+            return apc_fetch($key);
         }else{
             $obj = self::_getCacheObj();
             if($obj)
