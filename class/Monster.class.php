@@ -91,7 +91,14 @@ class Monster
 		$suffix_change      = Monster_SuffixConfig::getMonsterSuffixConfig($monster['suffix'], 'attribute_change_list');
 		$attribute          = Utility::arrayMultiply($base_attribute, $prefix_change, $suffix_change);
 		//成长属性
-		$growup_attribute   = User_Race::getGrowUpAttributes($monster['race_id'], $attribute);
+		//$growup_attribute   = User_Race::getGrowUpAttributes($monster['race_id'], $attribute);
+		/*
+		 *  新版怪物成长属性
+		 */
+		print_r($monster);
+		print_r($attribute);
+		$growup_attribute   = self::getMonsterGrowAttribute($attribute, $monster);
+
 		//print_r($growup_attribute);
 		return $attribute + $growup_attribute;
 	}
@@ -296,26 +303,25 @@ class Monster
 	/*
 	 * 重新定义怪物的成长属性
 	 */
-	private static function getMonsterGrowAttribute($baseAttribute, $aptitude, $growPercentage){
-	
-	
-	}
-
-
-	/*
-	 * 计算工式
-	 */
-	private static function _getGrowAttrResult(){
+	private static function getMonsterGrowAttribute($baseAttribute, $monster){
         $formuleRes =  array(
-            ConfigDefine::USER_ATTRIBUTE_HIT      => 30 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*2.01,
-            ConfigDefine::USER_ATTRIBUTE_HURT     => 34 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*0.67,
-            ConfigDefine::USER_ATTRIBUTE_MAGIC    => 80 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER]*3,
-            ConfigDefine::USER_ATTRIBUTE_BLOOD    => 100 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*5,
-            ConfigDefine::USER_ATTRIBUTE_PSYCHIC  => $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*0.4 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*0.3 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER]*0.7 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*0.2,
-            ConfigDefine::USER_ATTRIBUTE_SPEED    => $userAttributes[ConfigDefine::USER_ATTRIBUTE_POWER]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_QUICK]*0.7 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE]*0.1 + $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*0.1,
-            ConfigDefine::USER_ATTRIBUTE_DEFENSE  => $userAttributes[ConfigDefine::USER_ATTRIBUTE_ENDURANCE]*1.5,
-            ConfigDefine::USER_ATTRIBUTE_DODGE    => $userAttributes[ConfigDefine::USER_ATTRIBUTE_QUICK]*1,
-            ConfigDefine::USER_ATTRIBUTE_LUCKY	  => 0,
+			ConfigDefine::USER_ATTRIBUTE_HIT    => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_HIT, $monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_HURT   => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_HURT, $monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_MAGIC  => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_MAGIC,$monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_BLOOD  => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_BLOOD,$monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_PSYCHIC =>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_PSYCHIC,$monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_SPEED  => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_SPEED,$monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_DEFENSE=>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_DEFENSE,$monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_DODGE => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_DODGE,$monster, $baseAttribute),
+            ConfigDefine::USER_ATTRIBUTE_LUCKY => 0,
        );
        return $formuleRes;
 	}
@@ -323,9 +329,11 @@ class Monster
 	/*
 	 * 生成公式
 	 */
-	private static function createFormule($growAttrId, $monster, $baseAttr, $aptitude) {
+	private static function createFormule($growAttrId, $monster, $baseAttr) {
 		$growPer = $monster['grow_per'];
 		$level   = $monster['level'];
+		$aptitude = $monster['aptitude'];
+
 		switch ($growAttrId) {
 			case ConfigDefine::USER_ATTRIBUTE_HIT:
 				$powerAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_POWER];
@@ -373,6 +381,7 @@ class Monster
 				$formule = $agileAttr * 1 + $level * $dodgeAptitude/1000;
 				break;
 		}
+		return $formule;
 	}
 
 	/*

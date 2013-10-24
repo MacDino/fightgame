@@ -442,7 +442,7 @@ class User_Property{
 		//是否已经在用
 		$isUse = self::isuseDoubleHarvest($userId);
 		if(!empty($isUse)){
-			throw new Exception ('此道具已在使用', 10001);	
+			throw new Exception ('此道具已在使用', 10088);	
 		}
 		
 		//是否还有存数
