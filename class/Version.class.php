@@ -19,16 +19,18 @@ class Version
     public static function getStaticResourceVersion(){
         return self::VERSION;
     }
-	
+
 	public static function getVersionId(){
-		
+
 	}
 	//地图
 	public static function getMapList(){
-		$res = MySql::select('map_list', array(), array('map_id', 'map_name'));
+		$res = MySql::select('map_list', array(), array('map_id', 'map_name','start_level','end_level'));
 		foreach ($res as $key=>$value){
 			$result[$key]['id'] = $value['map_id'];
 			$result[$key]['name'] = $value['map_name'];
+            $result[$key]['start_level'] = $value['start_level'];
+            $result[$key]['end_level'] = $value['end_level'];
 		}
 		return $result;
 	}
@@ -41,7 +43,7 @@ class Version
 		}
 		return $result;
 	}
-	
+
 	//前后缀
 	public static function getTitleList(){
 		$res = ConfigDefine::titleList();
@@ -51,7 +53,7 @@ class Version
 		}
 		return $result;
 	}
-	
+
 	//动作
 	public static function getActionList(){
 		$res = ConfigDefine::actionList();
@@ -76,7 +78,7 @@ class Version
 		$res = MySql::select('level_info', array(), array('level', 'need_experience'));
 		return $res;
 	}
-	
+
 	//基本属性
 	public static function getAttributeList(){
 		$res = ConfigDefine::attributeList();
@@ -86,7 +88,7 @@ class Version
 		}
 		return $result;
 	}
-	
+
 	//装备属性
 	public static function getEquipList(){
 
@@ -97,7 +99,7 @@ class Version
 		}
 		return $result;
 	}
-	
+
 	//道具列表
 	public static function getPropsList()
 	{
