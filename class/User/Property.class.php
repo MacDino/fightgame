@@ -45,19 +45,19 @@ class User_Property{
 		if(!$userId || !$propsId)return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if(!$num || $num < 0 || !is_numeric($num)){
-			throw new Exception('购买数量不正确', 1);
+			throw new Exception('购买数量不正确', 13100);
 		}
 		$propsInfo = Props_Info::getPropsInfo($propsId);
 		if(!$propsInfo){
-			throw new Exception('此装备信息找不到', 1);
+			throw new Exception('此装备信息找不到', 13200);
 		}
 		$priceType = $propsInfo['price_type'];
 		$price = $propsInfo['price'];
 		if( $priceType == Props_Info::PRICE_TYPE_DYNAMIC){
-			throw new Exception('此接口只能购买固定价格的道具',1);	
+			throw new Exception('此接口只能购买固定价格的道具',13300);	
 		}
 		if($userInfo['ingot'] < $price) {
-			throw new Exception('您的元宝数不足,无法购买',1);	
+			throw new Exception('您的元宝数不足,无法购买',13400);	
 		}
 		$res = self::buyAction($userId, $propsId, $num);
 		/*
