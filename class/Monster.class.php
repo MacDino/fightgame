@@ -95,8 +95,8 @@ class Monster
 		/*
 		 *  新版怪物成长属性
 		 */
-		print_r($monster);
-		print_r($attribute);
+		//print_r($monster);
+		//print_r($attribute);
 		$growup_attribute   = self::getMonsterGrowAttribute($attribute, $monster);
 
 		//print_r($growup_attribute);
