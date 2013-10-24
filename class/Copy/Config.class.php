@@ -71,6 +71,7 @@ class Copy_Config{
 				'suffix'		=> $monsterSuffix,
 				'skills'		=> $skills,
 				'race_id'		=> $monsterRaceId,
+				'grow_per'		=> Monster::getGrowPercentage($mapId),
 			);
 			return $monster;
 		}

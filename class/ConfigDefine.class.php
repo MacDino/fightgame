@@ -68,6 +68,19 @@ class ConfigDefine
     CONST DI                            = 7130;//第
 
            
+	//资质类型
+	CONST APTITUDE_TYPE_ATTACK  =  8101;	//攻击资质
+	CONST APTITUDE_TYPE_DEFENSE =  8102; 	//防御资质
+	CONST APTITUDE_TYPE_FASHU   =  8103; 	//法术资质
+
+	//资质
+	CONST APTITUDE_ATTACK   = 8201;			//攻击资质
+	CONST APTITUDE_DEFENSE  = 8202;			//防御资质
+	CONST APTITUDE_PHYSICAL = 8203;			//体力资质
+	CONST APTITUDE_MAGIC	= 8204;			//魔力资质
+	CONST APTITUDE_SPEED	= 8205;			//速度资质
+	CONST APTITUDE_DODGE    = 8206;			//躲闪资质
+
 
     CONST PK_NUM                        = 'pk_num';//PVP次数
     CONST USER_BASE_ATTRIBUTE           = 'user_base_attribute';//用户基本属性
@@ -214,4 +227,125 @@ class ConfigDefine
 		return $res;
 	}
 
+	/*
+	 * 资质类型
+	 */
+	public static function aptitudeTypeList(){
+		$res = array (
+			self::APTITUDE_TYPE_ATTACK  => '攻击型',
+			self::APTITUDE_TYPE_DEFENSE => '防御型',
+			self::APTITUDE_TYPE_FASHU   => '法术型',
+		);	
+		return $res;
+	}
+
+	/*
+	 * 获取不同类型资质的配置
+	 */
+	public static function getAptitudeConfig($mapId){
+		$mapId = intval($mapId);
+		$res = array(
+			self::APTITUDE_TYPE_ATTACK  => self::getAttackAptitudeConfig($mapId),
+			self::APTITUDE_TYPE_DEFENSE => self::getDefenseAptitudeConfig($mapId),
+			self::APTITUDE_TYPE_FASHU   => self::getFashuAptitudeConfig($mapId),
+		);	
+		return $res;	
+	}
+
+	/*
+	 * 获取攻击型资质基础值和公式
+	 */
+	public static function getAttackAptitudeConfig ($mapId) {
+		$config = array(
+			self::APTITUDE_ATTACK => array(
+				'base_value' => 1400,
+				'formule'	 => 1400 + ($mapId - 1)	* 10,
+			),
+			self::APTITUDE_DEFENSE => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 10,
+			),
+			self::APTITUDE_PHYSICAL => array(
+				'base_value' => 2000,
+				'formule'	 => 2000 + ($mapId - 1)	* 110,
+			),
+			self::APTITUDE_MAGIC => array(
+				'base_value' => 1400,
+				'formule'	 => 1400 + ($mapId - 1)	* 60,
+			),
+			self::APTITUDE_SPEED => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 30,
+			),
+			self::APTITUDE_DODGE => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 30,
+			),
+		);
+		return $config;	
+	}
+	/*
+	 * 获取防御型资质基础值和公式
+	 */
+	public static function getDefenseAptitudeConfig ($mapId) {
+		$config = array(
+			self::APTITUDE_ATTACK => array(
+				'base_value' => 1100,
+				'formule'	 => 1400 + ($mapId - 1)	* 10,
+			),
+			self::APTITUDE_DEFENSE => array(
+				'base_value' => 1400,
+				'formule'	 => 1000 + ($mapId - 1)	* 10,
+			),
+			self::APTITUDE_PHYSICAL => array(
+				'base_value' => 3000,
+				'formule'	 => 2000 + ($mapId - 1)	* 110,
+			),
+			self::APTITUDE_MAGIC => array(
+				'base_value' => 1500,
+				'formule'	 => 1400 + ($mapId - 1)	* 60,
+			),
+			self::APTITUDE_SPEED => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 30,
+			),
+			self::APTITUDE_DODGE => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 30,
+			),
+		);
+		return $config;	
+	}
+	/*
+	 * 获取法术型资质基础值和公式
+	 */
+	public static function getFashuAptitudeConfig ($mapId) {
+		$config = array(
+			self::APTITUDE_ATTACK => array(
+				'base_value' => 1100,
+				'formule'	 => 1400 + ($mapId - 1)	* 10,
+			),
+			self::APTITUDE_DEFENSE => array(
+				'base_value' => 1100,
+				'formule'	 => 1000 + ($mapId - 1)	* 10,
+			),
+			self::APTITUDE_PHYSICAL => array(
+				'base_value' => 2000,
+				'formule'	 => 2000 + ($mapId - 1)	* 110,
+			),
+			self::APTITUDE_MAGIC => array(
+				'base_value' => 1900,
+				'formule'	 => 1400 + ($mapId - 1)	* 60,
+			),
+			self::APTITUDE_SPEED => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 30,
+			),
+			self::APTITUDE_DODGE => array(
+				'base_value' => 1000,
+				'formule'	 => 1000 + ($mapId - 1)	* 30,
+			),
+		);
+		return $config;	
+	}
 }
