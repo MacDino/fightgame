@@ -40,27 +40,29 @@ class Skill_Info {
 		
 		//装备加成
 		$equipInfo = Equip_Info::getEquipListByUserId($userId, TRUE);//根据ID取出所有装备,假设为getEquipInfoByUserId
-		foreach ($equipInfo as $p)
-		{//把装备中的属性点放在一起,属性值放在一起
-			//基础属性
-			$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
-			if(is_array($equipBaseAttribute)){
-				foreach ($equipBaseAttribute as $m=>$n)
-				{
-					if(array_key_exists($m, $attribute))//装备中属性点部分
+		if(!empty($equipInfo)){
+			foreach ($equipInfo as $p)
+			{//把装备中的属性点放在一起,属性值放在一起
+				//基础属性
+				$equipBaseAttribute = json_decode($p['attribute_base_list'], TRUE);
+				if(is_array($equipBaseAttribute)){
+					foreach ($equipBaseAttribute as $m=>$n)
 					{
-						$attribute[$m] += $n;
+						if(array_key_exists($m, $attribute))//装备中属性点部分
+						{
+							$attribute[$m] += $n;
+						}
 					}
 				}
-			}
-			//扩展属性
-			$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
-			if(is_array($equipExpandAttribute)){
-				foreach ($equipExpandAttribute as $x=>$y)
-				{
-					if(array_key_exists($x, $attribute))//装备中属性点部分
+				//扩展属性
+				$equipExpandAttribute = json_decode($p['attribute_list'], TRUE);
+				if(is_array($equipExpandAttribute)){
+					foreach ($equipExpandAttribute as $x=>$y)
 					{
-						$attribute[$x] += $y;
+						if(array_key_exists($x, $attribute))//装备中属性点部分
+						{
+							$attribute[$x] += $y;
+						}
 					}
 				}
 			}

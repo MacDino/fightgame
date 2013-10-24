@@ -20,16 +20,6 @@ if(!$userInfo){
 	$msg = "没有这个用户";
 }
 
-//好友ID是否存在
-$friendInfo = User_Info::getUserInfoByUserId($friendId);
-if(!$friendInfo)
-{
-	$code = 1;
-    //$msg = '用户信息错误!';
-    $msg = '3';
-    die;
-}
-
 //是否已经是好友
 $isFriend = Friend_Info::getUserFrined($userId, $friendId);
 if(empty($isFriend))

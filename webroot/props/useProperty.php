@@ -16,45 +16,51 @@ try{
 	switch ($propsId){
 		//双倍咒符
 		case User_Property::DOUBLE_HARVEST:
-			$data = User_Property::useDoubleHarvest($userId, $propsId);
+			$res = User_Property::useDoubleHarvest($userId, $propsId);
 			break;
 		//PK咒符
 		case User_Property::PK:
-			$data = User_Property::usePkNum($userId, $propsId);
+			$res = User_Property::usePkNum($userId, $propsId);
 			break;
 		//属性增强
 		case User_Property::ATTRIBUTE_ENHANCE:
-			$data = User_Property::useAttributeEnhance($userId, $propsId);
+			$res = User_Property::useAttributeEnhance($userId, $propsId);
 			break;
 		//人宠
 		case User_Property::PET:
-			$data = User_Property::usePetNum($userId, $propsId);
+			$res = User_Property::usePetNum($userId, $propsId);
 			break;
 		//背包
 		case User_Property::PACKAGE:
-			$data = User_Property::usePackNum($userId, $propsId);
+			$res = User_Property::usePackNum($userId, $propsId);
 			break;
 		//自动挂机
 		case User_Property::AUTO_FIGHT:
-			$data = User_Property::useAutoFight($userId, $propsId);
+			$res = User_Property::useAutoFight($userId, $propsId);
 			break;
 		//好友上限
 		case User_Property::FRIEND:
-			$data = User_Property::useFriendNum($userId, $propsId);
+			$res = User_Property::useFriendNum($userId, $propsId);
 			break;
 		//装备锻造
 		case User_Property::EQUIP_FORGE:
-			$data = User_Property::useEquipForge($userId, $propsId);
+			$res = User_Property::useEquipForge($userId, $propsId);
 			break;
 		//装备成长
 		case User_Property::EQUIP_GROW:
 			$equipId = isset($_REQUEST['equip_id'])?(int)$_REQUEST['equip_id']:'';
-			$data = User_Property::useEquipGrow($userId, $equipId);
+			$res = User_Property::useEquipGrow($userId, $equipId);
 			break;
 		default:
 			echo '没有此装备';
 			break;
 	}
+	$userPropsNum = User_Property::getPropertyNum($userId, $propsId);
+	$data = array(
+		'user_id' => $userId,
+		'result'  => $res,
+		'props_num' => $userPropsNum,	
+	);
 } catch (Exception $e){
 	$code = $e->getCode();
 	$msg = $e->getMessage();

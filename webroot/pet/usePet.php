@@ -6,9 +6,16 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $petId     = isset($_REQUEST['pet_id'])?$_REQUEST['pet_id']:'';//人宠ID
 
+if(!$userId || !$petId)
+{
+    $code = 1;
+    $msg = '传入参数不正确';
+    die;
+}
+
 $userInfo = User_Info::isExistUser(array($userId, $petId));
 if(!$userInfo){
-	$code = 1;
+	$code = 3;
 	$msg = "没有这个用户";
 }
 
@@ -27,6 +34,6 @@ try {
     die;
 } catch (Exception $e) {
     $code = 99;
-    $msg = '99';
+    $msg = '内部错误';
     die;    
 }

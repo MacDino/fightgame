@@ -9,7 +9,6 @@ if(!$equipId)
     die;
 }
 
-$info = self::getEquipInfoById($equipId);
 if(!empty($info)){
 	if($info['equip_level'] >= 100){
 		$code = 6;
@@ -20,8 +19,11 @@ if(!empty($info)){
 	    $msg = '当前装备等级不够30级,不能使用成长符';
 	    die;
 	}
+}else{
+    $code = 2;
+    $msg = '没有这个装备';
+    die;
 }
-
 
 try {
     $res = Equip_Info::upgrade($equipId);

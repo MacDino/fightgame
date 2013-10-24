@@ -15,7 +15,13 @@ if(!$userId || !$propsId)
     die;
 }
 try {
-    $data = User_Property::buyUserProps($userId, $propsId, $num);
+	$userPropsNum = User_Property::getPropertyNum($userId, $propsId);
+    $res = User_Property::buyUserProps($userId, $propsId, $num);
+	$data = array(
+		'user_id' => $userId,
+		'result'  => $res,
+		'props_num' => $userPropsNum,	
+	);
 } catch (Exception $e) {
 	$code = $e->getCode();
 	$msg = $e->getMessage();

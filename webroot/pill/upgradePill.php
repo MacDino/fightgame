@@ -31,8 +31,8 @@ if($pillInfo['pill_level'] == 10){//
 //print_r($pillInfo);
 $expend = Pill_Pill::compoundPillExpend($pillInfo['pill_layer'], $pillInfo['pill_level']);//消耗
 //print_r($expend);
-$userInfo = User_Info::getUserInfoByUserId($userId);
-if($expend['money'] > $userInfo['money']){
+$money = User_Info::getUserMoney($userId);
+if($expend['money'] > $money){
 	$code = 2;
 	$msg = "金钱不足!";
 	die;
@@ -56,7 +56,7 @@ if($expend['stone'] > $stoneNum){
 try {
     Pill_Iron::subtractIron($userId, $pillInfo['pill_layer'], $expend['iron']);//减少精铁
     Pill_Stone::subtractStone($userId, $pillInfo['pill_type'], $expend['stone']);//减少阵法石
-    User_Info::subtractMoney($userId, $expend['money']);//减少钱
+    User_Info::subtractBindMoney($userId, $expend['money']);//减少钱
     Pill_Pill::upgradePill($pillId, $pillInfo['pill_layer'], $pillInfo['pill_level']);//升级内丹
     $data['pill_layer'] = $pillInfo['pill_layer'];
     $data['pill_level'] = $pillInfo['pill_level'];

@@ -10,9 +10,10 @@ $type   = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
 
 $skillLevel    = Skill_Info::getSkillInfo($userId, $skillId);
 $userInfo  = User_Info::getUserInfoByUserId($userId); 
+$money = User_Info::getUserMoney($userId);
 //金钱判断
 $needMoney = Skill_Info::getSkillMoney($skillLevel);
-if($userInfo['money'] < $needMoney){
+if($needMoney > $money){
 	$code = 2;
     $msg    = '您金钱不足';
     die;
@@ -44,7 +45,7 @@ try {
 	$data   = Skill_Info::updateSkill($userId, $skillId, $type);
     if($data){
         //扣除金钱
-        User_Info::subtractMoney($userId, $needMoney);
+        User_Info::subtractBindMoney($userId, $needMoney);
         //减技能点数
         User_Info::subtractPointNum($userId, 1);
     }

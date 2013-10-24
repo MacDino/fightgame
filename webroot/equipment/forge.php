@@ -18,10 +18,23 @@ if(!empty($info)){
 	    $msg = '已经达到最大锻造次数';
 	    die;    		
 	}
+}else{
+	$code = 2;
+    $msg = '没有这个装备';
+    die;
+}
+
+$nowMoney = User_Info::getUserMoney($userId);
+$needMoney = Equip_Info::forgePrice($info['forge_level']);
+if($needMoney > $nowMoney){
+	$code = 8;
+    $msg = '你的钱不够';
+    die;
 }
 
 try {
     $res = Equip_Info::forge($equipId);
+    User_Info::subtractBindMoney($info['user_id'], $needMoney);
     $data['status'] = $res;
 	$data['info'] = Equip_Info::getEquipInfoById($equipId);
 	$data['info']['attribute_list'] = json_decode($data['info']['attribute_list'], true);

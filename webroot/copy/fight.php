@@ -6,7 +6,7 @@ $copyLevId             = isset($_REQUEST['copy_level_id']) ? $_REQUEST['copy_lev
 
 $copyLev = Copy_Config::getCopyLevelInfoByLevelId($copyLevId);
 if (!$copyLev) {
-	$code = 1; $msg = "无此副本";
+	$code = 1; $msg = "无此副本";exit;
 }
 $copy = Copy::getCopyInfoByCopyId($copyLev['copies_id']); 
 $userInfo           = User_Info::getUserInfoByUserId($userId);
@@ -22,6 +22,18 @@ if($userId <=0 ) {
 }
 $userLastCopyResult     = Copy_FightResult::getResult($userId, $copyLevId);
 if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
+	$jsonResult = json_decode($userLastCopyResult['last_fight_result'], TRUE);
+	$lastIsWin = $jsonResult['result']['win'];
+	$lastFightDate = date("Y-m-d",strtotime($userLastCopyResult['create_time']));
+	$isTodayFight = $lastFightDate == date("Y-m-d", time());
+	/*
+	 * 限制每天打一次此副本
+	 */
+	if ( $isTodayFight && !$lastIsWin) {
+		$code = 100090;	
+		exit;
+	}
+
     $accessDiffTime = time() - $userLastCopyResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastResult['use_time']) {
         //调用时间小于应该花费的时间
@@ -79,6 +91,20 @@ try {
         $data['result']['money']              = Monster::getMonsterMoney($monster);
         $data['result']['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
+		/*
+		 * 打赢时，怪物计数
+		 * 每天打过100个怪，则通关,启动下一个副本
+		 * 否则重新计数
+		 */
+		if(isset($isTodayFight) && $isTodayFight) {
+			$win_monster_count = $userLastCopyResult['win_monster_num'] + 1;
+			echo $win_monster_count;
+		} else {
+			echo 222;
+			$win_monster_count = 0;
+		}
+
+
         User_Info::addExperience($userId, $data['result']['experience']);
         $isLevelUp                  = User_Info::isLevel($userId);
         if($isLevelUp) {
@@ -106,8 +132,9 @@ try {
  /**记录战斗结果入库，战斗记录一个用户永远只保存一条**/
 $result = array(
     'user_id'   => $userId,
-    'level_id'    => $copyLevId,
+    'copies_level_id'    => $copyLevId,
     'use_time'  => $fightUseTime,
     'last_fight_result' => $data,
+	'win_monster_num'   => $win_monster_count,
 );
 Copy_FightResult::create($result);
