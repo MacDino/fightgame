@@ -22,11 +22,6 @@ class Fight {
 				if ($attacker->isDead()) {
 					continue;
 				}
-                //超过120回合就判定输了。不再计算回合
-                if($times > 120) {
-                    $isTooLong = 1;
-                    break;
-                }
 				//true 不可省略，严格检查是否是同一个对象
 				if (in_array($attacker, $team1, true)) {
 					$target = self::randTarget($team2);
@@ -41,6 +36,11 @@ class Fight {
 				$fight_procedure[] = self::_report($attacker, $target);
                 $times++;
 			}
+            //超过120回合就判定输了。不再计算回合
+            if($times > 120) {
+                $isTooLong = 1;
+                break;
+            }
 		}
 		return array(
             'use_time'          => $times * self::FIGHT_USE_TIME_BASE,
