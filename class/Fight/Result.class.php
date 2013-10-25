@@ -21,7 +21,7 @@ class Fight_Result {
             'map_id'            => intval($params['map_id']),
             'fight_start_time'  => time(),
             'use_time'          => intval($params['use_time']),
-            'last_fight_result' => json_encode($params['last_fight_result']),
+            'last_fight_result' => addslashes(json_encode($params['last_fight_result'])),
             'create_time'       => date('Y-m-d H:i:s'),
         );
         /**根据用户的id进行检验，如果有结果更新，没有结果插入**/
