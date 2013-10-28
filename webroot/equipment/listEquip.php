@@ -6,7 +6,7 @@ error_reporting(2047);
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : '';
 $equipType     = isset($_REQUEST['equip_type']) ? $_REQUEST['equip_type'] : '';
 
-if(!$equipId)
+if(!$userId)
 {
     $code = 1;
     $msg = '传入参数不正确';

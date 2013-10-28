@@ -16,7 +16,7 @@ class Friend_Info
 			if(!$userId) return FALSE;
 			
 			//查询好友信息
-			$sql = "select u.race_id as user_race, u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
+			$sql = "select u.user_id as user_id, u.race_id as user_race, u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
 //			echo $sql;exit;
 			$friendInfo = MySql::query($sql);
             return $friendInfo;
@@ -54,9 +54,8 @@ class Friend_Info
     	try{
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
-
 			//查询好友数量
-			$friendInfo = Mysql::selectCount(self::TABLE_NAME, array('user_id' => $userId));
+			$friendInfo = Mysql::selectCount(self::TABLE_NAME, array('user_id' => $userId, 'is_pass' => 1));
             return $friendInfo;
         }catch (Exception $e){
            return FALSE;
@@ -138,7 +137,7 @@ class Friend_Info
         	//同时减少user_id声望
             return TRUE;
         }else{
-        	return FALSE;
+        	return TRUE;
         }
     }
 

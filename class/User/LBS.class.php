@@ -25,8 +25,7 @@ class User_LBS
 	 * @param int $lng
 	 * @param int $lat
 	 */
-	public static function getNearbyFriend($userId, $distance = 1000)
-	{
+	public static function getNearbyFriend($userId, $distance = 1000){
 		$userLbs = self::getLBSByUserId($userId);
 //		print_r($userLbs);
 		$lng = $userLbs['longitude'];
@@ -46,21 +45,43 @@ class User_LBS
             FROM user_info i ,user_lbs l WHERE longitude<=$max_lng AND longitude>=$min_lng AND latitude<=$max_lat AND latitude>=$min_lat
             AND i.user_id!=$userId and i.user_id = l.user_id";
 //		echo $sql;
+		$sql = "select * from user_lbs WHERE longitude <= '$max_lng' AND longitude >= '$min_lng' AND latitude <= '$max_lat' AND latitude >= '$min_lat'
+            AND user_id <> '$userId'";
 		$res = MySql::query($sql);
+		$nowUser = Friend_Info::getFriendInfo($userId);
+		$user = array();
+		if(!empty($nowUser)){
+			foreach ($nowUser as $o=>$key){
+				$user[$o] = $key['user_id']; 
+			}
+		}
+		if(!empty($res)){
+			foreach ($res as $i=>$key){
+				if(array_key_exists($key['user_id'], $user)){//如果已经是好友
+					unset($res[$i]);
+				}else{
+					$userInfo = User_Info::getUserInfoByUserId($userId);
+					$res[$i]['user_level'] = $userInfo['user_level'];
+					$res[$i]['race_id'] = $userInfo['race_id'];
+					$res[$i]['user_name'] = $userInfo['user_name'];
+					$res[$i]['sex'] = $userInfo['sex'];
+				}
+			}
+		}
+		
+		$res = $user;
 		return $res;
 	}
 	
 	/** @desc 根据坐标计算距离 */
 	private static function GetDistance($lat1, $lng1, $lat2, $lng2){
 		$radLat1=deg2rad($lat1);
-//		echo $radLat1."<br>";
 		$radLat2=deg2rad($lat2);
 		$radLng1=deg2rad($lng1);
 		$radLng2=deg2rad($lng2);
 		$a=$radLat1-$radLat2;//两纬度之差,纬度<90
 		
 		$b=$radLng1-$radLng2;//两经度之差纬度<180
-//		echo $a."++";
 //		echo $b."<br>";
 		$s=2*asin(sqrt(pow(sin($a/2),2)+cos($radLat1)*cos($radLat2)*pow(sin($b/2),2)))*6378.137;
 //		echo ceil($s)."<br>";
@@ -80,11 +101,13 @@ class User_LBS
 				$res[$key] = $distance;
 			}
 		}
-		
-		asort($res, SORT_NUMERIC);//排序
-		foreach ($res as $a=>$b){
-			$result[] = $data[$a];
+		if(!empty($res)){
+			asort($res, SORT_NUMERIC);//排序
+			foreach ($res as $a=>$b){
+				$result[] = $data[$a];
+			}
 		}
+		
 
 		return $result;
 	}

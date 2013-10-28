@@ -26,19 +26,24 @@ if(!empty($info)){
 
 $nowMoney = User_Info::getUserMoney($info['user_id']);
 $needMoney = Equip_Info::forgePrice($info['forge_level']);
-if($needMoney > $nowMoney){
-	$code = 8;
-    $msg = '你的钱不够';
-    die;
-}
+
 
 try {
-    $res = Equip_Info::forge($equipId);
-    User_Info::subtractBindMoney($info['user_id'], $needMoney);
-    $data['status'] = $res;
-	$data['info'] = Equip_Info::getEquipInfoById($equipId);
-	$data['info']['attribute_list'] = json_decode($data['info']['attribute_list'], true);
-	$data['info']['attribute_base_list'] = json_decode($data['info']['attribute_base_list'], true);
+	
+	$attributeList = json_decode($info['attribute_base_list'], TRUE);
+	$forgeAttributeList = Equip_Config::forgeAttributeList();
+        //增加属性值
+    foreach($attributeList AS $k=>$v){
+            if(isset($forgeAttributeList[$info['equip_type']][$k])){
+                $res[$k] = $v;
+        }
+    }
+	
+	
+	$data['odds'] = Skill::getQuickAttributeForEquip($info['forge_level']);;//成功率
+	$data['add'] =  $res;//增加的属性
+	$data['needMoney'] = $needMoney;//需要的钱
+	$data['money'] = $nowMoney;//现有的钱
     $code = 0;
     $msg = 'ok';
     die;
