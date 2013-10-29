@@ -55,10 +55,9 @@ try {
     $userFightTeam      = array();
     $petInfo            = Pet::usedPet($userId);
     if(is_array($petInfo) && count($petInfo)) {
-        $userPetInfo    = User_Info::getUserInfoByUserId($petInfo['pet_id']);
         //人宠进入队伍
-        $userFightTeam[] = Fight::createUserFightable($userPetInfo['user_id'], $userPetInfo['user_level'], 'pet');
-        $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[0], $userPetInfo);
+        $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'], 'pet');
+        $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[0], $petInfo);
     }
 
     /**@todo 随即出来一个战斗对象**/
@@ -79,13 +78,20 @@ try {
 
     $targetUserInfo     = User_Info::getUserInfoByUserId($targetUserId);
     //计算是否相生相克
-    $userHelpAndHarm    = Fight::calculateHelpAndHarmfull($userInfo['race_id'], $userPetInfo['race_id'], $targetUserInfo['race_id']);
+    $userHelpAndHarm    = Fight::calculateHelpAndHarmfull($userInfo['race_id'], $petInfo['race_id'], $targetUserInfo['race_id']);
     //生成用户的战斗对象，进入队中的首位
     array_unshift($userFightTeam, Fight::createUserFightable($userId, $userInfo['user_level'], 'user', $userHelpAndHarm['user']['helpfull'], $userHelpAndHarm['user']['harmfull']));
     $data['participant']['user']        = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
 
     $targetUserFightTeam[]              = Fight::createUserFightable($targetUserId, $targetUserInfo['user_level'], 'challenger');
     $data['participant']['challenger']  = Fight::getPeopleFightInfo($targetUserFightTeam[0], $targetUserInfo);
+
+    $targetPet            = Pet::usedPet($targetUserId);
+    if(is_array($targetPet) && count($targetPet)) {
+        //人宠进入队伍
+        $targetUserFightTeam[] = Fight::createUserFightable($targetPet['user_id'], $targetPet['user_level'], 'target_pet');
+        $data['participant']['target_pet'] = Fight::getPeopleFightInfo($targetUserFightTeam[0], $targetPet);
+    }
 
     $fightResult = Fight::multiFight($userFightTeam, $targetUserFightTeam);
 
