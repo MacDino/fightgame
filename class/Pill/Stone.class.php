@@ -7,10 +7,11 @@ class Pill_Stone {
 	/** @desc 增加阵法石 */
 	public static function addStone($userId, $type, $num=1){
 		$nownum = self::getStoneNumBytype($userId, $type);
-		if(!empty($nownum)){
-			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'stone_type' => $type));
-		}else{
+//		echo $nownum;
+		if($nownum === false){
 			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'stone_type' => $type, 'num' => $num));
+		}else{
+			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'stone_type' => $type));
 		}
 		
 		return $res;
@@ -33,7 +34,11 @@ class Pill_Stone {
 	/** @desc 查询单种阵法石数量 */
 	public static function getStoneNumBytype($userId, $type){
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'stone_type' => $type), array('num'));
-		return $res['num'];
+		if(!empty($res)){
+			return $res['num'];
+		}else{
+			return false;
+		}
 	} 
 
 	/** @desc 出售价格 */

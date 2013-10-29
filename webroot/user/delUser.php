@@ -11,11 +11,10 @@ if(!$userId)
     die;
 }
 
-$userInfo = User_Info::getUserInfoByUserId($userId);
-if(empty($userInfo)){
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
 	$code = 2;
-    $msg = '根本没有这个用户';
-    die;
+	$msg = "没有这个用户";
 }
 
 try {
@@ -28,4 +27,3 @@ try {
 	$msg = '内部错误';
     die;    
 }
-?>

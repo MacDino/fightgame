@@ -71,7 +71,7 @@ class Equip_Info
             }elseif($hit == 'no_less_dz' && $info['forge_level'] != 0){ //装备锻造等级掉一级
             	$attributeList = json_decode($info['attribute_base_list'], TRUE);
                 $forgeAttributeList = Equip_Config::forgeAttributeList();
-                //增加属性值
+                //减少属性值
                 foreach($attributeList AS $k=>$v){
                     if(isset($forgeAttributeList[$info['equip_type']][$k])){
                         $attributeList[$k] = $forgeAttributeList[$info['equip_type']][$k] - $v;
@@ -114,7 +114,7 @@ class Equip_Info
     /** @desc 删除(卖出)装备 */
     public static function delEquip($equipId)
     {
-    	$res = MySql::update(self::TABLE_NAME, array('del_status'), array('user_equip_id' => $equipId));
+    	$res = MySql::update(self::TABLE_NAME, array('del_status' => 1), array('user_equip_id' => $equipId));
     	return $res;
     }
     

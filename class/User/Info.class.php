@@ -31,7 +31,6 @@ class User_Info
 	public static function getUserInfoByUserId($userId)
 	{
 		if(!is_numeric($userId))return FALSE;
-
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'del_status' => 0));
 		return $res;
 	}

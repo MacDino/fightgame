@@ -219,7 +219,7 @@ class Reward{
     		$res = call_user_func(array('Rewardtype', $contentId), $userId ,$content[$contentId]);
     	}
     	
-		unset($content[$contentId]);//删掉已领取的奖励
+		//unset($content[$contentId]);//删掉已领取的奖励
     	
     	if(!empty($content)){
     		self::_update(array('content' => json_encode($content)), $rewardId);//去掉已经领取的内容

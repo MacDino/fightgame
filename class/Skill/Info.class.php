@@ -223,7 +223,7 @@ class Skill_Info {
         	return MySql::update(self::TN_SKILL_INFO, array('skill_level' => ($level+1)), $where);
         }else{
         	//学习新技能
-        	return MySql::insert(self::TN_SKILL_INFO, array('user_id' => $user_id, 'skill_id' => $skill_id, 'skill_level' => 1, 'skill_type' => 1290+$type));
+        	return MySql::insert(self::TN_SKILL_INFO, array('user_id' => $user_id, 'skill_id' => $skill_id, 'skill_level' => 1, 'skill_type' => 1290+$type, 'odds_set' => Skill::PROPORTION_MIDDLE));
         }
     }
     /**

@@ -7,10 +7,10 @@ class Pill_Iron {
 	public static function addIron($userId, $level, $num=1){
 		$nownum = self::getIronNumByLevel($userId, $level);
 //		echo $num;
-		if(!empty($nownum)){
-			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'level' => $level));
-		}else{
+		if($nownum === false){
 			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level, 'num' => $num));
+		}else{
+			$res = MySql::update(self::TABLE_NAME, array('num' => $nownum+$num), array('user_id' => $userId, 'level' => $level));
 		}
 		
 		return $res;
@@ -34,10 +34,10 @@ class Pill_Iron {
 	public static function getIronNumByLevel($userId, $level){
 //		echo $level;
 		$res = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'level' => $level), array('num'));
-		if(!empty($res['num'])){
+		if(!empty($res)){
 			return $res['num'];
 		}else{
-			return 0;
+			return false;
 		}
 	}
 	

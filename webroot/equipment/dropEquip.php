@@ -12,7 +12,7 @@ if(!$equipId)
     die;
 }
 
-$equipInfo = Equip_Infoget::EquipInfoById($equipId);
+$equipInfo = Equip_Info::getEquipInfoById($equipId);
 if(empty($equipInfo))
 {
     $code = 2;

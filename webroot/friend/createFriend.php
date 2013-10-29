@@ -10,8 +10,7 @@ $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 if(!$userId || !$friendId)
 {
     $code = 1;
-    //$msg = '传入参数不正确!';
-    $msg = '1';
+    $msg = '传入参数不正确';
     die;
 }
 
@@ -23,23 +22,37 @@ if(!$userInfo){
 
 //查看是否还有位置添加好友
 $friendNum = Friend_Info::getFriendNum($userId);
-//echo $userInfo['friend_num'];
 $user = User_Info::getUserInfoByUserId($userId);
 if($friendNum == $user['friend_num']){
 	$code = 144;
-    //$msg = '好友已达上限!';
-    $msg = '5';
+    $msg = '好友已达上限!';
+    die;
+}
+
+//查看对方是否有位置添加
+$vFriendNum = Friend_Info::getFriendNum($friendId);
+$vUser = User_Info::getUserInfoByUserId($friendId);
+if($vFriendNum >= $vUser['friend_num']){
+	$code = 4;
+    $msg = '对方好友已达上限!';
     die;
 }
 
 //是否已经是好友
 $isFriend = Friend_Info::getUserFrined($friendId, $userId);
+$isPass = Friend_Info::getUserFrined($userId, $friendId);
 if(!empty($isFriend))
 {
-	$code = 8;
-    //$msg = '已经是好友!';
-    $msg = '4';
-    die;
+	if(!empty($isPass)){
+		$code = 8;
+	    $msg = '已经是好友!';
+	    die;
+	}else{
+		$code = 9;
+	    $msg = '申请已经发出,请耐心等待!';
+	    die;
+	}
+	
 }
 
 try {
