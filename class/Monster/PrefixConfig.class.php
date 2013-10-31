@@ -6,10 +6,10 @@ class Monster_PrefixConfig
 		Monster::MONSTER_PREFIX_PUNY => array(
 			'meet_probability' => 0.3,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
-				ConfigDefine::USER_ATTRIBUTE_POWER       => 0.5,//力量
-				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 0.5,//魔力
-				ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 0.5,//体质
-				ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 0.5,//耐力
+				ConfigDefine::USER_ATTRIBUTE_POWER       => 0.9,//力量
+				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 0.9,//魔力
+				ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 0.9,//体质
+				ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 0.9,//耐力
 				ConfigDefine::USER_ATTRIBUTE_QUICK       => 1,//敏捷
 			),
 			'experience_change' => 0.5, //经验加成

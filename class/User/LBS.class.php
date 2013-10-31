@@ -45,9 +45,11 @@ class User_LBS
             FROM user_info i ,user_lbs l WHERE longitude<=$max_lng AND longitude>=$min_lng AND latitude<=$max_lat AND latitude>=$min_lat
             AND i.user_id!=$userId and i.user_id = l.user_id";
 //		echo $sql;
-		$sql = "select * from user_lbs WHERE longitude <= '$max_lng' AND longitude >= '$min_lng' AND latitude <= '$max_lat' AND latitude >= '$min_lat'
-            AND user_id <> '$userId'";
+//		$sql = "select * from user_lbs WHERE longitude <= '$max_lng' AND longitude >= '$min_lng' AND latitude <= '$max_lat' AND latitude >= '$min_lat'
+//            AND user_id <> '$userId'";
 		$res = MySql::query($sql);
+//		print_r($res);
+//echo count($res);
 		$nowUser = Friend_Info::getFriendInfo($userId);
 		$user = array();
 		if(!empty($nowUser)){
@@ -55,21 +57,24 @@ class User_LBS
 				$user[$o] = $key['user_id']; 
 			}
 		}
+//		print_r($user);
 		if(!empty($res)){
 			foreach ($res as $i=>$key){
 				if(array_key_exists($key['user_id'], $user)){//如果已经是好友
 					unset($res[$i]);
 				}else{
-					$userInfo = User_Info::getUserInfoByUserId($userId);
-					$res[$i]['user_level'] = $userInfo['user_level'];
-					$res[$i]['race_id'] = $userInfo['race_id'];
-					$res[$i]['user_name'] = $userInfo['user_name'];
-					$res[$i]['sex'] = $userInfo['sex'];
+//					echo "<br>".$key['user_id'];
+
+//					$userInfo = User_Info::getUserInfoByUserId($key['user_id']);
+//					$res[$i]['user_level'] = $userInfo['user_level'];
+//					$res[$i]['race_id'] = $userInfo['race_id'];
+//					$res[$i]['user_name'] = $userInfo['user_name'];
+//					$res[$i]['sex'] = $userInfo['sex'];
 				}
 			}
 		}
-		
-		$res = $user;
+//		echo count($res);
+//		print_r($res);
 		return $res;
 	}
 	
@@ -93,21 +98,24 @@ class User_LBS
 		$userLbs = self::getLBSByUserId($userId);
 		$lng = $userLbs['longitude'];
 		$lat = $userLbs['latitude'];
-		
+//		print_r($data);
 		if(!empty($data)){
 			foreach ($data as $key=>$i){//给每个用户加上距离字段,单位是米
 				$distance = self::GetDistance($lat, $lng, $i['latitude'], $i['longitude']);
 				$data[$key]['distance'] = $distance;
-				$res[$key] = $distance;
+//				print_r($data[$key]);
+				$res[$key] = $data[$key];
 			}
 		}
+//		print_r($res);
 		if(!empty($res)){
 			asort($res, SORT_NUMERIC);//排序
 			foreach ($res as $a=>$b){
+//				print_r($data[$a]);
 				$result[] = $data[$a];
 			}
 		}
-		
+//		print_r($result);
 
 		return $result;
 	}

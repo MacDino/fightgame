@@ -479,10 +479,11 @@ class User_Info
 			}
 		}
 		
-		//人宠异性加成
+		//人宠异性加成,距离加成
 		$petInfo = Pet::usedPet($userId);
 		if($petInfo['sex'] != $userInfo['sex']){
 			$userAttributeValue = self::isomerismUserAttribute($userAttributeValue);
+			$userAttributeValue = User_Attributes::distanceAttribute($petInfo['user_id'], $userId, $userAttributeValue);
 		}
 
 		//套装增益

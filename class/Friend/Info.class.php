@@ -16,7 +16,7 @@ class Friend_Info
 			if(!$userId) return FALSE;
 			
 			//查询好友信息
-			$sql = "select u.user_id as user_id, u.race_id as user_race, u.user_name as user_name, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
+			$sql = "select u.user_id as user_id, u.race_id as user_race, u.user_name as user_name, u.user_level as user_level, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
 //			echo $sql;exit;
 			$friendInfo = MySql::query($sql);
             return $friendInfo;
@@ -36,7 +36,7 @@ class Friend_Info
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
 			//查询好友信息
-			$sql = "select u.user_name as user_name, u.race_id as race_id, u.user_level as user_level, f.friend_id as friend_id, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '0'";
+			$sql = "select u.user_id as user_id, u.user_name as user_name, u.race_id as race_id, u.user_level as user_level, f.is_pass as pass from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '0'";
 //			echo $sql;exit;
 			$friendInfo = MySql::query($sql);
 	        return $friendInfo;
@@ -56,6 +56,7 @@ class Friend_Info
 			if(!$userId)	return FALSE;
 			//查询好友数量
 			$friendInfo = Mysql::selectCount(self::TABLE_NAME, array('user_id' => $userId, 'is_pass' => 1));
+			
             return $friendInfo;
         }catch (Exception $e){
            return FALSE;
@@ -113,7 +114,7 @@ class Friend_Info
         	User_Info::addReputationNum($friend_info['user_id'], 2);
             return TRUE;
         }else{
-        	return FALSE;
+        	return TRUE;
         }
     }
 
@@ -170,5 +171,20 @@ class Friend_Info
         }
 	}
 
+	/** @赠送PK符 */
+	public static function sendPkNum(){
+		//判断是否是好友
+		
+		//今天是否送过
+		
+		//是否有发送次数限制
+	}
+	
+	public static function acceptPKNum(){
+		//判断是否好友
+		
+		//接受次数限制
+	}
+	
 	
 }

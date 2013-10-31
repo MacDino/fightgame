@@ -1484,3 +1484,7 @@ CREATE TABLE `props`(
 	(23, 3, 6323, '90级精品宝箱', '可以随机获得十件90级蓝色以上装备，其中其中至少4件橙色装备，套装2件。', 1, 7200),
 	(24, 3, 6324, '100级普通宝箱', '可以随机获得一件100级蓝色以上装备，其中橙色40%几率。', 1, 1000),
 	(25, 3, 6325, '100级精品宝箱', '可以随机获得十件100级蓝色以上装备，其中其中至少4件橙色装备，套装2件。', 1, 8000);
+
+alter table iap_product add description varchar(300) after product_name;
+
+UPDATE `app_fightgame`.`iap_product` SET `description` = '330元宝，每天登陆赠送4张双倍符、5张PK符、4张属性增强、4张挂机符、100元宝。每30天仅能购买一次。' WHERE `iap_product`.`product_id` = 1; UPDATE `app_fightgame`.`iap_product` SET `description` = '60元宝' WHERE `iap_product`.`product_id` = 2; UPDATE `app_fightgame`.`iap_product` SET `description` = '125元宝，赠送5个' WHERE `iap_product`.`product_id` = 3; UPDATE `app_fightgame`.`iap_product` SET `description` = '330元宝，赠送30个' WHERE `iap_product`.`product_id` = 4; UPDATE `app_fightgame`.`iap_product` SET `description` = '900元宝，赠送120个' WHERE `iap_product`.`product_id` = 5; UPDATE `app_fightgame`.`iap_product` SET `description` = '1900元宝，赠送320个' WHERE `iap_product`.`product_id` = 6; UPDATE `app_fightgame`.`iap_product` SET `description` = '3795元宝，赠送795个' WHERE `iap_product`.`product_id` = 7; UPDATE `app_fightgame`.`iap_product` SET `description` = '8424元宝，赠送1944个' WHERE `iap_product`.`product_id` = 8;

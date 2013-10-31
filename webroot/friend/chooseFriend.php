@@ -5,7 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 //echo "lng=====$lng&lat====$lat";exit;
-
+//echo '<meta http-equiv="content-type" content="text/html;charset=utf-8">';
 //数据进行校验,非空,数据内
 if(!$userId)
 {
@@ -22,12 +22,12 @@ if(!$userInfo){
 }
 
 try {
-    //显示好友
     if(!empty($friendId)){
     	$res[] = User_Info::getUserInfoByUserId($friendId);
     }else{
-    	$res = User_LBS::getNearbyFriend($userId, 100000000);
+    	$res = User_LBS::getNearbyFriend($userId, 1000000000);
     }
+//    print_r($res);
     $data = User_LBS::getNearUser($res, $userId);
     
 //    print_r($data);

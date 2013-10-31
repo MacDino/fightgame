@@ -2,7 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$copyLevId             = isset($_REQUEST['copy_level_id']) ? $_REQUEST['copy_level_id'] : 0;
+$copyLevId             = isset($_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
 
 $copyLev = Copy_Config::getCopyLevelInfoByLevelId($copyLevId);
 if (!$copyLev) {
@@ -98,9 +98,7 @@ try {
 		 */
 		if(isset($isTodayFight) && $isTodayFight) {
 			$win_monster_count = $userLastCopyResult['win_monster_num'] + 1;
-			echo $win_monster_count;
 		} else {
-			echo 222;
 			$win_monster_count = 0;
 		}
 
