@@ -54,7 +54,7 @@ class Shop_IAPProduct{
 			$user_id = $data['user_id'];	
 			$product_id = $data['product_id'];	
 			$receipt = $data['receipt-data'];
-			if(!$user_id || !$product_id || !$receipt) new Exception("缺少必传参数", 100001);
+			if(!$user_id || !$product_id || !$receipt) new Exception("缺少必传参数", 120001);
 			/*
 			 * 先入库记录，再验证
 			 */	
@@ -105,7 +105,7 @@ class Shop_IAPProduct{
 				new Exception($e->getErrorMsg(), $e->getErrorCode());	
 			}
 		} else{
-			throw new Exception ("请传入验证相关字段", 100002);	
+			throw new Exception ("请传入验证相关字段", 120002);	
 		}
 	}
 
@@ -141,12 +141,12 @@ class Shop_IAPProduct{
 
 		$data = json_decode($response);     
 		if (!is_object($data)) {     
-			throw new Exception('Invalid response data', 100021);     
+			throw new Exception('Invalid response data', 120003);     
 		}     
 
 		//处理验证失败
 		if (!isset($data->status) || $data->status != 0) {     
-			throw new Exception('Invalid receipt', 100022);     
+			throw new Exception('Invalid receipt', 120004);     
 		}     
 		$userInfo = User_Info::getUserInfoByUserId($user_id);	
 		$ingot = $userInfo['ingot'];
@@ -169,27 +169,27 @@ class Shop_IAPProduct{
 	 */
 	public static function recordMonthPackage($userId){
 		if(!$userId) {
-			throw new Exception('用户ID为必传参数',100030);
+			throw new Exception('用户ID为必传参数',120004);
 		}
 		$user = User_Info::getUserInfoByUserId ($userId);
 		if(!$user){
-			throw new Exception('无此用户',100031);
+			throw new Exception('无此用户',120005);
 		}
 		$lastPurchase = Shop_IAPPurchaseLog::getLastOne($userId, self::MONTH_PRODUCT_ID);
 		if(!$lastPurchase){
-			throw new Exception('未找到您的欢乐月套餐购买记录', 100032);
+			throw new Exception('未找到您的欢乐月套餐购买记录', 120006);
 		}
 		$ctime = strtotime($lastPurchase['ctime']);
 		$endtime = strtotime("next month", $ctime);	
 		if(time() > $endtime){
-			throw new Exception('欢乐月套餐已过期,您不能进行赠品领取',100033);	
+			throw new Exception('欢乐月套餐已过期,您不能进行赠品领取',120007);	
 		}
 		$pack = Props_Config::$month_package;
 		/*
 		 * 一天一领,防止刷包
 		 */
 		if(!Shop_HappyMonthLog::isGeted($userId)) {
-			throw new Exception('您一天只能领取一次', 100034);	
+			throw new Exception('您一天只能领取一次', 120008);	
 		}	
 		/*
 		 * 解包 

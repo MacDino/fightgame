@@ -45,19 +45,19 @@ class User_Property{
 		if(!$userId || !$propsId)return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if(!$num || $num < 0 || !is_numeric($num)){
-			throw new Exception('购买数量不正确', 13100);
+			throw new Exception('购买数量不正确', 120050);
 		}
 		$propsInfo = Props_Info::getPropsInfo($propsId);
 		if(!$propsInfo){
-			throw new Exception('此装备信息找不到', 13200);
+			throw new Exception('此道具信息找不到', 120051);
 		}
 		$priceType = $propsInfo['price_type'];
 		$price = $propsInfo['price'];
 		if( $priceType == Props_Info::PRICE_TYPE_DYNAMIC){
-			throw new Exception('此接口只能购买固定价格的道具',13300);	
+			throw new Exception('此接口只能购买固定价格的道具',120052);	
 		}
 		if($userInfo['ingot'] < $price) {
-			throw new Exception('您的元宝数不足,无法购买',13400);	
+			throw new Exception('您的元宝数不足,无法购买',120053);	
 		}
 		$res = self::buyAction($userId, $propsId, $num);
 		/*
@@ -95,7 +95,7 @@ class User_Property{
 		if(!$userId || !$equipId)return FALSE;
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if(!$num || $num < 0 || !is_numeric($num)){
-			throw new Exception('购买数量不正确', 1);
+			throw new Exception('购买数量不正确', 120050);
 		}
 		/*
 		 * 获取装备level
@@ -104,7 +104,7 @@ class User_Property{
 		$equipLev  = $equipInfo['equip_level'];
 		$price = self::getEquipGrowPrice($equipLev);
 		if($userInfo['ingot'] < $price) {
-			throw new Exception('您的元宝数不足,无法购买',1);	
+			throw new Exception('您的元宝数不足,无法购买',120053);	
 		}
 		/*
 		 * 扣除元宝
@@ -173,7 +173,7 @@ class User_Property{
 
 		$userProps = self::getUserPropsInfoByUnionKey($userId, $propsId);
 		if (!$userProps) {
-			throw new Exception ('未找到您当前的道具记录', 100310);
+			throw new Exception ('未找到您当前的道具记录', 120054);
 		}
 		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - 1 WHERE user_id = $userId AND property_id = $propsId";
 		return MySql::execute($sql);
@@ -278,13 +278,13 @@ class User_Property{
 
 		$num = self::getPropertyNum($userId, $propsId);
 		if($num <= 0) {
-			throw new Exception ('背包数量不足', 10011);
+			throw new Exception ('背包数量不足', 120054);
 		}
 
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if($userInfo['pack_num'] >= User::DEFAULT_PACK_MAX){
-			throw new Exception ('已经达到上限', 10012);
+			throw new Exception ('已经达到上限', 120100);
 		}
 
 		$res = self::updateNumDecreaseAction($userId, $propsId);
@@ -309,13 +309,13 @@ class User_Property{
 
 		$num = self::getPropertyNum($userId, $propsId);
 		if($num <= 0) {
-			throw new Exception ('好友上限数量不足', 10013);
+			throw new Exception ('好友上限数量不足', 120055);
 		}
 
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if($userInfo['friend_num'] >= User::DEFAULT_FRIEND_MAX){
-			throw new Exception ('已经达到上限', 10012);
+			throw new Exception ('已经达到上限', 120100);
 		}
 
 		$res = self::updateNumDecreaseAction($userId, $propsId);
@@ -340,13 +340,13 @@ class User_Property{
 
 		$num = self::getPropertyNum($userId, $propsId);
 		if($num <= 0) {
-			throw new Exception ('人宠上限数量不足', 10014);
+			throw new Exception ('人宠上限数量不足', 120056);
 		}
 
 		//验证是否已到最大购买数
 		$userInfo = User_Info::getUserInfoByUserId($userId);
 		if($userInfo['pet_num'] >= User::DEFAULT_PET_MAX){
-			throw new Exception ('已经达到上限', 10012);
+			throw new Exception ('已经达到上限', 120100);
 		}
 
 		$res = self::updateNumDecreaseAction($userId, $propsId);
@@ -371,12 +371,12 @@ class User_Property{
 
 		$num = self::getPropertyNum($userId, $propsId);
 		if($num <= 0) {
-			throw new Exception ('pk咒符数量不足', 10015);
+			throw new Exception ('pk咒符数量不足', 120057);
 		}
 
 		$todayNum = Props_Log::getTodayUseNum($userId, $propsId);
 		if($todayNum >= User::PK_BUY_NUM){
-			throw new Exception ('已经达到每天上限', 10050);
+			throw new Exception ('已经达到每天上限', 120100);
 		}
 
 		$res = self::updateNumDecreaseAction($userId, $propsId);
@@ -436,13 +436,13 @@ class User_Property{
 	public static function useDoubleHarvest($userId)
 	{
 		if(!$userId) {
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		
 		//是否已经在用
 		$isUse = self::isuseDoubleHarvest($userId);
 		if(!empty($isUse)){
-			throw new Exception ('此道具已在使用', 10088);	
+			throw new Exception ('此道具已在使用', 120060);	
 		}
 		
 		//是否还有存数
@@ -458,7 +458,7 @@ class User_Property{
 	public static function isuseDoubleHarvest($userId)
 	{
 		if(!$userId){
-			throw new Exception('缺少用户id', 100000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		
 		$res = MySql::selectOne('double_harvest', array('user_id' => $userId));
@@ -478,19 +478,19 @@ class User_Property{
 	public static function useAutoFight($userId)
 	{
 		if(!$userId){
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 
 		//是否已经在用
 		$isUse = self::isuseAutoFight($userId);
 		if(!empty($isUse)){
-			throw new Exception ('此道具已在使用', 10088);	
+			throw new Exception ('此道具已在使用', 120060);	
 		}
 
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, self::AUTO_FIGHT);
 		if(!$isHave || empty($isHave)){
-			throw new Exception('该道具数量不足，您无法使用', 10089);	
+			throw new Exception('该道具数量不足，您无法使用', 120070);	
 		}
 
 		$res = MySql::insert('auto_fight', array('user_id' => $userId, 'add_time' => time()));
@@ -502,7 +502,7 @@ class User_Property{
 	public static function isuseAutoFight($userId)
 	{
 		if(!$userId){
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		
 		$res = MySql::selectOne('auto_fight', array('user_id' => $userId));
@@ -523,12 +523,12 @@ class User_Property{
 	public static function useEquipForge($userId)
 	{
 		if(!$userId){
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, self::EQUIP_FORGE);
 		if(!$isHave || empty($isHave)){
-			throw new Exception('该道具数量不足，您无法使用', 100089);	
+			throw new Exception('该道具数量不足，您无法使用', 120070);	
 		}
 		$res = self::updateNumDecreaseAction($userId, self::EQUIP_FORGE);
 		if($res) {
@@ -550,20 +550,20 @@ class User_Property{
 	public static function useEquipGrow($userId, $equipId)
 	{
 		if(!$userId){
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		if(!$equipId){
-			throw new Exception('缺少装备id', 100090);
+			throw new Exception('缺少装备id', 120071);
 		}
 		$equipInfo = Equip_info::getEquipInfoById($equipId);
 		$equipLev  = $equipInfo['equip_level'];
 		if($equipLev < 30){
-			throw new Exception ('当前装备等级不够30级,不能使用装备成长符', 100091);	
+			throw new Exception ('当前装备等级不够30级,不能使用装备成长符', 120072);	
 		}
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, self::EQUIP_GROW);
 		if(!$isHave || empty($isHave)){
-			throw new Exception('该道具数量不足，您无法使用', 100089);	
+			throw new Exception('该道具数量不足，您无法使用', 120070);	
 		}
 		$res = self::updateNumDecreaseAction($userId, self::Equip_GROW);
 		if ($res){
@@ -583,15 +583,15 @@ class User_Property{
 	 */
 	public static function useGeneralTreasureBox($userId, $propsId){
 		if(!$userId){
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		if(!$propsId){
-			throw new Exception('缺少道具id', 1);
+			throw new Exception('缺少道具id', 120090);
 		}
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, $propsId);
 		if(!$isHave || empty($isHave)){
-			throw new Exception('该道具数量不足，您无法使用', 100089);	
+			throw new Exception('该道具数量不足，您无法使用', 120070);	
 		}
 		$res_num = self::updateNumDecreaseAction($userId, $propsId);
 		/*
@@ -615,15 +615,15 @@ class User_Property{
 	 */
 	public static function useChoiceTreasureBox($userId, $propsId){
 		if(!$userId){
-			throw new Exception('缺少用户id', 10000);
+			throw new Exception('缺少用户id', 120059);
 		}
 		if(!$propsId){
-			throw new Exception('缺少道具id', 1);
+			throw new Exception('缺少道具id', 120090);
 		}
 		//是否还有存数
 		$isHave = self::getPropertyNum($userId, $propsId);
 		if(!$isHave || empty($isHave)){
-			throw new Exception('该道具数量不足，您无法使用', 100089);	
+			throw new Exception('该道具数量不足，您无法使用', 120070);	
 		}
 		$res_num = self::updateNumDecreaseAction($userId, $propsId);
 		/*
