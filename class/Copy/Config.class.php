@@ -11,6 +11,8 @@ class Copy_Config{
 
 	const MONSTER_NUM = 100;
 
+	const TABLE_NAME = "copies_level";
+
 	/*
 	 * 获取某一层
 	 */
@@ -138,4 +140,9 @@ class Copy_Config{
 		return Map_Skill::getSkillRate('not_boss');
 	}
 
+
+	public static function getCopyLevels(){
+		$res = MySql::select(self::TABLE_NAME, $where);
+		return $res;
+	}
 }
