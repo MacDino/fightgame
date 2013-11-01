@@ -14,7 +14,7 @@ if(!$rewardId){
 $rewardInfo = Reward::getRewardInfoById($rewardId);
 $content = json_decode($rewardInfo['content'], true);
 if(!key_exists($contentId, $content)){
-	$code = 150001;
+	$code = 150101;
     $msg = '已经领取过了';
     die;
 }
