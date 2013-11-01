@@ -5,17 +5,16 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $rewardId = isset($_REQUEST['reward_id'])?$_REQUEST['reward_id']:'';//奖励ID
 $contentId = isset($_REQUEST['content_id'])?$_REQUEST['content_id']:'';//content_key
 
-if(!$rewardId)
-{
-    $code = 1;
-    $msg = '传入参数不正确';
+if(!$rewardId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $rewardInfo = Reward::getRewardInfoById($rewardId);
 $content = json_decode($rewardInfo['content'], true);
 if(!key_exists($contentId, $content)){
-	$code = 3;
+	$code = 150001;
     $msg = '已经领取过了';
     die;
 }
@@ -24,10 +23,9 @@ if(!key_exists($contentId, $content)){
 try {
 	$data = Reward::getReward($rewardId, $contentId);
     $code = 0;
-    $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 99;
-    $msg = '内部错误';
+    $code = 100099;
+    $msg = '程序内部错误';
     die;    
 }

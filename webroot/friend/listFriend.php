@@ -6,8 +6,7 @@ $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 //echo "UserId=====".$userId;exit;
 
 //数据进行校验,非空,数据内
-if(!$userId)
-{
+if(!$userId){
     $code = 1;
     $msg = '传入参数不正确!';
     die;
@@ -23,13 +22,12 @@ if(!$userInfo){
 try {
     //显示好友
     $data = Friend_Info::getFriendInfo($userId);
-//    print_r($data);
 //    var_dump($data);exit;
     $code = 0;
     $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 99;
-    $msg = '内部错误';
-    die;    
+    $code = 100099;
+    $msg = '程序内部错误';
+    die;     
 }

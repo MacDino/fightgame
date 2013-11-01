@@ -11,20 +11,21 @@ $sex   = isset($_REQUEST['sex'])?$_REQUEST['sex']:'0';//性别
 
 if(!$userName || !$masterId || !$areaId)
 {
-    $code = 9;
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $num = User_Info::verifyUserNum($masterId);
 if(!$num){
-	$code = 3;
+	$code = 110001;
 	$msg  = "只能创建3个角色";
 	die;
 }
 
 $name = User_Info::verifyUserName($userName);
 if(!$name){
-	$code = 4;
+	$code = 110002;
 	$msg  = "角色名已经被使用";
 	die;
 }
@@ -60,11 +61,11 @@ try {
         //User_Property::createPropertylist($userId, User_Property::EQUIP_GROW);
         $data = $userId;
         $code = 0;
-   		$msg = 'ok';
         die;
     }
     
 } catch (Exception $e) {
-    $code = 1;
+    $code = 100099;
+    $msg = '程序内部错误';
     die;
 }

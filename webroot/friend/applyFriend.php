@@ -6,20 +6,18 @@ $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 //echo "UserId=====".$userId;exit;
 
 //数据进行校验,非空,数据内
-if(!$userId)
-{
-    $code = 1;
-    $msg = '传入参数不正确';
+if(!$userId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 //查询用户ID是否在用户表里存在
 $userInfo = User_Info::isExistUser(array($userId));
-if(!$userInfo)
-{
-	$code = 2;
-    $msg = '用户信息错误!';
-    die;
+if(!$userInfo){
+	$code = 100098;
+	$msg = "读取用户信息错误";
+	die;
 }
 
 try {
@@ -27,10 +25,9 @@ try {
     $data = Friend_Info::getApplyFriendInfo($userId);
 //    print_r($data);
     $code = 0;
-    $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
-    die;    
+    $code = 100099;
+    $msg = '程序内部错误';
+    die;     
 }

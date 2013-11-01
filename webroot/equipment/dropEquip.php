@@ -5,17 +5,15 @@ error_reporting(2047);
 
 $equipId     = isset($_REQUEST['equip_id']) ? $_REQUEST['equip_id'] : '';
 
-if(!$equipId)
-{
-    $code = 1;
-    $msg = '传入参数不正确';
+if(!$equipId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $equipInfo = Equip_Info::getEquipInfoById($equipId);
-if(empty($equipInfo))
-{
-    $code = 2;
+if(empty($equipInfo)){
+    $code = 140001;
     $msg = '没有这个装备';
     die;
 }
@@ -23,10 +21,9 @@ if(empty($equipInfo))
 try {
 	$data = Equip_Info::dropEquip($equipId);
 	$code = 0;
-	$msg = 'OK';
 	die;
 } catch (Exception $e) {
-	$code = 99;
-	$msg = '内部错误';
-	die;
+	$code = 100099;
+    $msg = '程序内部错误';
+    die;
 }

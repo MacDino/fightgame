@@ -8,18 +8,16 @@ $equipId		= isset($_REQUEST['equip_id'])?$_REQUEST['equip_id']:'';//装备ID,数
 //echo 111;var_dump(json_decode($equipId, true));exit;
 $equipId = json_decode($equipId, true);
 //print_r($equipId);
-if(!$userId || !is_array($equipId))
-{
-    $code = 1;
-    //$msg = '传入参数不正确';
-    $msg = '1';
+if(!$userId || !is_array($equipId)){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 //echo 222;exit;
 
 $verify = Equip_Info::verifyEquipIsUsed($equipId);
 if($verify > 0){
-	$code = 5;
+	$code = 140004;
     $msg = '有装备正在使用中';
     die;
 }
@@ -31,7 +29,6 @@ try {
     	$price += Equip_Info::priceEquip($key);
     }
     $userInfo = User_Info::getUserInfoByUserId($userId);
-//    echo $price;exit;
     //删除选中的装备,标签式删除
     foreach ($equipId as $o=>$key){
     	Equip_Info::delEquip($key);
@@ -41,10 +38,9 @@ try {
     $userInfo = User_Info::getUserInfoByUserId($userId);
     $data = $userInfo['money'];
     $code = 0;
-    $msg = 'ok';
-//    die;
+    die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
+    $code = 100099;
+    $msg = '程序内部错误';
     die;    
 }

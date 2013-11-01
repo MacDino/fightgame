@@ -7,18 +7,17 @@ $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 //echo "lng=====$lng&lat====$lat";exit;
 //echo '<meta http-equiv="content-type" content="text/html;charset=utf-8">';
 //数据进行校验,非空,数据内
-if(!$userId)
-{
-    $code = 1;
-    //$msg = '传入参数不正确!';
-    $msg = '1';
+if(!$userId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $userInfo = User_Info::isExistUser(array($userId));
 if(!$userInfo){
-	$code = 2;
-	$msg = "没有这个用户";
+	$code = 100098;
+	$msg = "读取用户信息错误";
+	die;
 }
 
 try {
@@ -29,14 +28,10 @@ try {
     }
 //    print_r($res);
     $data = User_LBS::getNearUser($res, $userId);
-    
-//    print_r($data);
-//    var_dump($data);exit;
     $code = 0;
-    $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
+    $code = 100099;
+    $msg = '程序内部错误';
     die;    
 }

@@ -5,18 +5,17 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 if(!$userId)
 {
-    $code = 1;
-    $msg = '传入参数不正确';
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 try {    
 	$data = User_Info::getUserInfoByUserId($userId);
     $code = 0;
-    $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
-    die;    
+    $code = 100099;
+    $msg = '程序内部错误';
+    die; 
 }

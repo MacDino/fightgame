@@ -6,25 +6,24 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $petId     = isset($_REQUEST['pet_id'])?$_REQUEST['pet_id']:'';//人宠ID
 
-if(!$userId || !$petId)
-{
-    $code = 1;
-    $msg = '传入参数不正确';
+if(!$userId || !$petId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $userInfo = User_Info::isExistUser(array($userId, $petId));
 if(!$userInfo){
-	$code = 3;
-	$msg = "没有这个用户";
+	$code = 100098;
+	$msg = "读取用户信息错误";
 	die;
 }
 
 $usedPet = Pet::usedPet($userId);
 if(!empty($usedPet)){
 	if($usedPet['user_id'] == $petId){
-		$code = 3;
-		$msg = "正在被使用";
+		$code = 160011;
+		$msg = "TA正在被驱使";
 		die;
 	}
 }
@@ -32,12 +31,10 @@ if(!empty($usedPet)){
 try {
     //显示好友
     $data = Pet::delPet($userId, $petId);
-//    var_dump($data);exit;
     $code = 0;
-    $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    $msg = '99';
-    die;    
+    $code = 100099;
+    $msg = '程序内部错误';
+    die;  
 }

@@ -1,19 +1,22 @@
 <?php
 //显示装备列表
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
-error_reporting(2047);
 
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : '';
 $equipType     = isset($_REQUEST['equip_type']) ? $_REQUEST['equip_type'] : '';
 
-if(!$userId)
-{
-    $code = 1;
-    $msg = '传入参数不正确';
+if(!$userId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
-
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 100098;
+	$msg = "读取用户信息错误";
+	die;
+}
 
 try {
 	
@@ -23,10 +26,10 @@ try {
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
     }
 	$data = $res;
-	
 	$code = 0;
-	$msg = 'OK';
+	die;
 } catch (Exception $e) {
-	$code = 1;
-	$msg = '未查询到装备信息';
+	$code = 100099;
+    $msg = '程序内部错误';
+    die;
 }

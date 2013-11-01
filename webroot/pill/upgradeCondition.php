@@ -6,34 +6,42 @@ $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $pillId    = isset($_REQUEST['pill_id'])?$_REQUEST['pill_id']:'';//内丹ID
 
 if(!$userId || !$pillId){
-	$code = 1;
-	$msg = "传入数据错误!";
+	$code = 100001;
+    $msg = '缺少必传参数';
+    die;
+}
+
+$userInfo = User_Info::isExistUser(array($userId));
+if(!$userInfo){
+	$code = 100098;
+	$msg = "读取用户信息错误";
 	die;
 }
 
 $pillInfo = Pill_Pill::getPillInfoById($pillId);
 if(empty($pillInfo)){
-	$code = 8;
+	$code = 140106;
 	$msg = "没有这个内丹";
+	die;
 }
 
 if($pillInfo['pill_layer'] == 10 && $pillInfo['pill_level'] == 10){
-	$code = 7;
-	$msg = "已经满级";
+	$code = 140107;
+	$msg = "此内丹已经满级";
+	die;
 }
-//echo $pillInfo['pill_level'];
-if($pillInfo['pill_level'] == 10){//
+
+//下一级内丹等级
+if($pillInfo['pill_level'] == 10){
 	$pillInfo['pill_layer'] += 1;
 	$pillInfo['pill_level'] = 1;
 }else{
 	$pillInfo['pill_level'] += 1;
 }
-//print_r ($pillInfo);
+
 try {
 	$userInfo = User_Info::getUserInfoByUserId($userId);
     $data['need'] = Pill_Pill::compoundPillExpend($pillInfo['pill_layer'], $pillInfo['pill_level'], $pillInfo['pill_type']);
-//    echo $pillInfo['pill_level'];
-//    echo Pill_Iron::getIronNumByLevel($userId, $pillInfo['pill_level']);
     $data['now']  = array(
     	'level' => $pillInfo['pill_layer'],
     	'iron'  => Pill_Iron::getIronNumByLevel($userId, $pillInfo['pill_layer']),
@@ -43,10 +51,9 @@ try {
     );
 //    print_r($data);
     $code = 0;
-    $msg = 'ok';  
     die;
 } catch (Exception $e) {
-    $code = 99;
-    $msg = '内部错误';
+    $code = 100099;
+    $msg = '程序内部错误';
     die;    
 }

@@ -4,22 +4,21 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $equipId = isset($_REQUEST['equip_id']) ? $_REQUEST['equip_id'] :"";
 
-if(!$equipId)
-{
-    $code = 1;
-    $msg = '传入参数不正确';
+if(!$equipId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $info = Equip_Info::getEquipInfoById($equipId);
 if(!empty($info)){
 	if($info['forge_level'] >= 15){//最大次数
-	    $code = 6;
+	    $code = 140002;
 	    $msg = '已经达到最大锻造次数';
 	    die;    		
 	}
 }else{
-	$code = 2;
+	$code = 140001;
     $msg = '没有这个装备';
     die;
 }
@@ -45,10 +44,9 @@ try {
 	$data['needMoney'] = $needMoney;//需要的钱
 	$data['money'] = $nowMoney;//现有的钱
     $code = 0;
-    $msg = 'ok';
     die;
 } catch (Exception $e) {
-    $code = 99;
-    $msg = '内部错误';
-    die;    
+    $code = 100099;
+    $msg = '程序内部错误';
+    die;     
 }

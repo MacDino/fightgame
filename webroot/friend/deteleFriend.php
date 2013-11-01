@@ -6,27 +6,24 @@ $userId     = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
 $friendId   = isset($_REQUEST['friend_id'])?$_REQUEST['friend_id']:'';//好友ID
 
 //数据进行校验,非空,数据内
-if(!$userId || !$friendId)
-{
-    $code = 1;
-    //$msg = '传入参数不正确!';
-    $msg = '1';
+if(!$userId || !$friendId){
+    $code = 100001;
+    $msg = '缺少必传参数';
     die;
 }
 
 $userInfo = User_Info::isExistUser(array($userId, $friendId));
 if(!$userInfo){
-	$code = 1;
-	$msg = "没有这个用户";
+	$code = 100098;
+	$msg = "读取用户信息错误";
+	die;
 }
 
 //是否已经是好友
 $isFriend = Friend_Info::getUserFrined($userId, $friendId);
-if(empty($isFriend))
-{
-	$code = 1;
-    //$msg = '没有这个好友!';
-    $msg = '4';
+if(empty($isFriend)){
+	$code = 160001;
+    $msg = '没有这个好友!';
     die;
 }
 
@@ -38,11 +35,9 @@ try {
     }*/
     //减少声望
     $code = 0;
-    $msg = 'OK';
     die;
 } catch (Exception $e) {
-    $code = 1;
-    //$msg = '删除好友失败!';
-    $msg = '99';
-    die;    
+    $code = 100099;
+    $msg = '程序内部错误';
+    die;  
 }

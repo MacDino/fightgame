@@ -11,24 +11,23 @@ $equipInfo = Equip_Info::getEquipInfoById($equipId);
 
 if(empty($equipInfo))
 {
-    $code = 2;
+    $code = 140001;
     $msg = '没有这个装备';
     die;
 }
 
 //限制穿戴等级
 if((int)$equipInfo['equip_level'] > (int)$userInfo['user_level']){
-	$code = 3;
-	$msg = "等级不够";
+	$code = 140007;
+	$msg = "您的等级不够";
 	die;
 }
 try {
-	
-	
 	$data = Equip_Info::useEquip($userId, $equipId);
 	$code = 0;
-	$msg = 'OK';
+	die;
 } catch (Exception $e) {
-	$code = 99;
-	$msg = '内部错误';
+	$code = 100099;
+    $msg = '程序内部错误';
+    die;
 }
