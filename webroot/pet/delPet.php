@@ -22,7 +22,7 @@ if(!$userInfo){
 $usedPet = Pet::usedPet($userId);
 if(!empty($usedPet)){
 	if($usedPet['user_id'] == $petId){
-		$code = 160011;
+		$code = 160101;
 		$msg = "TA正在被驱使";
 		die;
 	}

@@ -21,7 +21,7 @@ if(!$userInfo){
 
 $is_true = Pet::isPet($userId, $petId);
 if(empty($is_true)){
-	$code = 160002;
+	$code = 160102;
 	$msg = "他不是你的宠物啊";
 }
 

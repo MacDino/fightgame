@@ -113,6 +113,7 @@ class MySql
     public static function selectCount($tableName, $whereArray = NULL){
     	if(!$tableName)return FALSE;
     	$sql = "SELECT count(1) as c FROM $tableName".self::_whereCondition($whereArray);
+//    	echo $sql;
     	$result = self::query($sql);
 		return isset($result[0]['c']) ? (int)$result[0]['c'] : 0;
 	}
