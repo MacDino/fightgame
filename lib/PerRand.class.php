@@ -21,7 +21,6 @@ class PerRand
 
 	public static function getRandResultKey($data)
 	{
-		
 		if ( ! is_array($data))
 		{
 			return false;
@@ -34,6 +33,13 @@ class PerRand
 		}
 
 		$min = min($data);
+
+		if($min == 1)
+		{
+			$key = array_search(1, $data);
+			return $key;
+		}
+		
 		$length = strlen($min) - 1;
 		$times = pow(10, $length);
 
