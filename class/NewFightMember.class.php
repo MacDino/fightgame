@@ -90,6 +90,10 @@ class NewFightMember
 		}
 		$this->_memberSkill['passive'] = $memberHaveSkill;
 	}
+	public function getPassiveSkills()
+	{
+		return $this->_memberSkill['passive']; 
+	}
 	//当前队员是否存活
 	public function isAlive()
 	{

@@ -6,6 +6,9 @@ class NewSkillHurt extends NewSkill
 	private static $_randUserAttributePower = 0;
 	private static $_randUserAttributeHurt = 0;
 	
+	private static $_defineMemberAttributeDfense = 0;
+	private static $_defineMemberAttributePsychic = 0;
+	
 	private static $_hurt = array();
 	
 	
@@ -19,23 +22,38 @@ class NewSkillHurt extends NewSkill
 			{
 				$return[] = array('hurt' => 0, 'addition' => 1);
 			}else{
+				self::$_defineMemberAttributeDfense = self::$_defineMemberObj->getMemberAttributeDfense();
+                self::$_defineMemberAttributePsychic = self::$_defineMemberObj->getMemberAttributePsychic();
+                $attackHavePassiveSkills = self::$_attackMemberObj->getPassiveSkills();
+                $defineHavePassiveSkills = self::$_defineMemberObj->getPassiveSkills();
+
+				if(self::$_attackSkillInfo['skill_type'] == 1 && isset($defineHavePassiveSkills[NewSkill::SKILL_COMMON_BD_WFX]))
+				{
+					self::$_defineMemberAttributeDfense = self::$_defineMemberAttributeDfense*pow(1.002, $defineHavePassiveSkills[NewSkill::SKILL_COMMON_BD_WFX]) 
+					+ 0.5*(pow(1.002, $defineHavePassiveSkills[NewSkill::SKILL_COMMON_BD_WFX]) -1)/(1.002 -1);
+				}elseif(self::$_attackSkillInfo['skill_type'] == 2 && 
+						isset($defineHavePassiveSkills[NewSkill::SKILL_COMMON_BD_FFX])){
+                    self::$_defineMemberAttributePsychic = self::$_defineMemberAttributePsychic*pow(1.002, $defineHavePassiveSkills[NewSkill::SKILL_COMMON_BD_FFX])
+					+ 0.5*(pow(1.002, $defineHavePassiveSkills[NewSkill::SKILL_COMMON_BD_FFX]) -1)/(1.002 -1);
+				}
 				self::$_rand5UserLevelGetTop3Average = self::_rand5UserLevelGetTop3Average(self::$_attackMemberObj->getMemberLevel());
 				self::$_addition = self::attackAddition(self::$_attackMemberObj->getMemberId());
 				self::$_randUserAttributePower = self::_randUserAttributePower(self::$_attackMemberObj->getMemberAttributePower());
 				self::$_randUserAttributeHurt = self::_randUserAttributePower(self::$_attackMemberObj->getMemberAttributeHurt());
 				$hurt = call_user_func('NewSkillHurt::'.$functionName, $i);
 				
-				if(self::$_attackSkillInfo['skill_type'] == 1)
+				if(self::$_attackSkillInfo['skill_type'] == 1 && 
+						isset($attackHavePassiveSkills[NewSkill::SKILL_COMMON_BD_WGX]))
 				{
-					//物理攻击
-					
-				}elseif(self::$_attackSkillInfo['skill_type'] == 2){
-					//法术攻击
+					//物攻修
+					$hurt = $hurt*pow(1.002, $attackHavePassiveSkills[NewSkill::SKILL_COMMON_BD_WGX])
+					+ 0.5*(pow(1.002, $attackHavePassiveSkills[NewSkill::SKILL_COMMON_BD_WGX]) -1)/(1.002 -1);
+				}elseif(self::$_attackSkillInfo['skill_type'] == 2 && 
+						isset($attackHavePassiveSkills[NewSkill::SKILL_COMMON_BD_FGX])){
+					//法攻修
+					$hurt = $hurt*pow(1.002, $attackHavePassiveSkills[NewSkill::SKILL_COMMON_BD_FGX]) 
+					+ 0.5*(pow(1.002, $attackHavePassiveSkills[NewSkill::SKILL_COMMON_BD_FGX]) -1)/(1.002 -1);
 				}
-				//计算攻击被动技能
-				
-				//计算防御被动技能
-				
 				
 				if($hurt < 0)$hurt = 1;
 				$return[] = array('hurt' => $hurt, 'addition' => self::$_addition);
@@ -54,14 +72,14 @@ class NewSkillHurt extends NewSkill
 	private static function _1201()
 	{
 		$hurt = self::$_rand5UserLevelGetTop3Average + self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt() 
-			+ self::$_randUserAttributePower - self::$_defineMemberObj->getMemberAttributeDfense();
+			+ self::$_randUserAttributePower - self::$_defineMemberAttributeDfense;
 		$hurt *= self::$_addition;
 		return $hurt;
 	}
 	private static function _1206($i)
 	{
 		$hurt = self::$_rand5UserLevelGetTop3Average + self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt() 
-				+ self::$_randUserAttributePower - self::$_defineMemberObj->getMemberAttributeDfense();
+				+ self::$_randUserAttributePower - self::$_defineMemberAttributeDfense;
 		switch ($i)
 		{
 			case 1:
@@ -82,14 +100,14 @@ class NewSkillHurt extends NewSkill
 	private static function _1212()
 	{
 		$hurt = self::$_attackSkillInfo['skill_level']*2.5 + self::_randUserAttributePsychic(self::$_attackMemberObj->getMemberAttributePsychic()) 
-			- self::$_defineMemberObj->getMemberAttributePsychic() + self::$_attackMemberObj->getMemberAttributeHurt()*0.3;
+			- self::$_defineMemberAttributePsychic + self::$_attackMemberObj->getMemberAttributeHurt()*0.3;
 		$hurt *= self::$_addition;
 		return $hurt;
 	}
 	private static function _1213()
 	{
 		$hurt = self::$_attackSkillInfo['skill_level']*2.0 + (self::_randUserAttributePsychic(self::$_attackMemberObj->getMemberAttributePsychic())
-				- self::$_defineMemberObj->getMemberAttributePsychic() + self::$_attackMemberObj->getMemberAttributeHurt()*0.3)
+				- self::$_defineMemberAttributePsychic + self::$_attackMemberObj->getMemberAttributeHurt()*0.3)
 				*(1 - (self::$_attackSkillInfo['hit_member_num'] -1)/20);
 		$hurt *= self::$_addition;
 		return $hurt;
@@ -97,14 +115,14 @@ class NewSkillHurt extends NewSkill
 	private static function _1218()
 	{
 		$hurt = (self::$_rand5UserLevelGetTop3Average + self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt() + self::$_randUserAttributePower)*1.05
-				- self::$_defineMemberObj->getMemberAttributeDfense()*0.7;
+				- self::$_defineMemberAttributeDfense*0.7;
 		$hurt *= self::$_addition;
 		return $hurt;
 	}
 	private static function _1219()
 	{
 		$hurt = (self::$_rand5UserLevelGetTop3Average + self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt() + self::$_randUserAttributePower)*1.05
-		- self::$_defineMemberObj->getMemberAttributeDfense();
+		- self::$_defineMemberAttributeDfense;
 		$hurt *= self::$_addition;
 		return $hurt;
 	}
