@@ -18,39 +18,7 @@ class NewFightMember
     private $_skillEffectAttribute = array();//技能效果-属性加成
     private $_skillEffectNotCanUseSkill = array();//技能效果-无法使用的技能
     private $_skillEffectNotCanAttackSkill = array();//技能效果-无法被攻攻到的技能
-    
-    /**
-     array(
-        'attribute' => 
-            array(
-                array('round' => 1, 'value' => array(ConfigDeifine::USER_ATTRIBUTE_DEFENSE => 0.8, )),
-                array('round' => 1, 'value' => array(ConfigDeifine::USER_ATTRIBUTE_DEFENSE => 0.8, )),
-            ),
-        'not_can_use_skill' =>
-            array(
-                array('round' => 1, 'value' => array(1021,1023,124)),
-                array('round' => 1, 'value' => array(1021,1023,124)),
-            ),
-        'not_can_attack_skill' => 
-            array(
-                array('round' => 1, 'value')
-            ),
-     );
-     
-     not_can_use_skill[] => array('round' => 1, 'value' => array(1202,1203,1204,1205),)
-     not_can_use_skill[] => array('round' => 1, 'value' => array(1202,1203,1204,1205),)
-     
-     attribute[] = array('round' => 'value' => array(ConfigDeifine::USER_ATTRIBUTE_DEFENSE => 0.8, ))
-     attribute[] = array('round' => 'value' => array(ConfigDeifine::USER_ATTRIBUTE_DEFENSE => 0.8, ))
-     
-     not_can_attack_skill[] => array('round' => 1, 'value' => array(1202,1203,1204,1205),)
-     not_can_attack_skill[] => array('round' => 1, 'value' => array(1202,1203,1204,1205),)
-     
-     attack_skill[] = array(skill_id => round, )
-     
-     
-     */
-	
+
 	//初始化
 	public function __construct($memberInfo)
 	{
@@ -212,5 +180,8 @@ class NewFightMember
     	$attribute = $this->_getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]:0;
     }
-    
+    public function getCurrentMagaic()
+    {
+    	return $this->_currentMagic;
+    }
 }
