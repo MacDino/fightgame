@@ -194,7 +194,11 @@ class NewFightMember
         return ;
     }
 
-    //当前队员是否存活
+	public function getPassiveSkills()
+	{
+		return $this->_memberSkill['passive'];
+	}
+	//当前队员是否存活
 	public function isAlive()
 	{
 		return $this->_currentBlood>0?TRUE:FALSE;
@@ -284,5 +288,8 @@ class NewFightMember
     	$attribute = $this->_getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]:0;
     }
-
+    public function getCurrentMagaic()
+    {
+    	return $this->_currentMagic;
+    }
 }

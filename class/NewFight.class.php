@@ -5,24 +5,24 @@ class NewFight
 	private static $_teamHaveNum = array();//团队拥有的用户数量
 	private static $_teamHaveDiedNum = array();//团队死亡的用户数量
 	private static $_membersList = array(); //所有团队的用户对象列表
-    private static $_attackSkillConfig = array();//攻击技能配置信息
+	
+	private static $_attackSkillInfo = array();
     
     CONST ATTACK_ADDITIONCOEFFICIENT = 0.05;//先攻速度加成
     CONST DEFINE_ADDITIONCOEFFICIENT = 0.5;//先守速度加成
     
     CONST DEBUG = 1;
     
-    
-    
     private $_fightList = array();//战斗过程
     private $_fightKeyMiss = 'miss';//战斗标识
+    
+    
 	
 	public static function getFightResult($teams)
 	{
 		try {
 			self::_mapTeamsAndMembersInfo($teams);
             $attackMemberKeyList = self::_getAttackMemberKeyOrderList();//获取攻击用户顺序
-            
             foreach($attackMemberKeyList as $memberKey)
             {
                 //判断是否有队伍获胜
@@ -30,13 +30,14 @@ class NewFight
                 $attackMemberObj = self::_getMemberObjByMemberKey($memberKey);
                 //获取攻击队员使用的技能
                 $attackSkillInfo = $attackMemberObj->getMemberAttackSkill();
-                self::$_attackSkillConfig = NewSkill::getSkillConfig(key($attackSkillInfo), current($attackSkillInfo));
+              	NewSkill::begin($attackMemberObj, $attackSkillInfo);
+              	self::$_attackSkillInfo = NewSkill::getAttackSkillConfig();
                 //判断攻击队员是否可以使用此技能
-                if(!NewSkill::isMemberCanUseSkill($attackMemberObj, key($attackSkillInfo)))continue;
+                if(!NewSkill::isMemberCanUseThisSkill())continue;
                 //获取防守队员
                 $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                 //开始战斗
-                self::_doFight($attackMemberObj, $defineMembersObj, self::$_attackSkillConfig);
+                self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
                 break;
             }
             
@@ -54,9 +55,10 @@ class NewFight
     {
         //判断攻方休息回合
         if($attackMemberObj->isMemberSleep())return;
+
         //todo 攻击效果判断攻方是否可以使用此技能
         //消耗
-        $consumes = self::$_attackSkillConfig['consume'];
+        $consumes = self::$_attackSkillInfo['consume'];
         foreach($consumes as $attributeId => $consume)
         {
             if($attributeId == ConfigDefine::USER_ATTRIBUTE_BLOOD)
@@ -76,14 +78,15 @@ class NewFight
             if($defineMemberObj->isDied())continue;
             //todo 攻击效果-判断守方是否可以被此技能攻击
             //todo 攻击效果-守方的属性加成
+            
+            NewSkill::setDefineObj($defineMemberObj);
             //计算是否命中
-            $hit = NewSKill::getHit($attackMemberObj, $defineMemberObj, $attackSkillInfo);
-            if(!$hit)continue;
-            if(self::$_attackSkillConfig['is_have_hurt'])
+            if(!NewSkill::skillIsHit())continue;
+            if(self::$_attackSkillInfo['is_have_hurt'])
             {
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
-            	$skillHurt = NewSkill::getAttack($attackMemberObj, $attackSkillInfo, $defineMemberObj);
+            	$skillHurt = NewSkill::getAttack();
             	foreach($skillHurt as $hurtInfo)
             	{
             		$hurt = $hurtInfo['hurt'];//攻击值
@@ -94,8 +97,9 @@ class NewFight
             		//todo 此处定义防御法术的攻击效果累加
             	}
             }
+            NewSkill::getSkillRound();
             //todo 此处定义攻击法术的攻击效果累加
-            exit;
+            break;
         }
     }
     
@@ -140,16 +144,16 @@ class NewFight
         foreach($defineMemberKeyList as $memberKey)
         {
             $memberObj = self::_getMemberObjByMemberKey($memberKey);
-            if(in_array(0, self::$_attackSkillConfig['target']))
+            if(in_array(0, self::$_attackSkillInfo['target']))
             {
                 //允许对己方使用的
-                if(self::$_attackSkillConfig['hit_me'] == 1)
+                if(self::$_attackSkillInfo['hit_me'] == 1)
                 {
                     if($attackMemberObj == $memberObj)
                     {
                         $returnMemberObj[$memberKey] = $memberObj;
                     }
-                }elseif(self::$_attackSkillConfig['hit_me'] == 0){
+                }elseif(self::$_attackSkillInfo['hit_me'] == 0){
                     if($attackMemberObj != $memberObj)
                     {
                         if($attackMemberObj->getMemberTeamKey() == $memberObj->getMemberTeamKey())
@@ -158,7 +162,7 @@ class NewFight
                         }
                     }
                 }
-            }elseif(in_array(1, self::$_attackSkillConfig['target'])){
+            }elseif(in_array(1, self::$_attackSkillInfo['target'])){
                 //允许对对方使用的
                 if($attackMemberObj->getMemberTeamKey() != $memberObj->getMemberTeamKey())
                 {
@@ -270,6 +274,7 @@ class NewFight
 		{
 			echo "队伍".$teamKey."共计有队员".$haveNum."目前已经死亡".self::$_teamHaveDiedNum[$teamKey]."<br />";
 		}
+		NewSkill::debug();
 		
 		echo "DEBUG结束";
 	}
