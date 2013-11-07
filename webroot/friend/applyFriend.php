@@ -22,7 +22,12 @@ if(!$userInfo){
 
 try {
     //显示好友
-    $data = Friend_Info::getApplyFriendInfo($userId);
+    $res = Friend_Info::getApplyFriendInfo($userId);
+    if(!empty($res)){
+    	$data['list'] = User_LBS::getNearUser($res, $userId);
+    }else{
+    	$data = null;
+    }
 //    print_r($data);
     $code = 0;
     die;

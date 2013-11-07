@@ -3,6 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $equipId = isset($_REQUEST['equip_id']) ? $_REQUEST['equip_id'] :"";
+$prop = isset($_REQUEST['prop']) ? $_REQUEST['prop'] :"";
 
 if(!$equipId){
     $code = 100001;
@@ -32,7 +33,20 @@ if($needMoney > $nowMoney){
 }
 
 try {
-    $res = Equip_Info::forge($equipId);
+	if($prop){
+		$num = User_Property::getPropertyNum($userId, 6308);
+		if($num){
+			$res = Equip_Info::forge($equipId, 6308);//道具改变几率
+			User_Property::updateNumDecreaseAction($userId, 6308);//减少道具数量
+		}else{
+			$code = 140201;
+		    $msg = '你的锻造符咒不够用了';
+		    die;
+		}
+	}else{
+		$res = Equip_Info::forge($equipId);
+	}
+    
     User_Info::subtractBindMoney($info['user_id'], $needMoney);
     $data['status'] = $res;
 	$data['info'] = Equip_Info::getEquipInfoById($equipId);

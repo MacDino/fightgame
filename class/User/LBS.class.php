@@ -41,7 +41,7 @@ class User_LBS
 		$min_lat = $_array[2];
 		$max_lat = $_array[3];
 
-		$sql = "SELECT i.user_id as user_id, i.user_name as user_name, i.race_id as race_id, i.user_level as user_level, l.longitude as longitude, l.latitude as latitude
+		$sql = "SELECT i.user_id as user_id,i.sex as sex, i.user_name as user_name, i.race_id as race_id, i.user_level as user_level, l.longitude as longitude, l.latitude as latitude
             FROM user_info i ,user_lbs l WHERE longitude<=$max_lng AND longitude>=$min_lng AND latitude<=$max_lat AND latitude>=$min_lat
             AND i.user_id!=$userId and i.user_id = l.user_id";
 //		echo $sql;
@@ -105,6 +105,8 @@ class User_LBS
 				$data[$key]['distance'] = $distance;
 //				print_r($data[$key]);
 				$res[$key] = $data[$key];
+				unset($data[$key]['longitude']);
+				unset($data[$key]['latitude']);
 			}
 		}
 //		print_r($res);

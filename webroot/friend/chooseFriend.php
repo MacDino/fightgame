@@ -27,7 +27,12 @@ try {
     	$res = User_LBS::getNearbyFriend($userId, 1000000000);
     }
 //    print_r($res);
-    $data = User_LBS::getNearUser($res, $userId);
+    $result = User_LBS::getNearUser($res, $userId);
+    if(!empty($result)){
+    	$data['list'] = $result;
+    }else{
+    	$data = null;
+    }
     $code = 0;
     die;
 } catch (Exception $e) {

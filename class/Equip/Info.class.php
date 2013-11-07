@@ -47,13 +47,18 @@ class Equip_Info
     }
 
     /** @desc 装备打造 */
-    public static function forge($equipId){
+    public static function forge($equipId, $prop=NULL){
         $res = FALSE;
         $info = self::getEquipInfoById($equipId);
 //print_r($info);
         if($info){
         	
-			$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level']);
+        	if($prop){
+        		$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level'], $prop);
+        	}else{
+        		$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level']);
+        	}
+			
             $hit = PerRand::getRandResultKey($sussessOdds);
             
             if($hit == 'success'){ //装备锻造等级升一级

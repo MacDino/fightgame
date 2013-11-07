@@ -31,7 +31,7 @@ $isSend = Friend_Good::isSendPk($userId, $friendId);
 //echo $isSend;
 if($isSend){
 	$code = 160013;
-	$msg = "你今天已经没有PK符可以送人了";
+	$msg = "你今天已经给他送过了,明天吧";
 	die;
 }
 

@@ -16,6 +16,7 @@ class Friend_Good
 	/** 接收PK符 */
 	public static function acceptPK($userId, $friendId){
 		$res = MySql::update(self::TABLE_NAME, array('status' => 1), array('user_id' => $friendId, 'friend_id' => $userId, 'send_time' => date('Y-m-d')));
+//		print_r($res);
 		if($res){
 			User_Property::updateNumIncreaseAction($userId, 6302, 1);//增加道具数量
 		}

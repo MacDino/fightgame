@@ -29,7 +29,7 @@ if(empty($isFriend)){
 
 $isAccept = Friend_Good::isAcceptPK($userId, $friendId);
 //echo $isAccept;
-if(!empty($isAccept)){
+if(empty($isAccept)){
 	$code = 160015;
 	$msg = "今天他没有送过你PK符";
 	die;

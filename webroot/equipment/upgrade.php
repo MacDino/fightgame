@@ -24,9 +24,17 @@ if(!empty($info)){
     $msg = '没有这个装备';
     die;
 }
+$prop = 6323 + $info['equip_level']/10;
+$num = User_Property::getPropertyNum($userId, $prop);
+if(!$num){
+	$code = 140202;
+    $msg = '你的升级符咒不够用了';
+    die;
+}
 
 try {
     $res = Equip_Info::upgrade($equipId);
+    User_Property::updateNumDecreaseAction($userId, $prop);//减少道具数量
     if($res){
     	$data = Equip_Info::getEquipInfoById($equipId);
     }
