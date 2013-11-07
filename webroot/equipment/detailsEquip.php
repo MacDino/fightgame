@@ -10,7 +10,7 @@ if(!$equipId){
     die;
 }
 
-$equipInfo = Equip_Infoget::EquipInfoById($equipId);
+$equipInfo = Equip_Info::getEquipInfoById($equipId);
 if(empty($equipInfo)){
     $code = 140001;
     $msg = '没有这个装备';
@@ -21,9 +21,15 @@ try{
 	$data = Equip_Info::getEquipInfoById($equipId);
 	if(!empty($data['attribute_base_list'])){
 		$data['attribute_base_list'] = json_decode($data['attribute_base_list'], TRUE);
+		foreach ($data['attribute_base_list'] as $i=>$value){
+			$data['attribute_base_list'][$i] = ceil($value);
+		}
 	}
 	if(!empty($data['attribute_list'])){
 		$data['attribute_list'] = json_decode($data['attribute_list'], TRUE);
+		foreach ($data['attribute_list'] as $i=>$value){
+			$data['attribute_list'][$i] = ceil($value);
+		}
 	}
 	
     $code = 0;

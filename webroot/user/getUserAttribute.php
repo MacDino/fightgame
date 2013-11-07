@@ -27,8 +27,14 @@ try {
     $data['equipInfo'] = $res;
 	//角色基本属性(点)
 	$data['baseAttribute'] = User_Info::getUserInfoFightAttribute($userId);
+	foreach ($data['baseAttribute'] as $i=>$value){
+		$data['baseAttribute'][$i] = ceil($value);
+	}
 	//角色成长属性(值)
 	$data['valueAttribute'] = User_Info::getUserInfoFightAttribute($userId, TRUE);
+	foreach ($data['valueAttribute'] as $i=>$value){
+		$data['valueAttribute'][$i] = ceil($value);
+	}
     $code = 0;
     $msg = 'ok';
     die;

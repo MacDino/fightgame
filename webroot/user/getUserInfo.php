@@ -36,7 +36,6 @@ try {
 	if(!empty($petInfo)){
 		$petAttribute = User_Info::getUserInfoFightAttribute($petInfo['user_id'], TRUE);
 		$data['pet']['name'] = $petInfo['user_name'];
-//		$data['pet']['id']   = $petInfo['user_id'];
 		$data['pet']['level']   = $petInfo['user_level'];
 		$data['pet']['blood']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
 		$data['pet']['magic']   = intval($petAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);

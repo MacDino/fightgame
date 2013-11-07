@@ -23,7 +23,13 @@ try {
 	$res = Equip_Info::getEquipInfoByType($equipType, $userId);
 	foreach ($res as $i=>$key){
     	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
+    	foreach ($res[$i]['attribute_base_list'] as $i=>$value){
+			$res[$i]['attribute_base_list'][$i] = ceil($value);
+		}
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
+    	foreach ($res[$i]['attribute_base_list'] as $i=>$value){
+			$res[$i]['attribute_base_list'][$i] = ceil($value);
+		}
     }
 	$data = $res;
 	$code = 0;
