@@ -72,6 +72,10 @@ class NewSkill
 	{
 		return NewSkillRound::skillRound();
 	}
+	public static function skillAttribute()
+	{
+		return NewSkillAttribute::skillAttribute();
+	}
 	private static function _getSkillConfig($attackSkillInfo)
 	{
 		$skillId = key($attackSkillInfo);
