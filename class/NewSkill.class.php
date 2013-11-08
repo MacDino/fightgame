@@ -5,6 +5,9 @@ class NewSkill
 	protected static $_defineMemberObj = NULL;
 	protected static $_attackSkillInfo = NULL;
 	
+	private static $_skillList = NULL;
+	
+	
 	CONST SKILL_CONFIG_TABLE = 'skill_config';
 	
 	
@@ -69,11 +72,15 @@ class NewSkill
 	{
 		return NewSkillRound::skillRound();
 	}
+	public static function skillAttribute()
+	{
+		return NewSkillAttribute::skillAttribute();
+	}
 	private static function _getSkillConfig($attackSkillInfo)
 	{
 		$skillId = key($attackSkillInfo);
 		$skillLevel = current($attackSkillInfo);
-		if(!is_array(self::$_attackSkillInfo))
+		if(!is_array(self::$_skillList))
 		{
 			$skillConfigList = MySql::select(self::SKILL_CONFIG_TABLE);
 			if(is_array($skillConfigList) && $skillConfigList)
@@ -103,10 +110,10 @@ class NewSkill
 					$skillConfig['target'] = json_decode($skillConfig['target'], true);
 					$skillList[$skillConfig['skill_id']] = $skillConfig;
 				}
-				self::$_attackSkillInfo = $skillList;
+				self::$_skillList = $skillList;
 			}
 		}
-		$skillConfigInfo =  self::$_attackSkillInfo[$skillId];
+		$skillConfigInfo =  self::$_skillList[$skillId];
 		$skillConfigInfo['skill_level'] = $skillLevel;
 		return $skillConfigInfo;
 	}
