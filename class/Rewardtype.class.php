@@ -48,7 +48,13 @@ class Rewardtype{
 			$equipId = Equip_Create::createEquip($colour, $userId, $level);
 			$res[$i] = Equip_Info::getEquipInfoById($equipId);
 			$res[$i]['attribute_list'] = json_decode($res[$i]['attribute_list'], true);
+			foreach ($res[$i]['attribute_list'] as $i=>$value){
+				$res[$i]['attribute_list'][$i] = ceil($value);
+			}
 			$res[$i]['attribute_base_list'] = json_decode($res[$i]['attribute_base_list'], true);
+			foreach ($res[$i]['attribute_base_list'] as $i=>$value){
+				$res[$i]['attribute_base_list'][$i] = ceil($value);
+			}
 		}
 		return $res;
 	}
