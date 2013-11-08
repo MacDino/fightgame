@@ -292,4 +292,9 @@ class NewFightMember
     {
     	return $this->_currentMagic;
     }
+
+    public function getCurrentBlood()
+    {
+        return $this->_currentBlood;
+    }
 }
