@@ -76,6 +76,27 @@ class NewSkill
 	{
 		return NewSkillAttribute::skillAttribute();
 	}
+    public static function setSkillEffect()
+    {
+        return NewSkillEffect::setSkillEffect();
+    }
+    public static function getPhysicsSkills()
+    {
+        return array(
+          self::SKILL_HUMAN_GJ_DTWLGJ,
+          self::SKILL_HUMAN_FY_FJ,
+          self::SKILL_DEMON_GJ_DTGJ,
+          self::SKILL_DEMON_GJ_QTGJ,
+        );
+    }
+    public static function getMagicSkills()
+    {
+        return array(
+          self::SKILL_TSIMSHIAN_GJ_DTFSGJ,
+          self::SKILL_TSIMSHIAN_GJ_QTFSGJ,
+        ); 
+    
+    }
 	private static function _getSkillConfig($attackSkillInfo)
 	{
 		$skillId = key($attackSkillInfo);
