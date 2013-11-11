@@ -88,23 +88,37 @@ class NewFight
             //todo 攻击效果-判断守方是否可以被此技能攻击
             //todo 攻击效果-守方的属性加成
             NewSkill::setDefineObj($defineMemberObj);
-            //计算是否命中
-//            if(!NewSkill::skillIsHit())continue;
             if(self::$_attackSkillInfo['is_have_hurt']) {
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
             	$skillHurt = NewSkill::getAttack();
             	foreach($skillHurt as $hurtInfo)
             	{
+                    //计算是否命中
+                    if(!NewSkill::skillIsHit()) {
+                        continue;
+                    }
             		$hurt = $hurtInfo['hurt'];//攻击值
                     $return[$objKey]['hurt'][] = $hurt;
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
-            		//todo 需要定义防御法术的返回值
+                    $defineSkillId = key((array)$defineSkillInfo);
+            		//todo 反击的值
+                    if($defineSkillId == 1211) {
+
+                    }elseif ($defineSkillId == 1217) {
+                        $isMagic = FALSE;
+                        $hurt    = $isMagic ? ($hurt * 0.5) : $hurt * 0.7;
+                    }elseif ($defineSkillId == 1223) {
+                        $defineMakeHurt = $hurt;
+                    }
             		//todo 此处守义防御法术的处理过程
             		//todo 攻击效果-对于攻结果加成
             		//todo 此处定义防御法术的攻击效果累加
                     //造成伤害
                     $defineMemberObj->consumeBlood($hurt);
+                    if($defineMakeHurt > 0) {
+                        $attackMemberObj->consumeBlood($defineMakeHurt);
+                    }
             	}
                 //看对方是否被打死了
                 //打死了处理打死的流程

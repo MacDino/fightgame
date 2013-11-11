@@ -319,14 +319,14 @@ class NewFightMember
     //各个技能的影响，区分attack和define
     //@todo 未考虑叠加，简单的覆盖此技能影响
     public function setEffect($skillId, $round, $flag = 'attack') {
-        if($skillId <=0 || $round <= 0 || !in_array($flag, array('attack','define'))) {
+        if($skillId <=0 || $round <= 0 || !in_array($flag, array('attack','define','sleep'))) {
             return false;
         }
         $this->_currentSkillEffect[$flag][$skillId] = $round;
         return;
     }
 
-    public function getEffect() {
-        return $this->_currentSkillEffect;
+    public function getEffect($flag) {
+        return isset($this->_currentSkillEffect[$flag]) ? $this->_currentSkillEffect[$flag] : array();
     }
 }
