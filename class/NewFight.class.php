@@ -24,6 +24,9 @@ class NewFight
 			self::_mapTeamsAndMembersInfo($teams);
             $attackMemberKeyList = self::_getAttackMemberKeyOrderList();//获取攻击用户顺序
             while (!self::_isHaveTeamWin()) {
+                if($i > 120) {
+                    break;
+                }
                 foreach($attackMemberKeyList as $memberKey)
                 {
                     if(self::_isHaveTeamWin()) {
@@ -47,9 +50,6 @@ class NewFight
                     self::_report($fightInfo);
                 }
                 $i++;
-                if($i > 120) {
-                    break;
-                }
             }
 		} catch (Exception $e) {
 			var_dump($e);
