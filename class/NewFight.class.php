@@ -26,29 +26,31 @@ class NewFight
             while (!self::_isHaveTeamWin()) {
                 foreach($attackMemberKeyList as $memberKey)
                 {
-                    //判断是否有队伍获胜
-                    if(self::_isHaveTeamWin())break;
+                    if(self::_isHaveTeamWin()) {
+                        break;
+                    }
                     $attackMemberObj = self::_getMemberObjByMemberKey($memberKey);
+                    if($attackMemberObj->isDied()) {
+                        continue;
+                    }
                     //获取攻击队员使用的技能
                     $attackSkillInfo = $attackMemberObj->getMemberAttackSkill();
                     NewSkill::begin($attackMemberObj, $attackSkillInfo);
                     self::$_attackSkillInfo = NewSkill::getAttackSkillConfig();
-                    var_dump(self::$_attackSkillInfo);
                     //判断攻击队员是否可以使用此技能
-                    if(!NewSkill::isMemberCanUseThisSkill())continue;
+                    if(!NewSkill::isMemberCanUseThisSkill()) continue;
                     //获取防守队员
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
                     $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                     $fightInfo['define'] = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
-//                    var_dump($fightInfo);
+                    self::_report($fightInfo);
                 }
                 $i++;
                 if($i > 120) {
                     break;
                 }
             }
-
 		} catch (Exception $e) {
 			var_dump($e);
 		}
@@ -75,27 +77,27 @@ class NewFight
         if($attackMemberObj->isDied())return;
         if($attackMemberObj->isEmptyMagic())return;
         //todo 攻击效果-攻方的属性加成
-        foreach($defineMembersObj as $defineMemberObj)
+        foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
-//            echo '被攻击者：'.$defineMemberObj->getMemberId();
             //判断攻守方是否有一方处于死亡状态
-            if($attackMemberObj->isDied())break;
-            if($defineMemberObj->isDied())continue;
+            if($attackMemberObj->isDied()) break;
+            if($defineMemberObj->isDied()) continue;
+            $return[$objKey] = array(
+                'user_id' => $defineMemberObj->getMemberId(),
+            );
             //todo 攻击效果-判断守方是否可以被此技能攻击
             //todo 攻击效果-守方的属性加成
             NewSkill::setDefineObj($defineMemberObj);
             //计算是否命中
 //            if(!NewSkill::skillIsHit())continue;
-            if(self::$_attackSkillInfo['is_have_hurt'])
-            {
+            if(self::$_attackSkillInfo['is_have_hurt']) {
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
             	$skillHurt = NewSkill::getAttack();
-//                var_dump(1);
-//                var_dump($skillHurt);
             	foreach($skillHurt as $hurtInfo)
             	{
             		$hurt = $hurtInfo['hurt'];//攻击值
+                    $return[$objKey]['hurt'][] = $hurt;
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
             		//todo 需要定义防御法术的返回值
             		//todo 此处守义防御法术的处理过程
@@ -103,20 +105,30 @@ class NewFight
             		//todo 此处定义防御法术的攻击效果累加
                     //造成伤害
                     $defineMemberObj->consumeBlood($hurt);
-                    //看对方是否被打死了
-                    //打死了处理打死的流程
-                    if($defineMemberObj->isDied()) {
-
-                    }
             	}
+                //看对方是否被打死了
+                //打死了处理打死的流程
+                if($defineMemberObj->isDied()) {
+                    self::teamDiedMember($defineMemberObj->getMemberTeamKey());
+                }
             } else {
-                $skillHurt = NewSkill::getAttack();
-//                var_dump($skillHurt);
+                $attribute = NewSkill::skillAttribute();
+                foreach ($attribute as $attributeId => $changeValue) {
+                    if($attributeId == ConfigDefine::USER_ATTRIBUTE_BLOOD) {
+                        $defineMemberObj->addBlood($changeValue);
+                    }
+                    if($attributeId == ConfigDefine::USER_ATTRIBUTE_MAGIC) {
+                        $defineMemberObj->addMagic($changeValue);
+                    }
+                }
             }
+            $return[$objKey]['current_blood'] = $defineMemberObj->getCurrentBlood();
+            $return[$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
             NewSkill::getSkillRound();
             //todo 此处定义攻击法术的攻击效果累加
             break;
         }
+        return $return;
     }
 
     /**
@@ -207,15 +219,14 @@ class NewFight
      */
     private static function _isHaveTeamWin()
     {
-        $haveTema = count(self::$_teamHaveNum);
-		foreach (self::$_teamHaveNum as $teamKey => $teamHaveNum)
+		foreach ((array)self::$_teamHaveNum as $teamKey => $teamHaveNum)
 		{
 			if($teamHaveNum == self::$_teamHaveDiedNum[$teamKey])
 			{
-				--$teamHaveNum;
+				return TRUE;
 			}
 		}
-		return $haveTema==1?TRUE:FALSE;
+		return FALSE;
     }
 
 	/**
@@ -295,8 +306,13 @@ class NewFight
 		echo "DEBUG结束";
 	}
 
-    private static function _report() {
-
+    private static function _report($fightInfo) {
+        $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].' ===> ';
+        foreach ((array)$fightInfo['define'] as $define) {
+            $str .= $define['user_id'].' blood :'.$define['current_blood'];
+        }
+        $str .= '<br />';
+        echo $str;
     }
 
     private static function createAttackInfo(NewFightMember $attackMemberObj, $skillInfo) {

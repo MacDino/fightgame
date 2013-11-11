@@ -233,6 +233,24 @@ class NewFightMember
     {
         $this->_currentMagic -= $magic;
     }
+    public function addBlood($blood) {
+        if($this->_currentBlood > 0) {
+            $this->_currentBlood = $this->_currentBlood + $blood;
+        }
+        if($this->_currentBlood > $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]) {
+            $this->_currentBlood = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
+        }
+    }
+    public function addMagic($magic)
+    {
+        //判断如果小于0的话，强制归0
+        $this->_currentMagic = $this->_currentMagic > 0 ? $this->_currentMagic : 0;
+        $this->_currentMagic = $this->_currentMagic + $magic;
+        if($this->_currentMagic > $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]) {
+            $this->_currentMagic = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+        }
+    }
+
     //魔法是否消耗空
     public function isEmptyMagic()
     {
