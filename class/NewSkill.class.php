@@ -16,6 +16,8 @@ class NewSkill
 	CONST SKILL_COMMON_BD_FFX 		= 1203;//被动技能-法防修
 	CONST SKILL_COMMON_BD_WGX 		= 1204;//被动技能-物攻修
 	CONST SKILL_COMMON_BD_FGX 		= 1205;//被动技能-法攻修
+	CONST SKILL_COMMON_BD_TX		= 1224;//被动技能-体修
+	CONST SKILL_COMMON_BD_DZ		= 1225;//被动技能-锻造
 	CONST SKILL_HUMAN_GJ_DTWLGJ 	= 1206;//人族-攻击-单体物理攻击
 	CONST SKILL_HUMAN_GJ_WGK 		= 1207;//人族-攻击-物攻控
 	CONST SKILL_HUMAN_GJ_FGK 		= 1208;//人族-攻击-法攻控

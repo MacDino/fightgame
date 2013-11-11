@@ -43,19 +43,24 @@ class Rewardtype{
 			$userInfo = User_Info::getUserInfoByUserId($userId);
 			$level = intval($userInfo['user_level']/10);
 		}
-		for($i=0;$i<$num;$i++){
+		//for($i=0;$i<$num;$i++){
 			$colour = User_Property::randGeneralEquipColor();
 			$equipId = Equip_Create::createEquip($colour, $userId, $level);
-			$res[$i] = Equip_Info::getEquipInfoById($equipId);
-			$res[$i]['attribute_list'] = json_decode($res[$i]['attribute_list'], true);
-			foreach ($res[$i]['attribute_list'] as $i=>$value){
-				$res[$i]['attribute_list'][$i] = ceil($value);
-			}
-			$res[$i]['attribute_base_list'] = json_decode($res[$i]['attribute_base_list'], true);
-			foreach ($res[$i]['attribute_base_list'] as $i=>$value){
-				$res[$i]['attribute_base_list'][$i] = ceil($value);
-			}
-		}
+			$res = Equip_Info::getEquipInfoById($equipId);
+			//print_r($res);
+			
+		    	$res['attribute_list'] = json_decode($res['attribute_list'], true);
+		    	foreach ($res['attribute_list'] as $o=>$value){
+					$res['attribute_list'][$o] = ceil($value);
+				}
+		    	$res['attribute_base_list'] = json_decode($res['attribute_base_list'], true);
+		    	foreach ($res['attribute_base_list'] as $o=>$value){
+					$res['attribute_base_list'][$o] = ceil($value);
+				}
+		    	$res['price'] = Equip_Info::priceEquip($key['user_equip_id']);
+			
+			$result[] = $res;
+		//}
 		return $res;
 	}
 	

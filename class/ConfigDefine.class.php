@@ -22,23 +22,6 @@ class ConfigDefine
      //其它
 	CONST RELEASE_PROBABILITY 		  	= 1301;//释放概率
 
-	//技能定义
-	CONST SKILL_ZJ      				= 1201;//重击
-	CONST SKILL_LJ      				= 1202;//连击
-    CONST SKILL_LXYZ    				= 1203;//灵犀一指
-    CONST SKILL_SWZH    				= 1204;//三昧真火
-    CONST SKILL_HFHY    				= 1205;//呼风唤雨
-    CONST SKILL_WLJ     				= 1206;//五雷决
-    CONST SKILL_WFX     				= 1207;//物防修
-    CONST SKILL_FFX     				= 1208;//法防修
-    CONST SKILL_GX      				= 1209;//攻修
-    CONST SKILL_FX      				= 1210;//法修
-    CONST SKILL_DZ      				= 1211;//锻造
-    CONST SKILL_FY      				= 1212;//防御
-    CONST SKILL_FJ      				= 1213;//反击
-    CONST SKILL_FD      				= 1214;//法盾
-    CONST SKILL_TX						= 1215;//体修
-    CONST SKILL_PT						= 1216;//普通攻击
     
     //战斗动作
     CONST PET                           = 7009;//人宠
@@ -113,22 +96,31 @@ class ConfigDefine
 	/** 技能 */
 	public static function skillList(){
 		$res = array(
-			self::SKILL_ZJ      				=> '重击',
-			self::SKILL_LJ      				=> '连击',
-		    self::SKILL_LXYZ    				=> '灵犀一指',
-		    self::SKILL_SWZH    				=> '三昧真火',
-		    self::SKILL_HFHY    				=> '呼风唤雨',
-		    self::SKILL_WLJ     				=> '五雷决',
-		    self::SKILL_TX						=> '体修',
-		    self::SKILL_WFX     				=> '物防修',
-		    self::SKILL_FFX     				=> '法防修',
-		    self::SKILL_GX      				=> '攻修',
-		    self::SKILL_FX      				=> '法修',
-		    self::SKILL_DZ      				=> '锻造',
-		    self::SKILL_FY      				=> '防御',
-		    self::SKILL_FJ      				=> '反击',
-		    self::SKILL_FD      				=> '法盾',
-		    self::SKILL_PT						=> '普通攻击',
+			NewSkill::SKILL_DEFAULT_PT 			=> '普通攻击',
+			NewSkill::SKILL_COMMON_BD_WFX 		=> '物防修',
+			NewSkill::SKILL_COMMON_BD_FFX 		=> '法防修',
+			NewSkill::SKILL_COMMON_BD_WGX 		=> '物攻修',
+			NewSkill::SKILL_COMMON_BD_FGX 		=> '法攻修',
+			NewSkill::SKILL_COMMON_BD_TX		=> '体修',
+			NewSkill::SKILL_COMMON_BD_DZ		=> '锻造',
+			NewSkill::SKILL_HUMAN_GJ_DTWLGJ 	=> '游龙斩',
+			NewSkill::SKILL_HUMAN_GJ_WGK 		=> '醉生梦死',
+			NewSkill::SKILL_HUMAN_GJ_FGK 		=> '封印',
+			NewSkill::SKILL_HUMAN_GJ_JL 		=> '天地正气',
+			NewSkill::SKILL_HUMAN_GJ_DJX 		=> '纯阳真气',
+			NewSkill::SKILL_HUMAN_FY_FJ 		=> '以牙还牙',
+			NewSkill::SKILL_TSIMSHIAN_GJ_DTFSGJ => '雷霆之怒',
+			NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ => '呼风唤雨',
+			NewSkill::SKILL_TSIMSHIAN_GJ_XR 	=> '净化',
+			NewSkill::SKILL_TSIMSHIAN_GJ_QJX 	=> '普降甘霖',
+			NewSkill::SKILL_TSIMSHIAN_GJ_QJSH 	=> '天神下凡',
+			NewSkill::SKILL_TSIMSHIAN_FY_ZJ 	=> '仙风护体',
+			NewSkill::SKILL_DEMON_GJ_DTGJ 		=> '狮子搏兔',
+			NewSkill::SKILL_DEMON_GJ_QTGJ 		=> '横扫千军',
+			NewSkill::SKILL_DEMON_GJ_JCK 		=> '怨灵缠身',
+			NewSkill::SKILL_DEMON_GJ_FH 		=> '回魂术',
+			NewSkill::SKILL_DEMON_GJ_QJL 		=> '战无止境',
+			NewSkill::SKILL_DEMON_FY_FZ 		=> '玉石俱焚',
 		);
 		return 	$res;
 	}
