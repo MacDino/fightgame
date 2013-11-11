@@ -36,7 +36,7 @@ try {
     //增加相应的金币
     $res = User_Info::addMoney($userId, $price);
     $userInfo = User_Info::getUserInfoByUserId($userId);
-    $data = $userInfo['money'];
+    $data = $price;
     $code = 0;
     die;
 } catch (Exception $e) {

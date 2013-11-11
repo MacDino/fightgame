@@ -23,8 +23,16 @@ if(!$userInfo){
 try {
     //显示好友
     $res = Friend_Info::getApplyFriendInfo($userId);
-    if(!empty($res)){
-    	$data['list'] = User_LBS::getNearUser($res, $userId);
+    $result = User_LBS::getNearUser($res, $userId);
+    foreach ($result as $key=>$value){
+		$friendInfo = User_Info::getUserInfoByUserId($value['user_id']);
+    	$result[$key]['power'] = User_Info::powerUser($value['user_id']);//战力
+	    $result[$key]['Prestige'] = $friendInfo['reputation'];//声望
+	    $result[$key]['Ranking'] = PK_Challenge::rankingAll($value['user_id']);//全国排名
+	    $result[$key]['Integral'] = $friendInfo['integral'];//积分
+    }
+    if(!empty($result)){
+    	$data['list'] = $result;
     }else{
     	$data = null;
     }

@@ -50,28 +50,34 @@ class Equip_Info
     public static function forge($equipId, $prop=NULL){
         $res = FALSE;
         $info = self::getEquipInfoById($equipId);
-//print_r($info);
+
         if($info){
-        	
+        	//$skillLevel = Skill_Info::getSkillInfo($info['user_id'], $skill_id);
+        	//锻造成功率
+        	$sussessOdds = Skill::getQuickAttributeForEquip(1, $prop);
         	if($prop){
-        		$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level'], $prop);
-        	}else{
-        		$sussessOdds = Skill::getQuickAttributeForEquip($info['forge_level']);
+        		$sussessOdds += 0.1;
         	}
 			
             $hit = PerRand::getRandResultKey($sussessOdds);
             
             if($hit == 'success'){ //装备锻造等级升一级
-                $attributeList = json_decode($info['attribute_base_list'], TRUE);
-                $forgeAttributeList = Equip_Config::forgeAttributeList();
-                //增加属性值
-                foreach($attributeList AS $k=>$v){
-                    if(isset($forgeAttributeList[$info['equip_type']][$k])){
-                        $attributeList[$k] = $forgeAttributeList[$info['equip_type']][$k] + $v;
-                    }
+            	$data['forge_level'] = $info['forge_level'] + 1;
+            	
+            	//基本属性
+                $attributeBaseList = json_decode($info['attribute_base_list'], TRUE);
+                foreach($attributeBaseList as $k=>$v){
+                    $attributeBaseList[$k] = $v * (1 + $data['forge_level'] * 0.015);
                 }
-                $data['forge_level'] = $info['forge_level'] + 1;
-                $data['attribute_base_list'] = json_encode($attributeList);
+                $data['attribute_base_list'] = json_encode($attributeBaseList);
+                
+                //附加属性
+                $attributeList = json_decode($info['attribute_list'], TRUE);
+                foreach($attributeList as $k=>$v){
+                    $attributeList[$k] = $v * (1 + $data['forge_level'] * 0.01);
+                }
+                $data['attribute_list'] = json_encode($attributeList);
+                
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
             }elseif($hit == 'no_less_dz' && $info['forge_level'] != 0){ //装备锻造等级掉一级
             	$attributeList = json_decode($info['attribute_base_list'], TRUE);

@@ -28,19 +28,30 @@ $needMoney = Equip_Info::forgePrice($info['forge_level']);
 
 
 try {
-	
-	$attributeList = json_decode($info['attribute_base_list'], TRUE);
-	$forgeAttributeList = Equip_Config::forgeAttributeList();
-        //增加属性值
-    foreach($attributeList AS $k=>$v){
-            if(isset($forgeAttributeList[$info['equip_type']][$k])){
-                $res[$k] = $v;
-        }
+	//$info = self::getEquipInfoById($equipId);
+	//增加属性值
+	$data['forge_level'] = $info['forge_level'] + 1;
+            	
+    //基本属性
+    $attributeBaseList = json_decode($info['attribute_base_list'], TRUE);
+    foreach($attributeBaseList as $k=>$v){
+        $attributeBaseList[$k] = $v * (1 + $data['forge_level'] * 0.015);
+        $attributeBaseList[$k] = ceil($attributeBaseList[$k]);
     }
+    $data['attribute_base_list'] = $attributeBaseList;
+    
+    
+    //附加属性
+    $attributeList = json_decode($info['attribute_list'], TRUE);
+    foreach($attributeList as $k=>$v){
+        $attributeList[$k] = $v * (1 + $data['forge_level'] * 0.01);
+        $attributeList[$k] = ceil($attributeList[$k]);
+    }
+    $data['attribute_list'] = $attributeList;
 	
 	
-	$data['odds'] = Skill::getQuickAttributeForEquip($info['forge_level']);;//成功率
-	$data['add'] =  $res;//增加的属性
+	$data['odds'] = Skill::getQuickAttributeForEquip($info['forge_level']);//成功率
+//	$data['add'] =  $res;//增加的属性
 	$data['needMoney'] = $needMoney;//需要的钱
 	$data['money'] = $nowMoney;//现有的钱
     $code = 0;

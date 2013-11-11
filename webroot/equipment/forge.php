@@ -51,7 +51,13 @@ try {
     $data['status'] = $res;
 	$data['info'] = Equip_Info::getEquipInfoById($equipId);
 	$data['info']['attribute_list'] = json_decode($data['info']['attribute_list'], true);
+	foreach ($data['info']['attribute_list'] as $i=>$value){
+		$data['info']['attribute_list'][$i] = ceil($value);
+	}
 	$data['info']['attribute_base_list'] = json_decode($data['info']['attribute_base_list'], true);
+	foreach ($data['info']['attribute_base_list'] as $i=>$value){
+		$data['info']['attribute_base_list'][$i] = ceil($value);
+	}
     $code = 0;
     die;
 } catch (Exception $e) {

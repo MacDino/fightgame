@@ -29,7 +29,8 @@ try {
 	    	$friendInfo = User_Info::getUserInfoByUserId($value['user_id']);
 	    	$result[$key]['power'] = User_Info::powerUser($value['user_id']);//战力
 		    $result[$key]['Prestige'] = $friendInfo['reputation'];//声望
-		    $result[$key]['Ranking'] = PK_Challenge::rankingFriend($value['user_id']);//排名
+//		    $result[$key]['Ranking'] = PK_Challenge::rankingFriend($value['user_id']);//好友排名
+		    $result[$key]['Ranking'] = PK_Challenge::rankingAll($value['user_id']);//全国排名
 		    $result[$key]['Integral'] = $friendInfo['integral'];//积分
 	    	
 	    	$isAccept = Friend_Good::isAcceptPK($userId, $value['user_id']);

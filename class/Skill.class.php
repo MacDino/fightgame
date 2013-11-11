@@ -241,13 +241,13 @@ class Skill
     /**
      * @desc 锻造技能对装备的影响
      */
-    public static function getQuickAttributeForEquip($level, $prop=NULL){
+    public static function getQuickAttributeForEquip($level/*, $prop=NULL*/){
         $data               = array();
-        $data['success']    = 0.5 + 0.002 * $level + $opt;
-        if($prop){//符咒增加概率
+        $data['success']    = 0.5 + 0 + $opt;
+        /*if($prop){//符咒增加概率
         	$data['success'] += 0.1;
-        }
-        $data['no_less_dz'] = 0.01 * ceil($level / 2);
+        }*/
+        $data['no_less_dz'] = 0.01 * ceil(1 / 2);
 //        print_r($data);
         return $data;
     }
