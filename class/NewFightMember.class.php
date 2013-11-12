@@ -266,44 +266,44 @@ class NewFightMember
     {
     	return $this->_memberId;
     }
-    private function _getMemberAttributes()
+    public function getMemberAttributes()
     {
     	return $this->_memberAttribute;
     }
     //获取队员的属性-力量
     public function getMemberAttributePower()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_POWER])?$attribute[ConfigDefine::USER_ATTRIBUTE_POWER]:0;
     }
     //获取队员的属性-伤害
     public function getMemberAttributeHurt()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_HURT])?$attribute[ConfigDefine::USER_ATTRIBUTE_HURT]:0;
     }
     //获取队员的属性-命中
     public function getMemberAttributeHit()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_HIT])?$attribute[ConfigDefine::USER_ATTRIBUTE_HIT]:0;
     }
     //获取队员的属性-躲闪
     public function getMemberAttributeDodge()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_DODGE]:0;
     }
     //获取队员的属性-防御
     public function getMemberAttributeDfense()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_DEFENSE]:0;
     }
     //获取队员的属性-灵力
     public function getMemberAttributePsychic()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]:0;
     }
     public function getCurrentMagaic()
