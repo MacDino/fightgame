@@ -219,6 +219,8 @@ class Reward{
     		$res = call_user_func(array('Rewardtype', $contentId), $userId ,$content[$contentId]);
     	}
     	
+//    	print_r($res);
+    	
 		unset($content[$contentId]);//删掉已领取的奖励
     	
     	if(!empty($content)){
