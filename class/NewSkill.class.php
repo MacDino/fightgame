@@ -1,9 +1,11 @@
-<?php 
+<?php
 class NewSkill
 {
-	protected static $_attackMemberObj = NULL;
+    protected static $_attackMemberObj = NULL;
 	protected static $_defineMemberObj = NULL;
 	protected static $_attackSkillInfo = NULL;
+    protected static $_attackMemberAttribute = array();
+    protected static $_defineMemberAttribute = array();
 	
 	private static $_skillList = NULL;
 	
@@ -39,6 +41,27 @@ class NewSkill
 	{
 		self::$_attackMemberObj = $attackMemberObj;
 		self::$_attackSkillInfo = self::_getSkillConfig($attackSkillInfo);
+        self::$_attackMemberAttribute = self::$_attackMemberObj->getMemberAttributes();
+        self::$_defineMemberAttribute = self::$_defineMemberObj->getMemberAttributes();
+        $attackEffect = self::$_attackMemberObj->getEffect();
+        $defineEffect = self::$_defineMemberObj->getEffect();
+
+        if(is_array($attackEffect))
+        {
+            foreach($attackEffect as $skillId => $skillInfo)
+            {
+                 self::$_attackMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_attackMemberAttribute);
+            }
+        }
+        if(is_array($defineEffect))
+        {
+        	foreach($defineEffect as $skillId => $skillInfo)
+        	{
+        		self::$_defineMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_defineMemberAttribute);
+        	}
+        }
+
+          
 	}
 	
 	public static function setDefineObj($defineMemberObj)
@@ -83,6 +106,7 @@ class NewSkill
     public static function getPhysicsSkills()
     {
         return array(
+          self::SKILL_DEFAULT_PT,
           self::SKILL_HUMAN_GJ_DTWLGJ,
           self::SKILL_HUMAN_FY_FJ,
           self::SKILL_DEMON_GJ_DTGJ,
