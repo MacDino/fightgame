@@ -45,8 +45,8 @@ class NewFight
                     //获取防守队员
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
-                    $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
-                    $fightInfo['define'] = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
+                    $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
+//                    $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                     self::_report($fightInfo);
                 }
                 $i++;
@@ -82,7 +82,7 @@ class NewFight
             //判断攻守方是否有一方处于死亡状态
             if($attackMemberObj->isDied()) break;
             if($defineMemberObj->isDied()) continue;
-            $return[$objKey] = array(
+            $return['define'][$objKey] = array(
                 'user_id' => $defineMemberObj->getMemberId(),
             );
             //todo 攻击效果-判断守方是否可以被此技能攻击
@@ -92,24 +92,35 @@ class NewFight
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
             	$skillHurt = NewSkill::getAttack();
-            	foreach($skillHurt as $hurtInfo)
+            	foreach($skillHurt as $key => $hurtInfo)
             	{
+                    $return['define'][$objKey]['hurt'][$key]['is_hit'] = 1;
                     //计算是否命中
                     if(!NewSkill::skillIsHit()) {
+                        $return['define'][$objKey]['hurt'][$key]['is_hit'] = 0;
                         continue;
                     }
             		$hurt = $hurtInfo['hurt'];//攻击值
-                    $return[$objKey]['hurt'][] = $hurt;
+                    $return['define'][$objKey]['hurt'][$key]['hurt'] = $hurt;
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
                     $defineSkillId = key((array)$defineSkillInfo);
             		//todo 反击的值
                     if($defineSkillId == 1211) {
-
+                        NewSkill::begin($defineMemberObj, array('1201' => $defineMemberObj->getMemberLevel()));
+                        NewSkill::setDefineObj($attackMemberObj);
+                        $defineSkillHurt = NewSkill::getAttack();
+                        $defineMakeHurt  = $defineSkillHurt[0]['hurt'];
                     }elseif ($defineSkillId == 1217) {
                         $isMagic = FALSE;
                         $hurt    = $isMagic ? ($hurt * 0.5) : $hurt * 0.7;
                     }elseif ($defineSkillId == 1223) {
                         $defineMakeHurt = $hurt;
+                    }
+                    if($defineSkillId > 0) {
+                        $return['define'][$objKey]['hurt'][$key]['define_skill'] = $defineSkillId;
+                        if($defineMakeHurt) {
+                            $return['define'][$objKey]['hurt'][$key]['define_hurt'] = $defineMakeHurt;
+                        }
                     }
             		//todo 此处守义防御法术的处理过程
             		//todo 攻击效果-对于攻结果加成
@@ -118,6 +129,9 @@ class NewFight
                     $defineMemberObj->consumeBlood($hurt);
                     if($defineMakeHurt > 0) {
                         $attackMemberObj->consumeBlood($defineMakeHurt);
+                        if($attackMemberObj->isDied()) {
+                            self::teamDiedMember($attackMemberObj->getMemberTeamKey());
+                        }
                     }
             	}
                 //看对方是否被打死了
@@ -136,8 +150,9 @@ class NewFight
                     }
                 }
             }
-            $return[$objKey]['current_blood'] = $defineMemberObj->getCurrentBlood();
-            $return[$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
+            $return['define'][$objKey]['current_blood'] = $defineMemberObj->getCurrentBlood();
+            $return['define'][$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
+            $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
             NewSkill::getSkillRound();
             //todo 此处定义攻击法术的攻击效果累加
             break;
@@ -323,7 +338,26 @@ class NewFight
     private static function _report($fightInfo) {
         $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].' ===> ';
         foreach ((array)$fightInfo['define'] as $define) {
-            $str .= $define['user_id'].' blood :'.$define['current_blood'];
+            $str .= $define['user_id'].'<br/>';
+            $str .= 'attack_blood:'.$fightInfo['attack']['current_blood'].' attack_magic:'.$fightInfo['attack']['current_magic'].'<br/>';
+            foreach ((array)$define['hurt'] as $k => $hurt) {
+                if($hurt['is_hit']) {
+                    $str .= 'first['.$hurt['hurt'].']';
+                    if(isset($hurt['define_skill'])) {
+                        $str .= ' define use '.$hurt['define_skill'];
+                        if(isset($hurt['define_hurt'])) {
+                            $str .= ' make attack hurt:'.$hurt['define_hurt'];
+                        } else {
+                            $str .= ' make attack hurt less';
+                        }
+                    }
+                }  else {
+                    $str .= 'not hit, skill miss';
+                }
+                $str .= '<br />';
+            }
+            $str .= 'define_blood:'.$define['current_blood'].' define_magic:'.$define['current_magic'];
+            $str .= '<br />--------------------------------<br />';
         }
         $str .= '<br />';
         echo $str;
