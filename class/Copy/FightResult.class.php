@@ -26,13 +26,16 @@ class Copy_FightResult{
         }
     }
 
-    public static function getResult($userId, $copyLevId = 0) {
+    public static function getResult($userId, $copyLevId = 0, $copyId = 0) {
         if($userId > 0) {
             $where = array(
                 'user_id'   => intval($userId),
             );
             if($copyLevId > 0) {
                 $where['copies_level_id'] = intval($copyLevId);
+            }
+            if($copyId > 0) {
+                $where['copy_id'] = intval($copyId);
             }
             return MySql::selectOne(self::TABLE_NAME, $where);
         }

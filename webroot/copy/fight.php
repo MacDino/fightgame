@@ -1,14 +1,15 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
-$copyLevId             = isset($_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
+$userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
+$copyLevId  = isset($_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
+$copyId     = isset($_REQUEST['copy_id']) ? $_REQUEST['copy_id'] : 0;
 
 $copyLev = Copy_Config::getCopyLevelInfoByLevelId($copyLevId);
 if (!$copyLev) {
 	$code = 1; $msg = "无此副本";exit;
 }
-$copy = Copy::getCopyInfoByCopyId($copyLev['copies_id']); 
+$copy = Copy::getCopyInfoByCopyId($copyId); 
 $userInfo           = User_Info::getUserInfoByUserId($userId);
 if ( $userInfo['user_level'] < $copy['level_limit']) {
 	$code = 100050;
@@ -32,6 +33,13 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	if ( $isTodayFight && !$lastIsWin) {
 		$code = 100090;	
 		exit;
+	}
+	/*
+	 * 已打赢的副本则不再重复进入
+	 */
+	if ($userLastCopyResult['win_monster_num'] == $copy['monster_num']) {
+		$code = 100091;
+		exit;	
 	}
 
     $accessDiffTime = time() - $userLastCopyResult['fight_start_time'];//一定为大于0的值
@@ -102,9 +110,15 @@ try {
 			$win_monster_count = 0;
 		}
 
+		/*
+		 * 每层完成时,领取奖励
+		 */
+		if ($win_monster_count == $copy['win_monster_num']) {
+				
+		}
 
         User_Info::addExperience($userId, $data['result']['experience']);
-        $isLevelUp                  = User_Info::isLevel($userId);
+        $isLevelUp = User_Info::isLevel($userId);
         if($isLevelUp) {
             $data['result']['level_up'] = $isLevelUp;
         }

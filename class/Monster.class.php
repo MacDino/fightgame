@@ -163,6 +163,7 @@ class Monster
 
     // 获取怪物的技能
 	public static function getMonsterSkill($monster) {
+		$skillLev = $monster['level'];
         //获取配置的技能列表
 		$map_skills_list    = Map_Skill::getAllSkills($monster['map_id']);
 		$must_skills_list   = self::_getMustSkills($monster);
@@ -207,12 +208,46 @@ class Monster
 			//获取技能概率
 			$rand_skill_count = count($rand_skills);
             foreach ($rand_skills as $skill => $skillV) {
-                $skills['rate'][$skill] = $skill_rate_list[$skill_type][$rand_skill_count];
+				//新技能等级为怪物等级
+                $skills['rate'][$skill] = $skillLev;
             }
 		}
-
 		return $ret;
 	}
+
+	/*
+	 * 新版的怪物技能
+	public static function getNewMonsterSkill($monster){
+		$skillLev = $monster['level'];
+		$skills = array (
+			'attack' => array(
+				'list' => array(
+					NewSkill::SKILL_DEFAULT_PT => $skillLev,
+					NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ => $skillLev,
+				),	
+				'rate' => array(
+					
+				),	
+			), 
+			'defense' => array(
+				'list' => array(
+					NewSkill::SKILL_HUMAN_FY_FJ => $skillLev,
+					NewSkill::SKILL_DEMON_FY_FZ => $skillLev,
+					NewSkill::SKILL_TSIMSHIAN_FY_ZJ => $skillLev,
+				),
+				'rate' => array(
+					
+				),	
+			),
+			'passive' => array(
+				'list' => array(),
+				'rate' => array(),
+			),
+		);	
+		$skill_rate_list    = self::_getSkillRate($monster);
+	
+	}
+	 */
 
 
     /**
