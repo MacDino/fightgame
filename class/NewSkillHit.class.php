@@ -17,10 +17,10 @@ class NewSkillHit extends NewSkill
 	
 	private static function _1201()
 	{
-		$randHit = PerRand::getRandValue(array(self::$_attackMemberObj->getMemberAttributeHit()*0.2,
-				self::$_attackMemberObj->getMemberAttributeHit()*1));
-		$randDodge = PerRand::getRandValue(array(self::$_attackMemberObj->getMemberAttributeDodge()*0.8,
-						self::$_attackMemberObj->getMemberAttributeDodge()*1));
+		$randHit = PerRand::getRandValue(array(self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HIT]*0.2,
+				self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HIT]*1));
+		$randDodge = PerRand::getRandValue(array(self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_DODGE]*0.8,
+						self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_DODGE]*1));
 		$hitValue = $randHit - $randDodge;
 		self::$_hitValue = $hitValue;
 		if($hitValue >= 1)return TRUE;

@@ -44,10 +44,7 @@ class NewSkill
 		self::$_attackMemberObj = $attackMemberObj;
 		self::$_attackSkillInfo = self::_getSkillConfig($attackSkillInfo);
         self::$_attackMemberAttribute = self::$_attackMemberObj->getMemberAttributes();
-        self::$_defineMemberAttribute = self::$_defineMemberObj->getMemberAttributes();
-        $attackEffect = self::$_attackMemberObj->getEffect();
-        $defineEffect = self::$_defineMemberObj->getEffect();
-
+        
         if(is_array($attackEffect))
         {
             foreach($attackEffect as $skillId => $skillInfo)
@@ -55,20 +52,60 @@ class NewSkill
                  self::$_attackMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_attackMemberAttribute);
             }
         }
-        if(is_array($defineEffect))
-        {
-        	foreach($defineEffect as $skillId => $skillInfo)
-        	{
-        		self::$_defineMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_defineMemberAttribute);
-        	}
-        }
-
-          
 	}
-	
 	public static function setDefineObj($defineMemberObj)
 	{
 		self::$_defineMemberObj = $defineMemberObj;
+		self::$_defineMemberAttribute = self::$_defineMemberObj->getMemberAttributes();
+		$defineEffect = self::$_defineMemberObj->getEffect('define');
+		if(is_array($defineEffect))
+		{
+			foreach($defineEffect as $skillId => $skillInfo)
+			{
+				self::$_defineMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_defineMemberAttribute);
+			}
+		}
+	}
+	//技能效果释放-加血加蓝
+	public static function skillEffectMagicAndBlood()
+	{
+		$attackEffect = self::$_attackMemberObj->getEffect('attack');
+		if(is_array($attackEffect))
+		{
+			foreach($attackEffect as $skillId => $skillInfo)
+			{
+				$res[] = NewSkillEffect::skillEffectMagicAndBlood($skillId, $skillInfo);
+			}
+		}
+		return $res;
+	}
+	//技能效果释放-攻方是否可以使用此技能
+	public static function skillEffectIsAttackCanUseThisSkill()
+	{
+		$attackEffect = self::$_attackMemberObj->getEffect('attack');
+		if(is_array($attackEffect))
+		{
+			foreach($attackEffect as $skillId => $skillInfo)
+			{
+				$res = NewSkillEffect::skillEffectIsAttackCanUseThisSkill($skillId, $skillInfo);
+				if(!$res)return FALSE;
+			}
+		}
+		return TRUE;
+	}
+	//技能释放效果-守方是否可以被此技能攻击
+	public static function skillEffectIsThisSKillCanAttack()
+	{
+		$attackEffect = self::$_attackMemberObj->getEffect('attack');
+		if(is_array($attackEffect))
+		{
+			foreach($attackEffect as $skillId => $skillInfo)
+			{
+				$res = NewSkillEffect::skillEffectIsThisSKillCanAttack($skillId, $skillInfo);
+				if(!$res)return FALSE;
+			}
+		}
+		return TRUE;
 	}
 	
 	public static function end()
