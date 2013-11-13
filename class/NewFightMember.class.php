@@ -331,9 +331,13 @@ class NewFightMember
         return isset($this->_currentSkillEffect[$flag]) ? $this->_currentSkillEffect[$flag] : array();
     }
 
-    public function delEffect($flag, $skillId) {
-        if(isset($this->_currentSkillEffect[$flag][$skillId])) {
-            unset($this->_currentSkillEffect[$flag][$skillId]);
+    public function delEffect($skillId) {
+        if(isset($this->_currentSkillEffect['attack'][$skillId])) {
+            unset($this->_currentSkillEffect['attack'][$skillId]);
         }
+        if(isset($this->_currentSkillEffect['define'][$skillId])) {
+            unset($this->_currentSkillEffect['define'][$skillId]);
+        }
+        return true;
     }
 }
