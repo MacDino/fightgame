@@ -330,4 +330,10 @@ class NewFightMember
     public function getEffect($flag) {
         return isset($this->_currentSkillEffect[$flag]) ? $this->_currentSkillEffect[$flag] : array();
     }
+
+    public function delEffect($flag, $skillId) {
+        if(isset($this->_currentSkillEffect[$flag][$skillId])) {
+            unset($this->_currentSkillEffect[$flag][$skillId]);
+        }
+    }
 }
