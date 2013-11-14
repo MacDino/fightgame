@@ -40,13 +40,15 @@ class NewFight
                     $attackSkillInfo = $attackMemberObj->getMemberAttackSkill();
                     NewSkill::begin($attackMemberObj, $attackSkillInfo);
                     self::$_attackSkillInfo = NewSkill::getAttackSkillConfig();
+//                    var_dump(self::$_attackSkillInfo);
                     //判断攻击队员是否可以使用此技能
-                    if(!NewSkill::isMemberCanUseThisSkill()) continue;
+                    if(!NewSkill::skillEffectIsAttackCanUseThisSkill()) {
+                        continue;
+                    }
                     //获取防守队员
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
                     $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
-//                    $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                     self::_report($fightInfo);
                 }
                 $i++;
@@ -79,6 +81,9 @@ class NewFight
         //todo 攻击效果-攻方的属性加成
         foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
+            if(self::$_attackSkillInfo['hit_member_num'] == 0) {
+                break;
+            }
             //判断攻守方是否有一方处于死亡状态
             if($attackMemberObj->isDied()) break;
             if($defineMemberObj->isDied()) continue;
@@ -86,7 +91,10 @@ class NewFight
                 'user_id' => $defineMemberObj->getMemberId(),
             );
             //todo 攻击效果-判断守方是否可以被此技能攻击
-            //todo 攻击效果-守方的属性加成
+            if(!NewSkill::skillEffectIsThisSKillCanAttack()) {
+                continue;
+            }
+
             NewSkill::setDefineObj($defineMemberObj);
             if(self::$_attackSkillInfo['is_have_hurt']) {
             	//计算攻击输出
@@ -104,7 +112,7 @@ class NewFight
                     $return['define'][$objKey]['hurt'][$key]['hurt'] = $hurt;
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
                     $defineSkillId = key((array)$defineSkillInfo);
-            		//todo 反击的值
+
                     if($defineSkillId == 1211) {
                         NewSkill::begin($defineMemberObj, array('1201' => $defineMemberObj->getMemberLevel()));
                         NewSkill::setDefineObj($attackMemberObj);
@@ -129,16 +137,12 @@ class NewFight
                     $defineMemberObj->consumeBlood($hurt);
                     if($defineMakeHurt > 0) {
                         $attackMemberObj->consumeBlood($defineMakeHurt);
-                        if($attackMemberObj->isDied()) {
-                            self::teamDiedMember($attackMemberObj->getMemberTeamKey());
-                        }
+                        self::dealTeamMemberDead($attackMemberObj);
                     }
             	}
                 //看对方是否被打死了
                 //打死了处理打死的流程
-                if($defineMemberObj->isDied()) {
-                    self::teamDiedMember($defineMemberObj->getMemberTeamKey());
-                }
+                self::dealTeamMemberDead($defineMemberObj);
             } else {
                 $attribute = NewSkill::skillAttribute();
                 foreach ($attribute as $attributeId => $changeValue) {
@@ -155,7 +159,11 @@ class NewFight
             $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
             NewSkill::getSkillRound();
             //todo 此处定义攻击法术的攻击效果累加
-            break;
+            NewSkill::setSkillEffect();
+            error_log(print_r($defineMemberObj->getEffect('define'),1),3,'/tmp/lishengwei.log');
+            if(self::$_attackSkillInfo['hit_member_num'] >= 1) {
+                self::$_attackSkillInfo['hit_member_num'] = self::$_attackSkillInfo['hit_member_num'] - 1;
+            }
         }
         return $return;
     }
@@ -370,5 +378,12 @@ class NewFight
         $attackInfo['skill_id']      = self::$_attackSkillInfo['skill_id'];
         $attackInfo['skill_level']      = self::$_attackSkillInfo['skill_level'];
         return $attackInfo;
+    }
+
+    private static function dealTeamMemberDead(NewFightMember $memberObj) {
+        if($memberObj->isDied()) {
+            return self::teamDiedMember($memberObj->getMemberTeamKey());
+        }
+        return FALSE;
     }
 }
