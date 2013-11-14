@@ -226,12 +226,12 @@ class NewFightMember
 	//消耗血量
     public function consumeBlood($blood)
     {
-        $this->_currentBlood -= $blood;
+        $this->_currentBlood -= intval($blood);
     }
     //消耗魔法
     public function consumeMagic($magic)
     {
-        $this->_currentMagic -= $magic;
+        $this->_currentMagic -= intval($magic);
     }
     public function addBlood($blood) {
         if($this->_currentBlood > 0) {
