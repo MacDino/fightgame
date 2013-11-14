@@ -169,7 +169,7 @@ class NewSkillEffect extends NewSkill
     	self::_setSleepSkillEffect(self::$_attackMemberObj, 1);
     }
     //------1214
-    private static function _getSkillEffect1219()
+    private static function _getSkillEffect1214()
     {
     	self::_setAttackSkillEffect(self::$_defineMemberObj, 1);
     }
@@ -180,7 +180,7 @@ class NewSkillEffect extends NewSkill
     	return $hurt;
     }
     //减血技能等级+25
-    private static function _skillEffectMagicAndBlood1209($skillInfo)
+    private static function _skillEffectMagicAndBlood1214($skillInfo)
     {
     	$res =  self::$_attackMemberObj->consumeBlood($skillInfo['skill_level'] + 25);
     	if($res)
