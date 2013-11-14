@@ -6,13 +6,13 @@ class NewSkill
 	protected static $_attackSkillInfo = NULL;
     protected static $_attackMemberAttribute = array();
     protected static $_defineMemberAttribute = array();
-	
+
 	private static $_skillList = NULL;
-	
-	
+
+
 	CONST SKILL_CONFIG_TABLE = 'skill_config';
-	
-	
+
+
 	CONST SKILL_DEFAULT_PT 			= 1201;//普通攻击
 	CONST SKILL_COMMON_BD_WFX 		= 1202;//被动技能-物防修
 	CONST SKILL_COMMON_BD_FFX 		= 1203;//被动技能-法防修
@@ -38,13 +38,12 @@ class NewSkill
 	CONST SKILL_DEMON_GJ_FH 		= 1221;//魔族-攻击-复活
 	CONST SKILL_DEMON_GJ_QJL 		= 1222;//魔族-攻击-群加灵
 	CONST SKILL_DEMON_FY_FZ 		= 1223;//魔族-攻击-反震
-	
+
 	public static function begin($attackMemberObj, $attackSkillInfo)
 	{
 		self::$_attackMemberObj = $attackMemberObj;
 		self::$_attackSkillInfo = self::_getSkillConfig($attackSkillInfo);
         self::$_attackMemberAttribute = self::$_attackMemberObj->getMemberAttributes();
-        
         if(is_array($attackEffect))
         {
             foreach($attackEffect as $skillId => $skillInfo)
@@ -107,12 +106,12 @@ class NewSkill
 		}
 		return TRUE;
 	}
-	
+
 	public static function end()
 	{
 		self::$_attackMemberObj = NULL;
 		self::$_defineMemberObj = NULL;
-		self::$_attackSkillInfo = NULL;	
+		self::$_attackSkillInfo = NULL;
 	}
 	public static function getAttackSkillConfig()
 	{
@@ -157,8 +156,8 @@ class NewSkill
         return array(
           self::SKILL_TSIMSHIAN_GJ_DTFSGJ,
           self::SKILL_TSIMSHIAN_GJ_QTFSGJ,
-        ); 
-    
+        );
+
     }
 	private static function _getSkillConfig($attackSkillInfo)
 	{
@@ -245,7 +244,7 @@ class NewSkill
 		);
 		return isset($skillList[$raceId])?$skillList[$raceId]:$skillList;
 	}
-	
+
 	//获取被动技能列表
 	public static function getPassiveSkillList()
 	{

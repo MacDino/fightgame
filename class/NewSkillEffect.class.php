@@ -17,7 +17,7 @@ class NewSkillEffect extends NewSkill
     	$functionName = '_skillEffectIsAttackCanUseThisSkill'.$skillId;
     	if(!method_exists('NewSkillEffect', $functionName))
     	{
-    		return array();
+    		return true;
     	}else{
     		return call_user_func('NewSkillEffect::'.$functionName, $skillInfo);
     	}
@@ -52,7 +52,7 @@ class NewSkillEffect extends NewSkill
     	}else{
     		return call_user_func('NewSkillEffect::'.$functionName, $skillInfo, $memberAttribute);
     	}
-    
+
     }
     public static function skillEffectHurt($skillId, $skillInfo, $hurt)
     {
@@ -63,10 +63,10 @@ class NewSkillEffect extends NewSkill
     	}else{
     		return call_user_func('NewSkillEffect::'.$functionName, $skillInfo, $hurt);
     	}
-    
+
     }
-    
-    
+
+
     //------1206
     private static function _setSkillEffect1206()
     {
@@ -89,7 +89,7 @@ class NewSkillEffect extends NewSkill
     			NewSKill::SKILL_HUMAN_GJ_FGK,
     			NewSkill::SKILL_TSIMSHIAN_GJ_XR,
     	);
-    	if(in_array(self::$_attackSkillInfo['skll_id'], $skillList))return FALSE;
+    	if(in_array(self::$_attackSkillInfo['skill_id'], $skillList))return FALSE;
     	return TRUE;
     }
     //------1207
@@ -109,7 +109,7 @@ class NewSkillEffect extends NewSkill
 	private static function _skillEffectIsAttackCanUseThisSkill1207()
     {
     	$skillList = NewSkill::getPhysicsSkills();
-    	if(in_array(self::$_attackSkillInfo['skll_id'], $skillList))return FALSE;
+    	if(in_array(self::$_attackSkillInfo['skill_id'], $skillList))return FALSE;
     	return TRUE;
     }
     //------1208
@@ -129,7 +129,7 @@ class NewSkillEffect extends NewSkill
     private static function _skillEffectIsAttackCanUseThisSkill1208()
     {
     	$skillList = NewSkill::getMagicSkills();
-    	if(in_array(self::$_attackSkillInfo['skll_id'], $skillList))return FALSE;
+    	if(in_array(self::$_attackSkillInfo['skill_id'], $skillList))return FALSE;
     	return TRUE;
     }
     //------1209
@@ -138,7 +138,7 @@ class NewSkillEffect extends NewSkill
     	$round = NewSkill::getSkillRound();
     	if($round > 1)$round -= 1;
     	if($round <= 1)return;
-    	$value = NewSkillAttribute::skillAttribute;
+    	$value = NewSkillAttribute::skillAttribute();
     	$value = current($value);
     	self::_setAttackSkillEffect(self::$_attackMemberObj, $round, $vlue);
     }
@@ -200,37 +200,37 @@ class NewSkillEffect extends NewSkill
     	$memberAttribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC] = $memberAttribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]+$skillInfo['skill_levle']/4;
     	return $memberAttribute;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private static function _setAttackSkillEffect($memberObj, $round, $value = NULL)
     {
     	$memberObj->setEffect('attack', self::$_attackSkillInfo['skill_id'],
@@ -239,14 +239,14 @@ class NewSkillEffect extends NewSkill
     					'value' => $value,
     					));
     }
-    
+
     private static function _setDefineSkillEffect($memberObj, $round)
     {
     	$memberObj->setEffect('define', self::$_attackSkillInfo['skill_id'],
     			array('skill_level' => self::$_attackSkillInfo['skill_level'],
     					'round' => $round));
     }
-    
+
     private static function _setSleepSkillEffect($memberObj, $round)
     {
     	$memberObj->setEffect('sleep', self::$_attackSkillInfo['skill_id'],
