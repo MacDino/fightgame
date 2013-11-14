@@ -60,7 +60,7 @@ class NewSkillHurt extends NewSkill
 				{
 					foreach($attackEffect as $skillId => $skillInfo)
 					{
-						$hurt = NewSkillEffect::skillEffectHurt($skillId, $skillInfo, self::$_hurt);
+						$hurt = NewSkillEffect::skillEffectHurt($skillId, $skillInfo, $hurt);
 					}
 				}
 
