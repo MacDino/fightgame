@@ -182,7 +182,7 @@ class NewSkillEffect extends NewSkill
     //减血技能等级+25
     private static function _skillEffectMagicAndBlood1214($skillInfo)
     {
-    	$res =  self::$_attackMemberObj->consumeBlood($skillInfo['skill_level'] + 25);
+    	$res =  self::$_defineMemberObj->consumeBlood($skillInfo['skill_level'] + 25);
     	if($res)
     	{
     		return array(ConfigDefine::USER_ATTRIBUTE_BLOOD => -($skillInfo['skill_level'] + 25));

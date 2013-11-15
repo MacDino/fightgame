@@ -152,9 +152,6 @@ class NewFight
                             $return['define'][$objKey]['hurt'][$key]['define_hurt'] = $defineMakeHurt;
                         }
                     }
-            		//todo 此处守义防御法术的处理过程
-            		//todo 攻击效果-对于攻结果加成
-            		//todo 此处定义防御法术的攻击效果累加
                     //造成伤害
                     $defineMemberObj->consumeBlood($hurt);
                     if($defineMakeHurt > 0) {
@@ -167,6 +164,7 @@ class NewFight
                 self::dealTeamMemberDead($defineMemberObj);
             } else {
                 $attribute = NewSkill::skillAttribute();
+//                var_dump($attribute);
                 foreach ($attribute as $attributeId => $changeValue) {
                     if($attributeId == ConfigDefine::USER_ATTRIBUTE_BLOOD) {
                         $defineMemberObj->addBlood($changeValue);
@@ -176,6 +174,7 @@ class NewFight
                     }
                 }
             }
+            self::$_attackSkillInfo['round'] = NewSkill::getSkillRound();
             $return['define'][$objKey]['current_blood'] = $defineMemberObj->getCurrentBlood();
             $return['define'][$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
             $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
@@ -376,7 +375,7 @@ class NewFight
             $str = $fightInfo['attack']['user_id'].' sleep ';
             $str .= '<br />--------------------------------<br />';
         }else {
-            $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].' ===> ';
+            $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].'-round:'.$fightInfo['attack']['round'].' ===> ';
             foreach ((array)$fightInfo['define'] as $define) {
                 $str .= $define['user_id'].'<br/>';
                 $str .= 'attack_blood:'.$fightInfo['attack']['current_blood'].' attack_magic:'.$fightInfo['attack']['current_magic'].'<br/>';
@@ -410,6 +409,7 @@ class NewFight
         $attackInfo['current_magic'] = $attackMemberObj->getCurrentMagaic();
         $attackInfo['skill_id']      = self::$_attackSkillInfo['skill_id'];
         $attackInfo['skill_level']      = self::$_attackSkillInfo['skill_level'];
+        $attackInfo['round']        = self::$_attackSkillInfo['round'];
         return $attackInfo;
     }
 
