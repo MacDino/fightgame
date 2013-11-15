@@ -1,6 +1,9 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
+
+echo getReward();
+
 $userId     = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $copyLevId  = isset($_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
 $copyId     = isset($_REQUEST['copy_id']) ? $_REQUEST['copy_id'] : 0;
@@ -61,7 +64,7 @@ if(isset($_REQUEST['colors'])) {
  */
 try {
     $monster            = Copy::getMonster($copyLevId , $userId);
-    $monsterFightTeam[] = Copy_Fight::createMonsterFightable($monster, 'copy');
+    $monsterFightTeam[] = Copy_Fight::createMonsterFightable($monster);
 	$monsterFightInfo = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
     $data['participant']['monster'][]  = $monsterFightInfo;
 
@@ -114,7 +117,9 @@ try {
 		 * 每层完成时,领取奖励
 		 */
 		if ($win_monster_count == $copy['win_monster_num']) {
-				
+			//记录通关次数
+			$passedTime = $userLastCopyResult['passed_time'] + 1
+			getReward($userId, $userInfo['user_level']);
 		}
 
         User_Info::addExperience($userId, $data['result']['experience']);
@@ -148,5 +153,46 @@ $result = array(
     'use_time'  => $fightUseTime,
     'last_fight_result' => $data,
 	'win_monster_num'   => $win_monster_count,
+	'passed_time'	=> $passedTime,
 );
 Copy_FightResult::create($result);
+
+
+
+
+
+
+
+
+
+
+function getReward($userId, $level){
+	$reward = array(
+		'double','pk','ingot','money','pill','equip'
+	);	
+	$k = array_rand($reward);
+	$result = $reward[$k];
+
+	switch ($result) {
+		case 'double':
+			$prop_id = 1;	
+			$res = Rewardtype::props($userId, 1, $prop_id);
+			break;
+		case 'pk':
+			$prop_id = 2;	
+			$res = Rewardtype::props($userId, 1, $prop_id);
+			break;
+		case 'ingot':
+			$res = Rewardtype::ingot($userId, 10);
+			break;
+		case 'money':
+			$res = Rewardtype::money($userId, 5000);
+			break;
+		case 'pill':
+			$res = Rewardtype::pillStone($userId);
+			break;
+		case 'equip':
+			$res = Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, $level);
+			break;
+	}
+}

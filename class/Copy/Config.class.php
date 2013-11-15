@@ -85,6 +85,7 @@ class Copy_Config{
 				'race_id'		=> $monsterRaceId,
 				'grow_per'		=> Monster::getGrowPercentage($mapId),
 			);
+			$monster += $monsterSkill = self::getMonsterSkill($monster, $levelInfo['skill_rate']);
 			return $monster;
 		}
 		return false;
@@ -93,53 +94,50 @@ class Copy_Config{
 	/*
 	 * 根据技能ID获取技能分组和释放概率
 	 */
-	public static function getMonsterSkill($monster){
+	public static function getMonsterSkill($monster, $rateConfig){
 		$skillIds = explode (',', $monster['skills']);
 		$skillGroup = array();
+		$skillLev = $monster['level'];
+		$rateArray = json_decode($rateConfig, TRUE);
+
+		$attackSkill = NewSkill::getAttackSkillList();
+		$defineSkill = NewSkill::getDefineSkillList();
+		$passiveSkill = NewSkill::getPassiveSkillList();
+
 		foreach ($skillIds as $v) {
-			$group = Skill::getSkillGroupBySkillCode($v);	
-			if($group == Skill::SKILL_GROUP_WLGJ || $group == Skill::SKILL_GROUP_FSGJ){
-				$skillGroup['attack'][] = $v;
+			$returnSkills[$v] = $skillLev; 
+			foreach ($attackSkill as $v2) {
+				if (in_array($v, $v2)) {
+					$skillGroup['attack'][] = $v;
+				}
 			}
-			if($group == Skill::SKILL_GROUP_FYJN){
-				$skillGroup['defense'][] = $v;
+			if (in_array($v, $defineSkill)) {
+				$skillGroup['define'][] = $v;
 			}
-			if($group == Skill::SKILL_GROUP_BDJN){
+			if (in_array($v, $passiveSkill)) {
 				$skillGroup['passive'][] = $v;
 			}
 		}
 
-		$ret = array('attack' => array(), 'defense' => array(), 'passive' => array());  				
-		$skill_rate_list    = self::_getSkillRate($monster);
-
-		foreach ($ret as $skill_type => &$skills) {
-
-			$min_count = self::MONSTER_SKILL_RAND_START;
-			$max_count = ($skill_type == 'passive') ? count($skillGroup[$skill_type]) : 5;
-
-			$skill_count = mt_rand($min_count, $max_count);  
-			$copy_skills = $skillGroup[$skill_type];
-			if (!$copy_skills) {
-				continue;	
-			}
-			shuffle($copy_skills);		
-			$rand_skills = array_slice($copy_skills, 0, $skill_count);
-			$rand_skills = array_flip($rand_skills);
-			$min_skill_level = max(1, $monster['level'] - 10);
-			$max_skill_level = $monster['level'] + 10;
-			foreach ($rand_skills as $k => $v){
-				$rand_skills[$k] = mt_rand($min_skill_level, $max_skill_level);
-			}
-			$skills = array(
-				'list' => $rand_skills,
-			);	
-			//获取技能概率
-			$rand_skill_count = count($rand_skills);
-			foreach ($rand_skills as $skill => $skillV) {
-				$skills['rate'][$skill] = $skill_rate_list[$skill_type][$rand_skill_count];
+		$result['have_skillids'] = $returnSkills;
+		empty($skillGroup) && $skillGroup = array();
+		foreach ($skillGroup as $k => $v) {
+			foreach ($v as $skill) {
+				foreach ($attackSkill as $v2) {
+					if (in_array($skill, $v2)) {
+						$result['skill_rates'][$k][$skill] = $rateArray['attack'];
+					}
+				}
+				if (in_array($skill, $defineSkill)) {
+					$result['skill_rates'][$k][$skill] = $rateArray['define'];
+				}
+				if (in_array($skill, $passiveSkill)) {
+					$result['skill_rates'][$k][$skill] = $rateArray['passive'];
+				}
 			}
 		}
-		return $ret;
+		//print_r($result);
+		return $result;
 	}
 
 
@@ -166,16 +164,19 @@ class Copy_Config{
 		);
 		$monsters = MySql::select(self::TABLE_NAME_CONFIG, $where);	
 		foreach ($monsters as $k => $v) {
-			$monsters[$k]['level'] = $level;
+			$returnMonster[$k]['level'] = $level;
 			$mapMonster = MySql::selectOne('map_monster', array('monster_id' => $v['monster_id']));
-			$monster[$k]['race_id'] = $mapMonster['race_id'];
+			$returnMonster[$k]['race_id'] = $mapMonster['race_id'];
 			//技能和释放概率
-			$monster[$k]= self::getGeneralMonsterSkill($v, $level, $mapMonster['race_id']);
-			$monster[$k]['prefix']	= $v['monster_prefix'];
-			$monster[$k]['suffix']	= $v['monster_suffix'];
+			$returnMonster[$k]['prefix']	= $v['monster_prefix'];
+			$returnMonster[$k]['suffix']	= $v['monster_suffix'];
+
+			$skills = self::getGeneralMonsterSkill($v, $level, $mapMonster['race_id']);
+			$returnMonster[$k] += $skills;
+
 		}
-		//print_r($monster);
-		return $monster;
+		//print_r($returnMonster);
+		return $returnMonster;
 	} 
 
 	/*
