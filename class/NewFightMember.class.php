@@ -340,4 +340,17 @@ class NewFightMember
         }
         return true;
     }
+
+    public function delEffectByFlag($flag, $skillId) {
+        if(isset($this->_currentSkillEffect[$flag][$skillId])) {
+            unset($this->_currentSkillEffect[$flag][$skillId]);
+        }
+        return true;
+    }
+
+    public function reAlive() {
+        $this->_currentBlood = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
+		$this->_currentMagic = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+        $this->_currentSkillEffect = array();
+    }
 }

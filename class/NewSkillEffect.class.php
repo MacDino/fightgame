@@ -96,8 +96,8 @@ class NewSkillEffect extends NewSkill
     private static function _setSkillEffect1207()
     {
     	$round = NewSkill::getSkillRound();
-    	self::_setAttackSkillEffect(self::$_attackMemberObj, $round);
-    	self::_setDefineSkillEffect(self::$_attackMemberObj, $round);
+    	self::_setAttackSkillEffect(self::$_defineMemberObj, $round);
+    	self::_setDefineSkillEffect(self::$_defineMemberObj, $round);
     }
     //减少20%物理防御
     private static function _skillEffectAttribute1207($skillInfo, $memberAttribute)

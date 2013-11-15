@@ -36,15 +36,27 @@ class NewFight
                     if($attackMemberObj->isDied()) {
                         continue;
                     }
+                    $sleepInfo = $attackMemberObj->getEffect('sleep');
+                    if($sleepInfo[1206]['round'] >= 1) {
+                        $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
+                        $fightInfo['attack']['sleep'] = 1;
+                        self::_report($fightInfo);
+                        self::dealEffeckRound($attackMemberObj, 'sleep');
+                        continue;
+                    }
                     //获取攻击队员使用的技能
                     $attackSkillInfo = $attackMemberObj->getMemberAttackSkill();
                     NewSkill::begin($attackMemberObj, $attackSkillInfo);
                     self::$_attackSkillInfo = NewSkill::getAttackSkillConfig();
-//                    var_dump(self::$_attackSkillInfo);
                     //判断攻击队员是否可以使用此技能
                     if(!NewSkill::skillEffectIsAttackCanUseThisSkill()) {
+                        $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
+                        $fightInfo['attack']['attack_fail'] = 1;
+                        self::_report($fightInfo);
+                        self::dealEffeckRound($attackMemberObj, 'attack');
                         continue;
                     }
+                    self::dealEffeckRound($attackMemberObj, 'attack');
                     //获取防守队员
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
@@ -86,7 +98,16 @@ class NewFight
             }
             //判断攻守方是否有一方处于死亡状态
             if($attackMemberObj->isDied()) break;
-            if($defineMemberObj->isDied()) continue;
+            if($defineMemberObj->isDied()) {
+                //复活
+                if(self::$_attackSkillInfo['skill_id'] == 1221) {
+                    $defineMemberObj->reAlive();
+                    break;
+                }
+                continue;
+            }
+            NewSkill::setDefineObj($defineMemberObj);
+            NewSkill::skillEffectMagicAndBlood();
             $return['define'][$objKey] = array(
                 'user_id' => $defineMemberObj->getMemberId(),
             );
@@ -95,7 +116,6 @@ class NewFight
                 continue;
             }
 
-            NewSkill::setDefineObj($defineMemberObj);
             if(self::$_attackSkillInfo['is_have_hurt']) {
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
@@ -118,6 +138,8 @@ class NewFight
                         NewSkill::setDefineObj($attackMemberObj);
                         $defineSkillHurt = NewSkill::getAttack();
                         $defineMakeHurt  = $defineSkillHurt[0]['hurt'];
+                        NewSkill::begin($attackMemberObj, $attackMemberObj->getMemberAttackSkill());
+                        NewSkill::setDefineObj($defineMemberObj);
                     }elseif ($defineSkillId == 1217) {
                         $isMagic = FALSE;
                         $hurt    = $isMagic ? ($hurt * 0.5) : $hurt * 0.7;
@@ -157,10 +179,13 @@ class NewFight
             $return['define'][$objKey]['current_blood'] = $defineMemberObj->getCurrentBlood();
             $return['define'][$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
             $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
-            NewSkill::getSkillRound();
             //todo 此处定义攻击法术的攻击效果累加
+            self::dealEffeckRound($defineMemberObj, 'define');
             NewSkill::setSkillEffect();
-            error_log(print_r($defineMemberObj->getEffect('define'),1),3,'/tmp/lishengwei.log');
+            error_log(print_r($defineMemberObj->getMemberId(),true),3,'/tmp/lishengwei.log');
+            error_log(print_r($defineMemberObj->getEffect('attack'),true),3,'/tmp/lishengwei.log');
+            error_log(print_r($defineMemberObj->getEffect('define'),true),3,'/tmp/lishengwei.log');
+            error_log("\n",3,'/tmp/lishengwei.log');
             if(self::$_attackSkillInfo['hit_member_num'] >= 1) {
                 self::$_attackSkillInfo['hit_member_num'] = self::$_attackSkillInfo['hit_member_num'] - 1;
             }
@@ -344,28 +369,36 @@ class NewFight
 	}
 
     private static function _report($fightInfo) {
-        $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].' ===> ';
-        foreach ((array)$fightInfo['define'] as $define) {
-            $str .= $define['user_id'].'<br/>';
-            $str .= 'attack_blood:'.$fightInfo['attack']['current_blood'].' attack_magic:'.$fightInfo['attack']['current_magic'].'<br/>';
-            foreach ((array)$define['hurt'] as $k => $hurt) {
-                if($hurt['is_hit']) {
-                    $str .= 'first['.$hurt['hurt'].']';
-                    if(isset($hurt['define_skill'])) {
-                        $str .= ' define use '.$hurt['define_skill'];
-                        if(isset($hurt['define_hurt'])) {
-                            $str .= ' make attack hurt:'.$hurt['define_hurt'];
-                        } else {
-                            $str .= ' make attack hurt less';
-                        }
-                    }
-                }  else {
-                    $str .= 'not hit, skill miss';
-                }
-                $str .= '<br />';
-            }
-            $str .= 'define_blood:'.$define['current_blood'].' define_magic:'.$define['current_magic'];
+        if($fightInfo['attack']['attack_fail'] == 1) {
+            $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].' can not attack ';
             $str .= '<br />--------------------------------<br />';
+        }if($fightInfo['attack']['sleep'] == 1) {
+            $str = $fightInfo['attack']['user_id'].' sleep ';
+            $str .= '<br />--------------------------------<br />';
+        }else {
+            $str = $fightInfo['attack']['user_id'].' use '.$fightInfo['attack']['skill_id'].' ===> ';
+            foreach ((array)$fightInfo['define'] as $define) {
+                $str .= $define['user_id'].'<br/>';
+                $str .= 'attack_blood:'.$fightInfo['attack']['current_blood'].' attack_magic:'.$fightInfo['attack']['current_magic'].'<br/>';
+                foreach ((array)$define['hurt'] as $k => $hurt) {
+                    if($hurt['is_hit']) {
+                        $str .= 'first['.$hurt['hurt'].']';
+                        if(isset($hurt['define_skill'])) {
+                            $str .= ' define use '.$hurt['define_skill'];
+                            if(isset($hurt['define_hurt'])) {
+                                $str .= ' make attack hurt:'.$hurt['define_hurt'];
+                            } else {
+                                $str .= ' make attack hurt less';
+                            }
+                        }
+                    }  else {
+                        $str .= 'not hit, skill miss';
+                    }
+                    $str .= '<br />';
+                }
+                $str .= 'define_blood:'.$define['current_blood'].' define_magic:'.$define['current_magic'];
+                $str .= '<br />--------------------------------<br />';
+            }
         }
         $str .= '<br />';
         echo $str;
@@ -385,5 +418,20 @@ class NewFight
             return self::teamDiedMember($memberObj->getMemberTeamKey());
         }
         return FALSE;
+    }
+
+    private static function dealEffeckRound(NewFightMember $obj, $flag) {
+        $array = $obj->getEffect($flag);
+        if(is_array($array) && count($array)) {
+            foreach ($array as $skillId => $v) {
+                $round = $v['round'] - 1;
+                if($round <= 0) {
+                    $obj->delEffectByFlag($flag, $skillId);
+                }  else {
+                    $v['round'] = $round;
+                    $obj->setEffect($flag, $skillId, $v);
+                }
+            }
+        }
     }
 }
