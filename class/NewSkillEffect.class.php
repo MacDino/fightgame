@@ -171,7 +171,8 @@ class NewSkillEffect extends NewSkill
     //------1214
     private static function _getSkillEffect1214()
     {
-    	self::_setAttackSkillEffect(self::$_defineMemberObj, 1);
+    	$round = NewSkill::getSkillRound();
+    	self::_setAttackSkillEffect(self::$_defineMemberObj, $round);
     }
     //输出伤害减为30%
     private static function _skillEffectHurt1214($skillInfo, $hurt)
