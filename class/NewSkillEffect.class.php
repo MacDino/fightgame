@@ -152,7 +152,7 @@ class NewSkillEffect extends NewSkill
     	}
     }
 	//------1216
-    private static function _getSkillEffect1216()
+    private static function _setSkillEffect1216()
     {
     	$round = NewSkill::getSkillRound();
     	self::_setAttackSkillEffect(self::$_attackMemberObj, $round);
@@ -164,12 +164,12 @@ class NewSkillEffect extends NewSkill
     	return $hurt;
     }
     //------1219
-    private static function _getSkillEffect1219()
+    private static function _setSkillEffect1219()
     {
     	self::_setSleepSkillEffect(self::$_attackMemberObj, 1);
     }
     //------1214
-    private static function _getSkillEffect1214()
+    private static function _setSkillEffect1214()
     {
     	$round = NewSkill::getSkillRound();
     	self::_setAttackSkillEffect(self::$_defineMemberObj, $round);
@@ -190,7 +190,7 @@ class NewSkillEffect extends NewSkill
     	}
     }
     //------1222
-    private static function _getSkillEffect1222()
+    private static function _setSkillEffect1222()
     {
     	$round = NewSkill::getSkillRound();
     	self::_setAttackSkillEffect(self::$_defineMemberObj, $round);
