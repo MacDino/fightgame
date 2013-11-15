@@ -60,7 +60,9 @@ while($monsterGroupDeadCount<2){
 		} else {
 			$monster            = Copy_Config::getGroupMonsterByCopyId($copyId, 2, $userInfo['user_level']);
 		}
-		$monsterFightTeam[] = Copy_Fight::createMonsterFightable($monster, 'copy');
+		foreach ($monster as $v) {
+			$monsterFightTeam[] = Copy_Fight::createGeneralMonsterFightable($v);
+		}
 		$monsterFightInfo = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
 		$data['participant']['monster'][]  = $monsterFightInfo;
 
@@ -103,7 +105,6 @@ while($monsterGroupDeadCount<2){
 			$monsterGroupDeadCount++;
 			/*
 			 * 打赢时，怪物计数
-			 * 每天打过100个怪，则通关,启动下一个副本
 			 * 否则重新计数
 			 */
 			if(isset($isTodayFight) && $isTodayFight) {
@@ -116,16 +117,18 @@ while($monsterGroupDeadCount<2){
 			 * 每层完成时,领取奖励
 			 */
 			if ($win_monster_count == $copy['win_monster_num']) {
-					
+				//记录通关次数
+				$passedTime = $userLastCopyResult['passed_time'] + 1
+				getReward($userId, $copyId);
 			}
 
-			User_Info::addExperience($userId, $data['result']['experience']);
+			User_Info::addExperience($userId, $data['result']['experience'] * 2);
 			$isLevelUp = User_Info::isLevel($userId);
 			if($isLevelUp) {
 				$data['result']['level_up'] = $isLevelUp;
 			}
 
-			User_Info::addMoney($userId, $data['result']['money']);
+			User_Info::addMoney($userId, $data['result']['money'] * 2);
 
 			if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
 				$getEquipSetting = Fight_Setting::isEquipMentCan($userId);
@@ -151,5 +154,52 @@ $result = array(
     'use_time'  => $fightUseTime,
     'last_fight_result' => $data,
 	'win_monster_num'   => $win_monster_count,
+	'passed_time'	=> $passedTime,
 );
 Copy_FightResult::create($result);
+
+
+
+
+
+function getReward($userId, $copyId){
+	$copySecond = array (
+		EQUIP_COLOUR_BLUE => EQUIP_TYPE_ARMS,
+		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_ARMS,
+		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_ARMS,
+		EQUIP_COLOUR_BLUE => EQUIP_TYPE_CLOTHES,
+		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_CLOTHES,
+		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_CLOTHES,
+	);	
+	$copyThird = array(
+		EQUIP_COLOUR_BLUE => EQUIP_TYPE_HELMET,
+		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_HELMET,
+		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_HELMET,
+		EQUIP_COLOUR_BLUE => EQUIP_TYPE_NECKLACE,
+		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_NECKLACE,
+		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_NECKLACE,
+	);
+	$copyForth = array (
+		EQUIP_COLOUR_BLUE => EQUIP_TYPE_BELT,
+		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_BELT,
+		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_BELT,
+		EQUIP_COLOUR_BLUE => EQUIP_TYPE_SHOES,
+		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_SHOES,
+		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_SHOES,
+	);
+	switch ($copyId) {
+		case 2:
+			$equipColour = array_rand($copySecond);
+			$equipType = $copySecond[$equipColour];
+			break;
+		case 3:
+			$equipColour = array_rand($copyThird);
+			$equipType = $copyThird[$equipColour];
+			break;
+		case 4:
+			$equipColour = array_rand($copyForth);
+			$equipType = $copyForth[$equipColour];
+			break;
+	}
+	Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType);
+}
