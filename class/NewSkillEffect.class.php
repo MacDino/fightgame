@@ -185,7 +185,7 @@ class NewSkillEffect extends NewSkill
     	$res =  self::$_attackMemberObj->consumeBlood($skillInfo['skill_level'] + 25);
     	if($res)
     	{
-    		return array(ConfigDefine::USER_ATTRIBUTE_BLOOD => -$skillInfo['skill_level'] + 25);
+    		return array(ConfigDefine::USER_ATTRIBUTE_BLOOD => -($skillInfo['skill_level'] + 25));
     	}
     }
     //------1222
