@@ -208,10 +208,28 @@ class Monster
 			//获取技能概率
 			$rand_skill_count = count($rand_skills);
             foreach ($rand_skills as $skill => $skillV) {
-				//新技能等级为怪物等级
                 $skills['rate'][$skill] = $skillLev;
             }
 		}
+		/*
+		 *  将老格式转换为新格式
+		 */
+		$tmp = array ();
+		foreach ($ret as $k => $v) {
+			$tmp[] = $v['list'];
+			$__rate[$k] = $v['rate'];
+		}
+		empty($tmp) && $tmp = array();
+		foreach($tmp as $key=>$val){
+			empty($val) && $val = array();
+			foreach($val as $key1=>$val1){
+				$__skills[$key1]=$val1;
+			}
+		}
+		$result['have_skillids'] = $__skills;
+		$result['skill_rates'] = $__rate;
+		//print_r($ret);
+		//print_r($result);
 		return $ret;
 	}
 
@@ -251,8 +269,8 @@ class Monster
 
 
     /**
+	 * 新版不对技能加成
      * 对怪物的成长属性进行技能的加成
-     * **/
 	public static function attributeWithSkill($attribute, $skill, $monster) {
 		$skill_list = array();
         if(is_array($skill)) {
@@ -264,6 +282,7 @@ class Monster
         }
         return Monster_SkillConfig::getAttributeBySkillInfos($attribute, $skill_list, $monster);
 	}
+     * **/
 
 	/****
      * 多余属性随机分配

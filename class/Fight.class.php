@@ -205,8 +205,6 @@ class Fight {
 	public static function createMonsterFightable($monster, $marking = '') {
 		$skill      = Monster::getMonsterSkill($monster);
 		$attribute  = Monster::getMonsterAttribute($monster);
-		//技能加成后的属性
-		$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
 		return new Fightable($monster['level'], $attribute, $skill, array('monster_id' => $monster['monster_id'],'marking' => $marking));
 	}
 
