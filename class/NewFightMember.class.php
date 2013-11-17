@@ -7,8 +7,9 @@ class NewFightMember
 	private $_memberAttribute = array();//当前队员的属性
 	private $_memberLevel = 0;//当前队员的级别
 	private $_memberId = 0;//当前队员的级别
+    private $_mark      = '';
 
-	private $_currentSkillEffect = array();//当前队员所受技能的影响效果
+    private $_currentSkillEffect = array();//当前队员所受技能的影响效果
 	private $_memberSkill = array();//当前队员所拥有的技能
     private $_memberSkillRate = array(); //当前队员所拥有的技能的释放概率
     private $_memberRace = NULL;//当前队员的种族
@@ -66,6 +67,7 @@ class NewFightMember
 		$this->_setPassiveSkill($memberInfo['have_skillids']);
         $this->_setAttackSkillRate($memberInfo['skill_rates']['attack']);
         $this->_setDefineSkillRate($memberInfo['skill_rates']['define']);
+        $this->_mark = $memberInfo['mark'] ? $memberInfo['mark'] : '';
 	}
 
     //根据技能的释放概率进行技能的选择
@@ -352,5 +354,9 @@ class NewFightMember
         $this->_currentBlood = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
 		$this->_currentMagic = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
         $this->_currentSkillEffect = array();
+    }
+
+    public function getMark() {
+        return $this->_mark;
     }
 }

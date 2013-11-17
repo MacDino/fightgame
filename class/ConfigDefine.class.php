@@ -18,11 +18,11 @@ class ConfigDefine
     CONST USER_ATTRIBUTE_DEFENSE      	= 1112;//防御 - 成长属性
     CONST USER_ATTRIBUTE_DODGE        	= 1113;//躲闪 - 成长属性
     CONST USER_ATTRIBUTE_LUCKY        	= 1114;//幸运 - 成长属性
-    
+
      //其它
 	CONST RELEASE_PROBABILITY 		  	= 1301;//释放概率
 
-    
+
     //战斗动作
     CONST PET                           = 7009;//人宠
     CONST YOU							= 7100;//你
@@ -49,9 +49,25 @@ class ConfigDefine
     CONST ZHUANGTAI                     = 7128;//状态
     CONST BAOJI                         = 7129;//暴击
     CONST DI                            = 7130;//第
+    const JINENG                        = 7131;//技能
+    const MINGZHONG                     = 7132;//命中
+    const WUFA                          = 7133;//无法
+    const WULI                          = 7134;//物理
+    CONST FASHU                         = 7135;//法术
+    CONST CHIXU                         = 7136;//持续
+    const ZENGJIA                       = 7137;//增加
+    const XUE                           = 7138;//血
+    CONST LAN                           = 7139;//蓝
+    const LINGLI                        = 7140;//灵力
+    const SHANGHAISHUXING               = 7141;//伤害属性
+    const FENGYIN                       = 7142;//封印
+    CONST JIECHU                        = 7143;//解除
+    CONST FUHUO                         = 7144;//复活
 
-           
-	//资质类型
+
+
+
+            //资质类型
 	CONST APTITUDE_TYPE_ATTACK  =  8101;	//攻击资质
 	CONST APTITUDE_TYPE_DEFENSE =  8102; 	//防御资质
 	CONST APTITUDE_TYPE_FASHU   =  8103; 	//法术资质
@@ -165,7 +181,7 @@ class ConfigDefine
 			Monster::MONSTER_PREFIX_ORDINARY => '普通的',
 			Monster::MONSTER_PREFIX_POWERFUL => '强大的',
 			Monster::MONSTER_PREFIX_QUICK    => '敏捷的',
-		
+
 			Monster::MONSTER_SUFFIX_BOSS         => 'Boss',
 			Monster::MONSTER_SUFFIX_SACRED       => '圣灵',
 			Monster::MONSTER_SUFFIX_UNKNOWN      => '领主',
@@ -177,7 +193,7 @@ class ConfigDefine
 		);
 		return $res;
 	}
-	
+
 	/** 装备 */
 	public static function equipList(){
 		$res = array(
@@ -187,26 +203,26 @@ class ConfigDefine
 			Equip::EQUIP_COLOUR_BLUE 	=> '蓝色',
 			Equip::EQUIP_COLOUR_PURPLE 	=> '紫色',
 			Equip::EQUIP_COLOUR_ORANGE 	=> '橙色',
-						
+
 			Equip::EQUIP_TYPE_ARMS 		=> '武器',
 			Equip::EQUIP_TYPE_HELMET 	=> '头盔',
 			Equip::EQUIP_TYPE_NECKLACE 	=> '项链',
 			Equip::EQUIP_TYPE_CLOTHES 	=> '衣服',
 			Equip::EQUIP_TYPE_BELT 		=> '腰带',
 			Equip::EQUIP_TYPE_SHOES 	=> '鞋子',
-			
+
 			Equip::EQUIP_QUALITY_GENERAL 	=> '普通',
 			Equip::EQUIP_QUALITY_ADVANCED 	=> '进阶',
 			Equip::EQUIP_QUALITY_SUBLIME 	=> '升华',
 			Equip::EQUIP_QUALITY_HOLY 		=> '圣品',
-			
+
 			Equip::EQUIP_BASE_ATTRIBUTE_GENERAL => '普通',
 			Equip::EQUIP_BASE_ATTRIBUTE_HIGH 	=> '高',
 			Equip::EQUIP_BASE_ATTRIBUTE_VH 		=> '很高',
 		);
 		return $res;
 	}
-	
+
 	/** 内丹 */
 	public static function pillList(){
 		$res = array(
@@ -227,7 +243,7 @@ class ConfigDefine
 			self::APTITUDE_TYPE_ATTACK  => '攻击型',
 			self::APTITUDE_TYPE_DEFENSE => '防御型',
 			self::APTITUDE_TYPE_FASHU   => '法术型',
-		);	
+		);
 		return $res;
 	}
 
@@ -240,8 +256,8 @@ class ConfigDefine
 			self::APTITUDE_TYPE_ATTACK  => self::getAttackAptitudeConfig($mapId),
 			self::APTITUDE_TYPE_DEFENSE => self::getDefenseAptitudeConfig($mapId),
 			self::APTITUDE_TYPE_FASHU   => self::getFashuAptitudeConfig($mapId),
-		);	
-		return $res;	
+		);
+		return $res;
 	}
 
 	/*
@@ -274,7 +290,7 @@ class ConfigDefine
 				'formule'	 => 1000 + ($mapId - 1)	* 30,
 			),
 		);
-		return $config;	
+		return $config;
 	}
 	/*
 	 * 获取防御型资质基础值和公式
@@ -306,7 +322,7 @@ class ConfigDefine
 				'formule'	 => 1000 + ($mapId - 1)	* 30,
 			),
 		);
-		return $config;	
+		return $config;
 	}
 	/*
 	 * 获取法术型资质基础值和公式
@@ -338,6 +354,6 @@ class ConfigDefine
 				'formule'	 => 1000 + ($mapId - 1)	* 30,
 			),
 		);
-		return $config;	
+		return $config;
 	}
 }
