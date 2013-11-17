@@ -203,46 +203,69 @@ class NewSkill
 	//获取防御技能列表
 	public static function getDefineSkillList($raceId = NULL)
 	{
-		$skillList =  array(
-				User_Race::RACE_HUMAN => array(
-						self::SKILL_HUMAN_FY_FJ,
-				),
-				User_Race::RACE_TSIMSHIAN => array(
-						self::SKILL_TSIMSHIAN_FY_ZJ,
-				),
-				User_Race::RACE_DEMON => array(
-						self::SKILL_DEMON_FY_FZ,
-				),
-		);
-		return isset($skillList[$raceId])?$skillList[$raceId]:$skillList;
+		return array(
+				self::SKILL_HUMAN_FY_FJ,
+				self::SKILL_TSIMSHIAN_FY_ZJ,
+				self::SKILL_DEMON_FY_FZ,
+				);
+		
+// 		$skillList =  array(
+// 				User_Race::RACE_HUMAN => array(
+// 						self::SKILL_HUMAN_FY_FJ,
+// 				),
+// 				User_Race::RACE_TSIMSHIAN => array(
+// 						self::SKILL_TSIMSHIAN_FY_ZJ,
+// 				),
+// 				User_Race::RACE_DEMON => array(
+// 						self::SKILL_DEMON_FY_FZ,
+// 				),
+// 		);
+// 		return isset($skillList[$raceId])?$skillList[$raceId]:$skillList;
 	}
 	//获取攻击技能列表
 	public static function getAttackSkillList($raceId = NULL)
 	{
-		$skillList =  array(
-				User_Race::RACE_HUMAN => array(
-						self::SKILL_HUMAN_GJ_DTWLGJ,
-						self::SKILL_HUMAN_GJ_WGK,
-						self::SKILL_HUMAN_GJ_FGK,
-						self::SKILL_HUMAN_GJ_JL,
-						self::SKILL_HUMAN_GJ_DJX,
-				),
-				User_Race::RACE_TSIMSHIAN => array(
-						self::SKILL_TSIMSHIAN_GJ_DTFSGJ,
-						self::SKILL_TSIMSHIAN_GJ_QTFSGJ,
-						self::SKILL_TSIMSHIAN_GJ_XR,
-						self::SKILL_TSIMSHIAN_GJ_QJX,
-						self::SKILL_TSIMSHIAN_GJ_QJSH,
-				),
-				User_Race::RACE_DEMON => array(
-						self::SKILL_DEMON_GJ_DTGJ,
-						self::SKILL_DEMON_GJ_QTGJ,
-						self::SKILL_DEMON_GJ_JCK,
-						self::SKILL_DEMON_GJ_FH,
-						self::SKILL_DEMON_GJ_QJL,
-				),
-		);
-		return isset($skillList[$raceId])?$skillList[$raceId]:$skillList;
+		return array(
+				self::SKILL_HUMAN_GJ_DTWLGJ,
+				self::SKILL_HUMAN_GJ_WGK,
+				self::SKILL_HUMAN_GJ_FGK,
+				self::SKILL_HUMAN_GJ_JL,
+				self::SKILL_HUMAN_GJ_DJX,
+				self::SKILL_TSIMSHIAN_GJ_DTFSGJ,
+				self::SKILL_TSIMSHIAN_GJ_QTFSGJ,
+				self::SKILL_TSIMSHIAN_GJ_XR,
+				self::SKILL_TSIMSHIAN_GJ_QJX,
+				self::SKILL_TSIMSHIAN_GJ_QJSH,
+				self::SKILL_DEMON_GJ_DTGJ,
+				self::SKILL_DEMON_GJ_QTGJ,
+				self::SKILL_DEMON_GJ_JCK,
+				self::SKILL_DEMON_GJ_FH,
+				self::SKILL_DEMON_GJ_QJL,
+				);
+// 		$skillList =  array(
+// 				User_Race::RACE_HUMAN => array(
+// 						self::SKILL_HUMAN_GJ_DTWLGJ,
+// 						self::SKILL_HUMAN_GJ_WGK,
+// 						self::SKILL_HUMAN_GJ_FGK,
+// 						self::SKILL_HUMAN_GJ_JL,
+// 						self::SKILL_HUMAN_GJ_DJX,
+// 				),
+// 				User_Race::RACE_TSIMSHIAN => array(
+// 						self::SKILL_TSIMSHIAN_GJ_DTFSGJ,
+// 						self::SKILL_TSIMSHIAN_GJ_QTFSGJ,
+// 						self::SKILL_TSIMSHIAN_GJ_XR,
+// 						self::SKILL_TSIMSHIAN_GJ_QJX,
+// 						self::SKILL_TSIMSHIAN_GJ_QJSH,
+// 				),
+// 				User_Race::RACE_DEMON => array(
+// 						self::SKILL_DEMON_GJ_DTGJ,
+// 						self::SKILL_DEMON_GJ_QTGJ,
+// 						self::SKILL_DEMON_GJ_JCK,
+// 						self::SKILL_DEMON_GJ_FH,
+// 						self::SKILL_DEMON_GJ_QJL,
+// 				),
+// 		);
+// 		return isset($skillList[$raceId])?$skillList[$raceId]:$skillList;
 	}
 
 	//获取被动技能列表
