@@ -35,7 +35,7 @@ try {
     //基本属性
     $attributeBaseList = json_decode($info['attribute_base_list'], TRUE);
     foreach($attributeBaseList as $k=>$v){
-        $attributeBaseList[$k] = $v * (1 + $data['forge_level'] * 0.015);
+        $attributeBaseList[$k] = $v * ($data['forge_level'] * 0.015);
         $attributeBaseList[$k] = ceil($attributeBaseList[$k]);
     }
     $data['attribute_base_list'] = $attributeBaseList;
@@ -44,7 +44,7 @@ try {
     //附加属性
     $attributeList = json_decode($info['attribute_list'], TRUE);
     foreach($attributeList as $k=>$v){
-        $attributeList[$k] = $v * (1 + $data['forge_level'] * 0.01);
+        $attributeList[$k] = $v * ($data['forge_level'] * 0.01);
         $attributeList[$k] = ceil($attributeList[$k]);
     }
     $data['attribute_list'] = $attributeList;

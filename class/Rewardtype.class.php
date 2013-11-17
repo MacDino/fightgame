@@ -61,7 +61,7 @@ class Rewardtype{
 			
 			$result[] = $res;
 		//}
-		return $res;
+		return $result;
 	}
 	
 	/** @desc 金币 */

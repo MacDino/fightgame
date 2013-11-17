@@ -34,10 +34,10 @@ if($needMoney > $nowMoney){
 
 try {
 	if($prop){
-		$num = User_Property::getPropertyNum($userId, 6308);
+		$num = User_Property::getPropertyNum($info['user_id'], 8);
 		if($num){
-			$res = Equip_Info::forge($equipId, 6308);//道具改变几率
-			User_Property::updateNumDecreaseAction($userId, 6308);//减少道具数量
+			$res = Equip_Info::forge($equipId, 8);//道具改变几率
+			User_Property::updateNumDecreaseAction($info['user_id'], 8);//减少道具数量
 		}else{
 			$code = 140201;
 		    $msg = '你的锻造符咒不够用了';
@@ -46,6 +46,7 @@ try {
 	}else{
 		$res = Equip_Info::forge($equipId);
 	}
+	
     
     User_Info::subtractBindMoney($info['user_id'], $needMoney);
     $data['status'] = $res;
