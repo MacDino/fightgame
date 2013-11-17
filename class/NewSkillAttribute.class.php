@@ -22,23 +22,29 @@ class NewSkillAttribute extends NewSkill
 	{
 		return array(
 				ConfigDefine::USER_ATTRIBUTE_BLOOD =>
-				(self::$_attackSkillInfo['skill_level']*4.5 + (self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt())*2/3)*NewSkillHurt::attackAddition(self::$_attackMemberObj->getMemberId()),
+				(self::$_attackSkillInfo['skill_level']*4.5 + (self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HIT]/3 + self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HURT])*2/3)*NewSkillHurt::attackAddition(self::$_attackMemberObj->getMemberId()),
 				);
 	}
 	private static function _1215()
 	{
 		return array(
 				ConfigDefine::USER_ATTRIBUTE_BLOOD =>
-					(self::$_attackSkillInfo['skill_level']*3 + (self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt())*1/3
-						+ self::$_attackMemberObj->getMemberAttributePsychic()*1/3)*(1 - (self::$_attackSkillInfo['hit_member_num'] -1)/20)*NewSkillHurt::attackAddition(self::$_attackMemberObj->getMemberId())
+					(self::$_attackSkillInfo['skill_level']*3 + (self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HIT]/3 + self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HURT])*1/3
+						+ self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]*1/3)*(1 - (self::$_attackSkillInfo['hit_member_num'] -1)/20)*NewSkillHurt::attackAddition(self::$_attackMemberObj->getMemberId())
 		);
 	}
 	private static function _1221()
 	{
 		return array(
 				ConfigDefine::USER_ATTRIBUTE_BLOOD =>
-				(self::$_attackSkillInfo['skill_level']*3 + (self::$_attackMemberObj->getMemberAttributeHit()/3 + self::$_attackMemberObj->getMemberAttributeHurt())*1/6
+				(self::$_attackSkillInfo['skill_level']*3 + (self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HIT]/3 + self::$_attackMemberAttribute[ConfigDefine::USER_ATTRIBUTE_HURT])*1/6
 						+ self::$_attackMemberObj->getMemberAttributePsychic()*1/6)
 		);
+	}
+	private static function _1220()
+	{
+		self::$_defineMemberObj->delEffect(NewSkill::SKILL_HUMAN_GJ_WGK);
+		self::$_defineMemberObj->delEffect(NewSkill::SKILL_HUMAN_GJ_FGK);
+		self::$_defineMemberObj->delEffect(NewSkill::SKILL_TSIMSHIAN_GJ_XR);
 	}
 }

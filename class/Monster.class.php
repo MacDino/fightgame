@@ -163,6 +163,7 @@ class Monster
 
     // 获取怪物的技能
 	public static function getMonsterSkill($monster) {
+		$skillLev = $monster['level'];
         //获取配置的技能列表
 		$map_skills_list    = Map_Skill::getAllSkills($monster['map_id']);
 		$must_skills_list   = self::_getMustSkills($monster);
@@ -207,17 +208,69 @@ class Monster
 			//获取技能概率
 			$rand_skill_count = count($rand_skills);
             foreach ($rand_skills as $skill => $skillV) {
-                $skills['rate'][$skill] = $skill_rate_list[$skill_type][$rand_skill_count];
+                $skills['rate'][$skill] = $skillLev;
             }
 		}
-
+		/*
+		 *  将老格式转换为新格式
+		 */
+		$tmp = array ();
+		foreach ($ret as $k => $v) {
+			$tmp[] = $v['list'];
+			$__rate[$k] = $v['rate'];
+		}
+		empty($tmp) && $tmp = array();
+		foreach($tmp as $key=>$val){
+			empty($val) && $val = array();
+			foreach($val as $key1=>$val1){
+				$__skills[$key1]=$val1;
+			}
+		}
+		$result['have_skillids'] = $__skills;
+		$result['skill_rates'] = $__rate;
+		//print_r($ret);
+		//print_r($result);
 		return $ret;
 	}
 
+	/*
+	 * 新版的怪物技能
+	public static function getNewMonsterSkill($monster){
+		$skillLev = $monster['level'];
+		$skills = array (
+			'attack' => array(
+				'list' => array(
+					NewSkill::SKILL_DEFAULT_PT => $skillLev,
+					NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ => $skillLev,
+				),	
+				'rate' => array(
+					
+				),	
+			), 
+			'defense' => array(
+				'list' => array(
+					NewSkill::SKILL_HUMAN_FY_FJ => $skillLev,
+					NewSkill::SKILL_DEMON_FY_FZ => $skillLev,
+					NewSkill::SKILL_TSIMSHIAN_FY_ZJ => $skillLev,
+				),
+				'rate' => array(
+					
+				),	
+			),
+			'passive' => array(
+				'list' => array(),
+				'rate' => array(),
+			),
+		);	
+		$skill_rate_list    = self::_getSkillRate($monster);
+	
+	}
+	 */
+
 
     /**
+	 * 新版不对技能加成
      * 对怪物的成长属性进行技能的加成
-     * **/
 	public static function attributeWithSkill($attribute, $skill, $monster) {
 		$skill_list = array();
         if(is_array($skill)) {
@@ -229,6 +282,7 @@ class Monster
         }
         return Monster_SkillConfig::getAttributeBySkillInfos($attribute, $skill_list, $monster);
 	}
+     * **/
 
 	/****
      * 多余属性随机分配

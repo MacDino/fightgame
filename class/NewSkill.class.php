@@ -1,16 +1,18 @@
-<?php 
+<?php
 class NewSkill
 {
-	protected static $_attackMemberObj = NULL;
+    protected static $_attackMemberObj = NULL;
 	protected static $_defineMemberObj = NULL;
 	protected static $_attackSkillInfo = NULL;
-	
+    protected static $_attackMemberAttribute = array();
+    protected static $_defineMemberAttribute = array();
+
 	private static $_skillList = NULL;
-	
-	
+
+
 	CONST SKILL_CONFIG_TABLE = 'skill_config';
-	
-	
+
+
 	CONST SKILL_DEFAULT_PT 			= 1201;//普通攻击
 	CONST SKILL_COMMON_BD_WFX 		= 1202;//被动技能-物防修
 	CONST SKILL_COMMON_BD_FFX 		= 1203;//被动技能-法防修
@@ -36,23 +38,80 @@ class NewSkill
 	CONST SKILL_DEMON_GJ_FH 		= 1221;//魔族-攻击-复活
 	CONST SKILL_DEMON_GJ_QJL 		= 1222;//魔族-攻击-群加灵
 	CONST SKILL_DEMON_FY_FZ 		= 1223;//魔族-攻击-反震
-	
+
 	public static function begin($attackMemberObj, $attackSkillInfo)
 	{
 		self::$_attackMemberObj = $attackMemberObj;
 		self::$_attackSkillInfo = self::_getSkillConfig($attackSkillInfo);
+        self::$_attackMemberAttribute = self::$_attackMemberObj->getMemberAttributes();
+        if(is_array($attackEffect))
+        {
+            foreach($attackEffect as $skillId => $skillInfo)
+            {
+                 self::$_attackMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_attackMemberAttribute);
+            }
+        }
 	}
-	
 	public static function setDefineObj($defineMemberObj)
 	{
 		self::$_defineMemberObj = $defineMemberObj;
+		self::$_defineMemberAttribute = self::$_defineMemberObj->getMemberAttributes();
+		$defineEffect = self::$_defineMemberObj->getEffect('define');
+		if(is_array($defineEffect))
+		{
+			foreach($defineEffect as $skillId => $skillInfo)
+			{
+				self::$_defineMemberAttribute = NewSkillEffect::skillEffectAttribute($skillId, $skillInfo, self::$_defineMemberAttribute);
+			}
+		}
 	}
-	
+	//技能效果释放-加血加蓝
+	public static function skillEffectMagicAndBlood()
+	{
+		$attackEffect = self::$_attackMemberObj->getEffect('attack');
+		if(is_array($attackEffect))
+		{
+			foreach($attackEffect as $skillId => $skillInfo)
+			{
+				$res[] = NewSkillEffect::skillEffectMagicAndBlood($skillId, $skillInfo);
+			}
+		}
+		return $res;
+	}
+	//技能效果释放-攻方是否可以使用此技能
+	public static function skillEffectIsAttackCanUseThisSkill()
+	{
+		$attackEffect = self::$_attackMemberObj->getEffect('attack');
+		if(is_array($attackEffect))
+		{
+			foreach($attackEffect as $skillId => $skillInfo)
+			{
+				$res = NewSkillEffect::skillEffectIsAttackCanUseThisSkill($skillId, $skillInfo);
+				if(!$res)return FALSE;
+			}
+		}
+		return TRUE;
+	}
+	//技能释放效果-守方是否可以被此技能攻击
+	public static function skillEffectIsThisSKillCanAttack()
+	{
+		$attackEffect = self::$_attackMemberObj->getEffect('attack');
+		if(is_array($attackEffect))
+		{
+			foreach($attackEffect as $skillId => $skillInfo)
+			{
+				$res = NewSkillEffect::skillEffectIsThisSKillCanAttack($skillId, $skillInfo);
+				if(!$res)return FALSE;
+			}
+		}
+		return TRUE;
+	}
+
 	public static function end()
 	{
 		self::$_attackMemberObj = NULL;
 		self::$_defineMemberObj = NULL;
-		self::$_attackSkillInfo = NULL;	
+		self::$_attackSkillInfo = NULL;
 	}
 	public static function getAttackSkillConfig()
 	{
@@ -85,6 +144,7 @@ class NewSkill
     public static function getPhysicsSkills()
     {
         return array(
+          self::SKILL_DEFAULT_PT,
           self::SKILL_HUMAN_GJ_DTWLGJ,
           self::SKILL_HUMAN_FY_FJ,
           self::SKILL_DEMON_GJ_DTGJ,
@@ -96,8 +156,8 @@ class NewSkill
         return array(
           self::SKILL_TSIMSHIAN_GJ_DTFSGJ,
           self::SKILL_TSIMSHIAN_GJ_QTFSGJ,
-        ); 
-    
+        );
+
     }
 	private static function _getSkillConfig($attackSkillInfo)
 	{
@@ -184,7 +244,7 @@ class NewSkill
 		);
 		return isset($skillList[$raceId])?$skillList[$raceId]:$skillList;
 	}
-	
+
 	//获取被动技能列表
 	public static function getPassiveSkillList()
 	{

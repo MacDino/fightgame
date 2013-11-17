@@ -226,12 +226,12 @@ class NewFightMember
 	//消耗血量
     public function consumeBlood($blood)
     {
-        $this->_currentBlood -= $blood;
+        $this->_currentBlood -= intval($blood);
     }
     //消耗魔法
     public function consumeMagic($magic)
     {
-        $this->_currentMagic -= $magic;
+        $this->_currentMagic -= intval($magic);
     }
     public function addBlood($blood) {
         if($this->_currentBlood > 0) {
@@ -266,44 +266,44 @@ class NewFightMember
     {
     	return $this->_memberId;
     }
-    private function _getMemberAttributes()
+    public function getMemberAttributes()
     {
     	return $this->_memberAttribute;
     }
     //获取队员的属性-力量
     public function getMemberAttributePower()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_POWER])?$attribute[ConfigDefine::USER_ATTRIBUTE_POWER]:0;
     }
     //获取队员的属性-伤害
     public function getMemberAttributeHurt()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_HURT])?$attribute[ConfigDefine::USER_ATTRIBUTE_HURT]:0;
     }
     //获取队员的属性-命中
     public function getMemberAttributeHit()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_HIT])?$attribute[ConfigDefine::USER_ATTRIBUTE_HIT]:0;
     }
     //获取队员的属性-躲闪
     public function getMemberAttributeDodge()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_DODGE]:0;
     }
     //获取队员的属性-防御
     public function getMemberAttributeDfense()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_DEFENSE]:0;
     }
     //获取队员的属性-灵力
     public function getMemberAttributePsychic()
     {
-    	$attribute = $this->_getMemberAttributes();
+    	$attribute = $this->getMemberAttributes();
     	return isset($attribute[ConfigDefine::USER_ATTRIBUTE_DODGE])?$attribute[ConfigDefine::USER_ATTRIBUTE_PSYCHIC]:0;
     }
     public function getCurrentMagaic()
@@ -318,15 +318,39 @@ class NewFightMember
 
     //各个技能的影响，区分attack和define
     //@todo 未考虑叠加，简单的覆盖此技能影响
-    public function setEffect($skillId, $round, $flag = 'attack') {
-        if($skillId <=0 || $round <= 0 || !in_array($flag, array('attack','define','sleep'))) {
+    public function setEffect($flag, $skillId, $params) {
+        if(!(is_array($params) && count($params)) || $skillId <= 0 || !in_array($flag, array('attack','define','sleep'))) {
             return false;
         }
-        $this->_currentSkillEffect[$flag][$skillId] = $round;
+        $params['skill_id'] = $skillId;
+        $this->_currentSkillEffect[$flag][$skillId] = $params;
         return;
     }
 
     public function getEffect($flag) {
         return isset($this->_currentSkillEffect[$flag]) ? $this->_currentSkillEffect[$flag] : array();
+    }
+
+    public function delEffect($skillId) {
+        if(isset($this->_currentSkillEffect['attack'][$skillId])) {
+            unset($this->_currentSkillEffect['attack'][$skillId]);
+        }
+        if(isset($this->_currentSkillEffect['define'][$skillId])) {
+            unset($this->_currentSkillEffect['define'][$skillId]);
+        }
+        return true;
+    }
+
+    public function delEffectByFlag($flag, $skillId) {
+        if(isset($this->_currentSkillEffect[$flag][$skillId])) {
+            unset($this->_currentSkillEffect[$flag][$skillId]);
+        }
+        return true;
+    }
+
+    public function reAlive() {
+        $this->_currentBlood = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
+		$this->_currentMagic = $this->_memberAttribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+        $this->_currentSkillEffect = array();
     }
 }
