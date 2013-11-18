@@ -166,32 +166,32 @@ class Monster
 		$skillLev = $monster['level'];
         //获取配置的技能列表
 		$map_skills_list    = Map_Skill::getAllSkills($monster['map_id']);
-		$must_skills_list   = self::_getMustSkills($monster);
+		//$must_skills_list   = self::_getMustSkills($monster);
 		$min_count_list     = self::_getMinSkillCount($monster);
 		$skill_rate_list    = self::_getSkillRate($monster);
 		$ret = array('attack' => array(), 'defense' => array(), 'passive' => array());
 		foreach ($ret as $skill_type => &$skills) {
-			$must_skills = isset($must_skills_list[$skill_type]) ? $must_skills_list[$skill_type] : array();
+			//$must_skills = isset($must_skills_list[$skill_type]) ? $must_skills_list[$skill_type] : array();
 			//地图技能为空时直接返回必须技能
 			if (empty($map_skills_list[$skill_type])) {
-				$skills = $must_skills;
+				//$skills = $must_skills;
 				continue;
 			}
 
 			//可选技能中去除必选的
-			$map_skills =  array_diff($map_skills_list[$skill_type], $must_skills);
-
+			//$map_skills =  array_diff($map_skills_list[$skill_type], $must_skills);
+			$map_skills =  $map_skills_list[$skill_type];
 			//生成技能数范围
 			$min_count = isset($min_count_list[$skill_type]) ? $min_count_list[$skill_type] : 0;
 			$max_count = ($skill_type == 'passive') ? count($map_skills_list[$skill_type]) : 5;
 			//随机技能数
 			$skill_count = mt_rand($min_count, $max_count);
 			//去除必选的技能数
-			$skill_count = max($skill_count - count($must_skills), 0);
+			$skill_count = max($skill_count, 0);
 			//随机技能
 			shuffle($map_skills);
 			$rand_skills = array_slice($map_skills, 0, $skill_count);
-			$rand_skills = array_flip(array_merge($rand_skills, $must_skills));
+			$rand_skills = array_flip($rand_skills);
 			$min_skill_level = max(1, $monster['level'] - 10);
 			$max_skill_level = $monster['level'] + 10;
 
