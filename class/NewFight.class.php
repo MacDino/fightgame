@@ -16,9 +16,58 @@ class NewFight
     private static $_fightList = array();//战斗过程
     private $_fightKeyMiss = 'miss';//战斗标识
 
+    public static function createUserObj($userInfo) {
+        $attack = Skill_Info::getReleaseProbability($userInfo['user_id'], 1);
+        foreach ((array)$attack as $skillInfo) {
+            $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
+            $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
+        }
+        $defense = Skill_Info::getReleaseProbability($userInfo['user_id'], 2);
+        foreach ((array)$defense as $skillInfo) {
+            $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
+            $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
+        }
+        $attrbuteArr    = User_Info::getUserInfoFightAttribute($userInfo['user_id'], TRUE);
+        $user = array(
+            'user_id' => $userInfo['user_id'],
+            'race'       => $userInfo['race_id'],
+            'user_level' => $userInfo['user_level'],
+            'mark'       => $userInfo['mark'],
+            'attributes' => $attrbuteArr,
+            'have_skillids' => $skills,
+            'skill_rates' => $skillRates,
+        );
+        return new NewFightMember($user);
+    }
 
+    public static function createMonsterObj($monster) {
+		$skill      = Monster::getMonsterSkill($monster);
+        foreach ((array)$skill as $info) {
+            if(is_array($info['list']) && count($info['list'])) {
+                foreach ($info['list'] as $ski => $s) {
+                    $skills[$ski] = $s;
+                }
+            }
+            if(is_array($info['rate']) && count($info['rate'])) {
+                foreach ($info['rate'] as $k => $v) {
+                    $skillsRates[$k] = $v/10;
+                }
+            }
+        }
+		$attribute  = Monster::getMonsterAttribute($monster);
+        $monsterInfo = array(
+            'monster_id' => $monster['monster_id'],
+            'race'       => $monster['race_id'],
+            'user_level' => $monster['level'],
+            'mark'       => $monster['mark'],
+            'attributes' => $attribute,
+            'have_skillids' => $skills,
+            'skill_rates' => $skillsRates,
+        );
+        return new NewFightMember($monsterInfo);
+    }
 
-	public static function getFightResult($teams)
+    public static function getFightResult($teams)
 	{
 		try {
 			self::_mapTeamsAndMembersInfo($teams);
@@ -95,11 +144,12 @@ class NewFight
         foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
             if(self::$_attackSkillInfo['hit_member_num'] == 0) {
-                break;
+//                break;
             }
             $return['define'][$objKey] = array(
                 'mark' => $defineMemberObj->getMark(),
             );
+//            var_dump($return);
             //判断攻守方是否有一方处于死亡状态
             if($attackMemberObj->isDied()) break;
             if($defineMemberObj->isDied()) {
@@ -124,6 +174,7 @@ class NewFight
             }
 
             if(self::$_attackSkillInfo['is_have_hurt']) {
+//                var_dump(1);
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
             	$skillHurt = NewSkill::getAttack();
@@ -255,7 +306,8 @@ class NewFight
                         }
                     }
                 }
-            }elseif(in_array(1, (array)self::$_attackSkillInfo['target'])){
+//            }elseif(in_array(1, (array)self::$_attackSkillInfo['target'])){
+            }else {
                 //允许对对方使用的
                 if($attackMemberObj->getMemberTeamKey() != $memberObj->getMemberTeamKey())
                 {
@@ -490,5 +542,35 @@ class NewFight
                 }
             }
         }
+    }
+
+    public static function getPeopleFightInfo(NewFightMember $user, $userInfo = array()) {
+        return array(
+            'user_id'   => $user->getMemberId(),
+            'user_name' => $userInfo['user_name'],
+            'level'     => $userInfo['user_level'],
+            'blood'     => intval($user->getCurrentBlood()),
+            'magic'     => intval($user->getCurrentMagaic()),
+        );
+    }
+
+    public static function getMonsterFightInfo(NewFightMember $monster, $monsterInfo = array()) {
+        return array(
+            'monster_id' => $monsterInfo['monster_id'],
+            'level' => $monsterInfo['level'],
+            'blood' => intval($monster->getCurrentBlood()),
+            'magic' => intval($monster->getCurrentMagaic()),
+            'prefix' => $monsterInfo['prefix'],
+            'suffix' => $monsterInfo['suffix'],
+        );
+    }
+
+    public static function isTeamAlive($teamObjs) {
+        foreach ((array)$teamObjs as $memberObj) {
+            if($memberObj->isAlive()) {
+                return true;
+            }
+        }
+        return FALSE;
     }
 }
