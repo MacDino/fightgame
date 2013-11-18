@@ -61,7 +61,7 @@ class NewFightMember
 		$this->_memberRace = isset($memberInfo['race'])?$memberInfo['race']:User_Race::RACE_HUMAN;
 		$this->_memberAttribute = $memberInfo['attributes'];
 		$this->_memberLevel = $memberInfo['user_level'];
-		$this->_memberId = $memberInfo['user_id'];
+		$this->_memberId = $memberInfo['user_id'] > 0 ? $memberInfo['user_id'] : $memberInfo['monster_id'];
 		$this->_setAttackSkill($memberInfo['have_skillids']);
 		$this->_setDefineSkill($memberInfo['have_skillids']);
 		$this->_setPassiveSkill($memberInfo['have_skillids']);

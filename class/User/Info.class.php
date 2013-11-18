@@ -426,7 +426,7 @@ class User_Info
 		}
 
 		//技能加成
-		$skillAttribute = Skill_Info::getSkillList($userId);
+		/*$skillAttribute = Skill_Info::getSkillList($userId);
 		if(!empty($skillAttribute)){
 			foreach ($skillAttribute as $a){
 				$skillValue = Skill_info::getSkillAttribute($a['skill_id'], $a['skill_level'], $userInfo['race_id']);
@@ -443,7 +443,7 @@ class User_Info
 					}
 				}
 			}
-		}
+		}*/
 
 		//根据种族和等级取出基本属性点
 		$userBaseAttribute = User_Attributes::getBaseAttribute($userInfo['race_id'], $userInfo['user_level']);
@@ -466,9 +466,9 @@ class User_Info
 		}
 
 		//体修加成
-		if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
+		/*if(array_key_exists(ConfigDefine::SKILL_TX, $skillAttribute)){
 			$userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] += $userAttributeValue[ConfigDefine::USER_ATTRIBUTE_BLOOD] * 0.01 * $skillAttribute[ConfigDefine::SKILL_TX]['skill_level'];
-		}
+		}*/
 		
 		//内丹加成
 		$pillInfo = Pill_Pill::usedPill($userId);
