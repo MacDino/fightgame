@@ -42,18 +42,6 @@ class NewFight
 
     public static function createMonsterObj($monster) {
 		$skill      = Monster::getMonsterSkill($monster);
-        foreach ((array)$skill as $info) {
-            if(is_array($info['list']) && count($info['list'])) {
-                foreach ($info['list'] as $ski => $s) {
-                    $skills[$ski] = $s;
-                }
-            }
-            if(is_array($info['rate']) && count($info['rate'])) {
-                foreach ($info['rate'] as $k => $v) {
-                    $skillsRates[$k] = $v;
-                }
-            }
-        }
 		$attribute  = Monster::getMonsterAttribute($monster);
         $monsterInfo = array(
             'monster_id' => $monster['monster_id'],
@@ -61,9 +49,9 @@ class NewFight
             'user_level' => $monster['level'],
             'mark'       => $monster['mark'],
             'attributes' => $attribute,
-            'have_skillids' => $skills,
-            'skill_rates' => $skillsRates,
         );
+		$monsterInfo = array_merge($monsterInfo,$skill);
+		//print_r($monsterInfo);
         return new NewFightMember($monsterInfo);
     }
 
