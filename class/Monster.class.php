@@ -231,7 +231,7 @@ class Monster
 		$result['skill_rates'] = $__rate;
 		//print_r($ret);
 		//print_r($result);
-		return $ret;
+		return $result;
 	}
 
 	/*
