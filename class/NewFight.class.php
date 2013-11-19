@@ -50,7 +50,7 @@ class NewFight
             }
             if(is_array($info['rate']) && count($info['rate'])) {
                 foreach ($info['rate'] as $k => $v) {
-                    $skillsRates[$k] = $v/10;
+                    $skillsRates[$k] = $v;
                 }
             }
         }
@@ -110,11 +110,14 @@ class NewFight
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
                     $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
-                    self::_report($fightInfo);
+                    foreach ((array)self::_report($fightInfo) as $fight) {
+                        $return['fight_procedure'][] = $fight;
+                    }
                 }
                 $i++;
             }
-            return self::$_fightList;
+            $return['use_time'] = $i;
+            return $return;
 		} catch (Exception $e) {
 			var_dump($e);
 		}
@@ -144,12 +147,11 @@ class NewFight
         foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
             if(self::$_attackSkillInfo['hit_member_num'] == 0) {
-//                break;
+                break;
             }
             $return['define'][$objKey] = array(
                 'mark' => $defineMemberObj->getMark(),
             );
-//            var_dump($return);
             //判断攻守方是否有一方处于死亡状态
             if($attackMemberObj->isDied()) break;
             if($defineMemberObj->isDied()) {
@@ -172,9 +174,7 @@ class NewFight
             if(!NewSkill::skillEffectIsThisSKillCanAttack()) {
                 continue;
             }
-
             if(self::$_attackSkillInfo['is_have_hurt']) {
-//                var_dump(1);
             	//计算攻击输出
             	//计算的攻击值中已减去防御属性值，并且已经乘以暴击系数，并且已计算出被动技能值，即计算出的值可以直接减血使用
             	$skillHurt = NewSkill::getAttack();
@@ -433,10 +433,12 @@ class NewFight
         );
         $processBegin = $fightInfo['attack']['mark'];
         if($fightInfo['attack']['sleep'] == 1) {
-            self::$_fightList[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
+            $return['process'] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
+            $fightList[] = $return;
         }elseif($fightInfo['attack']['attack_fail'] == 1) {
-            self::$_fightList[] = $processBegin.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::MISS;
-        }  else {
+            $return['process'] = $processBegin.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::MISS;
+            $fightList[] = $return;
+        } else {
             foreach ((array)$fightInfo['define'] as $defineKey => $define) {
                 $return['defense']['blood'] = $define['current_blood'];
                 $return['defense']['magic'] = $define['current_magic'];
@@ -485,10 +487,10 @@ class NewFight
                     $process[$defineKey][] = $process1;
                 }
                 $return['process'] = $process[$defineKey];
-                self::$_fightList[] = $return;
+                $fightList[] = $return;
             }
         }
-        return ;
+        return $fightList;
     }
 
     public static function getCode($hurt, $attackMark, $defineMark) {

@@ -82,7 +82,7 @@ class NewSkill
 	public static function skillEffectIsAttackCanUseThisSkill()
 	{
 		$attackEffect = self::$_attackMemberObj->getEffect('attack');
-		if(is_array($attackEffect))
+		if(is_array($attackEffect) && count($attackEffect))
 		{
 			foreach($attackEffect as $skillId => $skillInfo)
 			{
@@ -208,7 +208,7 @@ class NewSkill
 				self::SKILL_TSIMSHIAN_FY_ZJ,
 				self::SKILL_DEMON_FY_FZ,
 				);
-		
+
 // 		$skillList =  array(
 // 				User_Race::RACE_HUMAN => array(
 // 						self::SKILL_HUMAN_FY_FJ,

@@ -56,8 +56,11 @@ try {
     $petInfo            = Pet::usedPet($userId);
     if(is_array($petInfo) && count($petInfo)) {
         //人宠进入队伍
-        $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'], 'pet');
-        $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[0], $petInfo);
+//        $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'], 'pet');
+        $petInfo['mark'] = 'pet';
+        $teams['user'][] = NewFight::createUserObj($petInfo);
+//        $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[0], $petInfo);
+        $data['participant']['pet'] = NewFight::getPeopleFightInfo($teams['user'][0], $petInfo);
     }
 
     /**@todo 随即出来一个战斗对象**/
@@ -78,25 +81,40 @@ try {
 
     $targetUserInfo     = User_Info::getUserInfoByUserId($targetUserId);
     //计算是否相生相克
-    $userHelpAndHarm    = Fight::calculateHelpAndHarmfull($userInfo['race_id'], $petInfo['race_id'], $targetUserInfo['race_id']);
+//    $userHelpAndHarm    = Fight::calculateHelpAndHarmfull($userInfo['race_id'], $petInfo['race_id'], $targetUserInfo['race_id']);
     //生成用户的战斗对象，进入队中的首位
-    array_unshift($userFightTeam, Fight::createUserFightable($userId, $userInfo['user_level'], 'user', $userHelpAndHarm['user']['helpfull'], $userHelpAndHarm['user']['harmfull']));
-    $data['participant']['user']        = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+//    array_unshift($userFightTeam, Fight::createUserFightable($userId, $userInfo['user_level'], 'user', $userHelpAndHarm['user']['helpfull'], $userHelpAndHarm['user']['harmfull']));
+    $userInfo['mark'] = 'user';
+    if(is_array($teams['user']) && count($teams['user'])) {
+        array_unshift($teams['user'], NewFight::createUserObj($userInfo));
+    }  else {
+        $teams['user'][] = NewFight::createUserObj($userInfo);
+    }
+//    $data['participant']['user']        = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+    $data['participant']['user']        = NewFight::getPeopleFightInfo($teams['user'][0], $userInfo);
 
-    $targetUserFightTeam[]              = Fight::createUserFightable($targetUserId, $targetUserInfo['user_level'], 'challenger');
-    $data['participant']['challenger']  = Fight::getPeopleFightInfo($targetUserFightTeam[0], $targetUserInfo);
-
+//    $targetUserFightTeam[]              = Fight::createUserFightable($targetUserId, $targetUserInfo['user_level'], 'challenger');
+//    $data['participant']['challenger']  = Fight::getPeopleFightInfo($targetUserFightTeam[0], $targetUserInfo);
+    $targetUserInfo['mark'] = 'challenger';
+    $teams['challenger'][]              = NewFight::createUserObj($targetUserInfo);
+    $data['participant']['challenger']  = NewFight::getPeopleFightInfo($teams['challenger'][0], $targetUserInfo);
     $targetPet            = Pet::usedPet($targetUserId);
     if(is_array($targetPet) && count($targetPet)) {
         //人宠进入队伍
-        $targetUserFightTeam[] = Fight::createUserFightable($targetPet['user_id'], $targetPet['user_level'], 'target_pet');
-        $data['participant']['target_pet'] = Fight::getPeopleFightInfo($targetUserFightTeam[0], $targetPet);
+//        $targetUserFightTeam[] = Fight::createUserFightable($targetPet['user_id'], $targetPet['user_level'], 'target_pet');
+//        $data['participant']['target_pet'] = Fight::getPeopleFightInfo($targetUserFightTeam[0], $targetPet);
+        $targetPet['mark'] = 'challenger_pet';
+        $teams['challenger'][] = NewFight::createUserObj($targetPet);
+        $data['participant']['target_pet'] = NewFight::getPeopleFightInfo($teams['challenger'][1], $targetPet);
     }
 
-    $fightResult = Fight::multiFight($userFightTeam, $targetUserFightTeam);
+//    $fightResult = Fight::multiFight($userFightTeam, $targetUserFightTeam);
+    $fightResult = NewFight::getFightResult($teams);
 
-    $isUserAlive        = Fight::isTeamAlive($userFightTeam);
-    $isTargetUserAlive  = Fight::isTeamAlive($targetUserFightTeam);
+//    $isUserAlive        = Fight::isTeamAlive($userFightTeam);
+//    $isTargetUserAlive  = Fight::isTeamAlive($targetUserFightTeam);
+    $isUserAlive        = NewFight::isTeamAlive($teams['user']);
+    $isTargetUserAlive  = NewFight::isTeamAlive($teams['challenger']);
 
     $data['fight_procedure'] = $fightResult['fight_procedure'];
 

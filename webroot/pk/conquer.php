@@ -21,17 +21,25 @@ try{
         $msg = '本日征服次数已用完';
         exit;
     }
+    $userInfo['mark'] = 'user';
+//    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level'],'user');
+//    $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level'],'target');
+    $teams['user'][]        = NewFight::createUserObj($userInfo);
+    $targetUserInfo['mark'] = 'target';
+    $teams['target'][]  = NewFight::createUserObj($targetUserInfo);
 
-    $userFightTeam[]        = Fight::createUserFightable($userInfo['user_id'], $userInfo['user_level'],'user');
-    $targetUserFightTeam[]  = Fight::createUserFightable($targetUserInfo['user_id'], $targetUserInfo['user_level'],'target');
-
-    $data['participant']['user']    = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
-    $data['participant']['target']  = Fight::getPeopleFightInfo($userFightTeam[0], $targetUserInfo);
+    $data['participant']['user']    = NewFight::getPeopleFightInfo($teams['user'][0], $userInfo);
+    $data['participant']['target']  = NewFight::getPeopleFightInfo($teams['target'][0], $targetUserInfo);
+//    $data['participant']['user']    = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+//    $data['participant']['target']  = Fight::getPeopleFightInfo($userFightTeam[0], $targetUserInfo);
     /**获取战斗结果**/
-    $fightResult            = Fight::multiFight($userFightTeam, $targetUserFightTeam);
+//    $fightResult            = Fight::multiFight($userFightTeam, $targetUserFightTeam);
+    $fightResult            = NewFight::getFightResult($teams);
 
-    $isUserAlive = Fight::isTeamAlive($userFightTeam);
-    $isTargetUserAlive = Fight::isTeamAlive($targetUserFightTeam);
+//    $isUserAlive = Fight::isTeamAlive($userFightTeam);
+//    $isTargetUserAlive = Fight::isTeamAlive($targetUserFightTeam);
+    $isUserAlive = NewFight::isTeamAlive($teams['user']);
+    $isTargetUserAlive = NewFight::isTeamAlive($teams['target']);
     $data['fight_procedure']        = $fightResult['fight_procedure'];
     $data['result']['win']          = $isUserAlive && !$isTargetUserAlive ? 1 : 0;
     /**

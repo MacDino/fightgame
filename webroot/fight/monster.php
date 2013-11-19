@@ -8,7 +8,6 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId             = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 $mapId              = isset($_REQUEST['map_id']) ? $_REQUEST['map_id'] : 0;
-
 if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
@@ -33,33 +32,46 @@ if(isset($_REQUEST['colors'])) {
 try {
     /**初始化一个怪物**/
     $monster            = Map::getMonster($mapId);
-    $monsterFightTeam[] = Fight::createMonsterFightable($monster, 'monster[0]');
-    $data['participant']['monster'][]    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
+//    $monsterFightTeam[] = Fight::createMonsterFightable($monster, 'monster[0]');
+    $monster['mark'] = 'monster[0]';
+    $teams['monster'][] = NewFight::createMonsterObj($monster);
+
+//    $data['participant']['monster'][]    = Fight::getMonsterFightInfo($monsterFightTeam[0], $monster);
+    $data['participant']['monster'][]    = NewFight::getMonsterFightInfo($teams['monster'][0], $monster);
     /**当前角色fight对象，如果有人宠，获取人宠**/
     $userInfo           = User_Info::getUserInfoByUserId($userId);
-    $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level'], 'user');
+    $userInfo['mark']   = 'user';
+//    $userFightTeam[]    = Fight::createUserFightable($userId, $userInfo['user_level'], 'user');
+    $teams['user'][]    = NewFight::createUserObj($userInfo);
 
-    $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+//    $data['participant']['user'] = Fight::getPeopleFightInfo($userFightTeam[0], $userInfo);
+    $data['participant']['user'] = NewFight::getPeopleFightInfo($teams['user'][0], $userInfo);
 
     if($userInfo['user_level'] > 10) {
         $petInfo    = Pet::usedPet($userId);
         if(is_array($petInfo) && count($petInfo)) {
             //人宠进入队伍
-            $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'],'pet');
-            $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $petInfo);
+//            $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'],'pet');
+            $petInfo['mark'] = 'pet';
+            $teams['user'][] = NewFight::createUserObj($petInfo);
+//            $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $petInfo);
+            $data['participant']['pet'] = NewFight::getPeopleFightInfo($teams['user'][1], $petInfo);
         }else{
         	$data['participant']['pet'] = NULL;//没有人宠时给空值
         }
     }
 
     /**进入多人对单怪的战斗**/
-    $fightResult = Fight::multiFight($userFightTeam, $monsterFightTeam);
+//    $fightResult = Fight::multiFight($userFightTeam, $monsterFightTeam);
+    $fightResult = NewFight::getFightResult($teams);
     /**此次战斗耗时 * **/
     $fightUseTime   = $fightResult['use_time'];
 
     $data['fight_procedure']  =  $fightResult['fight_procedure'];
-    $isUserAlive = Fight::isTeamAlive($userFightTeam);
-    $isMonsterAlive = Fight::isTeamAlive($monsterFightTeam);
+//    $isUserAlive = Fight::isTeamAlive($userFightTeam);
+//    $isMonsterAlive = Fight::isTeamAlive($monsterFightTeam);
+    $isUserAlive = NewFight::isTeamAlive($teams['user']);
+    $isMonsterAlive = NewFight::isTeamAlive($teams['monster']);
     $data['result']['use_time'] = $fightUseTime;
     if(!$isUserAlive && $isMonsterAlive || $fightResult['is_too_long'] == 1) {
         $data['result']['win']      = 0;
