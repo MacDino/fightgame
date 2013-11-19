@@ -106,10 +106,8 @@ class Copy_Config{
 
 		foreach ($skillIds as $v) {
 			$returnSkills[$v] = $skillLev; 
-			foreach ($attackSkill as $v2) {
-				if (in_array($v, $v2)) {
-					$skillGroup['attack'][] = $v;
-				}
+			if (in_array($v, $attackSkill)) {
+				$skillGroup['attack'][] = $v;
 			}
 			if (in_array($v, $defineSkill)) {
 				$skillGroup['define'][] = $v;
@@ -123,10 +121,8 @@ class Copy_Config{
 		empty($skillGroup) && $skillGroup = array();
 		foreach ($skillGroup as $k => $v) {
 			foreach ($v as $skill) {
-				foreach ($attackSkill as $v2) {
-					if (in_array($skill, $v2)) {
-						$result['skill_rates'][$k][$skill] = $rateArray['attack'];
-					}
+				if (in_array($skill, $attackSkill)) {
+					$result['skill_rates'][$k][$skill] = $rateArray['attack'];
 				}
 				if (in_array($skill, $defineSkill)) {
 					$result['skill_rates'][$k][$skill] = $rateArray['define'];
@@ -164,6 +160,7 @@ class Copy_Config{
 		);
 		$monsters = MySql::select(self::TABLE_NAME_CONFIG, $where);	
 		foreach ($monsters as $k => $v) {
+			$returnMonster[$k]['monster_id'] = $v['monster_id'];
 			$returnMonster[$k]['level'] = $level;
 			$mapMonster = MySql::selectOne('map_monster', array('monster_id' => $v['monster_id']));
 			$returnMonster[$k]['race_id'] = $mapMonster['race_id'];
