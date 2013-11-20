@@ -438,6 +438,9 @@ class NewFight
                         if($hurtNum == 1) {
                             $process[$defineKey][] = $process1.'|'.self::getCode($hurt, $fightInfo['attack']['mark'], $define['mark']);
                         }  else {
+                            if($k == 0) {
+                                $process[$defineKey][] = $process1;
+                            }
                             $process[$defineKey][] = ConfigDefine::DI.'|N:'.($k + 1).'|'.ConfigDefine::GONGJI.'|'.self::getCode($hurt, $fightInfo['attack']['mark'], $define['mark']);
                         }
                     }
