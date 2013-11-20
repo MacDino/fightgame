@@ -12,7 +12,7 @@ if($userId <=0 ) {
     $code = 1; $msg = '没有对应的人物';
     exit();
 }
-$userLastResult     = Fight_Result::getResult($userId, $mapId);
+//$userLastResult     = Fight_Result::getResult($userId, $mapId);
 if(is_array($userLastResult) && count($userLastResult)) {
     $accessDiffTime = time() - $userLastResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastResult['use_time']) {
@@ -73,6 +73,13 @@ try {
     $isUserAlive = NewFight::isTeamAlive($teams['user']);
     $isMonsterAlive = NewFight::isTeamAlive($teams['monster']);
     $data['result']['use_time'] = $fightUseTime;
+
+    if(!DEVELOPER && $fightUseTime > 119) {
+        sae_set_display_errors(false);//关闭信息输出
+        sae_debug(json_encode($data));//记录日志
+        sae_set_display_errors(true);
+    }
+
     if(!$isUserAlive && $isMonsterAlive || $fightResult['is_too_long'] == 1) {
         $data['result']['win']      = 0;
         $data['result']['is_dead']  = 1;
