@@ -169,6 +169,20 @@ class ConfigDefine
 		    self:: ZHUANGTAI                    => '状态',
 		    self:: BAOJI                        => '暴击',
 		    self:: DI                           => '第',
+            self::JINENG                        => '技能',
+            self::MINGZHONG                     => '命中',
+            self::WUFA                          => '无法',
+            self::WULI                          => '物理',
+            self::FASHU                         => '法术',
+            self::CHIXU                         =>'持续',
+            self::ZENGJIA                       => '增加',
+            self::XUE                           => '血',
+            self::LAN                           => '蓝',
+            self::LINGLI                        => '灵力',
+            self::SHANGHAISHUXING               => '伤害属性',
+            self::FENGYIN                       => '封印',
+            self::JIECHU                        => '解除',
+            self::FUHUO                         => '复活',
 		);
 		return $res;
 	}
