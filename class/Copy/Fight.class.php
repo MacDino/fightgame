@@ -8,10 +8,9 @@ class Copy_Fight{
 		$attribute  = Monster::getMonsterAttribute($monster);
 		//print_r($attribute);
 		//技能加成后的属性
-		$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
+		//$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
 
 		$monster['attributes'] = $attribute;
-		print_r($monster);
 		return new NewFightMember($monster);
 	}
 
@@ -21,7 +20,6 @@ class Copy_Fight{
 	public static function createGeneralMonsterFightable($monster) {
 		$attribute  = Monster::getMonsterAttribute($monster);
 		$monster['attributes'] = $attribute;
-		print_r($monster);
 		return new NewFightMember($monster);	
 	}
 }
