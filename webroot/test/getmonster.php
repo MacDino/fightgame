@@ -13,6 +13,8 @@ $configDefineList = ConfigDefine::skillList();
 $configDefineList += ConfigDefine::titleList();
 $configDefineList += ConfigDefine::equipList();
 $configDefineList += ConfigDefine::AttributeList();
+$configDefineList += ConfigDefine::aptitudeTypeList();
+$configDefineList += ConfigDefine::aptitudeList();
 
 
 $mapList = Version::getMapList();
@@ -49,6 +51,8 @@ echoStr('当前怪物前缀ID为', $res['prefix']);
 echoStr('当前怪物前缀为', $configDefineList[$res['prefix']]);
 echoStr('当前怪物后缀ID为', $res['suffix']);
 echoStr('当前怪物后缀为', $configDefineList[$res['suffix']]);
+echoStr('当前怪物成长率为', $res['grow_per']);
+echoStr('当前怪物资质类型为', $configDefineList[$res['aptitude_type']]);
 
 
 
@@ -58,18 +62,21 @@ function echoStr($str, $str1)
 }
 echoStr('当前怪物等级为', $res['level']);
 
-$monsterFightTeam = Fight::createMonsterFightable($res);
+//$monsterFightTeam = Fight::createMonsterFightable($res);
+$monsterFightTeam = NewFight::createMonsterObj($monster);
 
-echoStr('当前怪物血量为', $monsterFightTeam->getCurrentBlood());
-echoStr('当前怪物魔法值为', $monsterFightTeam->getCurrentMagic());
+//echoStr('当前怪物血量为', $monsterFightTeam->getCurrentBlood());
+//echoStr('当前怪物魔法值为', $monsterFightTeam->getCurrentMagic());
 
 
-$attributesList = $monsterFightTeam->getAttributes();
+//$attributesList = $monsterFightTeam->getAttributes();
+$attributesList = Monster::getMonsterAttribute($res);
 foreach($attributesList as $attributeId => $value)
 {
 	echoStr('当前属性ID为', $attributeId);
 	echoStr('当前属性为', $configDefineList[$attributeId]);
 	echoStr('当前属性值为', $value);
+	echo "</p>";
 }
 
 echo '</pre>';

@@ -247,6 +247,18 @@ class ConfigDefine
 		return $res;
 	}
 
+	public static function aptitudeList(){
+		$res = array(
+			self::APTITUDE_ATTACK   => '攻击资质',
+			self::APTITUDE_DEFENSE  => '防御资质',
+			self::APTITUDE_PHYSICAL => '体力资质',
+			self::APTITUDE_MAGIC 	=> '魔力资质',
+			self::APTITUDE_SPEED	=> '速度资质',
+			self::APTITUDE_DODGE	=> '躲闪资质'
+		);
+		return $res;	
+	}
+
 	/*
 	 * 获取不同类型资质的配置
 	 */
