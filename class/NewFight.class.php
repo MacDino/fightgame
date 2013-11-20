@@ -414,8 +414,8 @@ class NewFight
     private static function _report($fightInfo) {
         $return = array(
             'attack' => array(
-                'blood' => $fightInfo['attack']['current_blood'],
-                'magic' => $fightInfo['attack']['current_magic'],
+                'blood' => intval($fightInfo['attack']['current_blood']),
+                'magic' => intval($fightInfo['attack']['current_magic']),
                 'mark'  => $fightInfo['attack']['mark'],
             ),
         );
@@ -428,8 +428,8 @@ class NewFight
             $fightList[] = $return;
         } else {
             foreach ((array)$fightInfo['define'] as $defineKey => $define) {
-                $return['defense']['blood'] = $define['current_blood'];
-                $return['defense']['magic'] = $define['current_magic'];
+                $return['defense']['blood'] = intval($define['current_blood']);
+                $return['defense']['magic'] = intval($define['current_magic']);
                 $return['defense']['mark']  = $define['mark'];
                 $process1 = $processBegin.'|'.ConfigDefine::VS.'|defense|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'];
                 if(isset($define['hurt'])) {
@@ -450,11 +450,11 @@ class NewFight
                             $process1 .= '|'.ConfigDefine::JINENG.'|'.ConfigDefine::MINGZHONG.'|defense|'.ConfigDefine::SHIYONG.'|'.ConfigDefine::FASHU.'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
                             break;
                         case 1209:
-                            $process1 .= '|defense|'.ConfigDefine::ZENGJIA.'|M:'.$define['add_magic'].'|'.ConfigDefine::LAN;
+                            $process1 .= '|defense|'.ConfigDefine::ZENGJIA.'|M:'.intval($define['add_magic']).'|'.ConfigDefine::LAN;
                             break;
                         case 1210:
                         case 1215:
-                            $process1 .= '|defense|'.ConfigDefine::ZENGJIA.'|B:'.$define['add_blood'].ConfigDefine::XUE;
+                            $process1 .= '|defense|'.ConfigDefine::ZENGJIA.'|B:'.intval($define['add_blood']).ConfigDefine::XUE;
                             break;
                         case 1214:
                             $process1 .= '|defense|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
@@ -466,7 +466,7 @@ class NewFight
                             $process1 .= '|'.ConfigDefine::JINENG.'|'.ConfigDefine::MINGZHONG.'|'.ConfigDefine::FENGYIN.'|'.ConfigDefine::JIECHU;
                             break;
                         case 1221:
-                            $process1 .= '|defense|'.ConfigDefine::FUHUO.'|'.ConfigDefine::ZENGJIA.'|B:'.$define['re_blood'];
+                            $process1 .= '|defense|'.ConfigDefine::FUHUO.'|'.ConfigDefine::ZENGJIA.'|B:'.intval($define['re_blood']);
                             break;
                         case 1222:
                             $process1 .= '|defense|'.ConfigDefine::ZENGJIA.'|'.ConfigDefine::LINGLI.'|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
