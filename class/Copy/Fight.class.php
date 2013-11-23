@@ -10,8 +10,17 @@ class Copy_Fight{
 		//技能加成后的属性
 		//$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
 
-		$monster['attributes'] = $attribute;
-		return new NewFightMember($monster);
+        $monsterInfo = array(
+            'monster_id' => $monster['monster_id'],
+            'race'       => $monster['race_id'],
+            'user_level' => $monster['level'],
+            'mark'       => $monster['mark'],
+            'attributes' => $attribute,
+			'have_skillids' => $monster['have_skillids'],
+			'skill_rates'  => $monster['skill_rates'],
+        );
+		//print_r($monsterInfo);
+		return new NewFightMember($monsterInfo);
 	}
 
 	/*
