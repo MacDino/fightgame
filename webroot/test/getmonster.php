@@ -28,6 +28,9 @@ foreach($mapList as $mapInfo)
 }
 
 $res = Map::getMonster($mapId);
+$aptitudeLev = Monster::getAptitudeLev();
+$growPerLev = Monster::getGrowPerLev()+1;
+
 
 $raceList = User_Race::getRaceList();
 foreach ($raceList as $raceId => $raceName) {
@@ -51,9 +54,19 @@ echoStr('当前怪物前缀ID为', $res['prefix']);
 echoStr('当前怪物前缀为', $configDefineList[$res['prefix']]);
 echoStr('当前怪物后缀ID为', $res['suffix']);
 echoStr('当前怪物后缀为', $configDefineList[$res['suffix']]);
-echoStr('当前怪物成长率为', $res['grow_per']);
+$growPer = $res['grow_per'];
+echoStr('当前怪物成长率为', $growPer."&nbsp;&nbsp;成长率阶为第&nbsp;&nbsp;".$growPerLev);
 echoStr('当前怪物资质类型为', $configDefineList[$res['aptitude_type']]);
 
+echo "<br>";
+echo "-------------------怪物资质列表---------------------";
+echo "<p>";
+foreach ($res['aptitude'] as $k => $v) {
+
+	$lev = $aptitudeLev[$k]+1;
+	echoStr('怪物资质', $configDefineList[$k]."&nbsp;&nbsp;资质阶为第&nbsp;&nbsp;".$lev."&nbsp;&nbsp;阶");
+}
+echo "</p>";
 
 
 function echoStr($str, $str1)

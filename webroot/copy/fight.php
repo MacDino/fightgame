@@ -7,18 +7,18 @@ $copyId     = isset($_REQUEST['copy_id']) ? $_REQUEST['copy_id'] : 0;
 
 $copyLev = Copy_Config::getCopyLevelInfoByLevelId($copyLevId);
 if (!$copyLev) {
-	$code = 1; $msg = "无此副本";exit;
+	$code = 170001; $msg = "无此副本";exit;
 }
 $copy = Copy::getCopyInfoByCopyId($copyId); 
 $userInfo           = User_Info::getUserInfoByUserId($userId);
 if ( $userInfo['user_level'] < $copy['level_limit']) {
-	$code = 100050;
+	$code = 170002;
 	$msg = "您当前的等级未达到此副本的要求";
 	exit();
 }
 
 if($userId <=0 ) {
-    $code = 1; $msg = '没有对应的人物';
+    $code = 170003; $msg = '没有对应的人物';
     exit();
 }
 $userLastCopyResult     = Copy_FightResult::getResult($userId, $copyLevId);
@@ -31,14 +31,14 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	 * 限制每天打一次此副本
 	 */
 	if ( $isTodayFight && !$lastIsWin) {
-		$code = 100090;	
+		$code = 170004;	
 		exit;
 	}
 	/*
 	 * 已打赢的副本则不再重复进入
 	 */
 	if ($userLastCopyResult['win_monster_num'] == $copy['monster_num']) {
-		$code = 100091;
+		$code = 170005;
 		exit;	
 	}
 
