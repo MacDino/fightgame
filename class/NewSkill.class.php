@@ -165,40 +165,38 @@ class NewSkill
 		$skillLevel = current($attackSkillInfo);
 		if(!is_array(self::$_skillList))
 		{
-			$skillConfigList = MySql::select(self::SKILL_CONFIG_TABLE);
-			if(is_array($skillConfigList) && $skillConfigList)
-			{
-				foreach($skillConfigList as $skillConfig)
-				{
-					$attack_num = 1;
-					if($skillConfig['attack_num_each_level'] > 0)
-					{
-						$attack_num = floor($skilLevel/$skillConfig['attack_num_each_level']);
-						if($attack_num < 1)$attack_num = 1;
-					}
-					unset($skillConfig['attack_num_each_level']);
-					$skillConfig['hit_member_num'] = $attack_num;
-					if($skillConfig['is_consume_attack_num'])
-					{
-						$consume_1109 = $skillConfig['consume_1109'] * $attack_num;
-						$consume_1108 = $skillConfig['consume_1108'] * $attack_num;
-					}else{
-						$consume_1109 = $skillConfig['consume_1109'];
-						$consume_1108 = $skillConfig['consume_1108'];
-					}
-					unset($skillConfig['is_consume_attack_num']);
-					unset($skillConfig['consume_1109']);
-					unset($skillConfig['consume_1108']);
-					$skillConfig['consume'] = array(1109 => $consume_1109, 1108 => $consume_1108);
-					$skillConfig['target'] = json_decode($skillConfig['target'], true);
-					$skillList[$skillConfig['skill_id']] = $skillConfig;
-				}
-				self::$_skillList = $skillList;
-			}
-		}
-		$skillConfigInfo =  self::$_skillList[$skillId];
-		$skillConfigInfo['skill_level'] = $skillLevel;
-		return $skillConfigInfo;
+			$allSkillInfos = MySql::select(self::SKILL_CONFIG_TABLE);
+            foreach ((array)$allSkillInfos as $v) {
+                self::$_skillList[$v['skill_id']] = $v;
+            }
+        }
+        $skillConfig = self::$_skillList[$skillId];
+        if(is_array($skillConfig) && count($skillConfig))
+        {
+            $attack_num = 1;
+            if($skillConfig['attack_num_each_level'] > 0)
+            {
+                $attack_num = floor($skillLevel/$skillConfig['attack_num_each_level']);
+                if($attack_num < 1) $attack_num = 1;
+            }
+            unset($skillConfig['attack_num_each_level']);
+            $skillConfig['hit_member_num'] = $attack_num;
+            if($skillConfig['is_consume_attack_num'])
+            {
+                $consume_1109 = $skillConfig['consume_1109'] * $attack_num;
+                $consume_1108 = $skillConfig['consume_1108'] * $attack_num;
+            }else{
+                $consume_1109 = $skillConfig['consume_1109'];
+                $consume_1108 = $skillConfig['consume_1108'];
+            }
+            unset($skillConfig['is_consume_attack_num']);
+            unset($skillConfig['consume_1109']);
+            unset($skillConfig['consume_1108']);
+            $skillConfig['consume'] = array(1109 => $consume_1109, 1108 => $consume_1108);
+            $skillConfig['target'] = json_decode($skillConfig['target'], true);
+            $skillConfig['skill_level'] = $skillLevel;
+        }
+		return $skillConfig;
 	}
 	//获取防御技能列表
 	public static function getDefineSkillList($raceId = NULL)
