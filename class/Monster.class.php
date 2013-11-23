@@ -16,6 +16,9 @@ class Monster
 	CONST MONSTER_SUFFIX_ANCIENT      = 3207;//长老
 	CONST MONSTER_SUFFIX_HEAD         = 3208;//头头
 
+	public static $aptitudeLev = array ();
+	public static $growPerLev;
+
 	/**
      * 获取杀死怪物获得的金钱，没有计算加成
      * review by lishengwei
@@ -457,6 +460,7 @@ class Monster
 		}
 		//print_r($fiveStar);
 		$k = array_rand($fiveStar);
+		self::$growPerLev = $k;
 		return $fiveStar[$k];
 	}
 
@@ -497,8 +501,22 @@ class Monster
 			//print_r($fiveStar);
 			$randK = array_rand($fiveStar[$k]);
 			$aptitudeRand[$k] = $fiveStar[$k][$randK];
+			self::$aptitudeLev[$k] = $randK;
 		}
 		//print_r($aptitudeRand);
 		return $aptitudeRand;
 	} 
+
+	/*
+	 * 返回随机出来的资质阶级
+	 */
+	public static function getAptitudeLev(){
+		return self::$aptitudeLev;
+	}
+	/*
+	 * 返回随机出来的成长率阶级
+	 */
+	public static function getGrowPerLev(){
+		return self::$growPerLev;
+	}
 }
