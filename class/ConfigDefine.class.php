@@ -63,6 +63,7 @@ class ConfigDefine
     const FENGYIN                       = 7142;//封印
     CONST JIECHU                        = 7143;//解除
     CONST FUHUO                         = 7144;//复活
+    CONST DIYU                          = 7145;//低于
 
 
 
@@ -183,6 +184,7 @@ class ConfigDefine
             self::FENGYIN                       => '封印',
             self::JIECHU                        => '解除',
             self::FUHUO                         => '复活',
+            self::DIYU                          => '低于',
 		);
 		return $res;
 	}

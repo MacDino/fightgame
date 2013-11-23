@@ -78,9 +78,7 @@ class NewFight
                     if($sleepInfo[1206]['round'] >= 1) {
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                         $fightInfo['attack']['sleep'] = 1;
-                        foreach ((array)self::_report($fightInfo) as $fight) {
-                            $return['fight_procedure'][] = $fight;
-                        }
+                        $return['fight_procedure'][] = self::_report($fightInfo);
                         self::dealEffeckRound($attackMemberObj, 'sleep');
                         continue;
                     }
@@ -93,9 +91,7 @@ class NewFight
                         self::dealTeamMemberDead($attackMemberObj);
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                         $fightInfo['attack']['effect'] = 1;
-                        foreach ((array)self::_report($fightInfo) as $fight) {
-                            $return['fight_procedure'][] = $fight;
-                        }
+                        $return['fight_procedure'][] = self::_report($fightInfo);
                         self::dealEffeckRound($attackMemberObj, 'attack');
                         continue;
                     }
@@ -103,7 +99,7 @@ class NewFight
                     if(!NewSkill::skillEffectIsAttackCanUseThisSkill()) {
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                         $fightInfo['attack']['attack_fail'] = 1;
-                        self::_report($fightInfo);
+                        $return['fight_procedure'][] = self::_report($fightInfo);
                         self::dealEffeckRound($attackMemberObj, 'attack');
                         continue;
                     }
@@ -112,6 +108,7 @@ class NewFight
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
                     $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
+//                    var_dump($fightInfo);
                     $return['fight_procedure'][] = self::_report($fightInfo);
                     NewSkill::end();
                 }
@@ -135,14 +132,19 @@ class NewFight
         if($attackMemberObj->isMemberSleep())return;
         //消耗
         $consumes = self::$_attackSkillInfo['consume'];
-        if($consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD] > 0) {
+        $attackCurrentBlood = $attackMemberObj->getCurrentBlood();
+        $attackCurrentMagic = $attackMemberObj->getCurrentMagaic();
+        if($consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD] > 0 && $attackCurrentBlood > $consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD]) {
             $attackMemberObj->consumeBlood($consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
         }
-        if($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0) {
+        if($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0 && $attackCurrentMagic > $consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC]) {
            $attackMemberObj->consumeMagic($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
         }
         if($attackMemberObj->isDied())return;
-        if($attackMemberObj->isEmptyMagic())return;
+        if($attackMemberObj->isEmptyMagic() && $consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0) {
+            $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
+            return $return;
+        }
         //todo 攻击效果-攻方的属性加成
         foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
@@ -412,7 +414,9 @@ class NewFight
             ),
         );
         $processBegin = $attackMark;
-        if($fightInfo['attack']['sleep'] == 1) {
+        if($fightInfo['attack']['can_not'] == 1) {
+            $process[] = $processBegin.'|'.ConfigDefine::LAN.'|'.ConfigDefine::DIYU.'|'.$fightInfo['attack']['need_magic'].'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
+        }elseif($fightInfo['attack']['sleep'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
         }elseif($fightInfo['attack']['attack_fail'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::MISS;
@@ -443,6 +447,9 @@ class NewFight
                         $process[] = self::getCode($define['hurt'][0], $attackMark, $defineMark);;
                         break;
                     case 1206:
+                        foreach ((array)$define['hurt'] as $hurt) {
+                            $process[] = self::getCode($hurt, $attackMark, $defineMark);
+                        }
                         break;
                     case 1207:
                         $process[] = ConfigDefine::JINENG.'|'.ConfigDefine::MINGZHONG.'|'.$defineMark.'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.ConfigDefine::WULI.'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
@@ -515,6 +522,10 @@ class NewFight
         $attackInfo['skill_id']      = self::$_attackSkillInfo['skill_id'];
         $attackInfo['skill_level']      = self::$_attackSkillInfo['skill_level'];
         $attackInfo['round']        = self::$_attackSkillInfo['round'];
+        if($skillInfo['consume'][ConfigDefine::USER_ATTRIBUTE_MAGIC] > $attackMemberObj->getCurrentMagaic()) {
+            $attackInfo['can_not']       = 1;
+            $attackInfo['need_magic']   = $skillInfo['consume'][ConfigDefine::USER_ATTRIBUTE_MAGIC];
+        }
         return $attackInfo;
     }
 
