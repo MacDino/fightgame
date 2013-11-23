@@ -21,15 +21,17 @@ if(!$userInfo){
 try {
 	
 	$res = Equip_Info::getEquipInfoByType($equipType, $userId);
-	foreach ($res as $i=>$key){
+	
+    foreach ($res as $i=>$key){
     	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
-    	foreach ($res[$i]['attribute_base_list'] as $i=>$value){
-			$res[$i]['attribute_base_list'][$i] = ceil($value);
+    	foreach ($res[$i]['attribute_list'] as $o=>$value){
+			$res[$i]['attribute_list'][$o] = ceil($value);
 		}
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
-    	foreach ($res[$i]['attribute_base_list'] as $i=>$value){
-			$res[$i]['attribute_base_list'][$i] = ceil($value);
+    	foreach ($res[$i]['attribute_base_list'] as $o=>$value){
+			$res[$i]['attribute_base_list'][$o] = ceil($value);
 		}
+    	$res[$i]['price'] = Equip_Info::priceEquip($key['user_equip_id']);
     }
 	$data = $res;
 	$code = 0;
