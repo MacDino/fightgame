@@ -2,6 +2,21 @@
 //技能附加属性
 class NewSkillAttr{
 	
+	public static function getSkillAttr($userId){
+		$attrArray = array();
+		$skillInfo = NewSkillStudy::getSkillList();
+		foreach ($skillInfo as $k=>$v){
+			$res = self::_. $v['skill_id'];
+			foreach ($res as $i => $o){
+				if(array_key_exists($i, $attrArray)){
+					$AttrArray[$i] += $o;
+				}
+			}
+		}
+		
+		return $attrArray;
+	}
+	
 	/** 游龙斩 */
 	private static function _1206($level){
 		$coefficient = pow(2,$level);
@@ -161,32 +176,33 @@ class NewSkillAttr{
 	
 	/** 体修 */
 	private static function _1224($level, $race){
-		
-	}
-	
-	/** 锻造 */
-	private static function _1225($level){
-		
+		/*人族：{(当前体质-10)*5+150}*(1+体修等级%) 
+魔族 ：{(当前体质-12)*6+172}*(1+体修等级%)
+仙族 ：{(当前体质-12)*4.5+154}*(1+体修等级%)*/
+
+		/*if($race == 1){
+			return 
+		}*/
 	}
 	
 	/** 物攻修 */
 	private static function _1202($level){
-		
+/*		最终伤害结果=原伤害*1.002^技能等级+0.5（1.002^技能等级-1）/(1.002-1)*/
 	}
 	
 	/** 法攻修 */
 	private static function _1203($level){
-		
+		/*最终法术伤害结果=原法术伤害*1.002^技能等级+0.5（1.002^技能等级-1）/(1.002-1)*/
 	}
 	
 	/** 法防修 */
 	private static function _1204($level){
-		
+		/*最终法术防御结果=原灵力*1.002^技能等级+0.5（1.002^技能等级-1）/(1.002-1)*/
 	}
 	
 	/** 物防修 */
 	private static function _1205($level){
-		
+		/*最终物理防御结果=原防御*1.002^技能等级+0.5（1.002^技能等级-1）/(1.002-1)*/
 	}
 	
 	

@@ -5,11 +5,13 @@ class NewSkillStudy{
 	CONST TN_SKILL_SPEND = 'level_skill_spend';
 	
 	/** @desc 获取角色技能等级列表 */
-    public static function getSkillList($userId, $skillType){
+    public static function getSkillList($userId, $skillType=false){
         $where      = array(
             'user_id' 		=> $userId,
-            'skill_type'	=> $skillType,
         );
+        if(!empty($skillType)){
+        	$where['skill_type'] = $skillType;
+        }
         $res = MySql::select(self::TN_SKILL_INFO, $where, array('skill_id', 'skill_level', 'odds_set'));
         
         return $res;
