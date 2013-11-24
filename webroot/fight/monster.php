@@ -94,6 +94,7 @@ try {
         $data['result']['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['result']['experience']);
+        $data['result']['experience_sum']   =  $userInfo['experience'];
         $isLevelUp                  = User_Info::isLevel($userId);
         if($isLevelUp) {
             $data['result']['level_up'] = $isLevelUp;
