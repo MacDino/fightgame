@@ -415,7 +415,7 @@ class NewFight
         );
         $processBegin = $attackMark;
         if($fightInfo['attack']['can_not'] == 1) {
-            $process[] = $processBegin.'|'.ConfigDefine::LAN.'|'.ConfigDefine::DIYU.'|'.$fightInfo['attack']['need_magic'].'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
+            $process[] = $processBegin.'|'.ConfigDefine::LAN.'|'.ConfigDefine::DIYU.'|M:'.$fightInfo['attack']['need_magic'].'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
         }elseif($fightInfo['attack']['sleep'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
         }elseif($fightInfo['attack']['attack_fail'] == 1) {
