@@ -6,15 +6,25 @@ class User_Bind
 
     private static $_allowBindType = array('mac', 'sina', 'weixin');
 
-    public static function getBindUserId($bindType, $bindValue, $createNew = FALSE)
+    /**
+     * 获取账号ID
+     *
+     * @param 注册方式 $bindType
+     * @param 账号 $bindValue
+     * @param 密码 $passWord
+     * @param 是否新建 $createNew
+     * @return BOOL
+     */
+    public static function getBindUserId($bindType, $bindValue, $passWord, $createNew = FALSE)
     {
         try{
            //self::_allowBindType($bindType);
-           self::_checkValue($bindType, $bindValue);
-           $masterId = self::_getBindUerInfo($bindType, $bindValue);
-           if(!$masterId && $createNew)
+           self::_checkValue($bindType, $bindValue, $passWord);
+           $masterId = self::_getBindUerInfo($bindType, $bindValue, $passWord);
+           if(!$masterId)
            {
-               $masterId = self::_createBindUserInfo($bindType, $bindValue);  
+//               $masterId = self::_createBindUserInfo($bindType, $bindValue);  
+				return FALSE; 
            }
            return $masterId;
         }catch (Exception $e){
@@ -22,23 +32,26 @@ class User_Bind
         } 
     }
 
-    private static function _createBindUserInfo($bindType, $bindValue)
+    /**
+     * 创建用户
+     *
+     * @param 注册方式 $bindType
+     * @param 账号 $bindValue
+     * @param 密码 $passWord
+     * @return BOOL
+     */
+    public static function createBindUserInfo($bindType, $bindValue, $passWord)
     {
-        if(!$bindType || !$bindValue)return;
-        $masterId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue), true);
+        echo "$bindType, $bindValue, $passWord";
+        if(!$bindType || !$bindValue || !$passWord)return;
+        echo 65666;
+        $masterId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue, 'password' => $passWord), true);
         return $masterId;
     }
     
-    //自己创建用户
-    public static function createAccount($account, $passWord){
-    	if(!$account || !$passWord)return;
-    	$masterId = MySql::insert(self::TABLE_NAME, array('bind_type' => 'self', 'bind_value' => $bindValue, 'password' => $passWord), true);
-    	return $masterId;
-    }
-
-    private static function _getBindUerInfo($bindType, $bindValue)
+    private static function _getBindUerInfo($bindType, $bindValue, $passWord)
     {
-        $loginUserInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue));
+        $loginUserInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue, 'password' => $passWord));
         if($loginUserInfo)
         {
         	$masterId = $loginUserInfo['master_id'];
@@ -47,8 +60,25 @@ class User_Bind
         	return FALSE;
         }
     }
+    
+    public static function getBindUerInfo($bindType, $bindValue)
+    {
+        $loginUserInfo = MySql::selectOne(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue));
+        if($loginUserInfo)
+        {
+            return TRUE;
+        }else{
+        	return FALSE;
+        }
+    }
 
-    private static function _checkValue($bindType, $bindValue)
+    /**
+     * 检验
+     * @param 注册方式 $bindType
+     * @param 账号 $bindValue
+     * @param 密码 $passWord
+     */
+    private static function _checkValue($bindType, $bindValue, $passWord)
     {
         //todo 检查数据    
     }

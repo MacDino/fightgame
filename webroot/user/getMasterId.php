@@ -4,8 +4,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $bindType   = isset($_REQUEST['bind_type'])?$_REQUEST['bind_type']:'';//绑定用户类别
 $bindValue  = isset($_REQUEST['bind_value'])?$_REQUEST['bind_value']:'';//绑定用户值
+$passWord   = isset($_REQUEST['pass_word'])?$_REQUEST['pass_word']:'';//密码
 
-if(!$bindType || !$bindValue){
+if(!$bindType || !$bindValue || !$passWord){
 	$code = 100001;
     $msg = '缺少必传参数';
     die;
@@ -13,7 +14,7 @@ if(!$bindType || !$bindValue){
 
 
 try {
-    $res = User::getLoginUserId($bindType, $bindValue);
+    $res = User_Bind::getBindUserId($bindType, $bindValue, $passWord);
     if($res)
     {
         $data = array('master_id' => $res); 
