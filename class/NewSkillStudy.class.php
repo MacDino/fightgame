@@ -121,22 +121,42 @@ class NewSkillStudy{
 		return $res;
 	}
 	
+	public static function ReleaseProbability($userId){
+		$attack = array();
+		$defense = array();
+		$defenseSkill = array(NewSkill::SKILL_HUMAN_FY_FJ => 0, NewSkill::SKILL_TSIMSHIAN_FY_ZJ => 0, NewSkill::SKILL_DEMON_FY_FZ);
+		$skillInfo = self::getReleaseProbability($userId);
+		
+		foreach ($skillInfo as $k => $v){
+			if(array_key_exists($v['skill_id'], $defenseSkill)){
+				$defense[$v[skill_id]] =  $v['probability'];
+			}else{
+				$attack[$v[skill_id]] =  $v['probability'];
+			}
+		}
+		return array('defense' => $defense, 'attack' => $attack);
+	}
+	
 	/** @desc 技能权重换算成比例 */
 	public static function getReleaseProbability($userId){
 		$skillInfo = self::getSkillList($userId, 1);
-		$high = 0.4;
+		
+		//最高释放概率
+		$high = 0.45;//基础释放概率
+		$userInfo = User_Info::getUserInfoFightAttribute($userId, true);//用户属性
+		$equipProbability = $userInfo[ConfigDefine::RELEASE_PROBABILITY];//装备释放总概率
+		if($equipProbability > 0.45){$equipProbability = 0.45;}
+		$high += $equipProbability;
+		
 		$total = 0;
 		foreach ($skillInfo as $k=>$v){
 			$total += $v['odds_set'];
 		}
 		
 		foreach ($skillInfo as $i=>$o){
-			$skillInfo[$i]['probability'] = $high/$total*$o['odds_set'];
+			$skillInfo[$i]['probability'] = sprintf("%01.2f", $high/$total*$o['odds_set']*100);
 		}
 		return $skillInfo;
-		
-		
-		
 	}
 	
 	/** @desc 种族技能 */

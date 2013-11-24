@@ -6,11 +6,13 @@ $userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : "";
 $skillType    = isset($_REQUEST['skill_type']) ? $_REQUEST['skill_type'] : "";
 
 try {
-	if($skillType == 1){
+	$a = NewSkillStudy::ReleaseProbability($userId);
+	print_r($a);
+	/*if($skillType == 1){
 		$skillInfo = NewSkillStudy::getReleaseProbability($userId);
 	}else{
 		$skillInfo = NewSkillStudy::getSkillList($userId, 0);//被动技能
-	}
+	}*/
 	
 	$data = $skillInfo;
 	$code   = 0;
