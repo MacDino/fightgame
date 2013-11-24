@@ -37,7 +37,7 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	/*
 	 * 已打赢的副本则不再重复进入
 	 */
-	if ($userLastCopyResult['win_monster_num'] == $copy['monster_num']) {
+	if ($userLastCopyResult['win_monster_num'] >= $copy['monster_num']) {
 		$code = 170005;
 		exit;	
 	}
@@ -110,7 +110,7 @@ try {
 		if(isset($isTodayFight) && $isTodayFight) {
 			$win_monster_count = $userLastCopyResult['win_monster_num'] + 1;
 		} else {
-			$win_monster_count = 0;
+			$win_monster_count = 1;
 		}
 
 		/*
@@ -123,10 +123,14 @@ try {
 		}
 
         User_Info::addExperience($userId, $data['result']['experience']);
+
+        $data['result']['experience_sum']   =  $userInfo['experience'];
+
         $isLevelUp = User_Info::isLevel($userId);
         if($isLevelUp) {
             $data['result']['level_up'] = $isLevelUp;
         }
+        $data['result']['win_monster_num'] = $win_monster_count;
 
         User_Info::addMoney($userId, $data['result']['money']);
 

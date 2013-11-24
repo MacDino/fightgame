@@ -42,9 +42,9 @@ class User_Bind
      */
     public static function createBindUserInfo($bindType, $bindValue, $passWord)
     {
-        echo "$bindType, $bindValue, $passWord";
+        //echo "$bindType, $bindValue, $passWord";
         if(!$bindType || !$bindValue || !$passWord)return;
-        echo 65666;
+        //echo 65666;
         $masterId = MySql::insert(self::TABLE_NAME, array('bind_type' => $bindType, 'bind_value' => $bindValue, 'password' => $passWord), true);
         return $masterId;
     }

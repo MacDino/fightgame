@@ -7,7 +7,7 @@ $skillId    = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] :'';
 $oddsSet   = isset($_REQUEST['odds_set']) ? $_REQUEST['odds_set'] :'';
 
 try {
-	$data   = Skill_Info::setSkillOdds($userId, $skillId, $oddsSet);
+	$data   = NewSkillStudy::setSkillOdds($userId, $skillId, $oddsSet);
 	$code   = 0;
 } catch (Exception $e) {
 	$code   = 1;

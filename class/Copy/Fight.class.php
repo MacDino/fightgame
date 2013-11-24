@@ -6,9 +6,6 @@ class Copy_Fight{
 	 */
 	public static function createMonsterFightable($monster) {
 		$attribute  = Monster::getMonsterAttribute($monster);
-		//print_r($attribute);
-		//技能加成后的属性
-		//$attribute  = Monster::attributeWithSkill($attribute, $skill, $monster);
 
         $monsterInfo = array(
             'monster_id' => $monster['monster_id'],
@@ -28,7 +25,16 @@ class Copy_Fight{
 	 */
 	public static function createGeneralMonsterFightable($monster) {
 		$attribute  = Monster::getMonsterAttribute($monster);
-		$monster['attributes'] = $attribute;
-		return new NewFightMember($monster);	
+
+        $monsterInfo = array(
+            'monster_id' => $monster['monster_id'],
+            'race'       => $monster['race_id'],
+            'user_level' => $monster['level'],
+            'mark'       => $monster['mark'],
+            'attributes' => $attribute,
+			'have_skillids' => $monster['have_skillids'],
+			'skill_rates'  => $monster['skill_rates'],
+        );
+		return new NewFightMember($monsterInfo);	
 	}
 }
