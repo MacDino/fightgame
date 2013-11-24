@@ -49,7 +49,8 @@ class RobotFight{
     public static function getResult($info, $time) {
         $awardInfos = self::getAwardPerMinite();
         $awardInfo  = $awardInfos[$info['map_id']];
-        $return['money']      = intval($awardInfo['money']*$time);
+        $lucky      = intval($info['lucky']) > 0 ? intval($info['lucky']) : 0;
+        $return['money']      = intval($awardInfo['money'] * $time * (1 +  $lucky*0.02));
         $return['experience'] = intval($awardInfo['experience']*$time);
 
         User_Info::addExperience($info['user_id'], $return['experience']);
