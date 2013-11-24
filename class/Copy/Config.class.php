@@ -77,6 +77,9 @@ class Copy_Config{
 			$mapMonster = MySql::selectOne('map_monster', array('monster_id' => $monsterId));
 			$monsterRaceId = $mapMonster['race_id']; 
 
+			$aptitudeTypeId = Monster::randAptitudeType();
+			$aptitude = Monster::getMonsterAptitude($mapId, $aptitudeTypeId);
+
 			$monster = array(
 				'monster_id' 	=> $monsterId,
 				'level' 		=> $monsterLevel,
@@ -84,6 +87,8 @@ class Copy_Config{
 				'skills'		=> $skills,
 				'race_id'		=> $monsterRaceId,
 				'grow_per'		=> Monster::getGrowPercentage($mapId),
+				'aptitude_type' => $aptitudeTypeId,
+				'aptitude'		=> $aptitude,
 			);
 			$monster += $monsterSkill = self::getMonsterSkill($monster, $levelInfo['skill_rate']);
 			return $monster;
@@ -160,6 +165,8 @@ class Copy_Config{
 		);
 		$monsters = MySql::select(self::TABLE_NAME_CONFIG, $where);	
 		foreach ($monsters as $k => $v) {
+
+
 			$returnMonster[$k]['monster_id'] = $v['monster_id'];
 			$returnMonster[$k]['level'] = $level;
 			$mapMonster = MySql::selectOne('map_monster', array('monster_id' => $v['monster_id']));
@@ -168,11 +175,17 @@ class Copy_Config{
 			$returnMonster[$k]['prefix']	= $v['monster_prefix'];
 			$returnMonster[$k]['suffix']	= $v['monster_suffix'];
 
+			$aptitudeTypeId = Monster::randAptitudeType();
+			$aptitude = Monster::getMonsterAptitude($mapMonster['map_id'], $aptitudeTypeId);
+
+
+			$returnMonster[$k]['grow_per'] 		= Monster::getGrowPercentage($mapMonster['map_id']);
+			$returnMonster[$k]['aptitude_type']	= $aptitudeTypeId;
+			$returnMonster[$k]['aptitude']		= $aptitude;
+
 			$skills = self::getGeneralMonsterSkill($v, $level, $mapMonster['race_id']);
 			$returnMonster[$k] += $skills;
-
 		}
-		//print_r($returnMonster);
 		return $returnMonster;
 	} 
 

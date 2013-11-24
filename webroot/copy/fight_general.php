@@ -60,8 +60,11 @@ while($monsterGroupDeadCount<2){
 		} else {
 			$monster            = Copy_Config::getGroupMonsterByCopyId($copyId, 2, $userInfo['user_level']);
 		}
+		//print_r($monster);
 		foreach ($monster as $k=>$v) {
-			$monster[$k]['mark'] = 'copy_general';
+			$monster[$k]['mark'] = 'monster['.$k.']';
+		}
+		foreach ($monster as $k=>$v) {
 			$teams['monster'][] = Copy_Fight::createGeneralMonsterFightable($v);
 		}
 		foreach ($monster as $k=>$v) {

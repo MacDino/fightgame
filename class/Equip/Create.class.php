@@ -19,11 +19,12 @@ class Equip_Create
         
         try{
         	if($equipSuitRaceId)self::$_equipSuitRaceId = $equipSuitRaceId;
-            self::_getEquipSuitAttributeInfo($equipColour, $equipQuality, $equipType);//套装信息
+            //self::_getEquipSuitAttributeInfo($equipColour, $equipQuality, $equipType);//套装信息
             $attributeBaseList = self::_getEquipAttributeInfo($equipColour, $equipQuality, $equipType, $equipLevel);//装备信息     
             $attributeList = self::_getEquipAttributeValue($equipLevel, $equipQuality);
             $equipInfo = self::_getEquipData($equipLevel, $equipType, $equipColour, $attributeList, $attributeBaseList, $equipQuality); 
             self::_cleanData();
+            
             if($userId)
             {
                 $equipInfo['user_id'] = $userId;
@@ -131,6 +132,7 @@ class Equip_Create
     //获取套装信息
     private static function _getEquipSuitAttributeInfo($equipColour, $equipQuality, $equipType)
     {
+    	return;
         if($equipColour != Equip::EQUIP_COLOUR_ORANGE)return array();
         if($equipQuality != Equip::EQUIP_QUALITY_HOLY)return array();
         if(!self::$_equipSuitRaceId)self::$_equipSuitRaceId = User_Race::randRaceId();

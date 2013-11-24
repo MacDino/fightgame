@@ -98,14 +98,19 @@ try {
         if($isLevelUp) {
             $data['result']['level_up'] = $isLevelUp;
         }
-
         User_Info::addMoney($userId, $data['result']['money']);
-
         if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
             $getEquipSetting = Fight_Setting::isEquipMentCan($userId);
-            foreach ($data['result']['equipment'] as $equipment) {
+            foreach ($data['result']['equipment'] as $equipKey => $equipment) {
                 if($getEquipSetting[$equipment['color']]) {
-                    Equip::createEquip($equipment['color'], $userId, $equipment['level']);
+                    $equipmentNum = Equip_Info::getEquipNum($userId);
+                    $equipmentSurplus = $userInfo['pack_num'] - intval($equipmentNum);
+                    $equipmentSurplus = $equipmentSurplus > 0 ? $equipmentSurplus : 0;
+                    $data['result']['equipment'][$equipKey]['get'] = 0;
+                    if($equipmentSurplus > 0) {
+                        $get = Equip::createEquip($equipment['color'], $userId, $equipment['level']);
+                        $data['result']['equipment'][$equipKey]['get'] = 1;
+                    }
                 }
             }
         }
