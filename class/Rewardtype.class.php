@@ -41,7 +41,7 @@ class Rewardtype{
 	public static function box($userId, $num=1, $level=null){
 		if(empty($level)){
 			$userInfo = User_Info::getUserInfoByUserId($userId);
-			$level = intval($userInfo['user_level']/10);
+			$level = intval($userInfo['user_level']/10) * 10;
 		}
 		//for($i=0;$i<$num;$i++){
 			$colour = User_Property::randGeneralEquipColor();

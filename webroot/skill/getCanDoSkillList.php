@@ -1,4 +1,5 @@
 <?php
+//弃用
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : "";
