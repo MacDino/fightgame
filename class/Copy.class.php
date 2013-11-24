@@ -12,6 +12,11 @@ class Copy {
         return FALSE;
     }
 
+	public static function getCopyList(){
+		$res = MySql::select(self::TABLE_NAME, $where);
+		return $res;
+	}
+
 	public static function getMonster($copyLevelId, $userId) {
 		return Copy_Config::getMonsterByLevelId($copyLevelId, $userId);
 	}

@@ -61,7 +61,7 @@ if(isset($_REQUEST['colors'])) {
  */
 try {
     $monster            = Copy::getMonster($copyLevId , $userId);
-    $monster['mark'] = 'copy1[0]';
+    $monster['mark'] = 'monster[0]';
     $teams['monster'][] = Copy_Fight::createMonsterFightable($monster);
     $data['participant']['monster'][]    = NewFight::getMonsterFightInfo($teams['monster'][0], $monster);
 
