@@ -9,6 +9,7 @@ class Copy_FightResult{
         }
         $data = array(
             'user_id'           => intval($params['user_id']),
+			'copy_id'			=> intval($params['copy_id']),
             'copies_level_id'   => intval($params['copies_level_id']),
             'fight_start_time'  => time(),
             'use_time'          => intval($params['use_time']),
@@ -18,9 +19,18 @@ class Copy_FightResult{
 		if ($params['win_monster_num']) {
 			$data['win_monster_num'] = $params['win_monster_num'];
 		}
-        $existResult = self::getResult($params['user_id'], $params['copies_level_id']);
+        $existResult = self::getResult($params['user_id'], $params['copies_level_id'], $params['copy_id']);
         if(is_array($existResult) && count($existResult)) {
-            return MySql::update(self::TABLE_NAME, $data, array('user_id' => intval($params['user_id'])));
+			$where = array(
+				'user_id' => $params['user_id'],	
+			);
+			if ($params['copy_id']) {
+				$where['copy_id'] = $params['copy_id'];	
+			}
+			if ($params['copies_level_id']) {
+				$where['copies_level_id'] = $params['copies_level_id'];	
+			}
+            return MySql::update(self::TABLE_NAME, $data, $where);
         } else {
             return MySql::insert(self::TABLE_NAME, $data, TRUE);
         }
