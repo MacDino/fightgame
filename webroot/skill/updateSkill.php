@@ -6,9 +6,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId    = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : "";
 $skillId   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : "";
-$type   = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
+$skillType   = isset($_REQUEST['skill_type']) ? $_REQUEST['skill_type'] : "";
 
-$skillLevel    = Skill_Info::getSkillInfo($userId, $skillId);
+
 $userInfo  = User_Info::getUserInfoByUserId($userId); 
 $money = User_Info::getUserMoney($userId);
 //金钱判断
@@ -18,16 +18,7 @@ if($needMoney > $money){
     $msg    = '您金钱不足';
     die;
 }
-/*//新学技能
-if(empty($skillLevel) || $skillLevel < 1){
-    $learned_skill_num  = Skill_Info::getLearnedSkillNum($userId, $skillId);
-    $allowed_skill_num  = Skill_Info::getAllowedSkillNum($userInfo['user_level']);
-    if($learned_skill_num >= $allowed_skill_num){
-        $code   = 1;
-        $msg    = '您已达到技能学习最大数';
-        die;
-    }
-}*/
+
 if($skillLevel+1 > $userInfo['user_level']+10){
 	$code = 3;
 	$msg = "不能高过人物等级10级";
@@ -42,7 +33,7 @@ if($userInfo['skil_point'] < 1){
     die;
 }
 try {
-	$data   = Skill_Info::updateSkill($userId, $skillId, $type);
+	$data   = $skillLevel    = NewSkillStudy::updateSkill($userId, $skillId, $skillType);
     if($data){
         //扣除金钱
         User_Info::subtractBindMoney($userId, $needMoney);
