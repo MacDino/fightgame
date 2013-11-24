@@ -80,16 +80,21 @@ class Equip_Info
                 
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
             }elseif($hit == 'no_less_dz' && $info['forge_level'] != 0){ //装备锻造等级掉一级
-            	$attributeList = json_decode($info['attribute_base_list'], TRUE);
-                $forgeAttributeList = Equip_Config::forgeAttributeList();
-                //减少属性值
-                foreach($attributeList AS $k=>$v){
-                    if(isset($forgeAttributeList[$info['equip_type']][$k])){
-                        $attributeList[$k] = $forgeAttributeList[$info['equip_type']][$k] - $v;
-                    }
+            	$data['forge_level'] = $info['forge_level'] - 1;
+            	
+                //基本属性
+                $attributeBaseList = json_decode($info['attribute_base_list'], TRUE);
+                foreach($attributeBaseList as $k=>$v){
+                    $attributeBaseList[$k] = $v - $v * ($data['forge_level'] * 0.015);
                 }
-                $data['attribute_base_list'] = json_encode($attributeList);
-                $data['forge_level'] = $info['forge_level'] - 1;
+                $data['attribute_base_list'] = json_encode($attributeBaseList);
+                
+                //附加属性
+                $attributeList = json_decode($info['attribute_list'], TRUE);
+                foreach($attributeList as $k=>$v){
+                    $attributeList[$k] = $v - $v * ($data['forge_level'] * 0.01);
+                }
+                $data['attribute_list'] = json_encode($attributeList);
                 $res = MySql::update(self::TABLE_NAME, $data, array('user_equip_id' => $equipId));        
             }
         }

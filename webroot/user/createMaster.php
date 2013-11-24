@@ -2,18 +2,26 @@
 //创建账号
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
-$account   = isset($_REQUEST['account'])?$_REQUEST['account']:'';//用户账号
-$passWord   = isset($_REQUEST['pass_word'])?$_REQUEST['pass_word']:'';//用户密码
+$bindType   = isset($_REQUEST['bind_type'])?$_REQUEST['bind_type']:'';//绑定用户类别
+$bindValue  = isset($_REQUEST['bind_value'])?$_REQUEST['bind_value']:'';//绑定用户值
+$passWord   = isset($_REQUEST['pass_word'])?$_REQUEST['pass_word']:'';//密码
 
-if(!$account || !$passWord)
+if(!$bindType || !$passWord || !$bindValue)
 {
     $code = 100001;
     $msg = '缺少必传参数';
     die;
 }
 
+$nowMaster = User_Bind::getBindUerInfo($bindType, $bindValue);
+if(!empty($nowMaster)){
+	$code = 100003;
+    $msg = '账号已经被使用';
+    die;
+}
+
 try{
-	$data['master_id'] = User_Bind::createAccount($account, $passWord);
+	$data['master_id'] = User_Bind::createBindUserInfo($bindType, $bindValue, $passWord);
 	$code = 0;
 	die;
 } catch (Exception $e) {
