@@ -447,8 +447,8 @@ class NewFight
                         $process[] = self::getCode($define['hurt'][0], $attackMark, $defineMark);;
                         break;
                     case 1206:
-                        foreach ((array)$define['hurt'] as $hurt) {
-                            $process[] = self::getCode($hurt, $attackMark, $defineMark);
+                        foreach ((array)$define['hurt'] as $hurtKey => $hurt) {
+                            $process[] = ConfigDefine::DI.'|N'.($hurtKey + 1).'|'.ConfigDefine::GONGJI.'|'.self::getCode($hurt, $attackMark, $defineMark);
                         }
                         break;
                     case 1207:
