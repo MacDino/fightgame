@@ -132,17 +132,17 @@ class NewSkillHurt extends NewSkill
 	//随机获取用用户力量1%-5%
 	private static function _randUserAttributePower($userAttributePower)
 	{
-		return PerRand::getRandValue($userAttributePower*0.01, $userAttributePower*0.05);
+		return PerRand::getRandValue(array($userAttributePower*0.01, $userAttributePower*0.05));
 	}
 	//随机获取用用户伤害3%-9%
 	private static function _randUserAttributeHurt($userAttributeHurt)
 	{
-		return PerRand::getRandValue($userAttributePower*0.03, $userAttributePower*0.09);
+		return PerRand::getRandValue(array($userAttributePower*0.03, $userAttributePower*0.09));
 	}
 	//随机获取用用户灵力值95%-105%
 	private static function _randUserAttributePsychic($userAttributePsychic)
 	{
-		return PerRand::getRandValue($userAttributePsychic*0.95, $userAttributePower*1.05);
+		return PerRand::getRandValue(array($userAttributePsychic*0.95, $userAttributePower*1.05));
 	}
 	//随机5次用户等级，取最大三个值的平均值
 	private static function _rand5UserLevelGetTop3Average($userLevel)
