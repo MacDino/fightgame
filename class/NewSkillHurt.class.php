@@ -169,8 +169,6 @@ class NewSkillHurt extends NewSkill
 		$ratio 		= 0.05;
 		$isViolent 	= 0;
 
-		if(NewFight::DEBUG)$ratio = 1;
-
 		//用户内丹
 		if($userId > 0)
 		{
