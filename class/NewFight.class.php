@@ -566,6 +566,7 @@ class NewFight
             'level'     => $userInfo['user_level'],
             'blood'     => intval($user->getCurrentBlood()),
             'magic'     => intval($user->getCurrentMagaic()),
+            'id'        => $userInfo['mark'],
         );
     }
 
@@ -577,6 +578,7 @@ class NewFight
             'magic' => intval($monster->getCurrentMagaic()),
             'prefix' => $monsterInfo['prefix'],
             'suffix' => $monsterInfo['suffix'],
+            'id'        => $monsterInfo['mark'],
         );
     }
 
