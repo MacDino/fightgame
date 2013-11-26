@@ -18,6 +18,12 @@ class NewFight
     private $_fightKeyMiss = 'miss';//战斗标识
 
     public static function createUserObj($userInfo) {
+        $newskill = NewSkillStudy::getReleaseProbability($userInfo['user_id']);
+        foreach ((array)$newskill as $skillInfo) {
+            $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
+            $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
+        }
+		/*
         $attack = Skill_Info::getReleaseProbability($userInfo['user_id'], 1);
         foreach ((array)$attack as $skillInfo) {
             $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
@@ -27,7 +33,8 @@ class NewFight
         foreach ((array)$defense as $skillInfo) {
             $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
             $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
-        }
+		}
+		 */
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($userInfo['user_id'], TRUE);
         $user = array(
             'user_id' => $userInfo['user_id'],
@@ -38,6 +45,7 @@ class NewFight
             'have_skillids' => $skills,
             'skill_rates' => $skillRates,
         );
+		//print_r($user);
         return new NewFightMember($user);
     }
 

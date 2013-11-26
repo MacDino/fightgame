@@ -327,19 +327,19 @@ class ConfigDefine
 		$config = array(
 			self::APTITUDE_ATTACK => array(
 				'base_value' => 1100,
-				'formule'	 => 1400 + ($mapId - 1)	* 10,
+				'formule'	 => 1100 + ($mapId - 1)	* 10,
 			),
 			self::APTITUDE_DEFENSE => array(
 				'base_value' => 1400,
-				'formule'	 => 1000 + ($mapId - 1)	* 10,
+				'formule'	 => 1400 + ($mapId - 1)	* 10,
 			),
 			self::APTITUDE_PHYSICAL => array(
 				'base_value' => 3000,
-				'formule'	 => 2000 + ($mapId - 1)	* 110,
+				'formule'	 => 3000 + ($mapId - 1)	* 110,
 			),
 			self::APTITUDE_MAGIC => array(
 				'base_value' => 1500,
-				'formule'	 => 1400 + ($mapId - 1)	* 60,
+				'formule'	 => 1500 + ($mapId - 1)	* 60,
 			),
 			self::APTITUDE_SPEED => array(
 				'base_value' => 1000,
@@ -359,11 +359,11 @@ class ConfigDefine
 		$config = array(
 			self::APTITUDE_ATTACK => array(
 				'base_value' => 1100,
-				'formule'	 => 1400 + ($mapId - 1)	* 10,
+				'formule'	 => 1100 + ($mapId - 1)	* 10,
 			),
 			self::APTITUDE_DEFENSE => array(
 				'base_value' => 1100,
-				'formule'	 => 1000 + ($mapId - 1)	* 10,
+				'formule'	 => 1100 + ($mapId - 1)	* 10,
 			),
 			self::APTITUDE_PHYSICAL => array(
 				'base_value' => 2000,
@@ -371,7 +371,7 @@ class ConfigDefine
 			),
 			self::APTITUDE_MAGIC => array(
 				'base_value' => 1900,
-				'formule'	 => 1400 + ($mapId - 1)	* 60,
+				'formule'	 => 1900 + ($mapId - 1)	* 60,
 			),
 			self::APTITUDE_SPEED => array(
 				'base_value' => 1000,

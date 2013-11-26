@@ -404,7 +404,7 @@ class Monster
 				$formule = $powerAttr * $growPer + $level * 3.2 * $attackAptitude/1000 * $growPer * 0.95;
 				break;
 			case ConfigDefine::USER_ATTRIBUTE_MAGIC:
-				$magicAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+				$magicAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER];
 				$magicAptitude = $aptitude[ConfigDefine::APTITUDE_MAGIC];
 				$formule = $magicAttr * 3 * $growPer + $level * 2 * $magicAptitude/1000;
 				break;
@@ -416,6 +416,7 @@ class Monster
 			case ConfigDefine::USER_ATTRIBUTE_PSYCHIC:
 				$powerAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_POWER];
 				$physiqueAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_PHYSIQUE];
+				$magicAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER];
 				$magicAptitude = $aptitude[ConfigDefine::APTITUDE_MAGIC];
 				$enduranceAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_ENDURANCE];
 				$formule = $powerAttr * 0.4 + $physiqueAttr * 0.3 + $magicAttr * 0.7 + $enduranceAttr * 0.2 + $level * $magicAptitude/1000; 
