@@ -198,6 +198,7 @@ class NewFight
                     }
             		$hurt = $hurtInfo['hurt'];//攻击值
                     $return['define'][$objKey]['hurt'][$key]['hurt'] = $hurt;
+                    $return['define'][$objKey]['hurt'][$key]['is_bj'] = $hurt['addition'] > 1 ? 1 : 0;
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
                     $defineSkillId = key((array)$defineSkillInfo);
 
@@ -506,15 +507,15 @@ class NewFight
         if($hurt['is_hit']) {
             if($hurt['define_skill'] == 1211) {
                 //造成了 xx 伤害 防御者  使用了 反击 对 攻击者 造成了 xx 伤害
-                $return = ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
             }elseif ($hurt['define_skill'] == 1217) {
                 //防御者 使用了 招架 造成了 xx 伤害
-                $return = $defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = $defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
             }elseif ($hurt['define_skill'] == 1223) {
                 //造成了100点伤害，Y使用了反震，对A造成了50点伤害。
-                $return = ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
             }  else {
-                $return = ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
             }
         } else {
             //躲避 成功 攻击 miss
