@@ -219,7 +219,7 @@ class NewFight
                         }
                     }
                     $return['define'][$objKey]['hurt'][$key]['hurt'] = $hurt;
-                    $return['define'][$objKey]['hurt'][$key]['is_bj'] = $hurt['addition'] > 1 ? 1 : 0;
+                    $return['define'][$objKey]['hurt'][$key]['is_bj'] = $hurtInfo['addition'] > 1 ? 1 : 0;
                     //造成伤害
                     $defineMemberObj->consumeBlood($hurt);
                     if($defineMakeHurt > 0) {
