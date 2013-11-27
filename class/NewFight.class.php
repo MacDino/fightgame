@@ -19,22 +19,12 @@ class NewFight
 
     public static function createUserObj($userInfo) {
         $newskill = NewSkillStudy::getReleaseProbability($userInfo['user_id']);
-        foreach ((array)$newskill as $skillInfo) {
-            $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
-            $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
+        foreach ((array)$newskill as $action  =>  $skillInfos) {
+            foreach ((array)$skillInfos as $skillInfo) {
+                $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
+                $skillRates[$action][$skillInfo['skill_id']] = $skillInfo['probability']/100;
+            }
         }
-		/*
-        $attack = Skill_Info::getReleaseProbability($userInfo['user_id'], 1);
-        foreach ((array)$attack as $skillInfo) {
-            $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
-            $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
-        }
-        $defense = Skill_Info::getReleaseProbability($userInfo['user_id'], 2);
-        foreach ((array)$defense as $skillInfo) {
-            $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
-            $skillRates[$skillInfo['skill_id']] = $skillInfo['probability']/100;
-		}
-		 */
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($userInfo['user_id'], TRUE);
         $user = array(
             'user_id' => $userInfo['user_id'],
@@ -45,7 +35,6 @@ class NewFight
             'have_skillids' => $skills,
             'skill_rates' => $skillRates,
         );
-		//print_r($user);
         return new NewFightMember($user);
     }
 
@@ -60,7 +49,6 @@ class NewFight
             'attributes' => $attribute,
         );
 		$monsterInfo = array_merge($monsterInfo,$skill);
-		//print_r($monsterInfo);
         return new NewFightMember($monsterInfo);
     }
 
@@ -116,7 +104,6 @@ class NewFight
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     //开始战斗
                     $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
-//                    var_dump($fightInfo);
                     $return['fight_procedure'][] = self::_report($fightInfo);
                     NewSkill::end();
                 }
