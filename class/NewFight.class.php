@@ -194,8 +194,6 @@ class NewFight
                         continue;
                     }
             		$hurt = $hurtInfo['hurt'];//攻击值
-                    $return['define'][$objKey]['hurt'][$key]['hurt'] = $hurt;
-                    $return['define'][$objKey]['hurt'][$key]['is_bj'] = $hurt['addition'] > 1 ? 1 : 0;
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
                     $defineSkillId = key((array)$defineSkillInfo);
 
@@ -207,8 +205,10 @@ class NewFight
                         NewSkill::begin($attackMemberObj, $attackSkillInfo);
                         NewSkill::setDefineObj($defineMemberObj);
                     }elseif ($defineSkillId == 1217) {
-                        $isMagic = FALSE;
-                        $hurt    = $isMagic ? ($hurt * 0.5) : $hurt * 0.7;
+                        $physicSkills = NewSkill::getPhysicsSkills();
+                        $isPhysic = in_array(self::$_attackSkillInfo['skill_id'], $physicSkills);
+                        $hurt    = $isPhysic ? ($hurt * 0.7) : $hurt * 0.5;
+                        $hurt    = $hurt > 1 ? $hurt : 1;
                     }elseif ($defineSkillId == 1223) {
                         $defineMakeHurt = $hurt;
                     }
@@ -218,6 +218,8 @@ class NewFight
                             $return['define'][$objKey]['hurt'][$key]['define_hurt'] = $defineMakeHurt;
                         }
                     }
+                    $return['define'][$objKey]['hurt'][$key]['hurt'] = $hurt;
+                    $return['define'][$objKey]['hurt'][$key]['is_bj'] = $hurt['addition'] > 1 ? 1 : 0;
                     //造成伤害
                     $defineMemberObj->consumeBlood($hurt);
                     if($defineMakeHurt > 0) {
