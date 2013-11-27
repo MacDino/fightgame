@@ -425,7 +425,7 @@ class NewFight
         }elseif($fightInfo['attack']['sleep'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
         }elseif($fightInfo['attack']['attack_fail'] == 1) {
-            $process[] = $processBegin.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::GONGJI.'|'.ConfigDefine::MISS;
+            $process[] = $processBegin.'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
         } else {
             $fightInfo['define'] = array_values((array)$fightInfo['define']);
             foreach ((array)$fightInfo['define'] as $defineKey => $define) {
