@@ -230,16 +230,15 @@ class NewFight
                 self::dealTeamMemberDead($defineMemberObj);
             } else {
                 $attribute = NewSkill::skillAttribute();
-                foreach ($attribute as $attributeId => $changeValue) {
-                    if($attributeId == ConfigDefine::USER_ATTRIBUTE_BLOOD) {
-                        $defineMemberObj->addBlood($changeValue);
-                        $return['define'][$objKey]['add_blood'] = $changeValue;
-                    }
-                    if($attributeId == ConfigDefine::USER_ATTRIBUTE_MAGIC) {
-                        $defineMemberObj->addMagic($changeValue);
-                        $return['define'][$objKey]['add_magic'] = $changeValue;
-                    }
+                if($attribute[ConfigDefine::USER_ATTRIBUTE_BLOOD] > 0) {
+                    $defineMemberObj->addBlood($attribute[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
+                    $return['define'][$objKey]['add_blood'] = $attribute[ConfigDefine::USER_ATTRIBUTE_BLOOD];
                 }
+                if($attribute[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0) {
+                    $defineMemberObj->addBlood($attribute[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
+                    $return['define'][$objKey]['add_blood'] = $attribute[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+                }
+                $return['define'][$objKey]['is_bj'] = $attribute['addition'] > 1 ? 1 : 0;
             }
             self::$_attackSkillInfo['round'] = NewSkill::getSkillRound();
             $return['define'][$objKey]['current_blood'] = $defineMemberObj->getCurrentBlood();
@@ -467,7 +466,7 @@ class NewFight
                         $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.'|M:'.intval($define['add_magic']).'|'.ConfigDefine::LAN;;
                         break;
                     case 1210:
-                        $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.'|B:'.intval($define['add_blood']).'|'.ConfigDefine::XUE;
+                        $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.($define['is_bj']==1 ? '|BB:' : '|B:').intval($define['add_blood']).'|'.ConfigDefine::XUE;
                         break;
                     case 1213:
                         $process[] = ConfigDefine::VS.'|'.$defineMark.'|'.self::getCode($define['hurt'][0], $attackMark, $defineMark);
@@ -476,7 +475,7 @@ class NewFight
                         $process[] = ConfigDefine::JINENG.'|'.  ConfigDefine::MINGZHONG.'|'.$defineMark.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
                         break;
                     case 1215:
-                        $process[] = ConfigDefine::VS.'|'.$defineMark.'|'.ConfigDefine::ZENGJIA.'|B:'.intval($define['add_blood']).'|'.ConfigDefine::XUE;
+                        $process[] = ConfigDefine::VS.'|'.$defineMark.'|'.ConfigDefine::ZENGJIA.($define['is_bj']==1 ? '|BB:' : '|B:').intval($define['add_blood']).'|'.ConfigDefine::XUE;
                         break;
                     case 1216:
                         $process[] = ConfigDefine::VS.'|'.$defineMark.'|'.ConfigDefine::ZENGJIA.'|'.ConfigDefine::SHANGHAISHUXING.'|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
@@ -504,15 +503,15 @@ class NewFight
         if($hurt['is_hit']) {
             if($hurt['define_skill'] == 1211) {
                 //造成了 xx 伤害 防御者  使用了 反击 对 攻击者 造成了 xx 伤害
-                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|BH:' : '|H:').(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
             }elseif ($hurt['define_skill'] == 1217) {
                 //防御者 使用了 招架 造成了 xx 伤害
-                $return = $defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = $defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|BH:' : '|H:').(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
             }elseif ($hurt['define_skill'] == 1223) {
                 //造成了100点伤害，Y使用了反震，对A造成了50点伤害。
-                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|BH:' : '|H:').(int)$hurt['hurt'].'|'.$defineMark.'|'.ConfigDefine::SHIYONG.'|'.$hurt['define_skill'].'|'.ConfigDefine::VS.'|'.$attackMark.'|'.ConfigDefine::ZAOCHENG.'|H:'.(int)$hurt['define_hurt'].'|'.ConfigDefine::SHANGHAI;
             }  else {
-                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|'.ConfigDefine::BAOJI.'|' : '').'|H:'.(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
+                $return = ConfigDefine::ZAOCHENG.($hurt['is_bj']==1 ? '|BH:' : '|H:').(int)$hurt['hurt'].'|'.ConfigDefine::SHANGHAI;
             }
         } else {
             //躲避 成功 攻击 miss
