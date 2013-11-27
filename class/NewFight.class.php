@@ -133,6 +133,16 @@ class NewFight
         $consumes = self::$_attackSkillInfo['consume'];
         $attackCurrentBlood = $attackMemberObj->getCurrentBlood();
         $attackCurrentMagic = $attackMemberObj->getCurrentMagaic();
+
+        if($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0) {
+            if($attackCurrentMagic - $consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] < 0) {
+                $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
+                $return['attack']['can_not']      = 1;
+                $return['attack']['need_magic']   = $consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC];
+                return $return;
+            }
+        }
+
         if($consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD] > 0 && $attackCurrentBlood > $consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD]) {
             $attackMemberObj->consumeBlood($consumes[ConfigDefine::USER_ATTRIBUTE_BLOOD]);
         }
@@ -140,10 +150,6 @@ class NewFight
            $attackMemberObj->consumeMagic($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
         }
         if($attackMemberObj->isDied())return;
-        if($attackMemberObj->isEmptyMagic() && $consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0) {
-            $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
-            return $return;
-        }
         //todo 攻击效果-攻方的属性加成
         foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
@@ -522,10 +528,6 @@ class NewFight
         $attackInfo['skill_id']      = self::$_attackSkillInfo['skill_id'];
         $attackInfo['skill_level']      = self::$_attackSkillInfo['skill_level'];
         $attackInfo['round']        = self::$_attackSkillInfo['round'];
-        if($skillInfo['consume'][ConfigDefine::USER_ATTRIBUTE_MAGIC] > $attackMemberObj->getCurrentMagaic()) {
-            $attackInfo['can_not']       = 1;
-            $attackInfo['need_magic']   = $skillInfo['consume'][ConfigDefine::USER_ATTRIBUTE_MAGIC];
-        }
         return $attackInfo;
     }
 
