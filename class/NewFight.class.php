@@ -25,6 +25,10 @@ class NewFight
                 $skillRates[$action][$skillInfo['skill_id']] = $skillInfo['probability']/100;
             }
         }
+        sae_set_display_errors(false);//关闭信息输出
+        sae_debug(json_encode($skills).'------------------------');//记录日志
+        sae_debug(json_encode($skillRates));//记录日志
+        sae_set_display_errors(true);
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($userInfo['user_id'], TRUE);
         $user = array(
             'user_id' => $userInfo['user_id'],
