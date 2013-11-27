@@ -57,10 +57,12 @@ class NewFight
 		try {
 			self::_mapTeamsAndMembersInfo($teams);
             $attackMemberKeyList = self::_getAttackMemberKeyOrderList();//获取攻击用户顺序
+            $i = 0;
             while (!self::_isHaveTeamWin()) {
                 if($i > 120) {
                     break;
                 }
+                $key = is_array($return['fight_procedure']) ? count($return['fight_procedure']) : 0;
                 foreach($attackMemberKeyList as $memberKey)
                 {
                     if(self::_isHaveTeamWin()) {
@@ -107,6 +109,8 @@ class NewFight
                     $return['fight_procedure'][] = self::_report($fightInfo);
                     NewSkill::end();
                 }
+                $huihe = ConfigDefine::DI.'|R:'.($i+1).'|'.  ConfigDefine::HUIHE;
+                array_unshift($return['fight_procedure'][$key]['process'], $huihe);
                 $i++;
             }
             $return['use_time'] = $i;
