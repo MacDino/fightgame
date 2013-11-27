@@ -18,7 +18,7 @@ class NewFight
     private $_fightKeyMiss = 'miss';//战斗标识
 
     public static function createUserObj($userInfo) {
-        $newskill = NewSkillStudy::getReleaseProbability($userInfo['user_id']);
+        $newskill = NewSkillStudy::ReleaseProbability($userInfo['user_id']);
         foreach ((array)$newskill as $action  =>  $skillInfos) {
             foreach ((array)$skillInfos as $skillInfo) {
                 $skills[$skillInfo['skill_id']] = $skillInfo['skill_level'];
@@ -457,7 +457,7 @@ class NewFight
                         $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.'|M:'.intval($define['add_magic']).'|'.ConfigDefine::LAN;;
                         break;
                     case 1210:
-                        $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.'|B:'.intval($define['add_blood']).ConfigDefine::XUE;
+                        $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.'|B:'.intval($define['add_blood']).'|'.ConfigDefine::XUE;
                         break;
                     case 1213:
                         $process[] = ConfigDefine::VS.'|'.$defineMark.'|'.self::getCode($define['hurt'][0], $attackMark, $defineMark);
