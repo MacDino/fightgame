@@ -161,7 +161,7 @@ class Monster
 
     private static function randomEquipment() {
         //6件装备随即掉落
-        return rand(1, 6);
+        return rand(Equip::EQUIP_TYPE_ARMS, Equip::EQUIP_TYPE_SHOES);
     }
 
     // 获取怪物的技能
@@ -246,11 +246,11 @@ class Monster
 				'list' => array(
 					NewSkill::SKILL_DEFAULT_PT => $skillLev,
 					NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ => $skillLev,
-				),	
+				),
 				'rate' => array(
-					
-				),	
-			), 
+
+				),
+			),
 			'defense' => array(
 				'list' => array(
 					NewSkill::SKILL_HUMAN_FY_FJ => $skillLev,
@@ -258,16 +258,16 @@ class Monster
 					NewSkill::SKILL_TSIMSHIAN_FY_ZJ => $skillLev,
 				),
 				'rate' => array(
-					
-				),	
+
+				),
 			),
 			'passive' => array(
 				'list' => array(),
 				'rate' => array(),
 			),
-		);	
+		);
 		$skill_rate_list    = self::_getSkillRate($monster);
-	
+
 	}
 	 */
 
@@ -294,7 +294,7 @@ class Monster
 	private static function _randAttribute($surplusAttribute, $userAttributeList) {
 		$i = 0;
 		$arrtibuteNum = count($userAttributeList);
-		
+
 		while ($surplusAttribute > 0)
 		{
 			$i++;
@@ -307,7 +307,7 @@ class Monster
 				$surplusAttribute -= $randValue;
 			}
 			$randAttributes[] = $randValue;
-			
+
 		}
 		$randUserAttributeList = $userAttributeList;
 		foreach ($randAttributes as $randAttribute)
@@ -363,21 +363,21 @@ class Monster
 	 */
 	private static function getMonsterGrowAttribute($baseAttribute, $monster){
         $formuleRes =  array(
-			ConfigDefine::USER_ATTRIBUTE_HIT    => 
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_HIT, $monster, $baseAttribute), 
-			ConfigDefine::USER_ATTRIBUTE_HURT   => 
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_HURT, $monster, $baseAttribute), 
-			ConfigDefine::USER_ATTRIBUTE_MAGIC  => 
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_MAGIC,$monster, $baseAttribute), 
-			ConfigDefine::USER_ATTRIBUTE_BLOOD  => 
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_BLOOD,$monster, $baseAttribute), 
+			ConfigDefine::USER_ATTRIBUTE_HIT    =>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_HIT, $monster, $baseAttribute),
+			ConfigDefine::USER_ATTRIBUTE_HURT   =>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_HURT, $monster, $baseAttribute),
+			ConfigDefine::USER_ATTRIBUTE_MAGIC  =>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_MAGIC,$monster, $baseAttribute),
+			ConfigDefine::USER_ATTRIBUTE_BLOOD  =>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_BLOOD,$monster, $baseAttribute),
 			ConfigDefine::USER_ATTRIBUTE_PSYCHIC =>
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_PSYCHIC,$monster, $baseAttribute), 
-			ConfigDefine::USER_ATTRIBUTE_SPEED  => 
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_SPEED,$monster, $baseAttribute), 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_PSYCHIC,$monster, $baseAttribute),
+			ConfigDefine::USER_ATTRIBUTE_SPEED  =>
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_SPEED,$monster, $baseAttribute),
 			ConfigDefine::USER_ATTRIBUTE_DEFENSE=>
-				self::createFormule(ConfigDefine::USER_ATTRIBUTE_DEFENSE,$monster, $baseAttribute), 
-			ConfigDefine::USER_ATTRIBUTE_DODGE => 
+				self::createFormule(ConfigDefine::USER_ATTRIBUTE_DEFENSE,$monster, $baseAttribute),
+			ConfigDefine::USER_ATTRIBUTE_DODGE =>
 				self::createFormule(ConfigDefine::USER_ATTRIBUTE_DODGE,$monster, $baseAttribute),
             ConfigDefine::USER_ATTRIBUTE_LUCKY => 0,
        );
@@ -419,7 +419,7 @@ class Monster
 				$magicAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER];
 				$magicAptitude = $aptitude[ConfigDefine::APTITUDE_MAGIC];
 				$enduranceAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_ENDURANCE];
-				$formule = $powerAttr * 0.4 + $physiqueAttr * 0.3 + $magicAttr * 0.7 + $enduranceAttr * 0.2 + $level * $magicAptitude/1000; 
+				$formule = $powerAttr * 0.4 + $physiqueAttr * 0.3 + $magicAttr * 0.7 + $enduranceAttr * 0.2 + $level * $magicAptitude/1000;
 				break;
 			case ConfigDefine::USER_ATTRIBUTE_SPEED:
 				$powerAttr = $baseAttr[ConfigDefine::USER_ATTRIBUTE_POWER];
@@ -448,15 +448,15 @@ class Monster
 	 */
 	public static function getGrowPercentage ( $mapId ) {
 		$interval = 0.012;
-		if(!$mapId) return false; 
+		if(!$mapId) return false;
 		$max = 1 + $interval *((int)$mapId-1);
 		$i = 0;
 		while ($i < 5) {
 			if ($i == 0) {
-				$fiveStar[] = $max;		
+				$fiveStar[] = $max;
 			} else {
 				$fiveStar[] = $max -( $i * $interval);
-			}	
+			}
 			$i++;
 		}
 		//print_r($fiveStar);
@@ -470,7 +470,7 @@ class Monster
 	 */
 	public static function randAptitudeType(){
 		$aptitude = ConfigDefine::aptitudeTypeList();
-		return array_rand($aptitude);	
+		return array_rand($aptitude);
 	}
 
 	/*
@@ -479,21 +479,21 @@ class Monster
 	public static function getMonsterAptitude($mapId, $aptitudeTypeId){
 		if (!$mapId || !$aptitudeTypeId) return false;
 		$allConfig = ConfigDefine::getAptitudeConfig($mapId);
-		$aptConfig = $allConfig[$aptitudeTypeId];	
+		$aptConfig = $allConfig[$aptitudeTypeId];
 
 		foreach ($aptConfig as $k => $v) {
 			for($i = 0; $i < 5; $i++) {
 				if ($mapId == 1) {
 					if($i == 0) {
 						$max = $v['base_value'];
-						$fiveStar[$k][] = $max;		
+						$fiveStar[$k][] = $max;
 					} else {
 						$fiveStar[$k][]	 = $max - ($i * 50);
 					}
 				} else {
 					if($i == 0) {
 						$max = $v['formule'];
-						$fiveStar[$k][] = $max;		
+						$fiveStar[$k][] = $max;
 					} else {
 						$fiveStar[$k][]	 = $max - ($i * 50);
 					}
@@ -506,7 +506,7 @@ class Monster
 		}
 		//print_r($aptitudeRand);
 		return $aptitudeRand;
-	} 
+	}
 
 	/*
 	 * 返回随机出来的资质阶级
