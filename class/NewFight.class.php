@@ -25,10 +25,6 @@ class NewFight
                 $skillRates[$action][$skillInfo['skill_id']] = $skillInfo['probability']/100;
             }
         }
-        sae_set_display_errors(false);//关闭信息输出
-        sae_debug(json_encode($skills).'------------------------');//记录日志
-        sae_debug(json_encode($skillRates));//记录日志
-        sae_set_display_errors(true);
         $attrbuteArr    = User_Info::getUserInfoFightAttribute($userInfo['user_id'], TRUE);
         $user = array(
             'user_id' => $userInfo['user_id'],
@@ -108,6 +104,13 @@ class NewFight
                     self::dealEffeckRound($attackMemberObj, 'attack');
                     //获取防守队员
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
+                    if(!(is_array($defineMembersObj) && count($defineMembersObj))) {
+                        $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
+                        $fightInfo['attack']['attack_fail'] = 1;
+                        $return['fight_procedure'][] = self::_report($fightInfo);
+                        self::dealEffeckRound($attackMemberObj, 'attack');
+                        continue;
+                    }
                     //开始战斗
                     $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
                     $return['fight_procedure'][] = self::_report($fightInfo);
@@ -118,6 +121,11 @@ class NewFight
                 $i++;
             }
             $return['use_time'] = $i;
+            $logContent = 'time:'.date('Y-m-d H:i:s').'-procedure:'.json_encode($return['fight_procedure']);
+            sae_set_display_errors(false);//关闭信息输出
+            sae_debug($logContent);
+            sae_debug('--------------------------------------------');//记录日志
+            sae_set_display_errors(true);
             return $return;
 		} catch (Exception $e) {
 			var_dump($e);
@@ -131,8 +139,6 @@ class NewFight
 	 */
     private static function _doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo)
     {
-        //判断攻方休息回合
-        if($attackMemberObj->isMemberSleep())return;
         //消耗
         $consumes = self::$_attackSkillInfo['consume'];
         $attackCurrentBlood = $attackMemberObj->getCurrentBlood();
@@ -153,7 +159,6 @@ class NewFight
         if($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC] > 0 && $attackCurrentMagic > $consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC]) {
            $attackMemberObj->consumeMagic($consumes[ConfigDefine::USER_ATTRIBUTE_MAGIC]);
         }
-        if($attackMemberObj->isDied())return;
         //todo 攻击效果-攻方的属性加成
         foreach($defineMembersObj as $objKey => $defineMemberObj)
         {
@@ -163,8 +168,6 @@ class NewFight
             $return['define'][$objKey] = array(
                 'mark' => $defineMemberObj->getMark(),
             );
-            //判断攻守方是否有一方处于死亡状态
-            if($attackMemberObj->isDied()) break;
             if($defineMemberObj->isDied()) {
                 //复活
                 if(self::$_attackSkillInfo['skill_id'] == 1221) {
@@ -303,10 +306,16 @@ class NewFight
             if(in_array(0, (array)self::$_attackSkillInfo['target']))
             {
                 if($attackMemberObj->getMemberTeamKey() == $memberObj->getMemberTeamKey()) {
-                    $returnMemberObj[$memberKey] = $memberObj;
+                    if(self::$_attackSkillInfo['hit_me']) {
+                        $returnMemberObj[$memberKey] = $memberObj;
+                    } else {
+                        if($attackMemberObj != $memberObj) {
+                            $returnMemberObj[$memberKey] = $memberObj;
+                        }
+                    }
                 }
 //            }elseif(in_array(1, (array)self::$_attackSkillInfo['target'])){
-            }else {
+            } else {
                 //允许对对方使用的
                 if($attackMemberObj->getMemberTeamKey() != $memberObj->getMemberTeamKey())
                 {
@@ -336,15 +345,17 @@ class NewFight
     private static function _isHaveTeamWin()
     {
         foreach ((array)  self::$memberObjsWithTeam as $teamKey => $objs) {
-            $thisObjIsAllDead = TRUE;
-            foreach ($objs as $obj) {
-                if($obj->isAlive()) {
-                    $thisObjIsAllDead = FALSE;
-                    break;
+            if(is_array($objs) && count($objs)) {
+                $thisObjIsAllDead = TRUE;
+                foreach ($objs as $obj) {
+                    if($obj->isAlive()) {
+                        $thisObjIsAllDead = FALSE;
+                        break;
+                    }
                 }
-            }
-            if($thisObjIsAllDead == TRUE) {
-                return TRUE;
+                if($thisObjIsAllDead == TRUE) {
+                    return TRUE;
+                }
             }
         }
         return FALSE;
