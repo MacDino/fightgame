@@ -88,7 +88,7 @@ class NewFight
                     if($attackMemberObj->isDied()) {
                         self::dealTeamMemberDead($attackMemberObj);
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
-                        $fightInfo['attack']['effect'] = 1;
+                        $fightInfo['attack']['dead'] = 1;
                         $return['fight_procedure'][] = self::_report($fightInfo);
                         self::dealEffeckRound($attackMemberObj, 'attack');
                         continue;
@@ -438,11 +438,25 @@ class NewFight
         $processBegin = $attackMark;
         if($fightInfo['attack']['can_not'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::LAN.'|'.ConfigDefine::DIYU.'|M:'.$fightInfo['attack']['need_magic'].'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
+            if($fightInfo['attack']['current_blood'] <= 0) {
+                $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
+            }
         }elseif($fightInfo['attack']['sleep'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
+            if($fightInfo['attack']['current_blood'] <= 0) {
+                $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
+            }
         }elseif($fightInfo['attack']['attack_fail'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
-        } else {
+            if($fightInfo['attack']['current_blood'] <= 0) {
+                $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
+            }
+        }elseif($fightInfo['attack']['dead'] == 1) {
+            $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI;
+            if($fightInfo['attack']['current_blood'] <= 0) {
+                $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
+            }
+        }else {
             $fightInfo['define'] = array_values((array)$fightInfo['define']);
             foreach ((array)$fightInfo['define'] as $defineKey => $define) {
                 $defineMark = $define['mark'];
@@ -509,6 +523,12 @@ class NewFight
                     case 1222:
                         $process[] = $defineMark.'|'.ConfigDefine::ZENGJIA.'|'.ConfigDefine::LINGLI.'|'.ConfigDefine::CHIXU.'|R:'.$fightInfo['attack']['round'].'|'.ConfigDefine::HUIHE;
                         break;
+                }
+                if($define['current_blood'] <= 0) {
+                    $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
+                }
+                if($fightInfo['attack']['current_blood'] <= 0) {
+                    $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
                 }
             }
         }

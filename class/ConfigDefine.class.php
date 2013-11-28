@@ -64,7 +64,7 @@ class ConfigDefine
     CONST JIECHU                        = 7143;//解除
     CONST FUHUO                         = 7144;//复活
     CONST DIYU                          = 7145;//低于
-
+    const SIWANG                        = 7146;//死亡
 
 
 
@@ -90,7 +90,7 @@ class ConfigDefine
 	public static function AttributeList()
 	{
 		$res = array(
-			self::USER_ATTRIBUTE_POWER        	=> '力量',
+						self::USER_ATTRIBUTE_POWER        	=> '力量',
             self::USER_ATTRIBUTE_MAGIC_POWER  	=> '魔力',
             self::USER_ATTRIBUTE_PHYSIQUE     	=> '体质',
             self::USER_ATTRIBUTE_ENDURANCE    	=> '耐力',
@@ -112,35 +112,68 @@ class ConfigDefine
 
 	/** 技能 */
 	public static function skillList(){
+                $res = array(
+                        NewSkill::SKILL_DEFAULT_PT              => '普通攻击',
+                        NewSkill::SKILL_COMMON_BD_WFX           => '物防修',
+                        NewSkill::SKILL_COMMON_BD_FFX           => '法防修',
+                        NewSkill::SKILL_COMMON_BD_WGX           => '物攻修',
+                        NewSkill::SKILL_COMMON_BD_FGX           => '法攻修',
+                        NewSkill::SKILL_COMMON_BD_TX            => '体修',
+                        NewSkill::SKILL_COMMON_BD_DZ            => '锻造',
+                        NewSkill::SKILL_HUMAN_GJ_DTWLGJ         => '连击',
+                        NewSkill::SKILL_HUMAN_GJ_WGK            => '物理封印',
+                        NewSkill::SKILL_HUMAN_GJ_FGK            => '法术封印',
+                        NewSkill::SKILL_HUMAN_GJ_JL             => '天地正气',
+                        NewSkill::SKILL_HUMAN_GJ_DJX            => '妙手回春',
+                        NewSkill::SKILL_HUMAN_FY_FJ             => '反击',
+                        NewSkill::SKILL_TSIMSHIAN_GJ_DTFSGJ			=> '三昧真火',
+                        NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ			=> '呼风唤雨',
+                        NewSkill::SKILL_TSIMSHIAN_GJ_XR         => '虚弱',
+                        NewSkill::SKILL_TSIMSHIAN_GJ_QJX        => '普降甘霖',
+                        NewSkill::SKILL_TSIMSHIAN_GJ_QJSH       => '伤害增益',
+                        NewSkill::SKILL_TSIMSHIAN_FY_ZJ         => '仙风护体',
+                        NewSkill::SKILL_DEMON_GJ_DTGJ           => '怒斩',
+                        NewSkill::SKILL_DEMON_GJ_QTGJ           => '横扫千军',
+                        NewSkill::SKILL_DEMON_GJ_JCK            => '净化',
+                        NewSkill::SKILL_DEMON_GJ_FH             => '起死回生',
+                        NewSkill::SKILL_DEMON_GJ_QJL            => '灵力增益',
+                        NewSkill::SKILL_DEMON_FY_FZ             => '反震',
+                );
+                return  $res;
+        }
+
+		/** 技能描述 **/
+	public static function skillDescList(){
 		$res = array(
-			NewSkill::SKILL_DEFAULT_PT 			=> '普通攻击',
-			NewSkill::SKILL_COMMON_BD_WFX 		=> '物防修',
-			NewSkill::SKILL_COMMON_BD_FFX 		=> '法防修',
-			NewSkill::SKILL_COMMON_BD_WGX 		=> '物攻修',
-			NewSkill::SKILL_COMMON_BD_FGX 		=> '法攻修',
-			NewSkill::SKILL_COMMON_BD_TX		=> '体修',
-			NewSkill::SKILL_COMMON_BD_DZ		=> '锻造',
-			NewSkill::SKILL_HUMAN_GJ_DTWLGJ 	=> '游龙斩',
-			NewSkill::SKILL_HUMAN_GJ_WGK 		=> '醉生梦死',
-			NewSkill::SKILL_HUMAN_GJ_FGK 		=> '封印',
-			NewSkill::SKILL_HUMAN_GJ_JL 		=> '天地正气',
-			NewSkill::SKILL_HUMAN_GJ_DJX 		=> '纯阳真气',
-			NewSkill::SKILL_HUMAN_FY_FJ 		=> '以牙还牙',
-			NewSkill::SKILL_TSIMSHIAN_GJ_DTFSGJ => '雷霆之怒',
-			NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ => '呼风唤雨',
-			NewSkill::SKILL_TSIMSHIAN_GJ_XR 	=> '净化',
-			NewSkill::SKILL_TSIMSHIAN_GJ_QJX 	=> '普降甘霖',
-			NewSkill::SKILL_TSIMSHIAN_GJ_QJSH 	=> '天神下凡',
-			NewSkill::SKILL_TSIMSHIAN_FY_ZJ 	=> '仙风护体',
-			NewSkill::SKILL_DEMON_GJ_DTGJ 		=> '狮子搏兔',
-			NewSkill::SKILL_DEMON_GJ_QTGJ 		=> '横扫千军',
-			NewSkill::SKILL_DEMON_GJ_JCK 		=> '怨灵缠身',
-			NewSkill::SKILL_DEMON_GJ_FH 		=> '回魂术',
-			NewSkill::SKILL_DEMON_GJ_QJL 		=> '战无止境',
-			NewSkill::SKILL_DEMON_FY_FZ 		=> '玉石俱焚',
+			'desc' . NewSkill::SKILL_DEFAULT_PT 			=> '普通攻击',
+			'desc' . NewSkill::SKILL_COMMON_BD_WFX 		=> '物防修',
+			'desc' . NewSkill::SKILL_COMMON_BD_FFX 		=> '法防修',
+			'desc' . NewSkill::SKILL_COMMON_BD_WGX 		=> '物攻修',
+			'desc' . NewSkill::SKILL_COMMON_BD_FGX 		=> '法攻修',
+			'desc' . NewSkill::SKILL_COMMON_BD_TX		=> '体修',
+			'desc' . NewSkill::SKILL_COMMON_BD_DZ		=> '锻造',
+			'desc' . NewSkill::SKILL_HUMAN_GJ_DTWLGJ 	=> '连续攻击对方3次，使用后需休息一回合，休息时不能使用战斗指令，也不会受封类法术影响；物理法术防御降低为正常状态的80%；防御技能不受影响。',
+			'desc' . NewSkill::SKILL_HUMAN_GJ_WGK 		=> '令对手一定回合无法使用物理攻击，并减少物理防御力',
+			'desc' . NewSkill::SKILL_HUMAN_GJ_FGK 		=> '令对手一定回合无法使用法术攻击，并减少法术防御力',
+			'desc' . NewSkill::SKILL_HUMAN_GJ_JL 		=> '一定回合内补充自己和队友的魔法，血量小于50无法使用此技能。',
+			'desc' . NewSkill::SKILL_HUMAN_GJ_DJX 		=> '使用后可以恢复自身和队友的气血',
+			'desc' . NewSkill::SKILL_HUMAN_FY_FJ 		=> '受到物理攻击时有一定的几率自动反击，反击的伤害与正常攻击相同，人物死亡后无法生效。',
+			'desc' . NewSkill::SKILL_TSIMSHIAN_GJ_DTFSGJ => '施展法术攻击对方单人',
+			'desc' . NewSkill::SKILL_TSIMSHIAN_GJ_QTFSGJ => '施展法术攻击对方，技能达到一定等级后可攻击多人',
+			'desc' . NewSkill::SKILL_TSIMSHIAN_GJ_XR 	=> '可以解除物攻控、法功控、虚弱的技能效果。',
+			'desc' . NewSkill::SKILL_TSIMSHIAN_GJ_QJX 	=> '使用后可以恢复多人的气血',
+			'desc' . NewSkill::SKILL_TSIMSHIAN_GJ_QJSH 	=> '战斗中临时提高自己或队友的伤害力，技能等级较高后可作用于多人。',
+			'desc' . NewSkill::SKILL_TSIMSHIAN_FY_ZJ 	=> '受到攻击后有一定的几率降低所受伤害。',
+			'desc' . NewSkill::SKILL_DEMON_GJ_DTGJ 		=> '以高于平时的伤害力攻击对方单人',
+			'desc' . NewSkill::SKILL_DEMON_GJ_QTGJ 		=> '攻击对方多人，使用后需要休息1回合',
+			'desc' . NewSkill::SKILL_DEMON_GJ_JCK 		=> '施展法术攻击对方，每回合减少对手气血。',
+			'desc' . NewSkill::SKILL_DEMON_GJ_FH 		=> '使用后可以复活已经死亡的队友',
+			'desc' . NewSkill::SKILL_DEMON_GJ_QJL 		=> '战斗中临时提高自己或队友的灵力，技能等级较高后可作用于多人。',
+			'desc' . NewSkill::SKILL_DEMON_FY_FZ 		=> '受到物理攻击时有一定的几率造成反震，反震的伤害与受到的攻击伤害相同，人物死亡后无法生效。',
 		);
 		return 	$res;
 	}
+
 
 	/** 战斗 */
 	public static function actionList(){
@@ -185,6 +218,7 @@ class ConfigDefine
             self::JIECHU                        => '解除',
             self::FUHUO                         => '复活',
             self::DIYU                          => '低于',
+            self::SIWANG                        => '死亡',
 		);
 		return $res;
 	}
@@ -272,7 +306,7 @@ class ConfigDefine
 			self::APTITUDE_SPEED	=> '速度资质',
 			self::APTITUDE_DODGE	=> '躲闪资质'
 		);
-		return $res;	
+		return $res;
 	}
 
 	/*
