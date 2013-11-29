@@ -72,6 +72,7 @@ class NewFight
                     if($attackMemberObj->isDied()) {
                         continue;
                     }
+                    $attackMemberObj->setCurrentRound($i+1);
                     $sleepInfo = $attackMemberObj->getEffect('sleep');
                     if($sleepInfo[1206]['round'] >= 1) {
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
@@ -111,7 +112,7 @@ class NewFight
                         continue;
                     }
                     //开始战斗
-                    $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
+                    $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo, $i+1);
                     self::dealEffeckAttackAndDefenseRound($attackMemberObj);
                     $return['fight_procedure'][] = self::_report($fightInfo);
                     NewSkill::end();
@@ -137,7 +138,7 @@ class NewFight
 	 * @param Object $defineMembersObj
 	 * @param Array $attackSkillInfo
 	 */
-    private static function _doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo)
+    private static function _doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo, $roundNum)
     {
         //消耗
         $consumes = self::$_attackSkillInfo['consume'];
@@ -257,7 +258,12 @@ class NewFight
             $return['define'][$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
             $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
             $return['define'][$objKey]['effect'] = $defineMemberObj->getEffect('define');
-            self::dealEffeckAttackAndDefenseRound($defineMemberObj);
+
+            if($defineMemberObj->getCurrentRound != $roundNum) {
+                $defineMemberObj->setCurrentRound($roundNum);
+                self::dealEffeckAttackAndDefenseRound($defineMemberObj);
+            }
+
             NewSkill::setSkillEffect();
             self::$_attackSkillInfo['hit_member_num']--;
         }

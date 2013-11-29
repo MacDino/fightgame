@@ -8,6 +8,7 @@ class NewFightMember
 	private $_memberLevel = 0;//当前队员的级别
 	private $_memberId = 0;//当前队员的级别
     private $_mark      = '';
+    private $_currentRound = 0;
 
     private $_currentSkillEffect = array();//当前队员所受技能的影响效果
 	private $_memberSkill = array();//当前队员所拥有的技能
@@ -68,6 +69,7 @@ class NewFightMember
         $this->_setAttackSkillRate($memberInfo['skill_rates']['attack']);
         $this->_setDefineSkillRate($memberInfo['skill_rates']['define']);
         $this->_mark = $memberInfo['mark'] ? $memberInfo['mark'] : '';
+        $this->_currentRound = 0;
 	}
 
     //根据技能的释放概率进行技能的选择
@@ -358,5 +360,14 @@ class NewFightMember
 
     public function getMark() {
         return $this->_mark;
+    }
+
+    public function setCurrentRound($roundNum) {
+        $roundNum = intval($roundNum);
+        return $this->_currentRound = $roundNum;
+    }
+
+    public function getCurrentRound() {
+        return $this->_currentRound;
     }
 }
