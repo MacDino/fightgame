@@ -90,7 +90,7 @@ class NewFight
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                         $fightInfo['attack']['dead'] = 1;
                         $return['fight_procedure'][] = self::_report($fightInfo);
-                        self::dealEffeckRound($attackMemberObj, 'attack');
+                        self::dealEffeckAttackAndDefenseRound($attackMemberObj);
                         continue;
                     }
                     //判断攻击队员是否可以使用此技能
@@ -98,21 +98,21 @@ class NewFight
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                         $fightInfo['attack']['attack_fail'] = 1;
                         $return['fight_procedure'][] = self::_report($fightInfo);
-                        self::dealEffeckRound($attackMemberObj, 'attack');
+                        self::dealEffeckAttackAndDefenseRound($attackMemberObj);
                         continue;
                     }
-                    self::dealEffeckRound($attackMemberObj, 'attack');
                     //获取防守队员
                     $defineMembersObj = self::_getDefineMembersObj($attackMemberObj);
                     if(!(is_array($defineMembersObj) && count($defineMembersObj))) {
                         $fightInfo['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
                         $fightInfo['attack']['attack_fail'] = 1;
                         $return['fight_procedure'][] = self::_report($fightInfo);
-                        self::dealEffeckRound($attackMemberObj, 'attack');
+                        self::dealEffeckAttackAndDefenseRound($attackMemberObj);
                         continue;
                     }
                     //开始战斗
                     $fightInfo = self::_doFight($attackMemberObj, $defineMembersObj, $attackSkillInfo);
+                    self::dealEffeckAttackAndDefenseRound($attackMemberObj);
                     $return['fight_procedure'][] = self::_report($fightInfo);
                     NewSkill::end();
                 }
@@ -121,11 +121,11 @@ class NewFight
                 $i++;
             }
             $return['use_time'] = $i;
-            $logContent = 'time:'.date('Y-m-d H:i:s').'-procedure:'.json_encode($return['fight_procedure']);
-            sae_set_display_errors(false);//关闭信息输出
-            sae_debug($logContent);
-            sae_debug('--------------------------------------------');//记录日志
-            sae_set_display_errors(true);
+//            $logContent = 'time:'.date('Y-m-d H:i:s').'-procedure:'.json_encode($return['fight_procedure']);
+//            sae_set_display_errors(false);//关闭信息输出
+//            sae_debug($logContent);
+//            sae_debug('--------------------------------------------');//记录日志
+//            sae_set_display_errors(true);
             return $return;
 		} catch (Exception $e) {
 			var_dump($e);
@@ -257,8 +257,7 @@ class NewFight
             $return['define'][$objKey]['current_magic'] = $defineMemberObj->getCurrentMagaic();
             $return['attack'] = self::createAttackInfo($attackMemberObj, self::$_attackSkillInfo);
             $return['define'][$objKey]['effect'] = $defineMemberObj->getEffect('define');
-            //todo 此处定义攻击法术的攻击效果累加
-            self::dealEffeckRound($defineMemberObj, 'define');
+            self::dealEffeckAttackAndDefenseRound($defineMemberObj);
             NewSkill::setSkillEffect();
             self::$_attackSkillInfo['hit_member_num']--;
         }
@@ -439,6 +438,15 @@ class NewFight
             ),
         );
         $processBegin = $attackMark;
+
+        if(is_array($fightInfo['attack']['effect']) && count($fightInfo['attack']['effect'])) {
+            foreach ($fightInfo['attack']['effect'] as $effect) {
+                if($effect['skill_id'] == 1206) {
+                    $effect['skill_id'] = '1206|'.ConfigDefine::XURUO;
+                }
+                $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.$effect['skill_id'].'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::CHIXU.'|R:'.$effect['round'].'|'.ConfigDefine::HUIHE;
+            }
+        }
         if($fightInfo['attack']['can_not'] == 1) {
             $process[] = $processBegin.'|'.ConfigDefine::LAN.'|'.ConfigDefine::DIYU.'|M:'.$fightInfo['attack']['need_magic'].'|'.ConfigDefine::WUFA.'|'.ConfigDefine::SHIYONG.'|'.$fightInfo['attack']['skill_id'].'|'.ConfigDefine::JINENG;
             if($fightInfo['attack']['current_blood'] <= 0) {
@@ -467,14 +475,7 @@ class NewFight
                 $return[$defineMark]['magic'] = intval($define['current_magic']);
                 $return[$defineMark]['mark']  = $define['mark'];
                 $attackSkillId = $fightInfo['attack']['skill_id'];
-                if(is_array($define['effect']) && count($define['effect'])) {
-                    foreach ($define['effect'] as $effect) {
-                        if($effect['skill_id'] == 1206) {
-                            $effect['skill_id'] = '1206|'.ConfigDefine::XURUO;
-                        }
-                        $process[] = $defineMark.'|'.ConfigDefine::CHUYU.'|'.$effect['skill_id'].'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::CHIXU.'|R:'.$effect['round'].'|'.ConfigDefine::HUIHE;
-                    }
-                }
+
                 if(in_array($attackSkillId, array(1213,1215,1216,1219,1222) )) {
                     if($defineKey == 0) {
                         $process[] = $processBegin.'|'.ConfigDefine::SHIYONG.'|'.$attackSkillId;
@@ -564,12 +565,21 @@ class NewFight
     }
 
     private static function createAttackInfo(NewFightMember $attackMemberObj, $skillInfo) {
-        $attackInfo['mark']       = $attackMemberObj->getMark();
+        $attackInfo['mark']          = $attackMemberObj->getMark();
         $attackInfo['current_blood'] = $attackMemberObj->getCurrentBlood();
         $attackInfo['current_magic'] = $attackMemberObj->getCurrentMagaic();
         $attackInfo['skill_id']      = self::$_attackSkillInfo['skill_id'];
-        $attackInfo['skill_level']      = self::$_attackSkillInfo['skill_level'];
-        $attackInfo['round']        = self::$_attackSkillInfo['round'];
+        $attackInfo['skill_level']   = self::$_attackSkillInfo['skill_level'];
+        $attackInfo['round']         = self::$_attackSkillInfo['round'];
+        $attackInfo['effect']        = $attackMemberObj->getEffect('attack');
+        $defineEffect = $attackMemberObj->getEffect('define');
+        if(is_array($defineEffect) && count($defineEffect)) {
+            foreach ($defineEffect as $define) {
+                if(!isset($attackInfo['effect'][$define['skill_id']])) {
+                    $attackInfo['effect'][$define['skill_id']] = $define;
+                }
+            }
+        }
         return $attackInfo;
     }
 
@@ -586,6 +596,11 @@ class NewFight
             self::teamReviveMember($teamKey);
         }
         return;
+    }
+
+    private static function dealEffeckAttackAndDefenseRound(NewFightMember $obj) {
+        self::dealEffeckRound($obj, 'attack');
+        self::dealEffeckRound($obj, 'define');
     }
 
     private static function dealEffeckRound(NewFightMember $obj, $flag) {
