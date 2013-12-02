@@ -88,9 +88,15 @@ try {
         }
         $msg    = '您被打败了';
     } else {
+        try{
+            $isDuoble = User_Property::isuseDoubleHarvest($userId);
+        }  catch (Exception $e) {
+            $isDuoble = FALSE;
+        }
+        $double = $isDuoble ? 2 : 1;
         $data['result']['win']  = 1;
-        $data['result']['experience']         = Monster::getMonsterExperience($monster);
-        $data['result']['money']              = Monster::getMonsterMoney($monster);
+        $data['result']['experience']         = (int)Monster::getMonsterExperience($monster) * $double;
+        $data['result']['money']              = (int)Monster::getMonsterMoney($monster) * $double;
         $data['result']['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
         User_Info::addExperience($userId, $data['result']['experience']);
