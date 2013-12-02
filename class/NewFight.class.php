@@ -204,7 +204,15 @@ class NewFight
             		$hurt = $hurtInfo['hurt'];//攻击值
             		$defineSkillInfo = $defineMemberObj->getMemberDefineSkill();
                     $defineSkillId = key((array)$defineSkillInfo);
-
+                    if(in_array($defineSkillId, array(NewSkill::SKILL_HUMAN_FY_FJ, NewSkill::SKILL_DEMON_FY_FZ))) {
+                        //防御的两个技能，前置条件是物理攻击生效
+                        $physicSkillIds   = NewSkill::getPhysicsSkills();
+                        $isPhysicId       = in_array(self::$_attackSkillInfo['skill_id'], $physicSkillIds);
+                        if(!$isPhysicId) {
+                            $defineSkillId   = 0;
+                            $defineSkillInfo = array();
+                        }
+                    }
                     if($defineSkillId == 1211) {
                         NewSkill::begin($defineMemberObj, array('1201' => $defineMemberObj->getMemberLevel()));
                         NewSkill::setDefineObj($attackMemberObj);
