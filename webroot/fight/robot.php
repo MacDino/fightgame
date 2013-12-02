@@ -21,5 +21,10 @@ if(is_array($info) && count($info) && $info['status'] == 1 || !$info) {
         'map_id'    => $mapId,
         'lucky'     => intval($attrbuteArr[ConfigDefine::USER_ATTRIBUTE_LUCKY]),
     );
-    RobotFight::create($params);
+    $res = RobotFight::create($params);
+    if($res) {
+        $data = 1;
+    }  else {
+        $data = 0;
+    }
 }
