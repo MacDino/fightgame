@@ -11,15 +11,11 @@ if($userId <= 0) {
 
 $info = RobotFight::getInfoByUserId($userId);
 
-$data['user_id'] = $userId;
+$data['user_id']  = $userId;
+$data['is_robot'] = 0;
 if(is_array($info) && count($info)) {
     if($info['status'] == 0) {
         $data['map_id'] = $info['map_id'];
         $data['is_robot'] = 1;
-    }  else {
-        $data['map_id'] = $info['map_id'];
-        $data['is_robot'] = 0;
     }
-} else {
-    $data['is_robot'] = 0;
 }
