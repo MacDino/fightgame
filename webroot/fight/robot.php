@@ -6,7 +6,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
 $mapId  = $_REQUEST['map_id'] > 0 ? $_REQUEST['map_id'] : 0;
-echo '<pre>';
+
 if($userId <= 0 || $mapId <= 0) {
     $code = 1;
     $msg  = '缺少参数';
