@@ -25,6 +25,10 @@ if(is_array($userLastResult) && count($userLastResult)) {
 }
 $mapId = $mapId > 0 ? $mapId : ($userLastResult['map_id'] > 0 ? $userLastResult['map_id'] : 1);
 
+$isRobot = RobotFight::getInfoByUserId($userId);
+if(is_array($isRobot) && count($isRobot) && $isRobot != 1) {
+    RobotFight::updateStatus($userId, $isRobot['map_id']);
+}
 //装备保留的颜色组
 if(isset($_REQUEST['colors'])) {
     Fight_Setting::create($userId, $_REQUEST['colors']);
