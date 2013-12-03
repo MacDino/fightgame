@@ -31,12 +31,11 @@ class RobotFight{
         return MySql::selectOne(self::TABLE_NAME, $where);
     }
 
-    public static function updateStatus($userId, $mapId) {
+    public static function updateStatus($userId) {
         $info = self::getInfoByUserId($userId);
-        if(is_array($info) && count($info) && $mapId == $info['map_id']) {
+        if(is_array($info) && count($info)) {
             $where = array(
                 'user_id' => $userId,
-                'map_id'    => $mapId,
             );
             $data = array(
                 'status'    => 1,
