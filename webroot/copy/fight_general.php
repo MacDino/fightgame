@@ -25,6 +25,8 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	$lastIsWin = $jsonResult['result']['win'];
 	$lastFightDate = date("Y-m-d",strtotime($userLastCopyResult['create_time']));
 	$isTodayFight = $lastFightDate == date("Y-m-d", time());
+
+	$preMonsterGroup = $jsonResult['result']['monster_group'];
 	/*
 	 * 限制每天打一次此副本
 	 */
@@ -41,23 +43,26 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	}
 
     $accessDiffTime = time() - $userLastCopyResult['fight_start_time'];//一定为大于0的值
-    if($accessDiffTime < $userLastResult['use_time']) {
+    if($accessDiffTime < $userLastCopyResult['use_time']) {
         //调用时间小于应该花费的时间
-        $result = json_decode($userLastResult['last_fight_result']);
+        $result = json_decode($userLastCopyResult['last_fight_result']);
         $code   = 0;
         $data   = $result;
         exit();
     }
 }
-$copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastResult['copy_level_id'] > 0 ? $userLastResult['copy_level_id'] : 1);
+$copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id'] > 0 ? $userLastCopyResult['copy_level_id'] : 1);
 
-$monsterGroupDeadCount = 0;
-while($monsterGroupDeadCount<2){
+
+//$monsterGroupDeadCount = 0;
+//while($monsterGroupDeadCount<2){
 	try {
 		//判断调用哪一组怪
-		if ($monsterGroupDeadCount == 0) {
+		if ($preMonsterGroup == 2||!$preMonsterGroup) {
+			$monster_group = 1;
 			$monster            = Copy_Config::getGroupMonsterByCopyId($copyId, 1, $userInfo['user_level']);
 		} else {
+			$monster_group = 2;
 			$monster            = Copy_Config::getGroupMonsterByCopyId($copyId, 2, $userInfo['user_level']);
 		}
 		//print_r($monster);
@@ -101,7 +106,6 @@ while($monsterGroupDeadCount<2){
 		if(!$isUserAlive && $isMonsterAlive) {
 			$data['result']['win']  = 0;
 			$msg    = '您被打败了';
-			break;
 		} else {
 			$data['result']['win']  = 1;
 			$data['result']['experience']         = Monster::getMonsterExperience($monster);
@@ -116,6 +120,7 @@ while($monsterGroupDeadCount<2){
 			 */
 			if(isset($isTodayFight) && $isTodayFight) {
 				$win_monster_count = $userLastCopyResult['win_monster_num'] + 2;
+				//$win_monster_count = 4;
 			} else {
 				$win_monster_count = 2;
 			}
@@ -138,6 +143,7 @@ while($monsterGroupDeadCount<2){
 				$data['result']['level_up'] = $isLevelUp;
 			}
 			$data['result']['win_monster_num'] = $win_monster_count;
+			$data['result']['monster_group'] = $monster_group; 
 
 			User_Info::addMoney($userId, $data['result']['money'] * 2);
 
@@ -156,7 +162,7 @@ while($monsterGroupDeadCount<2){
 		$code   = 1;
 		$msg    = '攻击操作失败';
 	}
-}
+//}
 
  /**记录战斗结果入库，战斗记录一个用户永远只保存一条**/
 $result = array(
