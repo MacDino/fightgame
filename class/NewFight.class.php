@@ -166,12 +166,12 @@ class NewFight
             if(self::$_attackSkillInfo['hit_member_num'] <= 0) {
                 break;
             }
-            $return['define'][$objKey] = array(
-                'mark' => $defineMemberObj->getMark(),
-            );
             if($defineMemberObj->isDied()) {
                 //复活
                 if(self::$_attackSkillInfo['skill_id'] == 1221) {
+                    $return['define'][$objKey] = array(
+                        'mark' => $defineMemberObj->getMark(),
+                    );
                     $defineMemberObj->reAlive();
                     $return['define'][$objKey]['re_alive'] = 1;
                     $return['define'][$objKey]['re_blood'] = $defineMemberObj->getCurrentBlood();
@@ -184,6 +184,9 @@ class NewFight
                 }
                 continue;
             }
+            $return['define'][$objKey] = array(
+                'mark' => $defineMemberObj->getMark(),
+            );
             NewSkill::setDefineObj($defineMemberObj);
             //todo 攻击效果-判断守方是否可以被此技能攻击
             if(!NewSkill::skillEffectIsThisSKillCanAttack()) {
