@@ -66,95 +66,96 @@ class RobotFight{
     public static function getAwardPerMinite() {
         return array(
             1 => array(
-                'experience' => '281.560905',
-                'money'      => '0.3385395',
+                'experience' => '306.825015',
+                'money'      => '85.995',
             ),
             2 => array(
-                'experience' => '482.45358',
-                'money'      => '0.407662',
+                'experience' => '525.74354',
+                'money'      => '103.5533333',
             ),
             3 => array(
-                'experience' => '683.346255',
-                'money'      => '0.5250095',
+                'experience' => '744.662065',
+                'money'      => '133.3616667',
             ),
             4 => array(
-                'experience' => '884.23893',
-                'money'      => '0.690582',
+                'experience' => '963.58059',
+                'money'      => '175.42',
             ),
             5 => array(
-                'experience' => '1085.131605',
-                'money'      => '0.9043795',
+                'experience' => '1182.499115',
+                'money'      => '229.7283333',
             ),
             6 => array(
-                'experience' => '1286.02428',
-                'money'      => '1.166402',
+                'experience' => '11401.41764',
+                'money'      => '296.2866667',
             ),
             7 => array(
-                'experience' => '1486.916955',
-                'money'      => '1.4766495',
+                'experience' => '1620.336165',
+                'money'      => '375.095',
             ),
             8 => array(
-                'experience' => '1687.80963',
-                'money'      => '1.835122',
+                'experience' => '1839.25469',
+                'money'      => '466.1533333',
             ),
             9 => array(
-                'experience' => '1888.702305',
-                'money'      => '2.2418195',
+                'experience' => '2058.173215',
+                'money'      => '569.4616667',
             ),
             10 => array(
-                'experience' => '2089.59498',
-                'money'      => '2.696742',
+                'experience' => '2277.09174',
+                'money'      => '685.02',
             ),
             11 => array(
-                'experience' => '2290.487655',
-                'money'      => '3.1998895',
+                'experience' => '2496.010265',
+                'money'      => '812.8283333',
             ),
             12 => array(
-                'experience' => '2491.38033',
-                'money'      => '3.751262',
+                'experience' => '2714.92879',
+                'money'      => '952.8866667',
             ),
             13 => array(
-                'experience' => '2692.273005',
-                'money'      => '4.3508595',
+                'experience' => '2933.847315',
+                'money'      => '1105.195',
             ),
             14 => array(
-                'experience' => '2893.16568',
-                'money'      => '4.998682',
+                'experience' => '3152.76584',
+                'money'      => '1269.753333',
             ),
             15 => array(
-                'experience' => '3094.058355',
-                'money'      => '5.6947295',
+                'experience' => '3371.684365',
+                'money'      => '1446.561667',
             ),
             16 => array(
-                'experience' => '3294.95103',
-                'money'      => '6.439002',
+                'experience' => '3590.60289',
+                'money'      => '1635.62',
             ),
             17 => array(
-                'experience' => '3495.843705',
-                'money'      => '7.2314995',
+                'experience' => '3809.521415',
+                'money'      => '1836.928333',
             ),
             18 => array(
-                'experience' => '3696.73638',
-                'money'      => '8.072222',
+                'experience' => '4028.43994',
+                'money'      => '2050.486667',
             ),
             19 => array(
-                'experience' => '3897.629055',
-                'money'      => '8.9611695',
+                'experience' => '4247.358465',
+                'money'      => '2276.295',
             ),
             20 => array(
-                'experience' => '4098.52173',
-                'money'      => '9.898342',
+                'experience' => '4466.27699',
+                'money'      => '2514.353333',
             ),
         );
     }
 
     public static function getEquipmentPerMinite() {
         return array(
-            Equip::EQUIP_COLOUR_GRAY  => '0.0093',
-            Equip::EQUIP_COLOUR_WHITE => '0.0093',
-            Equip::EQUIP_COLOUR_GREEN => '0.0045',
-            Equip::EQUIP_COLOUR_BLUE  => '0.00432',
-            Equip::EQUIP_COLOUR_ORANGE=> '0.00008',
+            Equip::EQUIP_COLOUR_GRAY  => '0.040833333',
+            Equip::EQUIP_COLOUR_WHITE => '0.040833333',
+            Equip::EQUIP_COLOUR_GREEN => '0.026133333',
+            Equip::EQUIP_COLOUR_BLUE  => '0.022866667',
+            Equip::EQUIP_COLOUR_PURPLE=> '0.0196',
+            Equip::EQUIP_COLOUR_ORANGE=> '0.003266667',
         );
     }
 
@@ -167,7 +168,7 @@ class RobotFight{
                 for($i = 1; $i <= $equipmentNums[$color]; $i++) {
                     $equipment = array(
                         'color'     => $color,
-                        'equipment' => rand(1, 6),
+                        'equipment' => rand(Equip::EQUIP_TYPE_ARMS, Equip::EQUIP_TYPE_SHOES),
                         'level'     => Monster::getMonsterEquipmentLevel($info['map_id']),
                     );
                     $equipmentNum = Equip_Info::getEquipNum($info['user_id']);
@@ -175,7 +176,7 @@ class RobotFight{
                     $equipmentSurplus = $equipmentSurplus > 0 ? $equipmentSurplus : 0;
                     $equipment['get'] = 0;
                     if($equipmentSurplus > 0) {
-                        $get = Equip::createEquip($equipment['color'], $info['user_id'], $equipment['level']);
+                        $get = Equip::createEquip($equipment['color'], $info['user_id'], $equipment['level'], $equipment['equipment']);
                         $equipment['get'] = 1;
                     }
                     $return[] = $equipment;

@@ -119,7 +119,7 @@ try {
                     $equipmentSurplus = $equipmentSurplus > 0 ? $equipmentSurplus : 0;
                     $data['result']['equipment'][$equipKey]['get'] = 0;
                     if($equipmentSurplus > 0) {
-                        $get = Equip::createEquip($equipment['color'], $userId, $equipment['level']);
+                        $get = Equip::createEquip($equipment['color'], $userId, $equipment['level'], $equipment['equipment']);
                         $data['result']['equipment'][$equipKey]['get'] = 1;
                     }
                 }
