@@ -23,7 +23,7 @@ class Monster_Config
      * 用于计算怪物的各个基本属性点
      */
 	public static function getMonsterBaseAttributeTotal($level) {
-		return $level*10;
+		return $level*10+50;
 	}
 
     public static function getList() {
