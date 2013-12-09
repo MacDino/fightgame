@@ -6,11 +6,11 @@ class Monster_SuffixConfig
 		Monster::MONSTER_SUFFIX_BOSS => array(
 			'meet_probability' => 0.005,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
-				ConfigDefine::USER_ATTRIBUTE_POWER       => 10,//力量
-				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 10,//魔力
+				ConfigDefine::USER_ATTRIBUTE_POWER       => 2,//力量
+				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.5,//魔力
 				ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => 20,//体质
-				ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 10,//耐力
-				ConfigDefine::USER_ATTRIBUTE_QUICK       => 10,//敏捷
+				ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => 1,//耐力
+				ConfigDefine::USER_ATTRIBUTE_QUICK       => 1,//敏捷
 			),
 			'experience_change' => 5, //经验加成
 			'money_change' => 5, //金币加成
@@ -18,13 +18,13 @@ class Monster_SuffixConfig
 				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
 				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
 				Equip::EQUIP_COLOUR_GREEN   => 0,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.9,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.1,//橙色
+				Equip::EQUIP_COLOUR_BLUE    => 0.3,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.5,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0.2,//橙色
 			),
 		),
 		Monster::MONSTER_SUFFIX_SACRED => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 5,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -35,16 +35,16 @@ class Monster_SuffixConfig
 			'experience_change' => 2, //经验加成
 			'money_change' => 2, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.075,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.04,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.025,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.0025,//橙色
+				Equip::EQUIP_COLOUR_GRAY    => 0.03,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.03,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.015,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.01,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),
 		Monster::MONSTER_SUFFIX_UNKNOWN => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -55,17 +55,17 @@ class Monster_SuffixConfig
 			'experience_change' => 2, //经验加成
 			'money_change' => 2, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.075,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.04,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.025,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.0025,//橙色
+				Equip::EQUIP_COLOUR_GRAY    => 0.03,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.03,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.015,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.01,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),
 
 		Monster::MONSTER_SUFFIX_ADVANCED => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -76,17 +76,17 @@ class Monster_SuffixConfig
 			'experience_change' => 2, //经验加成
 			'money_change' => 2, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.075,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.04,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.025,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.0025,//橙色
+				Equip::EQUIP_COLOUR_GRAY    => 0.03,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.03,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.015,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.01,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),
 
 		Monster::MONSTER_SUFFIX_WILL_EXTINCT => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 5,//魔力
@@ -97,16 +97,16 @@ class Monster_SuffixConfig
 			'experience_change' => 2, //经验加成
 			'money_change' => 2, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.075,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.04,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.025,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.0025,//橙色
+				Equip::EQUIP_COLOUR_GRAY    => 0.03,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.03,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.015,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.01,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),
 		Monster::MONSTER_SUFFIX_CURSED => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1,//魔力
@@ -117,16 +117,16 @@ class Monster_SuffixConfig
 			'experience_change' => 2, //经验加成
 			'money_change' => 2, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.075,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.04,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.025,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.0025,//橙色
+				Equip::EQUIP_COLOUR_GRAY    => 0.03,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.03,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.015,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.01,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),
 		Monster::MONSTER_SUFFIX_ANCIENT => array(
-			'meet_probability' => 0.02,//遇到几率
+			'meet_probability' => 0.05,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1.25,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.25,//魔力
@@ -137,16 +137,16 @@ class Monster_SuffixConfig
 			'experience_change' => 2, //经验加成
 			'money_change' => 2, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.075,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.04,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.025,//紫色
-				Equip::EQUIP_COLOUR_ORANGE  => 0.0025,//橙色
+				Equip::EQUIP_COLOUR_GRAY    => 0.03,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.03,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.015,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.01,//紫色
+				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),
 		Monster::MONSTER_SUFFIX_HEAD => array(
-			'meet_probability' => 0.03,//遇到几率
+			'meet_probability' => 0.10,//遇到几率
 			'attribute_change_list' => array(//基本属性变变化
 				ConfigDefine::USER_ATTRIBUTE_POWER       => 1.05,//力量
 				ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => 1.05,//魔力
@@ -157,11 +157,11 @@ class Monster_SuffixConfig
 			'experience_change' => 1.05, //经验加成
 			'money_change' => 1.05, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
-				Equip::EQUIP_COLOUR_GREEN   => 0.04,//绿色
-				Equip::EQUIP_COLOUR_BLUE    => 0.025,//蓝色
-				Equip::EQUIP_COLOUR_PURPLE  => 0.0125,//紫色
+				Equip::EQUIP_COLOUR_GRAY    => 0.035,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0.035,//白色
+				Equip::EQUIP_COLOUR_GREEN   => 0.02,//绿色
+				Equip::EQUIP_COLOUR_BLUE    => 0.01,//蓝色
+				Equip::EQUIP_COLOUR_PURPLE  => 0.005,//紫色
 				Equip::EQUIP_COLOUR_ORANGE  => 0,//橙色
 			),
 		),

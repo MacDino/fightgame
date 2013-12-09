@@ -15,8 +15,8 @@ class Monster_PrefixConfig
 			'experience_change' => 0.5, //经验加成
 			'money_change' => 0.5, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0.05,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0.025,//白色
+				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
 				Equip::EQUIP_COLOUR_GREEN   => 0,//绿色
 				Equip::EQUIP_COLOUR_BLUE    => 0,//蓝色
 				Equip::EQUIP_COLOUR_PURPLE  => 0,//紫色
@@ -35,8 +35,8 @@ class Monster_PrefixConfig
 			'experience_change' => 0.5, //经验加成
 			'money_change' => 0.5, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0.05,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0.025,//白色
+				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
 				Equip::EQUIP_COLOUR_GREEN   => 0,//绿色
 				Equip::EQUIP_COLOUR_BLUE    => 0,//蓝色
 				Equip::EQUIP_COLOUR_PURPLE  => 0,//紫色
@@ -55,8 +55,8 @@ class Monster_PrefixConfig
 			'experience_change' => 1, //经验加成
 			'money_change' => 1, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0.125,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0.04,//白色
+				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
 				Equip::EQUIP_COLOUR_GREEN   => 0,//绿色
 				Equip::EQUIP_COLOUR_BLUE    => 0,//蓝色
 				Equip::EQUIP_COLOUR_PURPLE  => 0,//紫色
@@ -75,8 +75,8 @@ class Monster_PrefixConfig
 			'experience_change' => 1.5, //经验加成
 			'money_change' => 1.5, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0.175,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0.075,//白色
+				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
 				Equip::EQUIP_COLOUR_GREEN   => 0,//绿色
 				Equip::EQUIP_COLOUR_BLUE    => 0,//蓝色
 				Equip::EQUIP_COLOUR_PURPLE  => 0,//紫色
@@ -95,8 +95,8 @@ class Monster_PrefixConfig
 			'experience_change' => 1.5, //经验加成
 			'money_change' => 1.5, //金币加成
 			'equip_get_probability' => array(
-				Equip::EQUIP_COLOUR_GRAY    => 0.175,//灰色
-				Equip::EQUIP_COLOUR_WHITE   => 0.075,//白色
+				Equip::EQUIP_COLOUR_GRAY    => 0,//灰色
+				Equip::EQUIP_COLOUR_WHITE   => 0,//白色
 				Equip::EQUIP_COLOUR_GREEN   => 0,//绿色
 				Equip::EQUIP_COLOUR_BLUE    => 0,//蓝色
 				Equip::EQUIP_COLOUR_PURPLE  => 0,//紫色
