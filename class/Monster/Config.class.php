@@ -8,12 +8,13 @@ class Monster_Config
      * 获取每项基本属性的最低点数
      */
 	public static function getMonsterBaseAttributeList($level) {
+		$lowPoint = ($level - 1 ) + 10;
 		return array(
-          ConfigDefine::USER_ATTRIBUTE_POWER       => $level,//力量
-          ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => $level,//魔力
-          ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => $level,//体质
-          ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => $level,//耐力
-          ConfigDefine::USER_ATTRIBUTE_QUICK       => $level,//敏捷
+          ConfigDefine::USER_ATTRIBUTE_POWER       => $lowPoint,//力量
+          ConfigDefine::USER_ATTRIBUTE_MAGIC_POWER => $lowPoint,//魔力
+          ConfigDefine::USER_ATTRIBUTE_PHYSIQUE    => $lowPoint,//体质
+          ConfigDefine::USER_ATTRIBUTE_ENDURANCE   => $lowPoint,//耐力
+          ConfigDefine::USER_ATTRIBUTE_QUICK       => $lowPoint,//敏捷
         );
 	}
 	/***
