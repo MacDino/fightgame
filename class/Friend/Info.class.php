@@ -16,7 +16,8 @@ class Friend_Info
 			if(!$userId) return FALSE;
 			
 			//查询好友信息
-			$sql = "select u.user_id as user_id, u.sex as sex, u.race_id as user_race, u.user_name as user_name, u.user_level as user_level from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
+			$sql = "select u.user_id as user_id, u.sex as sex, u.race_id as race_id, u.user_name as user_name, u.user_level as user_level, f.validity_time as validity_time from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '1'";
+			//
 //			echo $sql;exit;
 			$friendInfo = MySql::query($sql);
             return $friendInfo;
@@ -36,8 +37,8 @@ class Friend_Info
         	//数据进行校验,非空,数据内
 			if(!$userId)	return FALSE;
 			//查询好友信息
-			$sql = "select u.user_id as user_id, u.sex as sex, u.user_name as user_name, u.race_id as race_id, u.user_level as user_level from user_info u, friend_info f where f.user_id = '$userId' AND f.friend_id = u.user_id AND f.is_pass = '0'";
-//			echo $sql;exit;
+			$sql = "select u.user_id as user_id, u.sex as sex, u.user_name as user_name, u.race_id as race_id, u.user_level as user_level from user_info u, friend_info f where f.friend_id = '$userId' AND f.user_id = u.user_id AND f.is_pass = '0'";
+			//echo $sql;exit;
 			$friendInfo = MySql::query($sql);
 	        return $friendInfo;
         }catch (Exception $e){
@@ -85,6 +86,8 @@ class Friend_Info
 		}else{
 			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId, 'is_pass' => 1));//默认通过
 			$res = MySql::insert(self::TABLE_NAME, array('user_id' => $friendId, 'friend_id' => $userId, 'is_pass' => 1));//默认通过,并且添加对方为好友
+		User_Info::addReputationNum($user_info['user_id'], 2);
+        	User_Info::addReputationNum($friend_info['user_id'], 2);
 		}
 
         if($res){
@@ -104,17 +107,18 @@ class Friend_Info
     	//数据进行校验,非空,数据内
     	if(!$userId || !$friendId) return FALSE;
 
-		$res = MySql::update(self::TABLE_NAME, array('is_pass' => 1), array('user_id' => $userId, 'friend_id' => $friendId ));//通过状态
+		$res = MySql::update(self::TABLE_NAME, array('is_pass' => 1), array('user_id' => $friendId, 'friend_id' => $userId ));//通过状态
 		//通过好友申请的同时添加对方为好友,默认通过
-		$result = MySql::insert(self::TABLE_NAME, array('user_id' => $friendId, 'friend_id' => $userId, 'is_pass' => 1));//默认通过
-		if($res && $result)
+		MySql::insert(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));//默认通过
+		MySql::update(self::TABLE_NAME, array('is_pass' => 1), array('user_id' => $userId, 'friend_id' => $friendId ));//通过状态
+		if($res)
         {
         	//同时增加user_id声望
         	User_Info::addReputationNum($user_info['user_id'], 2);
         	User_Info::addReputationNum($friend_info['user_id'], 2);
             return TRUE;
         }else{
-        	return TRUE;
+        	return FALSE;
         }
     }
 
@@ -162,13 +166,21 @@ class Friend_Info
 		//简单检测
 		if(!$userId || !$friendId)	return FALSE;
 
-		$friendInfo = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId));
-
+		$friendInfo = MySql::selectOne(self::TABLE_NAME, array('user_id' => $userId, 'friend_id' => $friendId, 'is_pass' => 1));
+		
        	if(!empty($friendInfo)){
             return TRUE;
         }else{
         	return FALSE;
         }
+	}
+	
+	/**
+	 * 是否申请过
+	 */
+	public static function isCreate($userId, $friendId){
+		$sql = "select * from friend_info where user_id = '$userId' and friend_id = '$friendId'";
+		return MySql::query($sql);
 	}
 
 	/** @赠送PK符 */
@@ -186,5 +198,47 @@ class Friend_Info
 		//接受次数限制
 	}
 	
+	public static function getUseNum( $userId ){
+		
+		$time = date('Y-m-d');
+		$begin = strtotime($time.' 00:00:00');
+		$end   = strtotime($time.' 23:59:59');
+		$sql = "select * from friend_info where friend_id = '$userId' and validity_time >= '$begin' and validity_time <= '$end' ";
+		$res = MySql::query($sql);
+		if(Shop_IAPProduct::userIsBuyMonthPackage($userId)){
+			$total = 10;
+		}else{
+			$total = 5;
+		}
+		 
+		$num = count($res);
+		return $total-$num;
+	}
+	
+	/*public static function isUseFriend( $userId ){
+		$time = date('Y-m-d');
+		$begin = strtotime($time.' 00:00:00');
+		$end   = strtotime($time.' 23:59:59');
+		$sql = "select friend_id,validity_time  from friend_info where friend_id = '$userId' and validity_time >= '$begin' and validity_time <= '$end' ";
+		return MySql::query($sql);
+	}*/
+	
+	public static function useFriend( $userId, $friendId ){
+		$time = date('Y-m-d H:i:s', strtotime("+1 day"));
+		$old_sql = "update friend_info set validity_time = 0 where user_id = '$userId' ";
+		MySql::query($old_sql);
+		$sql = "update friend_info set validity_time = '$time' where user_id = '$userId' and friend_id = '$friendId'";
+		
+		return MySql::query($sql);
+	}
+	
+	public static function alreadyChooseFriend($userId){
+		$sql = "select friend_id from friend_info where user_id = '$userId' and is_pass = 0";
+		$res = MySql::query($sql);
+		foreach ($res as $i=>$key){
+			$result[$i] = $key['friend_id'];
+		}
+		return $result;
+	}
 	
 }

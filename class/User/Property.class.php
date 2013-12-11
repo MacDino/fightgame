@@ -655,6 +655,7 @@ class User_Property{
 				}			
 			}
 			$res = Equip_Create::createEquip($color, $userId, $level);
+			$equipInfo[] = Equip_Info::getEquipInfoById($res);
 		} else if($type == self::BOX_CHOICE){
 		//精品
 			$pack = Props_Config::$treasure_box_package[Props_Config::KEY_CHOICE_BOX];
@@ -680,8 +681,11 @@ class User_Property{
 				}
 				$res[] = Equip_Create::createEquip($color, $userId, $level, 0, $equipQuality);
 			}
+			foreach ($res as $v) {
+				$equipInfo[] = Equip_Info::getEquipInfoById($v);	
+			}
 		}	
-		return $res;
+		return $equipInfo;
 	}
 	/*
 	 * 随机普通宝箱装备颜色

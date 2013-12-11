@@ -31,15 +31,15 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	 * 限制每天打一次此副本
 	 */
 	if ( $isTodayFight && !$lastIsWin) {
-		$code = 170004;	
-		exit;
+		//$code = 170004;	
+		//exit;
 	}
 	/*
 	 * 已打赢的副本则不再重复进入
 	 */
 	if ($userLastCopyResult['win_monster_num'] >= $copy['monster_num']) {
-		$code = 170005;
-		exit;	
+		//$code = 170005;
+		//exit;	
 	}
 
     $accessDiffTime = time() - $userLastCopyResult['fight_start_time'];//一定为大于0的值
@@ -73,7 +73,8 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 			$teams['monster'][] = Copy_Fight::createGeneralMonsterFightable($v);
 		}
 		foreach ($monster as $k=>$v) {
-    		$data['participant']['monster'][]    = NewFight::getMonsterFightInfo($teams['monster'][$k], $v);
+			$monsterFightInfo = NewFight::getMonsterFightInfo($teams['monster'][$k], $v);
+			$data['participant']['monster'][]    = $monsterFightInfo;
 		}
 
 		//当前角色fight对象，如果有人宠，获取人宠
@@ -103,14 +104,42 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
     	$isUserAlive = NewFight::isTeamAlive($teams['user']);
     	$isMonsterAlive = NewFight::isTeamAlive($teams['monster']);
 		$data['result']['use_time'] = $fightUseTime;
+		$data['result']['experience_sum']   =  $userInfo['experience'];
+		/*
+		 * 处理一组怪物中单个怪物死亡时，掉落
+		 */
+		foreach ($teams['monster'] as $k=>$obj) {
+			if(!$obj->isAlive()) {
+				$data['result']['experience']         = Monster::getMonsterExperience($monster);
+				$data['result']['money']              = Monster::getMonsterMoney($monster);
+				$data['result']['equipment']          = Monster::getMonsterEquipment($monster);
+				//经验掉落
+				User_Info::addExperience($userId, $data['result']['experience'] * 2);
+				//金钱掉落
+				User_Info::addMoney($userId, $data['result']['money'] * 2);
+				//装备掉落
+				if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
+					$getEquipSetting = Fight_Setting::isEquipMentCan($userId);
+					foreach ($data['result']['equipment'] as $equipment) {
+						if($getEquipSetting[$equipment['color']]) {
+							Equip::createEquip($equipment['color'], $userId, $equipment['level']);
+						}
+					}
+				}
+			}
+		}
+
+
 		if(!$isUserAlive && $isMonsterAlive) {
 			$data['result']['win']  = 0;
 			$msg    = '您被打败了';
 		} else {
 			$data['result']['win']  = 1;
+			/*
 			$data['result']['experience']         = Monster::getMonsterExperience($monster);
 			$data['result']['money']              = Monster::getMonsterMoney($monster);
 			$data['result']['equipment']          = Monster::getMonsterEquipment($monster);
+			 */
 			$msg                        = '怪物已消灭';
 
 			$monsterGroupDeadCount++;
@@ -134,9 +163,6 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 				getReward($userId, $copyId);
 			}
 
-			User_Info::addExperience($userId, $data['result']['experience'] * 2);
-
-			$data['result']['experience_sum']   =  $userInfo['experience'];
 
 			$isLevelUp = User_Info::isLevel($userId);
 			if($isLevelUp) {
@@ -144,18 +170,6 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 			}
 			$data['result']['win_monster_num'] = $win_monster_count;
 			$data['result']['monster_group'] = $monster_group; 
-
-			User_Info::addMoney($userId, $data['result']['money'] * 2);
-
-			if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
-				$getEquipSetting = Fight_Setting::isEquipMentCan($userId);
-				foreach ($data['result']['equipment'] as $equipment) {
-					if($getEquipSetting[$equipment['color']]) {
-						Equip::createEquip($equipment['color'], $userId, $equipment['level']);
-					}
-				}
-			}
-
 		}
 		$code   = 0;
 	} catch (Exception $e) {

@@ -224,4 +224,17 @@ class Shop_IAPProduct{
 		Shop_HappyMonthLog::insert(array('user_id' => $userId, 'content' => json_encode($pack)));
 		return $res;
 	}
+
+	public static function userIsBuyMonthPackage($userId){
+		$lastPurchase = Shop_IAPPurchaseLog::getLastOne($userId, self::MONTH_PRODUCT_ID);
+		if(!$lastPurchase){
+			return false;
+		}
+		$ctime = strtotime($lastPurchase['ctime']);
+		$endtime = strtotime("next month", $ctime);	
+		if(time() > $endtime){
+			return false;
+		}
+		return TRUE;	
+	}
 }
