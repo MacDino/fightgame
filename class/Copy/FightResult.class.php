@@ -19,6 +19,9 @@ class Copy_FightResult{
 		if ($params['win_monster_num']) {
 			$data['win_monster_num'] = $params['win_monster_num'];
 		}
+		if ($params['passed_time']) {
+			$data['passed_time'] = $params['passed_time'];
+		}
         $existResult = self::getResult($params['user_id'], $params['copies_level_id'], $params['copy_id']);
         if(is_array($existResult) && count($existResult)) {
 			$where = array(

@@ -110,8 +110,8 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 		 */
 		foreach ($teams['monster'] as $k=>$obj) {
 			if(!$obj->isAlive()) {
-				$data['result']['experience']         = Monster::getMonsterExperience($monster);
-				$data['result']['money']              = Monster::getMonsterMoney($monster);
+				$data['result']['experience']         = Monster::getMonsterExperience($monster) * 2;
+				$data['result']['money']              = Monster::getMonsterMoney($monster) * 2;
 				$data['result']['equipment']          = Monster::getMonsterEquipment($monster);
 				//经验掉落
 				User_Info::addExperience($userId, $data['result']['experience'] * 2);
@@ -130,7 +130,7 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 		}
 
 
-		if(!$isUserAlive && $isMonsterAlive) {
+		if(!$isUserAlive && !$isMonsterAlive) {
 			$data['result']['win']  = 0;
 			$msg    = '您被打败了';
 		} else {
@@ -157,10 +157,12 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 			/*
 			 * 每层完成时,领取奖励
 			 */
-			if ($win_monster_count == $copy['win_monster_num']) {
+			if ($win_monster_count%$copy['monster_num'] == 0) {
 				//记录通关次数
 				$passedTime = $userLastCopyResult['passed_time'] + 1;
-				getReward($userId, $copyId);
+				$data['result']['passed_time'] = $passedTime;
+				$data['result']['reward'] = getReward($userId, $copyId);
+				$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, 0);
 			}
 
 
@@ -177,7 +179,6 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 		$msg    = '攻击操作失败';
 	}
 //}
-
  /**记录战斗结果入库，战斗记录一个用户永远只保存一条**/
 $result = array(
     'user_id'   => $userId,
@@ -193,30 +194,30 @@ Copy_FightResult::create($result);
 
 
 
-function getReward($userId, $copyId){
+function getReward($userId, $copyId, $levelId = 0){
 	$copySecond = array (
-		EQUIP_COLOUR_BLUE => EQUIP_TYPE_ARMS,
-		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_ARMS,
-		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_ARMS,
-		EQUIP_COLOUR_BLUE => EQUIP_TYPE_CLOTHES,
-		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_CLOTHES,
-		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_CLOTHES,
+		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_ARMS,
+		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_ARMS,
+		Equip::EQUIP_COLOUR_ORANGE => Equip::EQUIP_TYPE_ARMS,
+		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_CLOTHES,
+		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_CLOTHES,
+		Equip::EQUIP_COLOUR_ORANGE => Equip::EQUIP_TYPE_CLOTHES,
 	);	
 	$copyThird = array(
-		EQUIP_COLOUR_BLUE => EQUIP_TYPE_HELMET,
-		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_HELMET,
-		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_HELMET,
-		EQUIP_COLOUR_BLUE => EQUIP_TYPE_NECKLACE,
-		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_NECKLACE,
-		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_NECKLACE,
+		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_HELMET,
+		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_HELMET,
+		Equip::EQUIP_COLOUR_ORANGE => Equip::EQUIP_TYPE_HELMET,
+		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_NECKLACE,
+		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_NECKLACE,
+		Equip::EQUIP_COLOUR_ORANGE => Equip::EQUIP_TYPE_NECKLACE,
 	);
 	$copyForth = array (
-		EQUIP_COLOUR_BLUE => EQUIP_TYPE_BELT,
-		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_BELT,
-		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_BELT,
-		EQUIP_COLOUR_BLUE => EQUIP_TYPE_SHOES,
-		EQUIP_COLOUR_PURPLE => EQUIP_TYPE_SHOES,
-		EQUIP_COLOUR_ORANGE => EQUIP_TYPE_SHOES,
+		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_BELT,
+		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_BELT,
+		Equip::EQUIP_COLOUR_ORANGE => Equip::EQUIP_TYPE_BELT,
+		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_SHOES,
+		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_SHOES,
+		Equip::EQUIP_COLOUR_ORANGE => Equip::EQUIP_TYPE_SHOES,
 	);
 	switch ($copyId) {
 		case 2:
@@ -232,5 +233,16 @@ function getReward($userId, $copyId){
 			$equipType = $copyForth[$equipColour];
 			break;
 	}
-	//Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType);
+	$equipId = Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType);
+	$logData = array(
+		'copy_id' => $copyId,
+		'level_id'=> $levelId ? $levelId : 0,
+		'type'	  => "equip",
+		'num'	  => 1,
+		'ctime'	  => time(),
+		'equip_id'=> $equipId,		
+		'user_id' => $userId,
+	);
+	Copy_RewardLog::insert($logData);
+	return Equip_Info::getEquipInfoById($equipId);
 }

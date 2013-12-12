@@ -31,8 +31,8 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	 * 限制每天打一次此副本
 	 */
 	if ( $isTodayFight && !$lastIsWin) {
-		$code = 170004;	
-		exit;
+		//$code = 170004;	
+		//exit;
 	}
 	/*
 	 * 已打赢的副本则不再重复进入
@@ -116,10 +116,11 @@ try {
 		/*
 		 * 每层完成时,领取奖励
 		 */
-		if ($win_monster_count == $copy['win_monster_num']) {
+		if ($win_monster_count%$copy['monster_num'] == 0) {
 			//记录通关次数
 			$passedTime = $userLastCopyResult['passed_time'] + 1;
-			getReward($userId, $userInfo['user_level']);
+			$data['result']['reward'] =  getReward($userId, $userInfo['user_level'], $copyId, $copyLevId);
+			$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, $copyLevId);
 		}
 
         User_Info::addExperience($userId, $data['result']['experience']);
@@ -170,13 +171,14 @@ Copy_FightResult::create($result);
 
 
 
-function getReward($userId, $level){
+function getReward($userId, $level, $copyId, $levelId = 0){
 	$reward = array(
 		'double','pk','ingot','money','pill','equip'
 	);	
 	$k = array_rand($reward);
 	$result = $reward[$k];
 
+	$num = 1;
 	switch ($result) {
 		case 'double':
 			$prop_id = 1;	
@@ -187,16 +189,30 @@ function getReward($userId, $level){
 			$res = Rewardtype::props($userId, 1, $prop_id);
 			break;
 		case 'ingot':
-			$res = Rewardtype::ingot($userId, 10);
+			$num = 10;
+			$res = Rewardtype::ingot($userId, $num);
 			break;
 		case 'money':
-			$res = Rewardtype::money($userId, 5000);
+			$num = 5000;
+			$res = Rewardtype::money($userId, $num);
 			break;
 		case 'pill':
 			$res = Rewardtype::pillStone($userId);
 			break;
 		case 'equip':
-			$res = Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, $level);
+			$equipId = Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, $level);
+			$res = Equip_Info::getEquipInfoById($equipId);
 			break;
 	}
+	$logData = array(
+		'copy_id' => $copyId,
+		'level_id'=> $levelId,
+		'type'	  => $result,
+		'num'	  => $num,
+		'ctime'	  => time(),
+		'equip_id'=> $equipId,		
+		'user_id' => $userId,
+	);
+	Copy_RewardLog::insert($logData);
+	return $res;
 }
