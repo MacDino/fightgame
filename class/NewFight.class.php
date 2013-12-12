@@ -460,6 +460,7 @@ class NewFight
             foreach ($fightInfo['attack']['effect'] as $effect) {
                 if($effect['skill_id'] == 1206) {
                     $effect['skill_id'] = '1206|'.ConfigDefine::XURUO;
+                    $effect['round'] = 1;
                 }
                 $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|'.$effect['skill_id'].'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::CHIXU.'|R:'.$effect['round'].'|'.ConfigDefine::HUIHE;
             }
@@ -470,7 +471,7 @@ class NewFight
                 $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
             }
         }elseif($fightInfo['attack']['sleep'] == 1) {
-            $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|1206|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|1|'.ConfigDefine::HUIHE;
+            $process[] = $processBegin.'|'.ConfigDefine::CHUYU.'|1206|'.ConfigDefine::XURUO.'|'.ConfigDefine::ZHUANGTAI.'|'.ConfigDefine::XIXIU.'|R:1|'.ConfigDefine::HUIHE;
             if($fightInfo['attack']['current_blood'] <= 0) {
                 $process[] = $processBegin.'|'.ConfigDefine::SIWANG;
             }
