@@ -676,6 +676,7 @@ class User_Property{
 				 */
 				if( $i < 4) {
 					$color = Equip::EQUIP_COLOUR_ORANGE;
+					$equipQuality = Equip::EQUIP_QUALITY_SUBLIME;
 				} else {
 					$color = self::randChoiceEquipColor();	
 				}

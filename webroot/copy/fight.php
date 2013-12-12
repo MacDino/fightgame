@@ -73,7 +73,9 @@ try {
 
 
     if($userInfo['user_level'] > 10) {
-        $petInfo    = Pet::usedPet($userId);
+        $friendIdRes    = Friend_Info::isUseFriend($userId);
+        $petInfo        = User_Info::getUserInfoByUserId((int)$friendIdRes[0]['friend_id']);
+        //$petInfo    = Pet::usedPet($userId);
         if(is_array($petInfo) && count($petInfo)) {
             //人宠进入队伍
 //            $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'],'pet');
