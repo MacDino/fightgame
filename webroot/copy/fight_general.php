@@ -110,10 +110,11 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 		 */
 		foreach ($teams['monster'] as $k=>$obj) {
 			if(!$obj->isAlive()) {
-				$data['result']['experience']         = Monster::getMonsterExperience($monster) * 2;
-				$data['result']['money']              = Monster::getMonsterMoney($monster) * 2;
-				$data['result']['equipment']          = Monster::getMonsterEquipment($monster);
-				//经验掉落
+				$data['result']['experience']         = Monster::getMonsterExperience($monster[$k]);
+				$data['result']['money']              = Monster::getMonsterMoney($monster[$k]);
+				$data['result']['equipment']          = Monster::getMonsterEquipment($monster[$k]);
+
+              	//经验掉落
 				User_Info::addExperience($userId, $data['result']['experience'] * 2);
 				//金钱掉落
 				User_Info::addMoney($userId, $data['result']['money'] * 2);
@@ -130,7 +131,7 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 		}
 
 
-		if(!$isUserAlive && !$isMonsterAlive) {
+		if(!$isUserAlive && $isMonsterAlive) {
 			$data['result']['win']  = 0;
 			$msg    = '您被打败了';
 		} else {

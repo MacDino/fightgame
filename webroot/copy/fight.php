@@ -38,8 +38,8 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	 * 已打赢的副本则不再重复进入
 	 */
 	if ($userLastCopyResult['win_monster_num'] >= $copy['monster_num']) {
-		$code = 170005;
-		exit;	
+		//$code = 170005;
+		//exit;	
 	}
 
     $accessDiffTime = time() - $userLastCopyResult['fight_start_time'];//一定为大于0的值
@@ -73,9 +73,7 @@ try {
 
 
     if($userInfo['user_level'] > 10) {
-        $friendIdRes    = Friend_Info::isUseFriend($userId);
-        $petInfo        = User_Info::getUserInfoByUserId((int)$friendIdRes[0]['friend_id']);
-        //$petInfo    = Pet::usedPet($userId);
+        $petInfo    = Pet::usedPet($userId);
         if(is_array($petInfo) && count($petInfo)) {
             //人宠进入队伍
 //            $userFightTeam[] = Fight::createUserFightable($petInfo['user_id'], $petInfo['user_level'],'pet');

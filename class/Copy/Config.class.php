@@ -43,6 +43,7 @@ class Copy_Config{
 		if ($levelInfo) {
 			$monsterType = $levelInfo['monster_level_type'];
 			$monsterLevelLimit = $levelInfo['monster_level'];
+			$monsterPrefix = $levelInfo['monster_prefix'];
 			$monsterSuffix = $levelInfo['monster_suffix'];
 			$skills = $levelInfo['monster_skill'];
 
@@ -83,6 +84,8 @@ class Copy_Config{
 			$monster = array(
 				'monster_id' 	=> $monsterId,
 				'level' 		=> $monsterLevel,
+				'map_id'		=> $mapId,
+				'prefix'		=> $monsterPrefix,
 				'suffix'		=> $monsterSuffix,
 				'skills'		=> $skills,
 				'race_id'		=> $monsterRaceId,
@@ -171,6 +174,7 @@ class Copy_Config{
 			$returnMonster[$k]['level'] = $level;
 			$mapMonster = MySql::selectOne('map_monster', array('monster_id' => $v['monster_id']));
 			$returnMonster[$k]['race_id'] = $mapMonster['race_id'];
+			$returnMonster[$k]['map_id'] = $mapMonster['map_id'];
 			//技能和释放概率
 			$returnMonster[$k]['prefix']	= $v['monster_prefix'];
 			$returnMonster[$k]['suffix']	= $v['monster_suffix'];
