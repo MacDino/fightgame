@@ -173,14 +173,25 @@ class Copy_Config{
 			$returnMonster[$k]['monster_id'] = $v['monster_id'];
 			$returnMonster[$k]['level'] = $level;
 			$mapMonster = MySql::selectOne('map_monster', array('monster_id' => $v['monster_id']));
+
+			$mapWhere = array(
+				'end_level' => array(
+					'opt' => '>',
+					'val' => $level,
+				),
+			);	
+			$mapList = Map_Config::getMapList($mapWhere);
+			$mapId = $mapList[0]['map_id'];
+
+
 			$returnMonster[$k]['race_id'] = $mapMonster['race_id'];
-			$returnMonster[$k]['map_id'] = $mapMonster['map_id'];
+			$returnMonster[$k]['map_id'] = $mapId;
 			//技能和释放概率
 			$returnMonster[$k]['prefix']	= $v['monster_prefix'];
 			$returnMonster[$k]['suffix']	= $v['monster_suffix'];
 
 			$aptitudeTypeId = Monster::randAptitudeType();
-			$aptitude = Monster::getMonsterAptitude($mapMonster['map_id'], $aptitudeTypeId);
+			$aptitude = Monster::getMonsterAptitude($mapId, $aptitudeTypeId);
 
 
 			$returnMonster[$k]['grow_per'] 		= Monster::getGrowPercentage($mapMonster['map_id']);

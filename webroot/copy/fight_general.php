@@ -49,7 +49,7 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
         $code   = 0;
         $data   = $result;
         exit();
-    }
+	}
 }
 $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id'] > 0 ? $userLastCopyResult['copy_level_id'] : 1);
 
@@ -162,7 +162,8 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 				//记录通关次数
 				$passedTime = $userLastCopyResult['passed_time'] + 1;
 				$data['result']['passed_time'] = $passedTime;
-				$data['result']['reward'] = getReward($userId, $copyId);
+
+				$data['result']['reward'] = getReward($userId, $copyId, 0 , $monster[0]['map_id']);
 				$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, 0);
 			}
 
@@ -195,7 +196,7 @@ Copy_FightResult::create($result);
 
 
 
-function getReward($userId, $copyId, $levelId = 0){
+function getReward($userId, $copyId, $levelId = 0, $mapId){
 	$copySecond = array (
 		Equip::EQUIP_COLOUR_BLUE => Equip::EQUIP_TYPE_ARMS,
 		Equip::EQUIP_COLOUR_PURPLE => Equip::EQUIP_TYPE_ARMS,
@@ -234,6 +235,7 @@ function getReward($userId, $copyId, $levelId = 0){
 			$equipType = $copyForth[$equipColour];
 			break;
 	}
+	$equipLevel = Monster::getMonsterEquipmentLevel($mapId);
 	$equipId = Equip_Create::createEquip($equipColour, $userId, $equipLevel, $equipType);
 	$logData = array(
 		'copy_id' => $copyId,

@@ -119,7 +119,7 @@ try {
 		if ($win_monster_count%$copy['monster_num'] == 0) {
 			//记录通关次数
 			$passedTime = $userLastCopyResult['passed_time'] + 1;
-			$data['result']['reward'] =  getReward($userId, $userInfo['user_level'], $copyId, $copyLevId);
+			$data['result']['reward'] =  getReward($userId, $userInfo['user_level'], $copyId, $copyLevId, $monster['map_id']);
 			$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, $copyLevId);
 		}
 
@@ -171,7 +171,7 @@ Copy_FightResult::create($result);
 
 
 
-function getReward($userId, $level, $copyId, $levelId = 0){
+function getReward($userId, $level, $copyId, $levelId = 0 , $mapId){
 	$reward = array(
 		'double','pk','ingot','money','pill','equip'
 	);	
@@ -200,7 +200,8 @@ function getReward($userId, $level, $copyId, $levelId = 0){
 			$res = Rewardtype::pillStone($userId);
 			break;
 		case 'equip':
-			$equipId = Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, $level);
+			$equipLevel = Monster::getMonsterEquipmentLevel($mapId);
+			$equipId = Equip_Create::createEquip(Equip::EQUIP_COLOUR_BLUE, $userId, $equipLevel);
 			$res = Equip_Info::getEquipInfoById($equipId);
 			break;
 	}
