@@ -39,11 +39,17 @@ class Copy_FightResult{
         }
     }
 
-    public static function getResult($userId, $copyLevId = 0, $copyId = 0) {
+    public static function getResult($userId, $copyLevId = 0, $copyId = 0, $time = "") {
         if($userId > 0) {
             $where = array(
                 'user_id'   => intval($userId),
             );
+			if ($time) {
+				$where['create_time'] = array(
+					'opt' => 'like',
+					'val' => $time,	
+				);	
+			}
             if($copyLevId > 0) {
                 $where['copies_level_id'] = intval($copyLevId);
             }

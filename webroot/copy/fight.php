@@ -21,7 +21,7 @@ if($userId <=0 ) {
     $code = 170003; $msg = '没有对应的人物';
     exit();
 }
-$userLastCopyResult     = Copy_FightResult::getResult($userId, $copyLevId);
+$userLastCopyResult     = Copy_FightResult::getResult($userId, $copyLevId, 0, date("Y-m-d",time()));
 if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	$jsonResult = json_decode($userLastCopyResult['last_fight_result'], TRUE);
 	$lastIsWin = $jsonResult['result']['win'];
@@ -119,6 +119,9 @@ try {
 		if ($win_monster_count%$copy['monster_num'] == 0) {
 			//记录通关次数
 			$passedTime = $userLastCopyResult['passed_time'] + 1;
+			if($passedTime == 1){
+				$data['result']['first_pass_reward'] = Rewardtype::pillStone($userId);
+			}
 			$data['result']['reward'] =  getReward($userId, $userInfo['user_level'], $copyId, $copyLevId, $monster['map_id']);
 			$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, $copyLevId);
 		}

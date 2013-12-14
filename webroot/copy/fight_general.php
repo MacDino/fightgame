@@ -19,7 +19,7 @@ if($userId <=0 ) {
     $code = 170003; $msg = '没有对应的人物';
     exit();
 }
-$userLastCopyResult     = Copy_FightResult::getResult($userId, 0, $copyId);
+$userLastCopyResult     = Copy_FightResult::getResult($userId, 0, $copyId, date("Y-m-d",time()));
 if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 	$jsonResult = json_decode($userLastCopyResult['last_fight_result'], TRUE);
 	$lastIsWin = $jsonResult['result']['win'];
@@ -51,7 +51,6 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
         exit();
 	}
 }
-$copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id'] > 0 ? $userLastCopyResult['copy_level_id'] : 1);
 
 
 //$monsterGroupDeadCount = 0;
@@ -110,14 +109,14 @@ $copyLevId = $copyLevId > 0 ? $copyLevId : ($userLastCopyResult['copy_level_id']
 		 */
 		foreach ($teams['monster'] as $k=>$obj) {
 			if(!$obj->isAlive()) {
-				$data['result']['experience']         = Monster::getMonsterExperience($monster[$k]);
-				$data['result']['money']              = Monster::getMonsterMoney($monster[$k]);
-				$data['result']['equipment']          = Monster::getMonsterEquipment($monster[$k]);
+				$data['result'][$k]['experience']  = Monster::getMonsterExperience($monster[$k]) * 2;
+				$data['result'][$k]['money']       = Monster::getMonsterMoney($monster[$k]) * 2;
+				$data['result'][$k]['equipment']   = Monster::getMonsterEquipment($monster[$k]);
 
               	//经验掉落
-				User_Info::addExperience($userId, $data['result']['experience'] * 2);
+				User_Info::addExperience($userId, $data['result']['experience']);
 				//金钱掉落
-				User_Info::addMoney($userId, $data['result']['money'] * 2);
+				User_Info::addMoney($userId, $data['result']['money']);
 				//装备掉落
 				if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
 					$getEquipSetting = Fight_Setting::isEquipMentCan($userId);
