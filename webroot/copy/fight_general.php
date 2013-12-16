@@ -114,13 +114,13 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 				$data['result'][$k]['equipment']   = Monster::getMonsterEquipment($monster[$k]);
 
               	//经验掉落
-				User_Info::addExperience($userId, $data['result']['experience']);
+				User_Info::addExperience($userId, $data['result'][$k]['experience']);
 				//金钱掉落
-				User_Info::addMoney($userId, $data['result']['money']);
+				User_Info::addMoney($userId, $data['result'][$k]['money']);
 				//装备掉落
-				if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
+				if(is_array($data['result'][$k]['equipment']) && count($data['result'][$k]['equipment'])) {
 					$getEquipSetting = Fight_Setting::isEquipMentCan($userId);
-					foreach ($data['result']['equipment'] as $equipment) {
+					foreach ($data['result'][$k]['equipment'] as $equipment) {
 						if($getEquipSetting[$equipment['color']]) {
 							Equip::createEquip($equipment['color'], $userId, $equipment['level']);
 						}

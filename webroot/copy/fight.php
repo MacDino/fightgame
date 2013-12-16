@@ -98,9 +98,9 @@ try {
         $msg    = '您被打败了';
     } else {
         $data['result']['win']  = 1;
-        $data['result']['experience']         = Monster::getMonsterExperience($monster);
-        $data['result']['money']              = Monster::getMonsterMoney($monster);
-        $data['result']['equipment']          = Monster::getMonsterEquipment($monster);
+        $data['result'][0]['experience']         = Monster::getMonsterExperience($monster);
+        $data['result'][0]['money']              = Monster::getMonsterMoney($monster);
+        $data['result'][0]['equipment']          = Monster::getMonsterEquipment($monster);
         $msg                        = '怪物已消灭';
 		/*
 		 * 打赢时，怪物计数
@@ -126,7 +126,7 @@ try {
 			$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, $copyLevId);
 		}
 
-        User_Info::addExperience($userId, $data['result']['experience']);
+        User_Info::addExperience($userId, $data['result'][0]['experience']);
 
         $data['result']['experience_sum']   =  $userInfo['experience'];
 
@@ -136,11 +136,11 @@ try {
         }
         $data['result']['win_monster_num'] = $win_monster_count;
 
-        User_Info::addMoney($userId, $data['result']['money']);
+        User_Info::addMoney($userId, $data['result'][0]['money']);
 
-        if(is_array($data['result']['equipment']) && count($data['result']['equipment'])) {
+        if(is_array($data['result'][0]['equipment']) && count($data['result'][0]['equipment'])) {
             $getEquipSetting = Fight_Setting::isEquipMentCan($userId);
-            foreach ($data['result']['equipment'] as $equipment) {
+            foreach ($data['result'][0]['equipment'] as $equipment) {
                 if($getEquipSetting[$equipment['color']]) {
                     Equip::createEquip($equipment['color'], $userId, $equipment['level']);
                 }
