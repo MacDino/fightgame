@@ -237,4 +237,17 @@ class Shop_IAPProduct{
 		}
 		return TRUE;	
 	}
+
+	/*
+	 * 获取包月下次购买时间
+	 */
+	public static function getUserMonthPackageNextBuyTime($userId) {
+		$lastPurchase = Shop_IAPPurchaseLog::getLastOne($userId, self::MONTH_PRODUCT_ID);
+		if(!$lastPurchase){
+			return "";
+		}
+		$ctime = strtotime($lastPurchase['ctime']);
+		$endtime = strtotime("next month", $ctime);	
+		return date("Y-m-d H:i",$endtime);
+	}
 }

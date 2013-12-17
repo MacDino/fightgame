@@ -165,17 +165,18 @@ class User_Property{
 	/*
 	 * 更新用户道具数量  减少
 	 */
-	public static function updateNumDecreaseAction($userId, $propsId)
+	public static function updateNumDecreaseAction($userId, $propsId, $useNum = 1)
 	{
 		if(!$userId || !$propsId)	return FALSE;
 		$num = self::getPropertyNum($userId, $propsId);
 		if($num <= 0)return FALSE;
+		if($useNum>$num) return FALSE;
 
 		$userProps = self::getUserPropsInfoByUnionKey($userId, $propsId);
 		if (!$userProps) {
 			throw new Exception ('未找到您当前的道具记录', 120054);
 		}
-		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - 1 WHERE user_id = $userId AND property_id = $propsId";
+		$sql = "UPDATE " . self::TABLE_NAME . " SET `property_num` =  `property_num` - " . $useNum . " WHERE user_id = $userId AND property_id = $propsId";
 		return MySql::execute($sql);
 	}
 
