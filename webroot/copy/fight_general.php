@@ -173,7 +173,7 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 			/*
 			 * 每层完成时,领取奖励
 			 */
-			if ($win_monster_count%$copy['monster_num'] == 0 && $monster_group == 2) {
+			if ($win_monster_count%($copy['monster_num']/2) == 0 && $monster_group == 2) {
 				//记录通关次数
 				$passedTime = $userLastCopyResult['passed_time'] + 1;
 				$data['result']['passed_time'] = $passedTime;
