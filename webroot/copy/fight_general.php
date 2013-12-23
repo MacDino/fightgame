@@ -81,6 +81,8 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
     	$userInfo['mark']   = 'user';
     	$teams['user'][]    = NewFight::createUserObj($userInfo);
     	$data['participant']['user'] = NewFight::getPeopleFightInfo($teams['user'][0], $userInfo);
+    	$data['participant']['user']['race_id']    = $userInfo['race_id'];
+    	$data['participant']['user']['sex']    = $userInfo['sex'];
 
 
 		if($userInfo['user_level'] > 10) {
@@ -92,6 +94,8 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 				$teams['user'][] = NewFight::createUserObj($petInfo);
 	//            $data['participant']['pet'] = Fight::getPeopleFightInfo($userFightTeam[1], $petInfo);
 				$data['participant']['pet'] = NewFight::getPeopleFightInfo($teams['user'][1], $petInfo);
+    			$data['participant']['pet']['race_id']    = $petInfo['race_id'];
+    			$data['participant']['pet']['sex']    = $petInfo['sex'];
 			}else{
 				$data['participant']['pet'] = NULL;//没有人宠时给空值
 			}
