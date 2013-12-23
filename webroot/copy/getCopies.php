@@ -12,6 +12,9 @@ foreach ($copies as $k => $v){
 	}
 	$fightRes = Copy_FightResult::getResult($userId, 0, $v['copies_id'],date("Y-m-d", time()));
 	$copies[$k]['win_monster_num'] = $fightRes['win_monster_num'] ? $fightRes['win_monster_num'] : 0;
-	$copies[$k]['residue_degree'] = $v['monster_num'] - $fightRes['win_monster_num'];
+	$copyId = $v['copies_id'];
+	$count = Copy::getFightNum($userId, "copy_".$copyId);
+	$copies[$k]['residue_degree'] = $count['is_free'];
 }
+sort($copies);
 $data = $copies;

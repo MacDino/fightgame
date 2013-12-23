@@ -42,6 +42,7 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 		//exit;	
 	}
 
+	/*
     $accessDiffTime = time() - $userLastCopyResult['fight_start_time'];//一定为大于0的值
     if($accessDiffTime < $userLastCopyResult['use_time']) {
         //调用时间小于应该花费的时间
@@ -50,6 +51,7 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
         $data   = $result;
         exit();
 	}
+	 */
 }
 
 
@@ -64,7 +66,6 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 			$monster_group = 2;
 			$monster            = Copy_Config::getGroupMonsterByCopyId($copyId, 2, $userInfo['user_level']);
 		}
-		//print_r($monster);
 		foreach ($monster as $k=>$v) {
 			$monster[$k]['mark'] = 'monster['.$k.']';
 		}
@@ -120,9 +121,16 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 				//装备掉落
 				if(is_array($data['result'][$k]['equipment']) && count($data['result'][$k]['equipment'])) {
 					$getEquipSetting = Fight_Setting::isEquipMentCan($userId);
-					foreach ($data['result'][$k]['equipment'] as $equipment) {
+					foreach ($data['result'][$k]['equipment'] as  $equipKey => $equipment) {
 						if($getEquipSetting[$equipment['color']]) {
-							Equip::createEquip($equipment['color'], $userId, $equipment['level']);
+							$equipmentNum = Equip_Info::getEquipNum($userId);
+							$equipmentSurplus = $userInfo['pack_num'] - intval($equipmentNum);
+							$equipmentSurplus = $equipmentSurplus > 0 ? $equipmentSurplus : 0;
+							$data['result'][$k]['equipment'][$equipKey]['get'] = 0;
+                    		if($equipmentSurplus > 0) {
+								Equip::createEquip($equipment['color'], $userId, $equipment['level']);
+                        		$data['result'][$k]['equipment'][$equipKey]['get'] = 1;
+							}
 						}
 					}
 				}
@@ -133,6 +141,10 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 		if(!$isUserAlive && $isMonsterAlive) {
 			$data['result']['win']  = 0;
 			$msg    = '您被打败了';
+			/*
+			 * 被打败时记录一次
+			 */
+			PK_Conf::setInfo($userId, "copy_".$copyId);
 		} else {
 			$data['result']['win']  = 1;
 			/*
@@ -157,13 +169,17 @@ if(is_array($userLastCopyResult) && count($userLastCopyResult)) {
 			/*
 			 * 每层完成时,领取奖励
 			 */
-			if ($win_monster_count%$copy['monster_num'] == 0) {
+			if ($win_monster_count%$copy['monster_num'] == 0 && $monster_group == 2) {
 				//记录通关次数
 				$passedTime = $userLastCopyResult['passed_time'] + 1;
 				$data['result']['passed_time'] = $passedTime;
 
 				$data['result']['reward'] = getReward($userId, $copyId, 0 , $monster[0]['map_id']);
 				$data['result']['reward_count'] = Copy_RewardLog::getCountGroupByType($userId, $copyId, 0);
+				/*
+				 * 通关时记录次数
+				 */
+				PK_Conf::setInfo($userId, "copy_".$copyId);
 			}
 
 

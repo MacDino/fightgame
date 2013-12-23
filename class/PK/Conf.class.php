@@ -7,9 +7,11 @@ class PK_Conf {
     const TABLE_NAME_TIMES = 'user_pk_times'; //每天用户已经完成的战斗次数。不论胜败
     const PK_MODEL_CHALLENGE = 'challenge';
     const PK_MODEL_CONQUER  = 'conquer';
+    const COPY_MODEL_COPY  = 'copy';
     public static $timesInfo = array(
         self::PK_MODEL_CHALLENGE => array('init' => 5,'max' => 15),
         self::PK_MODEL_CONQUER   => array('init' => 10,),
+		self::COPY_MODEL_COPY	 => array('init' => 4),
     );
 
     public static function getChallengeTimes($userId) {
@@ -72,6 +74,10 @@ class PK_Conf {
 
     public static function isCanFight($userId, $type = self::PK_MODEL_CHALLENGE) {
         $times = self::getTimesByUserIdAndType($userId, $type);
+		if(strstr($type, "_")){
+			$tmp = explode("_", $type);	
+			$type = $tmp[0];
+		}
         $timesConf = self::$timesInfo[$type];
         $return = array(
             'is_can'  => 1,

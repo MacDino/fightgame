@@ -20,4 +20,24 @@ class Copy {
 	public static function getMonster($copyLevelId, $userId) {
 		return Copy_Config::getMonsterByLevelId($copyLevelId, $userId);
 	}
+
+    public static function getFightNum($userId, $type = self::PK_MODEL_CHALLENGE) {
+        $times = PK_Conf::getTimesByUserIdAndType($userId, $type);
+		if(strstr($type, "_")){
+			$tmp = explode("_", $type);	
+			$type = $tmp[0];
+		}
+        $timesConf = PK_Conf::$timesInfo[$type];
+        $return = array(
+            'is_can'  => $timesConf['init'],
+            'is_free' => $timesConf['init'] - $times,
+        );
+        if($times >= $timesConf['init']) {
+            $return['is_free'] = 0;
+            if($timesConf['max'] > 0 && $times >= $timesConf['max']) {
+                $return['is_can'] = 0;
+            }
+        }
+        return $return;
+    }
 }
