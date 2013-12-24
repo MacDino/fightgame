@@ -146,11 +146,11 @@ class ConfigDefine
 	public static function skillDescList(){
 		$res = array(
 			'desc' . NewSkill::SKILL_DEFAULT_PT 			=> '普通攻击',
-			'desc' . NewSkill::SKILL_COMMON_BD_WFX 		=> '物防修',
-			'desc' . NewSkill::SKILL_COMMON_BD_FFX 		=> '法防修',
-			'desc' . NewSkill::SKILL_COMMON_BD_WGX 		=> '物攻修',
-			'desc' . NewSkill::SKILL_COMMON_BD_FGX 		=> '法攻修',
-			'desc' . NewSkill::SKILL_COMMON_BD_TX		=> '体修',
+			'desc' . NewSkill::SKILL_COMMON_BD_WFX 		=> '提高物理防御能力',
+			'desc' . NewSkill::SKILL_COMMON_BD_FFX 		=> '提高法术防御能力（影响控制类法术命中结果）',
+			'desc' . NewSkill::SKILL_COMMON_BD_WGX 		=> '提高物理攻击伤害效果',
+			'desc' . NewSkill::SKILL_COMMON_BD_FGX 		=> '提高法术攻击能力（影响增益类法术计算结果及控制类法术命中结果）',
+			'desc' . NewSkill::SKILL_COMMON_BD_TX		=> '增加角色气血上限',
 			'desc' . NewSkill::SKILL_COMMON_BD_DZ		=> '锻造',
 			'desc' . NewSkill::SKILL_HUMAN_GJ_DTWLGJ 	=> '连续攻击对方3次，使用后需休息一回合，休息时不能使用战斗指令，也不会受封类法术影响；物理法术防御降低为正常状态的80%；防御技能不受影响。',
 			'desc' . NewSkill::SKILL_HUMAN_GJ_WGK 		=> '令对手一定回合无法使用物理攻击，并减少物理防御力',

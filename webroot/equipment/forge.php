@@ -13,7 +13,7 @@ if(!$equipId){
 
 $info = Equip_Info::getEquipInfoById($equipId);
 if(!empty($info)){
-	if($info['forge_level'] >= 15){//最大次数
+	if($info['forge_level'] >= User::MAX_FORGE){//最大次数
 	    $code = 140002;
 	    $msg = '已经达到最大锻造次数';
 	    die;    		
@@ -53,7 +53,11 @@ try {
 	$data['info'] = Equip_Info::getEquipInfoById($equipId);
 	$data['info']['attribute_list'] = json_decode($data['info']['attribute_list'], true);
 	foreach ($data['info']['attribute_list'] as $i=>$value){
-		$data['info']['attribute_list'][$i] = ceil($value);
+		if($i == ConfigDefine::RELEASE_PROBABILITY){
+				$data['info']['attribute_list'][$i] = round($value, 2)*100 . "%";
+    		}else{
+    			$data['info']['attribute_list'][$i] = ceil($value);
+    		}
 	}
 	$data['info']['attribute_base_list'] = json_decode($data['info']['attribute_base_list'], true);
 	foreach ($data['info']['attribute_base_list'] as $i=>$value){

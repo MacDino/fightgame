@@ -22,9 +22,9 @@ class User
     CONST FRIEND_PRICE = 100;
     
     /** 默认背包数量*/
-    CONST DEFAULT_PACK_NUM = 40;
+    CONST DEFAULT_PACK_NUM = 100;
     /** 最大背包数*/
-    CONST DEFAULT_PACK_MAX = 999;
+    CONST DEFAULT_PACK_MAX = 300;
     /** 背包数价格,5个*/
     CONST PACK_PRICE = 50;
     
@@ -39,6 +39,8 @@ class User
     CONST PK_BUY_NUM = 10;
     /** PK次数价格*/
     CONST PK_PRICE = 10;
+    //最大锻造次数
+    CONST MAX_FORGE = 10;
     
 	/** 属性增强符咒增益*/
     CONST ATTEIBUTEENHANCE = '0.05';

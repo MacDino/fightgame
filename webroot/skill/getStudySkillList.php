@@ -11,10 +11,24 @@ if(!$userId)
 }
 
 try {
+	//最高释放概率
+	$high = 0.45;//基础释放概率
+	$userInfo = User_Info::getUserInfoFightAttribute($userId, true);//用户属性
+	$equipProbability = $userInfo[ConfigDefine::RELEASE_PROBABILITY];//装备释放总概率
+	if($equipProbability > 0.45){$equipProbability = 0.45;}
+	$high += $equipProbability;
+
+
+
+
 	$userInfo = User_Info::getUserInfoByUserId($userId);
 	$data['skill_info']   = NewSkillStudy::getStudySkillList($userId, $skillType);
+	foreach ($data['skill_info'] as $k=>$v){
+		$data['skill_info'][$k]['probability'] = ceil($v['probability']);
+	}
 	$data['skill_point'] = $userInfo['skil_point'];
 	$data['money'] = $userInfo['money'];
+	$data['totalprobability'] = round($high,2);
 	$code   = 0;
 	$msg    = 'OK';
 	die;

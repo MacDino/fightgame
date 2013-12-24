@@ -20,11 +20,29 @@ if(!$userInfo){
 try {
     //使用中装备
     $res = Equip_Info::getEquipListByUserId($userId, 1);
-    foreach ($res as $i=>$key){
+    $pill = Pill_Pill::usedPill($userId);
+    /*foreach ($res as $i=>$key){
     	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
+    }*/
+    foreach ($res as $i=>$key){
+    	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
+    	foreach ($res[$i]['attribute_list'] as $o=>$value){
+    		if($o == ConfigDefine::RELEASE_PROBABILITY){
+				$res[$i]['attribute_list'][$o] = round($value, 2)*100 . "%";
+    		}else{
+    			$res[$i]['attribute_list'][$o] = ceil($value);
+    		}
+		}
+    	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
+    	foreach ($res[$i]['attribute_base_list'] as $o=>$value){
+			$res[$i]['attribute_base_list'][$o] = ceil($value);
+		}
+    	$res[$i]['price'] = Equip_Info::priceEquip($key['user_equip_id']);
     }
     $data['equipInfo'] = $res;
+    
+    $data['pillInfo'] = $pill;
 	//角色基本属性(点)
 	$data['baseAttribute'] = User_Info::getUserInfoFightAttribute($userId);
 	foreach ($data['baseAttribute'] as $i=>$value){
@@ -33,7 +51,11 @@ try {
 	//角色成长属性(值)
 	$data['valueAttribute'] = User_Info::getUserInfoFightAttribute($userId, TRUE);
 	foreach ($data['valueAttribute'] as $i=>$value){
-		$data['valueAttribute'][$i] = ceil($value);
+		if($i == ConfigDefine::RELEASE_PROBABILITY){
+				$data['valueAttribute'][$i] = round($value, 2)*100 . "%";
+    		}else{
+    			$data['valueAttribute'][$i] = ceil($value);
+    		}
 	}
     $code = 0;
     $msg = 'ok';

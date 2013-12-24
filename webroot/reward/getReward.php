@@ -12,6 +12,21 @@ if(!$rewardId){
 }
 
 $rewardInfo = Reward::getRewardInfoById($rewardId);
+if($contentId == 'box'){
+    
+    $userInfo = User_Info::getUserInfoByUserId($rewardInfo['user_id']);
+    $maxPack = $userInfo['pack_num'];
+    $nowPack = Equip_Info::getEquipNum($rewardInfo['user_id']);
+    //echo $maxPack."<br>";
+    //echo $nowPack;exit;
+    if($nowPack >= $maxPack){
+        $code = 150201;
+        $msg = '你的包裹已满,请先清理包裹';
+        die;
+    }    
+}
+
+
 $content = json_decode($rewardInfo['content'], true);
 if(!key_exists($contentId, $content)){
 	$code = 150101;

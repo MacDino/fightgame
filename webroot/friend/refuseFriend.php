@@ -20,7 +20,7 @@ if(!$userInfo){
 }
 
 //是否已经是好友
-$isFriend = Friend_Info::getUserFrined($userId, $friendId);
+$isFriend = Friend_Info::getUserFrined($friendId, $userId);
 if(empty($isFriend)){
 	$code = 160001;
     $msg = '没有这个好友!';

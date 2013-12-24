@@ -45,7 +45,7 @@ class Reward{
         
         $data['content'] = json_encode(array(
         	6301 => 2,
-        	6306 => 2,
+        	//6306 => 2,
         ));
         $data['status'] = 0;
         
@@ -69,7 +69,7 @@ class Reward{
         	6301 => 4,
         	6302 => 5,
         	6303 => 4,
-        	6306 => 4,
+        	//6306 => 4,
         	'ingot' => 100,
         ));
         $data['status'] = 0;
@@ -106,6 +106,7 @@ class Reward{
     public static function upgrade($userId){
     	$now = self::getRewardInfoByType($userId, self::UPGRADE);
     	$userInfo = User_Info::getUserInfoByUserId($userId);
+		$level = intval($userInfo['user_level']/10) * 10;
         
         $data['status'] = 0;
         
@@ -114,9 +115,9 @@ class Reward{
 	        	if($userInfo['user_level'] > $now['condition']){
 	        		$data['condition'] = $now['condition'] + 1;//生成下等级奖励
 	        		$data['content'] = json_encode(array(
-			        	'money'	   => ($userInfo['user_level']-1)*500 + 10000,
+			        	//'money'	   => ($userInfo['user_level']-1)*500 + 10000,
 			        	'box' 	   => 1,
-			        	'3601'	   => 2,
+			        	//'3601'	   => 2,
 			        ));
 	        		return self::_update($data, $now['reward_id']);
 	        	}
@@ -125,9 +126,9 @@ class Reward{
         	$data['user_id'] = $userId;
         	$data['name'] = '升级奖励';
         	$data['content'] = json_encode(array(
-	        	'money'	   => 10000,
+	        	//'money'	   => 10000,
 	        	'box' 	   => 1,
-	        	'3601'	   => 2,
+	        	//'3601'	   => 2,
 	        ));
         	$data['condition'] = 1;
         	$data['type'] = self::UPGRADE;
@@ -209,6 +210,7 @@ class Reward{
     	$type = $rewardInfo['type'];
     	$userId = $rewardInfo['user_id'];
     	
+    	
     	if(is_numeric($contentId)){
     		if(substr($contentId,0,2) == 63){//道具
     			$res = call_user_func(array('Rewardtype', 'props'), $userId ,$content[$contentId], $contentId);
@@ -216,7 +218,29 @@ class Reward{
     			$res = call_user_func(array('Rewardtype', 'pillStone'), $userId ,$content[$contentId], $contentId);
     		}
     	}else{
-    		$res = call_user_func(array('Rewardtype', $contentId), $userId ,$content[$contentId]);
+    		if($contentId == 'box'){
+    			$temp = rand(1,6);
+    			if($temp == 1){//双倍符咒
+    				$res = Rewardtype::props($userId, 1, 6301);
+    			}elseif($temp == 2){//PK符咒
+    				$res = Rewardtype::props($userId, 1, 6302);
+    			}elseif($temp == 3){//元宝
+    				$res = Rewardtype::ingot($userId, 10);
+    			}elseif($temp == 4){//金钱
+    				$res = Rewardtype::money($userId, 5000);
+    			}elseif($temp == 5){//精华
+    				//echo 44444;exit;
+    				$res = Rewardtype::pillStone($userId, 1);
+    			}elseif($temp == 6){//装备
+    				$level = intval($rewardInfo['condition']/10) * 10;
+    				$userInfo = User_Info::getUserInfoByUserId($userId);
+    				$res = Rewardtype::box($userId, 1, $level, Equip::EQUIP_COLOUR_ORANGE, Equip::EQUIP_QUALITY_SUBLIME, $userInfo['race_id']);
+    			}else{
+    				
+    			}
+    		}else{
+    			$res = call_user_func(array('Rewardtype', $contentId), $userId , $content[$contentId]);
+    		}
     	}
     	
 //    	print_r($res);
@@ -239,5 +263,25 @@ class Reward{
 		}
 		
 		return $res;
+    }
+    
+    public static function isReward($user_id){
+    	$sql = "select content from user_reward where user_id = '$user_id'";
+    	$res = MySql::query($sql);
+    	$ret = array();
+		if(!empty($res)){
+			foreach ($res as $k=>$v){
+				$tmp = json_decode($v['content'], true);
+				if(!empty($tmp)){
+					foreach($tmp as $i=>$o)
+					$ret[] = $o;
+				}
+			}
+		}
+		if(!empty($ret)){
+			return true;
+		}else{
+			return false;
+		}
     }
 }

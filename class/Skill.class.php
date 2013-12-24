@@ -7,9 +7,9 @@ class Skill
     CONST SKILL_GROUP_BDJN = 1293;//被动技能
     CONST SKILL_GROUP_FYJN = 1294;//防御技能
     
-    CONST PROPORTION_HIGH	= 1281;//高比例
-    CONST PROPORTION_MIDDLE	= 1282;//中比例
-    CONST PROPORTION_LOW	= 1283;//低比例
+    CONST PROPORTION_HIGH	= 10;//高比例
+    CONST PROPORTION_MIDDLE	= 5;//中比例
+    CONST PROPORTION_LOW	= 1;//低比例
     CONST PROPORTION_CLOSE	= 0;//关闭
     
     CONST PROPORTION_HIGH_RELEASE	= 10;//高释放概率配比
@@ -244,11 +244,11 @@ class Skill
      */
     public static function getQuickAttributeForEquip($level/*, $prop=NULL*/){
         $data               = array();
-        $data['success']    = 0.5 + 0.002*$level;
+        $data['success']    = 0.5 + 0 + $opt;
         /*if($prop){//符咒增加概率
         	$data['success'] += 0.1;
         }*/
-        $data['no_less_dz'] = (100-$level/2)/100;
+        $data['no_less_dz'] = 0.01 * ceil(1 / 2);
 //        print_r($data);
         return $data;
     }

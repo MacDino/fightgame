@@ -24,7 +24,11 @@ try {
     foreach ($res as $i=>$key){
     	$res[$i]['attribute_list'] = json_decode($key['attribute_list'], true);
     	foreach ($res[$i]['attribute_list'] as $o=>$value){
-			$res[$i]['attribute_list'][$o] = ceil($value);
+    		if($o == ConfigDefine::RELEASE_PROBABILITY){
+				$res[$i]['attribute_list'][$o] = round($value, 2)*100 . "%";
+    		}else{
+    			$res[$i]['attribute_list'][$o] = ceil($value);
+    		}
 		}
     	$res[$i]['attribute_base_list'] = json_decode($key['attribute_base_list'], true);
     	foreach ($res[$i]['attribute_base_list'] as $o=>$value){

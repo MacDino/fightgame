@@ -11,7 +11,7 @@ class PK_Conf {
     public static $timesInfo = array(
         self::PK_MODEL_CHALLENGE => array('init' => 5,'max' => 15),
         self::PK_MODEL_CONQUER   => array('init' => 10,),
-		self::COPY_MODEL_COPY	 => array('init' => 4),
+		self::COPY_MODEL_COPY	 => array('init' => 20),
     );
 
     public static function getChallengeTimes($userId) {

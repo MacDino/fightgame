@@ -8,7 +8,7 @@ $userId = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
 $mapId  = $_REQUEST['map_id'] > 0 ? $_REQUEST['map_id'] : 0;
 
 if($userId <= 0 || $mapId <= 0) {
-    $code = 1;
+    $code = 100030;
     $msg  = '缺少参数';
     exit;
 }

@@ -9,6 +9,7 @@ if(!$equipId){
     die;
 }
 
+$info = Equip_Info::getEquipInfoById($equipId);
 if(!empty($info)){
 	if($info['equip_level'] >= 100){
 		$code = 140005;
@@ -24,9 +25,10 @@ if(!empty($info)){
     $msg = '没有这个装备';
     die;
 }
-$prop = 6323 + $info['equip_level']/10;
-$num = User_Property::getPropertyNum($userId, $prop);
-if(!$num){
+
+$needNum = ($info['equip_level'] - 20) / 10;
+$propNum = User_Property::getPropertyNum($info['user_id'], 33);
+if($propNum < $needNum){
 	$code = 140202;
     $msg = '你的升级符咒不够用了';
     die;
@@ -34,10 +36,30 @@ if(!$num){
 
 try {
     $res = Equip_Info::upgrade($equipId);
-    User_Property::updateNumDecreaseAction($userId, $prop);//减少道具数量
-    if($res){
-    	$data = Equip_Info::getEquipInfoById($equipId);
+    $info = Equip_Info::getEquipInfoById($equipId);
+    
+    User_Property::updateNumDecreaseAction($info['user_id'], 33, $needNum);//减少道具数量
+    
+    //基本属性
+	$attributeBaseList = json_decode($info['attribute_base_list'], TRUE);
+    foreach($attributeBaseList as $k=>$v){
+        $attributeBaseList[$k] = ceil($attributeBaseList[$k]);
     }
+    $data['attribute_base_list'] = $attributeBaseList;
+    //附加属性
+    $attributeList = json_decode($info['attribute_list'], TRUE);
+    foreach($attributeList as $k=>$v){
+        if($k == ConfigDefine::RELEASE_PROBABILITY){
+			$attributeList[$k] = round($attributeList[$k], 2)*100 . "%";
+		}else{
+			$attributeList[$k] = ceil($attributeList[$k]);
+		}
+    }
+    $data['attribute_list'] = $attributeList;
+	$data['expend_num'] = $needNum;
+
+	
+
     $code = 0;
     die;
 } catch (Exception $e) {

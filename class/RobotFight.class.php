@@ -45,21 +45,23 @@ class RobotFight{
         return FALSE;
     }
 
-    public static function getResult($info, $time) {
-        $awardInfos = self::getAwardPerMinite();
-        $awardInfo  = $awardInfos[$info['map_id']];
-        $lucky      = intval($info['lucky']) > 0 ? intval($info['lucky']) : 0;
-        $return['money']      = intval($awardInfo['money'] * $time * (1 +  $lucky*0.02));
-        $return['experience'] = intval($awardInfo['experience']*$time);
+    public static function getResult($info, $time, $dropThingsRate) {
+        $dropThingsRate = $dropThingsRate * 100 >= 0 && $dropThingsRate * 100 <=100 ? $dropThingsRate : 1;
+        $awardInfos     = self::getAwardPerMinite();
+        $awardInfo      = $awardInfos[$info['map_id']];
+        $lucky          = intval($info['lucky']) > 0 ? intval($info['lucky']) : 0;
+        $return['money']      = intval($awardInfo['money'] * $time * (1 +  $lucky*0.02) * $dropThingsRate);
+        $return['experience'] = intval($awardInfo['experience'] * $time * $dropThingsRate);
+        $return['experience'] = $return['experience'] > 1 ? $return['experience'] : 1;
 
         User_Info::addExperience($info['user_id'], $return['experience']);
         User_Info::addMoney($info['user_id'], $return['money']);
 
-        $levelUp = User_Info::isLevel($userId);
+        $levelUp = User_Info::isLevel($info['user_id']);
         if($levelUp) {
             $return['level_up'] = $levelUp;
         }
-        $return['equipment'] = self::getEquipment($info, $time);
+        $return['equipment'] = self::getEquipment($info, $time, $dropThingsRate);
         return $return;
     }
 
@@ -159,12 +161,14 @@ class RobotFight{
         );
     }
 
-    public static function getEquipment($info, $time) {
+    public static function getEquipment($info, $time, $dropThingsRate) {
+        $dropThingsRate = $dropThingsRate * 100 >= 0 && $dropThingsRate * 100 <=100 ? $dropThingsRate : 1;
         $equipmentNums = self::getEquipmentPerMinite();
         $userInfo = User_Info::getUserInfoByUserId($info['user_id']);
         foreach ($equipmentNums as $color => $num) {
-            $equipmentNums[$color] = intval(($num * $time) * (rand(80, 120)/100));
-            if($equipmentNums[$color] >= 1) {
+            $equipmentNums[$color] = intval(($num * $time) * (rand(80, 120)/100) * $dropThingsRate);
+            $getEquipSetting = Fight_Setting::isEquipMentCan($info['user_id']);
+            if($equipmentNums[$color] >= 1 && $getEquipSetting[$color]) {
                 for($i = 1; $i <= $equipmentNums[$color]; $i++) {
                     $equipment = array(
                         'color'     => $color,

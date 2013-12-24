@@ -12,7 +12,7 @@ if(!$equipId){
 
 $info = Equip_Info::getEquipInfoById($equipId);
 if(!empty($info)){
-	if($info['forge_level'] >= 15){//最大次数
+	if($info['forge_level'] >= User::MAX_FORGE){//最大次数
 	    $code = 140002;
 	    $msg = '已经达到最大锻造次数';
 	    die;    		
@@ -39,19 +39,19 @@ try {
         $attributeBaseList[$k] = ceil($attributeBaseList[$k]);
     }
     $data['attribute_base_list'] = $attributeBaseList;
-    
-    
     //附加属性
     $attributeList = json_decode($info['attribute_list'], TRUE);
     foreach($attributeList as $k=>$v){
         $attributeList[$k] = $v * ($data['forge_level'] * 0.01);
-        $attributeList[$k] = ceil($attributeList[$k]);
+        if($k == ConfigDefine::RELEASE_PROBABILITY){
+				$attributeList[$k] = round($attributeList[$k], 2)*100 . "%";
+    		}else{
+    			$attributeList[$k] = ceil($attributeList[$k]);
+    		}
+        
     }
     $data['attribute_list'] = $attributeList;
-	
-	
 	$data['odds'] = Skill::getQuickAttributeForEquip($info['forge_level']);//成功率
-//	$data['add'] =  $res;//增加的属性
 	$data['needMoney'] = $needMoney;//需要的钱
 	$data['money'] = $nowMoney;//现有的钱
     $code = 0;

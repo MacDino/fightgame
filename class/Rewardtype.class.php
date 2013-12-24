@@ -9,10 +9,15 @@ class Rewardtype{
 	
 	/** @desc 内丹精华 */
 	public static function pillStone($userId, $num=1, $type=NULL){
+		//echo 44555;
 		if(empty($type)){
-			$array = array_rand(ConfigDefine::pillList());
-			$type = $array[array_rand($array)];
+			//echo 666666;
+			$type = array_rand(ConfigDefine::pillList());
+			//print_r($array);
+			//$type = $array[array_rand($array)];
+			//echo $type
 		}
+		//echo $type;exit;
 		$res = Pill_Stone::addStone($userId, $type, $num);
 		return $type.'|精华|N:'.$num;
 	}
@@ -29,25 +34,42 @@ class Rewardtype{
 	/** @desc 消费道具 */
 	public static function props($userId, $num=1, $type=NULL){
 		if(empty($type)){
-			$array = array(6301, 6302, 6303, 6306, 6308, 6309);
+			$array = array(6301, 6302, 6303, 6308);
 			$type = $array[array_rand($array)];
 		}
 
-		$res = User_Property::updateNumIncreaseAction($userId, $type, $num);
+		if($type == 6301){
+			$props_id = 1;
+		}elseif($type == 6302){
+			$props_id = 2;
+		}elseif($type == 6303){
+			$props_id = 3;
+		}/*elseif($type == 6306){
+			$props_id = 6;
+		}*/elseif($type == 6308){
+			$props_id = 8;
+		}
+
+		$res = User_Property::updateNumIncreaseAction($userId, $props_id, $num);
 		return $type.'|N:'.$num;
 	}
 	
 	/** @desc 上古遗迹 */
-	public static function box($userId, $num=1, $level=null){
+	public static function box($userId, $num=1, $level=null, $colour=null, $equipQuality=null, $equipSuitRaceId=null){
 		if(empty($level)){
 			$userInfo = User_Info::getUserInfoByUserId($userId);
 			$level = intval($userInfo['user_level']/10) * 10;
 		}
-		//for($i=0;$i<$num;$i++){
+		
+		if(empty($colour)){
 			$colour = User_Property::randGeneralEquipColor();
 			$equipId = Equip_Create::createEquip($colour, $userId, $level);
+		}else{
+			$equipId = Equip_Create::createEquip($colour, $userId, $level, '', $equipQuality, $equipSuitRaceId);
+		}
+		
+			
 			$res = Equip_Info::getEquipInfoById($equipId);
-			//print_r($res);
 			
 		    	$res['attribute_list'] = json_decode($res['attribute_list'], true);
 		    	foreach ($res['attribute_list'] as $o=>$value){
@@ -59,8 +81,8 @@ class Rewardtype{
 				}
 		    	$res['price'] = Equip_Info::priceEquip($key['user_equip_id']);
 			
-			$result[] = $res;
-		//}
+			$result = $res;
+		
 		return $result;
 	}
 	

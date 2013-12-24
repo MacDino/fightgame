@@ -29,6 +29,17 @@ try {
     	$result[$key]['power'] = User_Info::powerUser($value['user_id']);//战力
 	    $result[$key]['Prestige'] = $friendInfo['reputation'];//声望
 	    $result[$key]['Ranking'] = PK_Challenge::rankingAll($value['user_id']);//全国排名
+	    if($result[$key]['distance'] >= 1000 && $result[$key]['distance'] < 10000){
+		    	$result[$key]['distance'] = round($result[$key]['distance'] / 1000, 2) . "千米";
+		    }elseif($result[$key]['distance'] >= 10000 && $result[$key]['distance'] < 100000){
+		    	$result[$key]['distance'] = round($result[$key]['distance'] / 1000, 1) . "千米";
+		    }elseif($result[$key]['distance'] >= 100000 && $result[$key]['distance'] < 1000000){
+		    	$result[$key]['distance'] = round($result[$key]['distance'] / 1000, 0) . "千米";
+		    }elseif($result[$key]['distance'] >= 1000000){
+		    	$result[$key]['distance'] = ">999千米";
+		    }else{
+		    	$result[$key]['distance'] = $result[$key]['distance'] . '米';
+		    }
 	    $result[$key]['Integral'] = $friendInfo['integral'];//积分
     }
     if(!empty($result)){

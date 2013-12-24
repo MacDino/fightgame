@@ -11,15 +11,18 @@ $skillType   = isset($_REQUEST['skill_type']) ? $_REQUEST['skill_type'] : "";
 
 $userInfo  = User_Info::getUserInfoByUserId($userId); 
 $money = User_Info::getUserMoney($userId);
+
+$skill_level = NewSkillStudy::getSkillInfo($userId, $skillId);
+//print_r($skillInfo);
 //金钱判断
-$needMoney = Skill_Info::getSkillMoney($skillLevel);
+$needMoney = Skill_Info::getSkillMoney($skill_level);
 if($needMoney > $money){
 	$code = 2;
     $msg    = '您金钱不足';
     die;
 }
 
-if($skillLevel+1 > $userInfo['user_level']+10){
+if($skill_level+1 > $userInfo['user_level']+10){
 	$code = 3;
 	$msg = "不能高过人物等级10级";
 	die;
@@ -32,8 +35,17 @@ if($userInfo['skil_point'] < 1){
     $msg    = '您技能点数不足';
     die;
 }
+
+if($skill_level  > 110){
+	$code = 5;
+    $msg    = '你的技能已经达到最高级';
+    die;
+}
+
+
 try {
-	$data   = $skillLevel    = NewSkillStudy::updateSkill($userId, $skillId, $skillType);
+	$data['status']   = NewSkillStudy::updateSkill($userId, $skillId, $skillType);
+	$data['next_level_money'] = Skill_Info::getSkillMoney($skill_level+1);
     if($data){
         //扣除金钱
         User_Info::subtractBindMoney($userId, $needMoney);

@@ -3,6 +3,8 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $userId = isset($_REQUEST['user_id'])?$_REQUEST['user_id']:'';//用户ID
+$longitude = isset($_REQUEST['longitude'])?$_REQUEST['longitude']:'-1';//精度
+$latitude = isset($_REQUEST['latitude'])?$_REQUEST['latitude']:'-1';//纬度
 
 if(!$userId){
     $code = 100001;
@@ -19,8 +21,13 @@ if(!$userInfo){
 
 try {    
 	User_Info::updateLastLoginTime($userId);//更新最后登录时间
+	if($longitude != '-1' && $latitude != '-1'){//记录经纬度
+		User_LBS::recordLBS($userId, $longitude, $latitude);
+	}
 	Reward::login($userId);//判断登陆奖励
-	Reward::monthCard($userId);//判断月卡奖励
+	if(Shop_IAPProduct::userIsBuyMonthPackage($userId)){
+		Reward::monthCard($userId);//判断月卡奖励
+	}
     //人物基本属性,数据库读取
 	$data = User_Info::getUserInfoByUserId($userId);
 	

@@ -42,24 +42,25 @@ if($vFriendNum >= $vUser['friend_num']){
 
 //是否已经是好友
 $isFriend = Friend_Info::getUserFrined($friendId, $userId);
-$isPass = Friend_Info::getUserFrined($userId, $friendId);
 if(!empty($isFriend))
 {
-	if(!empty($isPass)){
-		$code = 160004;
-	    $msg = '你们已经是好友了';
-	    die;
-	}else{
-		$code = 160005;
-	    $msg = '申请已经发出,请耐心等待';
-	    die;
-	}
-	
+	$code = 160004;
+    $msg = '你们已经是好友了';
+    die;
+}
+
+$isCreate = Friend_Info::isCreate($userId, $friendId);
+if(!empty($isCreate))
+{
+	$code = 160005;
+    $msg = '申请已经发出,请耐心等待';
+    die;
 }
 
 try {
     //添加好友
-    $data = Friend_Info::createFriendInfo($friendId, $userId);
+    $data = Friend_Info::createFriendInfo($userId, $friendId);
+    Message::createFriendRequestMsg($friendId, $userId);
     //增加声望
     $code = 0;
     die;

@@ -6,15 +6,18 @@
 class Version
 {
     CONST VERSION = 1;
-	CONST MAP_VERSION = 1.01;
+	CONST MAP_VERSION = 1.02;
 	CONST MONSTER_VERSION = 1.04;
-	CONST ACTION_VERSION = 1.03;
-	CONST SKILL_VERSION = 1.03;
+	CONST ACTION_VERSION = 1.05;
+	CONST SKILL_VERSION = 1.11;
+	CONST SKILL_DESC_VERSION = 1.05;
 	CONST TITLE_VERSION = 1.03;
 	CONST EQUIP_VERSION = 1.03;
-	CONST EXP_VERSION = 1.01;
+	CONST EXP_VERSION = 1.02;
 	CONST ATTRIBUTE_VERSION = 1.04;
 	CONST PROPS_VERSION = 1.03;
+	CONST PILL_VERSION  = 1.12;
+	CONST ERROR_VERSION = 1.13;
 
     public static function getStaticResourceVersion(){
         return self::VERSION;
@@ -72,6 +75,15 @@ class Version
 		}
 		return $result;
 	}
+	//技能描述
+	public static function getSkillDescList(){
+		$res = ConfigDefine::skillDescList();
+		foreach($res as $key=>$value)
+		{
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		return $result;
+	}
 	//升级经验
 	public static function getLevelExpList()
 	{
@@ -99,6 +111,8 @@ class Version
 		}
 		return $result;
 	}
+	
+	
 
 	//道具列表
 	public static function getPropsList()
@@ -108,8 +122,26 @@ class Version
 		{
 			$result[] = array('id'=> $value['static_code'], 'name'=>$value['props_name']);
 		}
+		
+		return $result;
+	}
+	
+	//内丹列表
+	public static function getPillList()
+	{
 		$pill = ConfigDefine::pillList();
 		foreach ($pill as $key=>$value){
+			$result[] = array('id'=> $key, 'name'=>$value);
+		}
+		
+		return $result;
+	}
+	
+	//错误列表
+	public static function getErrorList()
+	{
+		$error = Error::errorList();
+		foreach ($error as $key=>$value){
 			$result[] = array('id'=> $key, 'name'=>$value);
 		}
 		return $result;

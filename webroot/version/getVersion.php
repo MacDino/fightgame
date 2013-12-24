@@ -3,8 +3,14 @@
 include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 
 $VersionId     = isset($_REQUEST['version_id'])?$_REQUEST['version_id']:'';//版本ID,数组
+$VersionId = urldecode($VersionId);//URL解码
+$VersionId = json_decode($VersionId, TRUE);//JSON解码
 
-$VersionId = json_decode($VersionId, TRUE);
+/*$VersionId = array(
+	'MAP_VERSION' => 1.02,
+	'MONSTER_VERSION' => 1.04
+);*/
+//print_r($VersionId);
 if(empty($VersionId)){$VersionId = array();}
 
 	//地图
@@ -49,6 +55,16 @@ if(empty($VersionId)){$VersionId = array();}
 	}else{
 		$data['SKILL_VERSION']['code'] = Version::SKILL_VERSION;
 		$data['SKILL_VERSION']['value'] = Version::getSkillList();
+	}
+	//技能描述
+	if(array_key_exists('SKILL_DESC_VERSION', $VersionId)){
+		if(Version::SKILL_DESC_VERSION > $VersionId['SKILL_DESC_VERSION']){
+			$data['SKILL_DESC_VERSION']['code'] = Version::SKILL_DESC_VERSION;
+			$data['SKILL_DESC_VERSION']['value'] = Version::getSkillDescList();
+		}
+	}else{
+		$data['SKILL_DESC_VERSION']['code'] = Version::SKILL_DESC_VERSION;
+		$data['SKILL_DESC_VERSION']['value'] = Version::getSkillDescList();
 	}
 	
 	//装备属性
@@ -95,9 +111,20 @@ if(empty($VersionId)){$VersionId = array();}
 		$data['EXP_VERSION']['value'] = Version::getLevelExpList();
 	}
 	
+	//内丹
+	if(array_key_exists('PILL_VERSION', $VersionId)){
+		if(Version::PROPS_VERSION > $VersionId['PILL_VERSION']){
+			$data['PILL_VERSION']['code'] = Version::PILL_VERSION;
+			$data['PILL_VERSION']['value'] = Version::getPillList();
+		}
+	}else{
+		$data['PILL_VERSION']['code'] = Version::PILL_VERSION;
+		$data['PILL_VERSION']['value'] = Version::getPillList();
+	}
+	
 	//道具
 	if(array_key_exists('PROPS_VERSION', $VersionId)){
-		if(Version::PROPS_VERSION > $VersionId['EXP_VERSION']){
+		if(Version::PROPS_VERSION > $VersionId['PROPS_VERSION']){
 			$data['PROPS_VERSION']['code'] = Version::PROPS_VERSION;
 			$data['PROPS_VERSION']['value'] = Version::getPropsList();
 		}
@@ -105,7 +132,18 @@ if(empty($VersionId)){$VersionId = array();}
 		$data['PROPS_VERSION']['code'] = Version::PROPS_VERSION;
 		$data['PROPS_VERSION']['value'] = Version::getPropsList();
 	}
-
+	
+	//错误
+	if(array_key_exists('ERROR_VERSION', $VersionId)){
+		if(Version::ERROR_VERSION > $VersionId['ERROR_VERSION']){
+			$data['ERROR_VERSION']['code'] = Version::ERROR_VERSION;
+			$data['ERROR_VERSION']['value'] = Version::getErrorList();
+		}
+	}else{
+		$data['ERROR_VERSION']['code'] = Version::ERROR_VERSION;
+		$data['ERROR_VERSION']['value'] = Version::getErrorList();
+	}
+//echo '<meta http-equiv="content-type" content="text/html;charset=utf-8">';
 //print_r($data);
 $code = 0;
 $msg = 'ok';

@@ -37,7 +37,7 @@ class Fight {
                 $times++;
 			}
             //超过120回合就判定输了。不再计算回合
-            if($times > 120) {
+            if($times > 60) {
                 $isTooLong = 1;
                 break;
             }

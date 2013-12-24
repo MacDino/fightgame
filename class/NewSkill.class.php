@@ -159,13 +159,13 @@ class NewSkill
         );
 
     }
-	private static function _getSkillConfig($attackSkillInfo)
-	{
-		$skillId = key($attackSkillInfo);
-		$skillLevel = current($attackSkillInfo);
-		if(!is_array(self::$_skillList))
-		{
-			$allSkillInfos = MySql::select(self::SKILL_CONFIG_TABLE);
+    private static function _getSkillConfig($attackSkillInfo)
+    {
+        $skillId = key($attackSkillInfo);
+        $skillLevel = current($attackSkillInfo);
+        if(!is_array(self::$_skillList))
+        {
+            $allSkillInfos = MySql::select(self::SKILL_CONFIG_TABLE);
             foreach ((array)$allSkillInfos as $v) {
                 self::$_skillList[$v['skill_id']] = $v;
             }
@@ -176,7 +176,7 @@ class NewSkill
             $attack_num = 1;
             if($skillConfig['attack_num_each_level'] > 0)
             {
-                $attack_num = floor($skillLevel/$skillConfig['attack_num_each_level']);
+                $attack_num = floor($skillLevel/$skillConfig['attack_num_each_level']) + 1;
                 if($attack_num < 1) $attack_num = 1;
             }
             unset($skillConfig['attack_num_each_level']);
@@ -196,8 +196,8 @@ class NewSkill
             $skillConfig['target'] = json_decode($skillConfig['target'], true);
             $skillConfig['skill_level'] = $skillLevel;
         }
-		return $skillConfig;
-	}
+	return $skillConfig;
+    }
 	//获取防御技能列表
 	public static function getDefineSkillList($raceId = NULL)
 	{

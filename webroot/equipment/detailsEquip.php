@@ -28,7 +28,11 @@ try{
 	if(!empty($data['attribute_list'])){
 		$data['attribute_list'] = json_decode($data['attribute_list'], TRUE);
 		foreach ($data['attribute_list'] as $i=>$value){
-			$data['attribute_list'][$i] = ceil($value);
+			if($i == ConfigDefine::RELEASE_PROBABILITY){
+				$data['attribute_list'][$i] = round($value, 2)*100 . "%";
+    		}else{
+    			$data['attribute_list'][$i] = ceil($value);
+    		}
 		}
 	}
 	

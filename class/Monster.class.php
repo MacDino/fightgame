@@ -25,7 +25,7 @@ class Monster
      */
 	public static function getMonsterBaseMoney($level) {
 		if(!$level || (int)$level < 1)return 1;
-		$baseNum = ($level/10)*2*($level*(1 + 0.09))+3;
+		$baseNum = $level*(1 + $level*0.3)/3+33;
 		$randBegin = $baseNum*(1 - 0.09);
 		$randEnd = $baseNum*(1+0.09);
 		$ration = Utility::getChangeIntRation(array($randBegin, $randEnd));

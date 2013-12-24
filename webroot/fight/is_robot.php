@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/init.inc.php';
 $userId = $_REQUEST['user_id'] > 0 ? $_REQUEST['user_id'] : 0;
 
 if($userId <= 0) {
-    $code = 1;
+    $code = 100030;
     $msg  = '缺少参数';
     exit;
 }
